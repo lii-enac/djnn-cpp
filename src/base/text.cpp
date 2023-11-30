@@ -232,13 +232,20 @@ namespace djnn
     #elif DJNN_STL_DJNN
     if (std::regex_search(input.begin(), input.end(), match, _reg._regex) && match.size() > 1) {
     #endif
-      for (size_t i = 0 ; i < match.size(); i++) {
-        auto it = _reg._in_map.find (i);
-        if (it != _reg._in_map.end () && !match.str(i).empty ()) {
+      // activate all entries before the general match [0]
+      for (size_t i = 1 ; i < match.size(); i++) {
+        if (!match.str(i).empty ()) {
+          TextProperty* p = dynamic_cast<TextProperty*> (_parent->find_child_impl (std::to_string(i)));
           const string res = match.str(i).c_str(); // FIXME copy of string even if no EASTL (or not, if optimized?)
-          it->second->set_value (res, true);
+          p->set_value (res, true);
         }
       }
+      // then activate the match [0]
+      auto it = _reg._in_map.find (0);
+      if (it != _reg._in_map.end () && !match.str(0).empty ()) {
+        const string res = match.str(0).c_str(); // FIXME copy of string even if no EASTL (or not, if optimized?)
+        it->second->set_value (res, true);
+      }    
     }
   }
 
