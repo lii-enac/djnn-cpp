@@ -169,7 +169,7 @@ namespace djnn
         const string& right = _tbo._right.get_value ();
         _tbo._result.set_value (perform(left, right), true);
       }
-      static bool perform(const string& l, const string& r) { return l.find(r) != std::string::npos; }
+      static bool perform(const string& l, const string& r) { return !r.empty() && (l.find(r) != std::string::npos); }
       static bool default_value () {return false;}
 
       private:
