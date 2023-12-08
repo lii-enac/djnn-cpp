@@ -1,14 +1,16 @@
-We provide a Makefile that should work on MacOS (10.12+), Linux, Windows 10+.
+We provide a `Makefile` that should work on MacOS (10.12+), Linux, Windows 10+.
 
 ---- LINUX -----
-linux package for ubuntu 20.04: <https://github.com/lii-enac/djnn-cpp/releases>
-in a Terminal:
+
+* With a debian binary package for ubuntu 20.04:  
+  get the package here: <https://github.com/lii-enac/djnn-cpp/releases>,  
+  then in a Terminal:
 
 ```
 dpkg -i djnn-cpp-x.xx.x.deb
 ````
 
-or using sources:
+* or using sources:
 
 ```
 sudo apt install git make pkg-config
@@ -19,16 +21,21 @@ make -j4
 ```
 
 ---- MACOS -----  
-install homebrew (<https://brew.sh/>)  
-then in a Terminal:
 
+  You need to install homebrew: follow the installation instructions over at <https://brew.sh/>  
+  Then in a Terminal:
 ```
 brew install git make pkg-config
+```
+
+* Then with the binary package...:
+
+```
 brew tap lii-enac/repo
 brew install djnn-cpp
 ```
 
-or using sources:
+* ...or using the sources:
 
 ```
 git clone --depth 1 https://github.com/lii-enac/djnn-cpp.git  
@@ -38,21 +45,25 @@ make -j
 ```
 
 ---- WINDOWS -----  
-install MSYS2 (from <https://www.msys2.org/>, follow installation steps )  
-then in an MSYS2-MinGW64/32 terminal:
+
+You need to install MSYS2: follow the installation instructions over at <https://www.msys2.org/>  
+Then in an MSYS2-MinGW64/32 terminal:
 
 ```
 pacman -Syu
 pacman -S --needed git make
 ```
 
-launch a MSYS2-MinGW64/32 terminal (but NOT MSYS2-MSYS) then install pacmac (ArchLinux) package .tar.zst from <https://github.com/lii-enac/djnn-cpp/releases> :
+* Then with an MSYS2 binary package...  
+  get the `.tar.zst` package here: <https://github.com/lii-enac/djnn-cpp/releases>  
+  launch an MSYS2-MinGW64/32 terminal (and *not* an MSYS2-MSYS one)  
+  then install it:
 
 ```
 pacman -U djnn-cpp-x.xx.x-1.pkg.tar.zst
 ```
 
-or using sources:
+* ...or using the sources:
 
 ```
 git clone --depth 1 -c core.symlinks=true https://github.com/lii-enac/djnn-cpp.git  
@@ -62,7 +73,7 @@ make -j
 ```
 
 ---- ALL PLATFORMS -----  
-ivy bus -> <https://github.com/lii-enac/libivy>
+if you need the ivy bus <https://github.com/lii-enac/libivy>
 
 Windows:
 download the pacman package .tar.zst from <https://github.com/lii-enac/libivy/releases>, and install it:
@@ -71,7 +82,7 @@ download the pacman package .tar.zst from <https://github.com/lii-enac/libivy/re
 pacman -U libivy-x.xx.x-1.pkg.tar.zst
 ```
 
-or using sources:
+or using the sources:
 
 ```
 git clone --depth 1 http://github.com:lii-enac/libivy.git  
