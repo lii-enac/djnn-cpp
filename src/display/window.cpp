@@ -322,7 +322,7 @@ namespace djnn
   CoreProcess*
   Cursor::find_child_impl (const string& name)
   {
-    auto * res = FatProcess::find_child (name);
+    auto * res = FatProcess::find_child_impl (name);
     if (res)
       return res;
     else if (name == "hotX") {
