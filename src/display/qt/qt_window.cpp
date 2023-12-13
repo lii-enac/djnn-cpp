@@ -37,7 +37,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QBitmap>
+#include <QtGui/QPixmap>
 
 #include "core/utils/error.h"
 
@@ -112,7 +112,7 @@ namespace djnn
   void
   QtWindow::set_cursor (const string& path, int hotX, int hotY) {
     if (_qwidget == nullptr) { return; }
-    QBitmap bmp (path.c_str ());
+    QPixmap bmp (path.c_str ());
     _qwidget->setCursor (QCursor (bmp, hotX, hotY));
   }
 
