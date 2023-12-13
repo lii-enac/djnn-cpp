@@ -65,6 +65,29 @@ namespace djnn
     }
   }
 
+  Qt::CursorShape QtWindow::cursor_shapes[22] = {Qt::ArrowCursor,
+                                               Qt::UpArrowCursor,
+                                               Qt::CrossCursor,
+                                               Qt::WaitCursor,
+                                               Qt::IBeamCursor,
+                                               Qt::SizeVerCursor,
+                                               Qt::SizeHorCursor,
+                                               Qt::SizeBDiagCursor,
+                                               Qt::SizeFDiagCursor,
+                                               Qt::SizeAllCursor,
+                                               Qt::BlankCursor,
+                                               Qt::SplitVCursor,
+                                               Qt::SplitHCursor,
+                                               Qt::PointingHandCursor,
+                                               Qt::ForbiddenCursor,
+                                               Qt::OpenHandCursor,
+                                               Qt::ClosedHandCursor,
+                                               Qt::WhatsThisCursor,
+                                               Qt::BusyCursor,
+                                               Qt::DragMoveCursor,
+                                               Qt::DragCopyCursor,
+                                               Qt::DragLinkCursor};
+
   void
   QtWindow::impl_activate ()
   {
@@ -114,6 +137,13 @@ namespace djnn
     if (_qwidget == nullptr) { return; }
     QPixmap bmp (path.c_str ());
     _qwidget->setCursor (QCursor (bmp, hotX, hotY));
+  }
+
+  void
+  QtWindow::set_cursor (int cursor_shape) {
+    if (_qwidget == nullptr) { return; }
+    QCursor cursor(cursor_shapes[cursor_shape]);
+    _qwidget->setCursor (cursor);
   }
 
   void

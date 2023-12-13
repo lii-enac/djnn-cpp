@@ -16,7 +16,7 @@
 
 #include "exec_env/external_source.h"
 #include "display/window.h"
-
+#include <QtCore/Qt>
 
 namespace djnn {
 
@@ -30,6 +30,7 @@ namespace djnn {
     void update () override;
     void check_for_update ();
     void set_cursor (const djnnstl::string& path, int hotX, int hotY) override;
+    void set_cursor (int cursor_shape) override;
     //void set_qwidget(MyQWidget* q) { _qwidget = q; }
     MyQWidget* qwidget() { return _qwidget; }
 
@@ -49,6 +50,7 @@ namespace djnn {
     friend class MyQWidget;
 
   private:
+    static Qt::CursorShape cursor_shapes[22];
     MyQWidget * _qwidget;
     Window* _window;
     std::atomic<bool> _please_update;

@@ -35,6 +35,31 @@ namespace djnn
   class BackgroundRect;
 
   class Picking;
+  enum cursor_t {
+    DJNN_ARROW,
+    DJNN_UP_ARROW,
+    DJNN_CROSS,
+    DJNN_WAIT,
+    DJNN_IBEAM,
+    DJNN_SIZE_VER,
+    DJNN_SIZE_HOR,
+    DJNN_SIZE_BDIAG,
+    DJNN_SIZE_FDIAG,
+    DJNN_SIZE_ALL,
+    DJNN_BLANK,
+    DJNN_SPLIT_V,
+    DJNN_SPLIT_H,
+    DJNN_POINTING_HAND,
+    DJNN_FORBIDDEN,
+    DJNN_OPEN_HAND,
+    DJNN_CLOSED_HAND,
+    DJNN_WHATS_THIS,
+    DJNN_BUSY,
+    DJNN_DRAG_MOVE,
+    DJNN_DRAG_COPY,
+    DJNN_DRAG_LINK
+  };
+
   class WinImpl {
   public:
     WinImpl () : _picking_view (nullptr) {}
@@ -43,6 +68,7 @@ namespace djnn
     virtual void impl_deactivate () = 0;
     virtual void update () = 0;
     virtual void set_cursor (const djnnstl::string& path, int hotX, int hotY) = 0;
+    virtual void set_cursor (int cursor_shape) = 0;
     Picking* picking_view () { return _picking_view;};
     void set_picking_view (Picking* p) { _picking_view = p;};
     virtual void perform_screenshot (const djnnstl::string& path) {}
@@ -152,6 +178,7 @@ namespace djnn
     FatProcess* holder () { return _holder; }
     void set_holder (FatProcess *p) { _holder = p; }
     void set_cursor (const string& path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }
+    void set_cursor (int cursor_shape) { _win_impl->set_cursor (cursor_shape); }
 
     Blank * refreshed () { return _refreshed; }
 
@@ -248,19 +275,28 @@ namespace djnn
       ~UpdateCursorAction () {}
       void impl_activate () override;
     };
+    class UpdateCursorShapeAction : public Action {
+    public:
+      UpdateCursorShapeAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+      ~UpdateCursorShapeAction () {}
+      void impl_activate () override { ((Cursor *)get_parent())->update_cursor_shape(); }
+    };
    public:
     Cursor (CoreProcess* parent, const string& name, const string& path, int hotX, int hotY);
+    Cursor (CoreProcess* parent, const string& name, int cursor_shape);
     virtual ~Cursor ();
     Window* get_win ();
     void impl_activate () override;
     void impl_deactivate () override;
     void update_cursor ();
+    void update_cursor_shape ();
     CoreProcess* find_child_impl (const string& n) override;
    private:
-    struct raw_props_t { int hot_x; int hot_y; string path; };
+    struct raw_props_t { int hot_x; int hot_y; string path; int cursor_shape;};
     raw_props_t raw_props;
-    Coupling *_c_x, *_c_y, *_c_path;
+    Coupling *_c_x, *_c_y, *_c_path, *_c_cursor_shape;
     UpdateCursorAction *_action;
+    UpdateCursorShapeAction *_shape_action;
     Window* _win;
   };
 

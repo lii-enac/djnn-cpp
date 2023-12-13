@@ -312,10 +312,21 @@ namespace djnn
 
   Cursor::Cursor (CoreProcess* parent, const string& name, const string& path, int hotX, int hotY) :
       FatProcess (name), raw_props
-        { .hot_x = hotX, .hot_y = hotY, .path = path }, _c_x (nullptr), _c_y (nullptr), _c_path (nullptr), _win (nullptr)
+        { .hot_x = hotX, .hot_y = hotY, .path = path, .cursor_shape = 0 }, _c_x (nullptr), _c_y (nullptr), _c_path (nullptr), _c_cursor_shape (nullptr), _win (nullptr)
 
   {
     _action = new UpdateCursorAction (this, "action");
+    _shape_action = new UpdateCursorShapeAction (this, "shape_action");
+    finalize_construction (parent, name);
+  }
+
+  Cursor::Cursor (CoreProcess* parent, const string& name, int cursor_shape) :
+      FatProcess (name), raw_props
+        { .hot_x = -1, .hot_y = -1, .path = "", .cursor_shape = cursor_shape }, _c_x (nullptr), _c_y (nullptr), _c_path (nullptr), _c_cursor_shape (nullptr), _win (nullptr)
+
+  {
+    _action = new UpdateCursorAction (this, "action");
+    _shape_action = new UpdateCursorShapeAction (this, "shape_action");
     finalize_construction (parent, name);
   }
 
@@ -340,6 +351,11 @@ namespace djnn
       _c_path = new Coupling (res, ACTIVATION, _action, ACTIVATION);
       if (!somehow_activating())
         _c_path->disable ();
+    } else if (name == "cursor_shape") {
+      res = new IntPropertyProxy (this, "cursor_shape", raw_props.cursor_shape);
+      _c_cursor_shape = new Coupling (res, ACTIVATION, _shape_action, ACTIVATION);
+      if (!somehow_activating())
+        _c_cursor_shape->disable ();
     }
     return res;
   }
@@ -353,6 +369,8 @@ namespace djnn
       _c_y->enable ();
     if (_c_path)
       _c_path->enable ();
+    if (_c_cursor_shape)
+      _c_cursor_shape->enable ();
     if (_win == nullptr || _win->somehow_deactivating ()) {
       bool found = false;
       FatProcess *cur_parent = get_parent ();
@@ -379,7 +397,10 @@ namespace djnn
         return;
       }
     }
-    update_cursor ();
+    if (!raw_props.path.empty())
+      update_cursor();
+    else
+      update_cursor_shape();
   }
 
   void
@@ -387,6 +408,13 @@ namespace djnn
   {
     if (_win)
       _win->set_cursor (raw_props.path, raw_props.hot_x, raw_props.hot_y);
+  }
+  
+  void
+  Cursor::update_cursor_shape ()
+  {
+    if (_win)
+      _win->set_cursor (raw_props.cursor_shape);
   }
 
   void
@@ -397,6 +425,8 @@ namespace djnn
       _c_y->disable ();
     if (_c_path)
       _c_path->disable ();
+    if (_c_cursor_shape)
+      _c_cursor_shape->disable ();
   }
 
   Cursor::~Cursor ()
@@ -415,6 +445,11 @@ namespace djnn
       auto * path = find_child ("path");
       delete _c_path;
       delete path;
+    }
+    if (_c_cursor_shape) {
+      auto * shape = find_child ("cursor_shape");
+      delete _c_cursor_shape;
+      delete shape;
     }
   }
 

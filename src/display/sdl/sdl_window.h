@@ -36,6 +36,7 @@ namespace djnn {
     virtual ~SDLWindow ();
     SDL_Window * sdl_window() { return _sdl_window; }
     void set_cursor (const string& path, int hotX, int hotY) override;
+    void set_cursor (int cursor_shape) override {};
     enum {
       user_event_awake,
       user_event_geometry
