@@ -30,7 +30,8 @@ namespace djnn {
     buff* get_next_buff ();
     void flip_page ();
     void flip_page_fb (uint32_t fb);
-    void set_cursor (const string& path, int hotX, int hotY) {}
+    void set_cursor (const string& path, int hotX, int hotY) override {}
+    void set_cursor (int cursor_shape) override {}
     FatProcess* get_vblank () {
       if (_conn == nullptr)
         return nullptr;
