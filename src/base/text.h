@@ -117,25 +117,25 @@ namespace djnn
   };
 
   class TextCatenatorAction : public Action
+  {
+  public:
+    TextCatenatorAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo) :
+    Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
+    virtual ~TextCatenatorAction () {}
+    void impl_activate () override
     {
-    public:
-      TextCatenatorAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo) :
-      Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
-      virtual ~TextCatenatorAction () {}
-      void impl_activate () override
-      {
-        const string& head = _tbo._left.get_value ();
-        const string& tail = _tbo._right.get_value ();
-        //string out = head + tail;
-        //_tbo._result.set_value (out, true);
-        _tbo._result.set_value (perform(head, tail), true);
-      }
-      static string perform(const string& l, const string& r) { return l+r; }
-      static string default_value () {return "";}
+      const string& head = _tbo._left.get_value ();
+      const string& tail = _tbo._right.get_value ();
+      //string out = head + tail;
+      //_tbo._result.set_value (out, true);
+      _tbo._result.set_value (perform(head, tail), true);
+    }
+    static string perform(const string& l, const string& r) { return l+r; }
+    static string default_value () {return "";}
 
-    private:
-      TextBinaryOperator<TextCatenatorAction, TextProperty>& _tbo;
-    };
+  private:
+    TextBinaryOperator<TextCatenatorAction, TextProperty>& _tbo;
+  };
 
   class TextComparatorAction : public Action
     {
@@ -153,28 +153,28 @@ namespace djnn
       static bool perform(const string& l, const string& r) { return l.compare(r) == 0; }
       static bool default_value () {return false;}
 
-      private:
+    private:
       TextBinaryOperator<TextComparatorAction, BoolProperty>& _tbo;
     };
 
-    class TextContainerAction : public Action
+  class TextContainerAction : public Action
+  {
+  public:
+    TextContainerAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextContainerAction, BoolProperty>& tbo) :
+    Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
+    virtual ~TextContainerAction () {}
+    void impl_activate ()
     {
-    public:
-      TextContainerAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextContainerAction, BoolProperty>& tbo) :
-      Action (parent, name), _tbo(tbo) { finalize_construction(parent, name); }
-      virtual ~TextContainerAction () {}
-      void impl_activate ()
-      {
-        const string& left = _tbo._left.get_value ();
-        const string& right = _tbo._right.get_value ();
-        _tbo._result.set_value (perform(left, right), true);
-      }
-      static bool perform(const string& l, const string& r) { return !r.empty() && (l.find(r) != std::string::npos); }
-      static bool default_value () {return false;}
+      const string& left = _tbo._left.get_value ();
+      const string& right = _tbo._right.get_value ();
+      _tbo._result.set_value (perform(left, right), true);
+    }
+    static bool perform(const string& l, const string& r) { return !r.empty() && (l.find(r) != std::string::npos); }
+    static bool default_value () {return false;}
 
-      private:
-      TextBinaryOperator<TextContainerAction, BoolProperty>& _tbo;
-    };
+  private:
+    TextBinaryOperator<TextContainerAction, BoolProperty>& _tbo;
+  };
 
   typedef TextBinaryOperator<TextCatenatorAction, TextProperty> TextCatenator;
   typedef TextBinaryOperator<TextComparatorAction, BoolProperty> TextComparator;
