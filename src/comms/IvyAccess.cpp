@@ -27,6 +27,8 @@
 
 #include "core/utils/iostream.h"
 
+#include <regex>
+
 // using djnnstl::cout;
 // using djnnstl::cerr;
 // using djnnstl::endl;
@@ -37,6 +39,16 @@ using namespace djnnstl;
 //#define __IVY_DEBUG__
 
 /** regexp function **/
+
+static int count_regex_groups(const std::string& pattern) {
+    std::regex re(pattern);
+    std::smatch match;
+
+    /* The number of groups is the value of regex.mark_count() */
+    int count = re.mark_count();
+
+    return count;
+}
 
 static const char* _skim_regex (const char* p, int* nb)
 {
@@ -178,7 +190,7 @@ static void _on_ivy_message ( IvyClientPtr app, void *user_data, int argc, char 
   cout << "_on_ivy_message - "  << endl;
   cout << "argc " << argc  << endl ;
   for (int i=0; i < argc ; i++){
-    cout << "argv[" << i << "] - " << djnn::string(argv[i]) << endl;
+    cout << "argv[" << i << "] - " << djnnstl::string(argv[i]) << endl;
   } 
   cout << "user_data (pair->first - regexp) : \"" << regexp  << "\""<< endl;
   cout << "---------------------" << endl << endl;
@@ -475,7 +487,7 @@ IvyAccess::find_child_impl (const string& key)
 {
   
 #ifdef __IVY_DEBUG__
-  cout << "---- Ivy find_child key : " << key << "------" <<  endl ;
+  cout << endl <<"---- Ivy find_child key : " << key << "------" <<  endl ;
 #endif
 
   if (key.at(0) == 'i' && key.at(1) == 'n' && key.at(2) == '/'){
@@ -489,8 +501,8 @@ IvyAccess::find_child_impl (const string& key)
     /* key do not exist - maybe use internal string as regexp */
 
     /* 
-       get sub_string = ...... : in/....../1
-       and save index : 1
+      get sub_string = ...... : in/....../1
+      and save index : 1
     */
     int nb_subexp, len = 0;
     string full_exp = key.substr (3);
@@ -499,7 +511,7 @@ IvyAccess::find_child_impl (const string& key)
     string regexp = full_exp;
     if(re_end && *re_end != '\0'){
       len = key.find (re_end, 3);
-       regexp = key.substr (3, len-3);
+      regexp = key.substr (3, len-3);
     }
     int index = std::stoi (re_end+1);
 
@@ -510,17 +522,46 @@ IvyAccess::find_child_impl (const string& key)
     TextProperty* tmp = dynamic_cast<TextProperty*>(FatProcess::find_child_impl (regexp));
     if (tmp){
 
-      string new_regexp_to_found = "in/" + tmp->get_value () + "/" + djnnstl::to_string(index);
+      string reg_str = tmp->get_value ();
 
 #ifdef __IVY_DEBUG__
-      cout << "REPLACE : " << regexp << " -> " << tmp->get_value () << endl;
-      cout << "new_regexp:  " << new_regexp_to_found << endl << endl;
+      cout << "REPLACE : \"" << regexp << "\" -> \"" << reg_str << "\"" << endl;
 #endif
 
-      /* key do not exist - but use internal string as regexp --- return*/
+      // take advantage of the first call to generate all child properties for each of the regexp groups
+      // else just, answer the initial question
+      map<string, vector<pair<int, djnn::TextProperty*>>>::iterator mit;
+      mit = _in_map.find(reg_str);
+      if (mit == _in_map.end ()) {
+        int nb_groups =  count_regex_groups (reg_str);
+#ifdef __IVY_DEBUG__
+      cout << endl << "----------- initialize full regex ------------" << endl;
+      cout << "nb groupes: " << nb_groups << endl;
+#endif
+        for (int i=1 ; i <= nb_groups ; i++) {
+            string new_bind_to_generate = "in/" + reg_str + "/" + djnnstl::to_string(i);
+            /* key do not exist - but use internal string as regexp --- return*/
+            find_child_impl (new_bind_to_generate);
+        }
+
+#ifdef __IVY_DEBUG__
+      _ivy_debug_mapping (_in_map);
+      cout << "-------------- END initialization -------------" << endl << endl;
+#endif
+      }
+      
+      // found the answer for the question asked 
+      string new_regexp_to_found = "in/" + reg_str + "/" + djnnstl::to_string(index); // the initial question to answer.
+
+#ifdef __IVY_DEBUG__
+      cout << "new_regexp_to_found : " << new_regexp_to_found << endl;
+#endif
+
       return find_child_impl (new_regexp_to_found);
+
     }
     else {
+
       /* key don't exist at all - create it */
 
       /* add as a new _in child */
@@ -540,10 +581,10 @@ IvyAccess::find_child_impl (const string& key)
 
       /* register in _in_map */  
       _in_map[regexp].push_back (djnnstl::pair(index, newin));
-      
-     
+
+
 #ifdef __IVY_DEBUG__
-       _ivy_debug_mapping (_in_map);
+      _ivy_debug_mapping (_in_map);
       cout << "nb sub : " << nb_subexp <<  " endl : \"" <<  re_end << "\" len : " << len << " index : " << index << endl ;
       cout << " regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl << endl;
 #endif
