@@ -256,7 +256,7 @@ namespace djnn
   Regex::Regex (CoreProcess* parent, const string& name, const string& reg)
   : FatProcess (name),
     _input (this, "input", ""),
-    _init (reg),
+    _init (this, "init", reg),
     _regex (reg.c_str()),
     _reg_action (this, "reg_action", *this),
     _c_reg (&_input, ACTIVATION, &_reg_action, ACTIVATION)
@@ -286,6 +286,8 @@ namespace djnn
 
     if (key.compare ("input") == 0)
       return &_input;
+    if (key.compare ("init") == 0)
+      return &_init;
 
     try {
       int i = stoi (key, nullptr);
@@ -343,7 +345,7 @@ namespace djnn
 
     AbstractSerializer::serializer->start ("base:regex");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->text_attribute ("regex", _init);
+    AbstractSerializer::serializer->text_attribute ("regex", _init.get_value());
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize (this);

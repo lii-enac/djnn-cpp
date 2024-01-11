@@ -48,7 +48,7 @@ namespace djnn {
   private:
     void set_parent (CoreProcess* parent) override;
     TextProperty _input;
-    string _init;
+    TextProperty _init;
     std::regex _regex;
     RegexAction _reg_action;
     Coupling _c_reg;
