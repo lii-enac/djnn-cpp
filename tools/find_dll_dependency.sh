@@ -22,6 +22,8 @@ fi
 # Définit la variable d'environnement PATH
 export PATH=:/home/lii/djnn-cpp/build/lib:/home/lii/smala/build/lib:$PATH
 
+echo "use PATH: $PATH"
+
 # Parcourt tous les fichiers exécutables dans le répertoire donné
 find "$directory" -type f -executable -print0 | while read -d $'\0' file; do
   # Ignore les fichiers exécutables qui ne sont pas du même type que l'exécutable donné
