@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#data_dir= 
 # --- user data --- #
 # - les repertoires a copier si besoin
 # - Définit la variable d'environnement PATH -

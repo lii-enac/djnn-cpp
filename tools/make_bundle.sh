@@ -1,5 +1,21 @@
 #!/bin/bash
 
+# cmd to DEBUG
+#rm dbg.txt ; open --stderr dbg.txt --stdout dbg.txt magnitude.app ; cat dbg.txt
+
+# --- user data --- #
+# - les repertoires a copier si besoin
+# - Définit la variable d'environnement PATH -
+
+#data_dir="data curve img diagrams"
+
+echo 
+echo "----------------------------------"
+echo "note:" 
+echo " - Copy and execute this script directly in the directory that you wish to transform into an app."
+echo " - Also, don't forget to enter the PATH and the data directories to copy directly into the script."
+echo "----------------------------------"
+
 # Vérifiez que le script a été appelé avec un argument (le chemin de l'exécutable).
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <executable>"
@@ -17,26 +33,35 @@ rm -rf ${executable_name}.app
 bundle_dir="${executable_name}.app"
 mkdir -p "$bundle_dir/Contents/MacOS"
 
-# Ask how many directories to copy
-echo "How many directories do you want to copy to $bundle_dir/Contents/MacOS?"
-read -p "Enter the number of directories to copy: " num_directories
-
 # Copiez l'exécutable dans le bundle.
 cp "$executable" "$bundle_dir/Contents/MacOS/"
 
-if [[ $num_directories -eq 0 ]]; then
-    echo "Nothing to do."
-elif [[ $num_directories -gt 0 ]]; then
-    echo 
-    for ((i=1; i<=$num_directories; i++)); do
-        read -p "Enter the path of directory $i: " source_directory
-        cp -r "$source_directory" "$bundle_dir/Contents/MacOS/"
-        echo "Directory $source_directory copied to $bundle_dir/Contents/MacOS/"
-    done
-else
-        echo "Invalid number. Please enter a number greater than 1."
-fi
+# Vérifiez si data_dir est vide sinon poser la question
+if [[ -z $data_dir ]]; then
+    # Ask how many directories to copy
+    echo "How many directories do you want to copy to $bundle_dir/Contents/MacOS?"
+    read -p "Enter the number of directories to copy: " num_directories
 
+    if [[ $num_directories -eq 0 ]]; then
+        echo "Nothing to do."
+    elif [[ $num_directories -gt 0 ]]; then
+        echo 
+        for ((i=1; i<=$num_directories; i++)); do
+            read -p "Enter the path of directory $i: " source_directory
+            cp -r "$source_directory" "$bundle_dir/Contents/MacOS/"
+            echo "Directory $source_directory copied to $bundle_dir/Contents/MacOS/"
+        done
+    else
+            echo "Invalid number. Please enter a number greater than 1."
+    fi
+else
+    # Si data_dir n'est pas vide, copiez chaque répertoire dans $bundle_dir/Contents/MacOS/
+    for dir in $data_dir; do
+        cp -r "$dir" "$bundle_dir/Contents/MacOS/"
+        echo "Directory $dir copied to $bundle_dir/Contents/MacOS/"
+    done
+    num_directories=$(echo $data_dir | wc -w)
+fi
 
 
 # Créez un fichier Info.plist pour le bundle.
