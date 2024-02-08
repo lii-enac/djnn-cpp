@@ -4,7 +4,7 @@ Language:        Cpp
 # Nous utiliserons les valeurs par défaut du style LLVM.
 BasedOnStyle: LLVM
 IndentWidth: 4
-BreakBeforeBraces: Attach
+BreakBeforeBraces: Mozilla #Attach
 AlwaysBreakAfterReturnType: AllDefinitions 
 ColumnLimit: 0
 PointerAlignment: Left
@@ -16,3 +16,9 @@ AlignConsecutiveAssignments: true
 AlignConsecutiveBitFields: true
 AlignConsecutiveDeclarations: true
 AlignConsecutiveMacros: true
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '^<.*>'
+    Priority:        1
+  - Regex:           '^".*"'
+    Priority:        2
