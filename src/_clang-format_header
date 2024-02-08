@@ -1,11 +1,16 @@
+
 ---
 Language:        Cpp
 # Nous utiliserons les valeurs par défaut du style LLVM.
 BasedOnStyle: LLVM
 IndentWidth: 4
 BreakBeforeBraces: Attach
-AlwaysBreakAfterReturnType: AllDefinitions   #remove from .h ?
 ColumnLimit: 0
 PointerAlignment: Left
 ReferenceAlignment: Left
 SpaceBeforeParens: Always
+AlignConsecutiveAssignments: true
+AlignConsecutiveBitFields: true
+AlignConsecutiveDeclarations: true
+AlignConsecutiveMacros: true
+# AlignAfterOpenBracket: Align

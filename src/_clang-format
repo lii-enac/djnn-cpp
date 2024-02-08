@@ -1,0 +1,18 @@
+
+---
+Language:        Cpp
+# Nous utiliserons les valeurs par défaut du style LLVM.
+BasedOnStyle: LLVM
+IndentWidth: 4
+BreakBeforeBraces: Attach
+AlwaysBreakAfterReturnType: AllDefinitions 
+ColumnLimit: 0
+PointerAlignment: Left
+ReferenceAlignment: Left
+SpaceBeforeParens: Always
+AllowShortFunctionsOnASingleLine: Inline
+AlwaysBreakAfterDefinitionReturnType: All
+AlignConsecutiveAssignments: true
+AlignConsecutiveBitFields: true
+AlignConsecutiveDeclarations: true
+AlignConsecutiveMacros: true
