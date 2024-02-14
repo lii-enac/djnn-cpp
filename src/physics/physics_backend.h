@@ -15,15 +15,16 @@
 #pragma once
 
 namespace djnn {
-  class AbstractPhysicsBackend;
+class AbstractPhysicsBackend;
 
-  class PhysicsBackend
-  {
+class PhysicsBackend
+{
   public:
     static AbstractPhysicsBackend* instance ();
-    static void init ();
+    static void                    init ();
+
   private:
     class Impl;
     static Impl* _instance;
-  };
-}
+};
+} // namespace djnn

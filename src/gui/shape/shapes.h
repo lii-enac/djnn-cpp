@@ -17,7 +17,9 @@
 #pragma once
 
 #include "gui/shape/circle.h"
+#include "gui/shape/defs.h"
 #include "gui/shape/ellipse.h"
+#include "gui/shape/group.h"
 #include "gui/shape/image.h"
 #include "gui/shape/line.h"
 #include "gui/shape/path.h"
@@ -26,6 +28,3 @@
 #include "gui/shape/rectangle.h"
 #include "gui/shape/rectangle_clip.h"
 #include "gui/shape/text.h"
-
-#include "gui/shape/group.h"
-#include "gui/shape/defs.h"

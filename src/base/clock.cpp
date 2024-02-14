@@ -14,112 +14,109 @@
  */
 
 #include "clock.h"
+
 #include "core/serializer/serializer.h"
 #include "exec_env/djnn_time_manager.h"
 
 // dbg
-//#include "core/utils/iostream.h"
-//#include "utils/debug.h"
+// #include "core/utils/iostream.h"
+// #include "utils/debug.h"
 
 #include "core/utils/error.h"
 
-namespace djnn
+namespace djnn {
+
+Clock::Clock (CoreProcess* parent, const string& name, std::chrono::milliseconds period)
+    : Clock (parent, name, period.count ())
 {
+}
 
-  Clock::Clock (CoreProcess* parent, const string& name, std::chrono::milliseconds period)
-  : Clock(parent, name, period.count ())
-  {
-  }
-
-  Clock::Clock (CoreProcess* parent, const string& name, int period)
-  :
-    FatProcess (name),
-    _period (this, "period", period),
-    _elapsed (this, "elapsed", 0),
-    _tick (this, "tick"),
-    _updateaction (this, "action"),
-    _c_update (&_period, ACTIVATION, &_updateaction, ACTIVATION, true)
-  {
+Clock::Clock (CoreProcess* parent, const string& name, int period)
+    : FatProcess (name),
+      _period (this, "period", period),
+      _elapsed (this, "elapsed", 0),
+      _tick (this, "tick"),
+      _updateaction (this, "action"),
+      _c_update (&_period, ACTIVATION, &_updateaction, ACTIVATION, true)
+{
     finalize_construction (parent, name);
-  }
-
+}
 
 #if DJNN_USE_BOOST_CHRONO
-  Clock::Clock (CoreProcess* parent, const string& name, boost::chrono::milliseconds period)
-  : Clock(parent, name, period.count())
-  {
-  }
+Clock::Clock (CoreProcess* parent, const string& name, boost::chrono::milliseconds period)
+    : Clock (parent, name, period.count ())
+{
+}
 #endif
-  Clock::~Clock ()
-  {
-  }
+Clock::~Clock ()
+{
+}
 
-  // FatProcess
-  void
-  Clock::impl_activate ()
-  {
-    //std::cerr << DBGVAR(_period.get_value ()) << __FL__;
-    //std::cerr << "activate " << get_name () << __FL__;
-    djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
-    if (d<=std::chrono::milliseconds(0)) {
-      error (this, "clock period must be greater than 0");
+// FatProcess
+void
+Clock::impl_activate ()
+{
+    // std::cerr << DBGVAR(_period.get_value ()) << __FL__;
+    // std::cerr << "activate " << get_name () << __FL__;
+    djnn_internal::Time::duration d = std::chrono::milliseconds (_period.get_value ());
+    if (d <= std::chrono::milliseconds (0)) {
+        error (this, "clock period must be greater than 0");
     }
     _c_update.enable ();
-    DjnnTimeManager::instance().schedule(this, d);
-  }
+    DjnnTimeManager::instance ().schedule (this, d);
+}
 
-  void
-  Clock::impl_deactivate ()
-  {
-     _c_update.disable ();
-    if(is_already_scheduled ())
-      DjnnTimeManager::instance().cancel(this);
-  }
+void
+Clock::impl_deactivate ()
+{
+    _c_update.disable ();
+    if (is_already_scheduled ())
+        DjnnTimeManager::instance ().cancel (this);
+}
 
-  // djnn_internal::Time::Timer
-  void
-  Clock::do_it(const djnn_internal::Time::duration& actualduration)
-  {
-    _elapsed.set_value ((double)actualduration.count()/1000, true);
-    //auto sav_period = _period.get_value ();
+// djnn_internal::Time::Timer
+void
+Clock::do_it (const djnn_internal::Time::duration& actualduration)
+{
+    _elapsed.set_value ((double)actualduration.count () / 1000, true);
+    // auto sav_period = _period.get_value ();
     _tick.schedule_activation ();
-    if(somehow_activating()
-      //&& !DjnnTimeManager::instance().already_scheduled(this)) // activate could have updated period // FIXME costly
-      //&& sav_period == _period.get_value ()
-    )
-    {
-      if(!is_already_scheduled ()) {// _tick.activate() below might have alread scheduled it
-        djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
-        DjnnTimeManager::instance().schedule(this, d, get_end_time());
-      }
+    if (somehow_activating ()
+        //&& !DjnnTimeManager::instance().already_scheduled(this)) // activate could have updated period // FIXME costly
+        //&& sav_period == _period.get_value ()
+    ) {
+        if (!is_already_scheduled ()) { // _tick.activate() below might have alread scheduled it
+            djnn_internal::Time::duration d = std::chrono::milliseconds (_period.get_value ());
+            DjnnTimeManager::instance ().schedule (this, d, get_end_time ());
+        }
     }
-  }
+}
 
-  void
-  Clock::update_period()
-  { //DBG
-    if(is_already_scheduled ())
-      DjnnTimeManager::instance().cancel(this);
-    if(somehow_activating()) {
-      djnn_internal::Time::duration d = std::chrono::milliseconds(_period.get_value ());
-      DjnnTimeManager::instance().schedule(this, d);
+void
+Clock::update_period ()
+{ // DBG
+    if (is_already_scheduled ())
+        DjnnTimeManager::instance ().cancel (this);
+    if (somehow_activating ()) {
+        djnn_internal::Time::duration d = std::chrono::milliseconds (_period.get_value ());
+        DjnnTimeManager::instance ().schedule (this, d);
     }
-  }
+}
 
 #ifndef DJNN_NO_SERIALIZE
-  void
-  Clock::serialize (const string& type) {
-   
-    AbstractSerializer::pre_serialize(this, type);
+void
+Clock::serialize (const string& type)
+{
+
+    AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("base:clock");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->int_attribute ("period", _period.get_value ());
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize(this);
-
-  }
+    AbstractSerializer::post_serialize (this);
+}
 #endif
 
-}
+} // namespace djnn

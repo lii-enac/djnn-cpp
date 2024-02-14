@@ -14,31 +14,33 @@
 
 #pragma once
 
-#include "exec_env/time_manager.h"
 #include "exec_env/external_source.h"
+#include "exec_env/time_manager.h"
 
 namespace djnn {
 
-    class DjnnTimeManager : public djnn_internal::Time::Manager, public ExternalSource {
-    public:
-        DjnnTimeManager();
-        ~DjnnTimeManager();
+class DjnnTimeManager : public djnn_internal::Time::Manager, public ExternalSource
+{
+  public:
+    DjnnTimeManager ();
+    ~DjnnTimeManager ();
 
-        static DjnnTimeManager& instance ();
-        void delete_ ();
-        //static DjnnTimeManager _instance;
+    static DjnnTimeManager& instance ();
+    void                    delete_ ();
+    // static DjnnTimeManager _instance;
 
-        virtual void please_stop () override;
+    virtual void please_stop () override;
 
-        void update_ref_now_in_scheduled_timers ();
+    void update_ref_now_in_scheduled_timers ();
 
-        void run_for_emscripten ();
+    void run_for_emscripten ();
 
-    protected:
-        // djnn_internal::Time::Manager
-        virtual void firstTimerHasChanged() override;
-    private:
-        // ExternalSource
-        void run () override;
-    };
-}
+  protected:
+    // djnn_internal::Time::Manager
+    virtual void firstTimerHasChanged () override;
+
+  private:
+    // ExternalSource
+    void run () override;
+};
+} // namespace djnn

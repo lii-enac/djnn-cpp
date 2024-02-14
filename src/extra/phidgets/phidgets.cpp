@@ -12,33 +12,33 @@
  *
  */
 
-#include "phidgets-priv.h"
 #include "core/tree/set.h"
 #include "core/utils/uri.h"
+#include "phidgets-priv.h"
 
 namespace djnn {
 
-  static bool __module_initialized = false;
+static bool __module_initialized = false;
 
-  FatProcess *Phidgets = nullptr;
-  FatProcess *InterfaceKits = nullptr;
+FatProcess* Phidgets      = nullptr;
+FatProcess* InterfaceKits = nullptr;
 
-  void
-  init_phidgets () {
+void
+init_phidgets ()
+{
 
-    if ( __module_initialized == false ) {
+    if (__module_initialized == false) {
 
-      __module_initialized = true;
-      
-      djnn::loadedModules.push_back("phidgets");
+        __module_initialized = true;
 
-      Phidgets = new Set (nullptr, "Phidgets");
-      Phidgets->activate ();
-      InterfaceKits = new Set (Phidgets, "InterfaceKits");
-      InterfaceKits->activate ();
-      URI::add_uri ("phidgets", Phidgets);
-      p_init_phidgets ();
+        djnn::loadedModules.push_back ("phidgets");
+
+        Phidgets = new Set (nullptr, "Phidgets");
+        Phidgets->activate ();
+        InterfaceKits = new Set (Phidgets, "InterfaceKits");
+        InterfaceKits->activate ();
+        URI::add_uri ("phidgets", Phidgets);
+        p_init_phidgets ();
     }
-
-  }
 }
+} // namespace djnn

@@ -15,7 +15,8 @@
 #include "extra/phidgets/phidgets-priv.h"
 
 namespace djnn {
-  void
-  p_init_phidgets () {
-  }
+void
+p_init_phidgets ()
+{
 }
+} // namespace djnn

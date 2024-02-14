@@ -15,40 +15,40 @@
 #pragma once
 
 #include "core/control/action.h"
-#include "core/tree/component.h"
 #include "core/control/spike.h"
-#include "core/property/text_property.h"
-#include "core/property/ref_property.h"
 #include "core/ontology/coupling.h"
+#include "core/property/ref_property.h"
+#include "core/property/text_property.h"
+#include "core/tree/component.h"
 
-namespace djnn
+namespace djnn {
+
+class Finder : public FatProcess
 {
-
-  class Finder : public FatProcess
-  {
   private:
     class FinderAction : public Action
     {
-    public:
-      FinderAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
-      virtual ~FinderAction () {}
-      void impl_activate () override;
+      public:
+        FinderAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        virtual ~FinderAction () {}
+        void impl_activate () override;
     };
-    public:
-      Finder (CoreProcess* parent, const string& name, CoreProcess *container, const string& path);
-      virtual ~Finder ();
-      void impl_activate () override;
-      void impl_deactivate () override;
+
+  public:
+    Finder (CoreProcess* parent, const string& name, CoreProcess* container, const string& path);
+    virtual ~Finder ();
+    void impl_activate () override;
+    void impl_deactivate () override;
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif
-    private:
-      void set_parent (CoreProcess* parent) override;
-      Container *_container;
-      TextProperty _path, _key;
-      RefProperty _result;
-      Spike _found, _not_found;
-      FinderAction _action;
-      Coupling _cfind;
-  };
-}
+  private:
+    void         set_parent (CoreProcess* parent) override;
+    Container*   _container;
+    TextProperty _path, _key;
+    RefProperty  _result;
+    Spike        _found, _not_found;
+    FinderAction _action;
+    Coupling     _cfind;
+};
+} // namespace djnn

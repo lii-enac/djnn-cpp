@@ -16,36 +16,37 @@
  *
  */
 
-
 #pragma once
 
-#include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
+#include "core/ontology/process.h"
 
-
-
-namespace djnn
+namespace djnn {
+class AbstractPropEllipse : public AbstractGShape
 {
-  class AbstractPropEllipse : public AbstractGShape
-  {
   public:
     AbstractPropEllipse (CoreProcess* parent, const string& name, double cx, double cy, double rx, double ry);
     virtual ~AbstractPropEllipse ();
-    
-    
-    void get_properties_values (double& cx, double& cy, double& rx, double& ry);
+
+    void                                    get_properties_values (double& cx, double& cy, double& rx, double& ry);
     const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child_impl ("cx"); }
-		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child_impl ("cy"); }
-		AbstractDoubleProperty* rx () { return (AbstractDoubleProperty*) find_child_impl ("rx"); }
-		AbstractDoubleProperty* ry () { return (AbstractDoubleProperty*) find_child_impl ("ry"); }
+    virtual CoreProcess*                    find_child_impl (const string&) override;
+    AbstractDoubleProperty*                 cx () { return (AbstractDoubleProperty*)find_child_impl ("cx"); }
+    AbstractDoubleProperty*                 cy () { return (AbstractDoubleProperty*)find_child_impl ("cy"); }
+    AbstractDoubleProperty*                 rx () { return (AbstractDoubleProperty*)find_child_impl ("rx"); }
+    AbstractDoubleProperty*                 ry () { return (AbstractDoubleProperty*)find_child_impl ("ry"); }
 
   protected:
-    struct raw_props_t { double cx; double cy; double rx; double ry; };
+    struct raw_props_t
+    {
+        double cx;
+        double cy;
+        double rx;
+        double ry;
+    };
     raw_props_t raw_props;
-    Coupling *_ccx, *_ccy, *_crx, *_cry;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling *  _ccx, *_ccy, *_crx, *_cry;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

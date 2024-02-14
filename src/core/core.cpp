@@ -17,24 +17,20 @@
 #include "core/utils/remotery.h"
 #endif
 
-//#include <locale.h>
-//#include "core/utils/error.h"
+// #include <locale.h>
+// #include "core/utils/error.h"
 #include "core/execution/graph.h"
 
-//#include "utils/debug.h"
-#include "core/utils/iostream.h"
-
-
+// #include "utils/debug.h"
 #include <locale.h>
 
+#include "core/utils/iostream.h"
 
-namespace djnn
-{
-  class FatProcess;
-  class StructureObserver;
+namespace djnn {
+class FatProcess;
+class StructureObserver;
 
-
-  djnnstl::vector<djnnstl::string> loadedModules;
+djnnstl::vector<djnnstl::string> loadedModules;
 /*
   void
   module_loaded(const char*)
@@ -42,156 +38,179 @@ namespace djnn
     djnn::loadedModules.push_back("core");
   }
 */
-  djnnstl::vector<StructureObserver*> structure_observer_list;
+djnnstl::vector<StructureObserver*> structure_observer_list;
 
 #if RMT_ENABLED
-  Remotery* rmt;
+Remotery* rmt;
 #endif
 
-  static bool __module_initialized = false;
+static bool __module_initialized = false;
 
-  void
-  init_core ()
-  {    
+void
+init_core ()
+{
     if (__module_initialized == false) {
-      //printf("init_core\n");
-      __module_initialized = true;
-      
-      djnn::loadedModules.push_back("core");
-      setlocale (LC_NUMERIC, "C");
-      //Graph::instance (); // make sure an instance is built ASAP since some platform may not be able to build it globally
+        // printf("init_core\n");
+        __module_initialized = true;
+
+        djnn::loadedModules.push_back ("core");
+        setlocale (LC_NUMERIC, "C");
+        // Graph::instance (); // make sure an instance is built ASAP since some platform may not be able to build it globally
     }
 
-  /* especially for unit test - make sure graph::_activation_deque is clean for each run */
-  Graph::instance ().clear_activation ();
+    /* especially for unit test - make sure graph::_activation_deque is clean for each run */
+    Graph::instance ().clear_activation ();
 
 #if RMT_ENABLED
-    rmtSettings* settings = rmt_Settings();
-    if(settings) {
-      settings->reuse_open_port = RMT_TRUE;
-      //settings->enableThreadSampler = RMT_FALSE;
+    rmtSettings* settings = rmt_Settings ();
+    if (settings) {
+        settings->reuse_open_port = RMT_TRUE;
+        // settings->enableThreadSampler = RMT_FALSE;
     }
 
-    enum rmtError err = rmt_CreateGlobalInstance(&rmt);
-    if(err) {
-      //warning (nullptr, "Rmt error");
-      //std::cerr << "rmt error " << err << __FL__;
+    enum rmtError err = rmt_CreateGlobalInstance (&rmt);
+    if (err) {
+        // warning (nullptr, "Rmt error");
+        // std::cerr << "rmt error " << err << __FL__;
     }
 #endif
-  }
+}
 
-  extern void delete_parentless_processes ();
-  extern void clear_xml ();
+extern void delete_parentless_processes ();
+extern void clear_xml ();
 
-  void
-  clear_core ()
-  {
-    //XML::clear_xml_parser ();
+void
+clear_core ()
+{
+    // XML::clear_xml_parser ();
 #if RMT_ENABLED
-    rmt_DestroyGlobalInstance(rmt);
+    rmt_DestroyGlobalInstance (rmt);
 #endif
-    //std::cerr << __PRETTY_FUNCTION__ << __FL__;
+    // std::cerr << __PRETTY_FUNCTION__ << __FL__;
     clear_xml ();
     delete_parentless_processes ();
 
     delete &Graph::instance (); // destructor will set Graph::_instance to nullptr since _instance is private
 
     __module_initialized = false;
-  }
+}
 
-  void
-  graph_add_edge (CoreProcess* src, CoreProcess* dst)
-  {
+void
+graph_add_edge (CoreProcess* src, CoreProcess* dst)
+{
     Graph::instance ().add_edge (src, dst);
-  }
-  
-  void
-  graph_remove_edge (CoreProcess* src, CoreProcess* dst)
-  {
-    Graph::instance ().remove_edge (src, dst);
-  }
+}
 
-  void
-  graph_check_order (CoreProcess* p1, CoreProcess* p2) {
+void
+graph_remove_edge (CoreProcess* src, CoreProcess* dst)
+{
+    Graph::instance ().remove_edge (src, dst);
+}
+
+void
+graph_check_order (CoreProcess* p1, CoreProcess* p2)
+{
 #if _DEBUG_ENABLE_CHECK_ORDER
     Graph::instance ().check_order (p1, p2);
 #endif
-  }
-  void
-  graph_exec ()
-  {
+}
+void
+graph_exec ()
+{
     Graph::instance ().exec ();
-  }
-
 }
 
+} // namespace djnn
 
 // temporyary hack
 #if DJNN_USE_FREERTOS
 #include "core/xml/xml.h"
 
 namespace djnn {
-  void XML::clear_xml_parser () {}
+void
+XML::clear_xml_parser ()
+{
 }
+} // namespace djnn
 #endif
-
 
 #if DJNN_STL_EASTL
 // https://github.com/paulhodge/EASTL/blob/community/example/example1.cpp
 // EASTL expects us to define these, see allocator.h line 194
-void* operator new[](size_t size, const char* /* pName */,
-                     int /* flags */, unsigned /* debugFlags */,
-                     const char* /* file */, int /* line */) {
-    return malloc(size);
+void*
+operator new[] (size_t size, const char* /* pName */,
+                int /* flags */, unsigned /* debugFlags */,
+                const char* /* file */, int /* line */)
+{
+    return malloc (size);
 }
 
-void* operator new[](size_t size, size_t alignment,
-                     size_t /* alignmentOffset */, const char* /* pName */,
-                     int /* flags */, unsigned /* debugFlags */,
-                     const char* /* file */, int /* line */) {
+void*
+operator new[] (size_t size, size_t alignment,
+                size_t /* alignmentOffset */, const char* /* pName */,
+                int /* flags */, unsigned /* debugFlags */,
+                const char* /* file */, int /* line */)
+{
     // this allocator doesn't support alignment
-    EASTL_ASSERT(alignment <= 8);
-    return malloc(size);
+    EASTL_ASSERT (alignment <= 8);
+    return malloc (size);
 }
 
 // EASTL also wants us to define this (see string.h line 197)
 namespace EA {
 namespace StdC {
-int Vsnprintf(char8_t* pDestination, size_t n,
-               const char8_t* pFormat, va_list arguments) {
+int
+Vsnprintf (char8_t* pDestination, size_t n,
+           const char8_t* pFormat, va_list arguments)
+{
 #ifdef _MSC_VER
-        return _vsnprintf(pDestination, n, pFormat, arguments);
+    return _vsnprintf (pDestination, n, pFormat, arguments);
 #else
-        return vsnprintf(pDestination, n, pFormat, arguments);
+    return vsnprintf (pDestination, n, pFormat, arguments);
 #endif
 }
 
-int Vsnprintf(char32_t* pDestination, size_t n, const char32_t* pFormat, va_list arguments) { return -1; }
-int Vsnprintf(char16_t* pDestination, size_t n, const char16_t* pFormat, va_list arguments) { return -1; }
-int Vsnprintf(wchar_t* pDestination, size_t n, const wchar_t* pFormat, va_list arguments) { return -1; }
-
-}
-}
-
-int stoi(const eastl::string& s)
+int
+Vsnprintf (char32_t* pDestination, size_t n, const char32_t* pFormat, va_list arguments)
 {
-  return atoi(s.c_str());
+    return -1;
+}
+int
+Vsnprintf (char16_t* pDestination, size_t n, const char16_t* pFormat, va_list arguments)
+{
+    return -1;
+}
+int
+Vsnprintf (wchar_t* pDestination, size_t n, const wchar_t* pFormat, va_list arguments)
+{
+    return -1;
 }
 
-int stoi(const eastl::string& s, size_t* idx, int base)
+} // namespace StdC
+} // namespace EA
+
+int
+stoi (const eastl::string& s)
 {
-  return strtol(s.c_str(), (char **)&idx, base);
+    return atoi (s.c_str ());
 }
 
-double stof(const eastl::string& s)
+int
+stoi (const eastl::string& s, size_t* idx, int base)
 {
-  return atof(s.c_str());
+    return strtol (s.c_str (), (char**)&idx, base);
 }
 
-double stof(const eastl::string& s, size_t* idx)
+double
+stof (const eastl::string& s)
 {
-  return strtod(s.c_str(), (char **)&idx);
+    return atof (s.c_str ());
+}
+
+double
+stof (const eastl::string& s, size_t* idx)
+{
+    return strtod (s.c_str (), (char**)&idx);
 }
 
 #endif
-

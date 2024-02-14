@@ -14,178 +14,184 @@
 
 #pragma once
 
+#include "abstract_pobj.h"
 #include "core/control/action.h"
 #include "core/control/spike.h"
-#include "abstract_pobj.h"
 
+namespace djnn {
 
-namespace djnn
+extern djnnstl::vector<djnnstl::string> loadedModules;
+void                                    init_physics ();
+void                                    clear_physics ();
+
+class PhyObj;
+class WorldImpl
 {
-
-  extern djnnstl::vector<djnnstl::string> loadedModules; 
-  void init_physics ();
-  void clear_physics ();
-
-  class PhyObj;
-  class WorldImpl {
   public:
     WorldImpl () {}
-    virtual  ~WorldImpl () {}
+    virtual ~WorldImpl () {}
     virtual void step (double dt) = 0;
-  };
+};
 
-  class PhyObjImpl {
+class PhyObjImpl
+{
   public:
     PhyObjImpl () {}
-    virtual  ~PhyObjImpl () {}
-  };
-}
+    virtual ~PhyObjImpl () {}
+};
+} // namespace djnn
 
 #include "physics/gen/abstract_prop_world.h"
 
-namespace djnn
+namespace djnn {
+class World : public AbstractPropWorld
 {
-  class World : public AbstractPropWorld {
     typedef vector<PhyObj*> phy_obj_list;
-    class StepAction : public Action {
-    public:
-      StepAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+    class StepAction : public Action
+    {
+      public:
+        StepAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
 
-      virtual ~StepAction () {}
-    private:
-      void impl_activate () override;
+        virtual ~StepAction () {}
+
+      private:
+        void impl_activate () override;
     };
 
   public:
     World (CoreProcess* parent, const string& name, double x, double y, double z = 0);
     virtual ~World ();
     WorldImpl* get_impl () { return _world_impl; }
-    //void get_gravity (double &x, double &y);
-    //void get_dt (double &dt);
-    //FatProcess* find_child (const string& n) override;
+    // void get_gravity (double &x, double &y);
+    // void get_dt (double &dt);
+    // FatProcess* find_child (const string& n) override;
     virtual process_type_e get_process_type () const override { return WORLD_T; }
-    void add_phy_object (PhyObj* p);
-    void remove_phy_object (PhyObj* p);
-    phy_obj_list& get_phy_objects  () { return _phy_objs; }
-    CoreProcess* damaged() { return nullptr; } // place holder for gen_prop // FIXME
-   private:
-    //struct raw_props_t { double x, y, z, dt; };
-    //raw_props_t raw_props;
-    Coupling *_cstep;
-    FatProcess *_step, *_step_action, *_dt;
-    void impl_activate () override;
-    void impl_deactivate () override;
-    WorldImpl *_world_impl;
+    void                   add_phy_object (PhyObj* p);
+    void                   remove_phy_object (PhyObj* p);
+    phy_obj_list&          get_phy_objects () { return _phy_objs; }
+    CoreProcess*           damaged () { return nullptr; } // place holder for gen_prop // FIXME
+  private:
+    // struct raw_props_t { double x, y, z, dt; };
+    // raw_props_t raw_props;
+    Coupling*    _cstep;
+    FatProcess * _step, *_step_action, *_dt;
+    void         impl_activate () override;
+    void         impl_deactivate () override;
+    WorldImpl*   _world_impl;
     phy_obj_list _phy_objs;
-  };
-}
+};
+} // namespace djnn
 
 #include "physics/gen/abstract_prop_phy_obj.h"
 
-namespace djnn
+namespace djnn {
+class PhyObj : public AbstractPropPhyObj
 {
-  class PhyObj : public AbstractPropPhyObj {
-    class D3PhyObjUpdatePosition : public Action {
-        public:
-          D3PhyObjUpdatePosition (CoreProcess* parent, const string& name) : Action (parent, name) {}
-          ~D3PhyObjUpdatePosition () {}
-          void impl_activate () override;
-        };
-        class D3PhyObjUpdateVelocity : public Action {
-        public:
-          D3PhyObjUpdateVelocity (CoreProcess* parent, const string& name) : Action (parent, name) {}
-          ~D3PhyObjUpdateVelocity () {}
-          void impl_activate () override;
-        };
+    class D3PhyObjUpdatePosition : public Action
+    {
+      public:
+        D3PhyObjUpdatePosition (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        ~D3PhyObjUpdatePosition () {}
+        void impl_activate () override;
+    };
+    class D3PhyObjUpdateVelocity : public Action
+    {
+      public:
+        D3PhyObjUpdateVelocity (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        ~D3PhyObjUpdateVelocity () {}
+        void impl_activate () override;
+    };
+
   public:
     PhyObj (CoreProcess* parent, const string& name, double x, double y, double z, double mass);
     PhyObj (CoreProcess* parent, const string& name);
     virtual ~PhyObj ();
-    //FatProcess* find_child (const string& name) override;
-    void impl_activate () override;
-    void impl_deactivate () override;
-    void set_impl (PhyObjImpl* impl) { _impl = impl; }
-    World* get_world () { return _world; }
+    // FatProcess* find_child (const string& name) override;
+    void         impl_activate () override;
+    void         impl_deactivate () override;
+    void         set_impl (PhyObjImpl* impl) { _impl = impl; }
+    World*       get_world () { return _world; }
     virtual void update ();
-    PhyObjImpl* get_impl () { return _impl; }
+    PhyObjImpl*  get_impl () { return _impl; }
     // double density () { return raw_props.density; }
     // double friction () { return raw_props.friction; }
-    void collision () { _collision->activate (); }
-    bool update_from_engine () { return _update_from_engine; }
+    void                 collision () { _collision->activate (); }
+    bool                 update_from_engine () { return _update_from_engine; }
     virtual CoreProcess* find_child_impl (const string&) override;
-    void get_position_values (double& x, double& y, double& z);
-    void get_velocity_values (double& dx, double& dy, double& dz);
+    void                 get_position_values (double& x, double& y, double& z);
+    void                 get_velocity_values (double& dx, double& dy, double& dz);
     // double x () { return raw_props.x; }
     // double y () { return raw_props.y; }
     // double z () { return raw_props.z; }
     // double dx () { return raw_props.dx; }
     // double dy () { return raw_props.dy; }
     // double dz () { return raw_props.dz; }
-    
+
   protected:
     // struct raw_props_t { double x, y, z, dx, dy, dz, roll, pitch, yall, mass, density, friction; };
     // raw_props_t raw_props;
     DoublePropertyProxy *_x, *_y, *_z, *_dx, *_dy, *_dz, *_roll, *_pitch, *_yall;
     //, *_mass, *_density, *_friction;
-    D3PhyObjUpdatePosition *_position_action;
-    D3PhyObjUpdateVelocity *_velocity_action;
-    //Coupling *_cx, *_cy, *_cz, *_cdx, *_cdy, *_cdz;
-    bool _update_from_engine;
-    World *_world;
+    D3PhyObjUpdatePosition* _position_action;
+    D3PhyObjUpdateVelocity* _velocity_action;
+    // Coupling *_cx, *_cy, *_cz, *_cdx, *_cdy, *_cdz;
+    bool        _update_from_engine;
+    World*      _world;
     PhyObjImpl* _impl;
-    Spike *_collision;
-  };
-}
+    Spike*      _collision;
+};
+} // namespace djnn
 
 #include "physics/gen/abstract_prop_box.h"
 
-namespace djnn
+namespace djnn {
+class Box : public AbstractPropBox
 {
-  class Box : public AbstractPropBox {
   public:
     Box (CoreProcess* parent, const string& name, double x, double y, double z, double w, double h, double d, double mass);
     virtual ~Box ();
     void impl_activate () override;
     void impl_deactivate () override;
-    //FatProcess* find_child (const string& n) override;
+    // FatProcess* find_child (const string& n) override;
   private:
-    //double w, h, d;
-    //DoublePropertyProxy *_w, *_h, *_d;
-  };
-}
+    // double w, h, d;
+    // DoublePropertyProxy *_w, *_h, *_d;
+};
+} // namespace djnn
 
 #include "physics/gen/abstract_prop_plane.h"
 
-namespace djnn
+namespace djnn {
+class Plane : public AbstractPropPlane
 {
-  class Plane : public AbstractPropPlane  {
   public:
     Plane (CoreProcess* parent, const string& name, double a, double b, double c, double d);
     virtual ~Plane ();
     void impl_activate () override;
     void impl_deactivate () override;
-    //FatProcess* find_child (const string& n) override;
-    void update () override {};
+    // FatProcess* find_child (const string& n) override;
+    void update () override{};
+
   protected:
     // struct plane_raw_props_t { double a, b, c, d ;};
     // plane_raw_props_t _plane_props;
     // DoublePropertyProxy *_a, *_b, *_c, *_d;
-  };
-}
+};
+} // namespace djnn
 
-  #include "physics/gen/abstract_prop_sphere.h"
+#include "physics/gen/abstract_prop_sphere.h"
 
-namespace djnn
+namespace djnn {
+class Sphere : public AbstractPropSphere
 {
-  class Sphere : public AbstractPropSphere {
   public:
     Sphere (CoreProcess* parent, const string& name, double x, double y, double z, double radius, double mass);
     virtual ~Sphere ();
     void impl_activate () override;
     void impl_deactivate () override;
-    //FatProcess* find_child (const string& n) override;
+    // FatProcess* find_child (const string& n) override;
   private:
-    //double radius;
-    //DoublePropertyProxy *_radius;
-  };
-}
+    // double radius;
+    // DoublePropertyProxy *_radius;
+};
+} // namespace djnn

@@ -18,20 +18,20 @@
 
 namespace djnn {
 
-  class AssignmentSequence : public Container
-  {
+class AssignmentSequence : public Container
+{
   public:
     AssignmentSequence (CoreProcess* parent, const string& name, bool is_model);
     virtual ~AssignmentSequence ();
-    void add_child (CoreProcess* c, const string& name) override;
-    void draw () override {}
-    void impl_activate () override;
-    void post_activate () override;
-    void impl_deactivate () override {};
+    void                add_child (CoreProcess* c, const string& name) override;
+    void                draw () override {}
+    void                impl_activate () override;
+    void                post_activate () override;
+    void                impl_deactivate () override{};
     AssignmentSequence* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
-  };
-}
+};
+} // namespace djnn

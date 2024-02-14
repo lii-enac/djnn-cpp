@@ -17,7 +17,7 @@
 #ifndef _WIN32
 #if DJNN_USE_QT_THREAD
 #include <QtGlobal>
-#if (QT_VERSION < QT_VERSION_CHECK(5,10,0))
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
 #undef DJNN_USE_QT_THREAD
 #define DJNN_USE_STD_THREAD 1
 #endif
@@ -25,59 +25,59 @@
 #endif
 
 #if DJNN_USE_BOOST_THREAD
-	#include <boost/thread/thread.hpp>
-	namespace djnn {
-		namespace this_thread = boost::this_thread;
-		typedef boost::thread djnn_thread_t;
-    /*inline void sleep(int ms) {
-      this_thread::sleep_for (boost::chrono::milliseconds(ms));
-    }*/
-	}
-	#define DJNN_THREAD_IS_POINTER 0
+#include <boost/thread/thread.hpp>
+namespace djnn {
+namespace this_thread = boost::this_thread;
+typedef boost::thread djnn_thread_t;
+/*inline void sleep(int ms) {
+  this_thread::sleep_for (boost::chrono::milliseconds(ms));
+}*/
+} // namespace djnn
+#define DJNN_THREAD_IS_POINTER 0
 
 #elif DJNN_USE_BOOST_FIBER
-	#include <boost/fiber/all.hpp>
-	namespace djnn {
-		namespace this_thread = boost::this_fiber;
-		typedef boost::fibers::fiber djnn_thread_t;
-	}
-	#define DJNN_THREAD_IS_POINTER 0
+#include <boost/fiber/all.hpp>
+namespace djnn {
+namespace this_thread = boost::this_fiber;
+typedef boost::fibers::fiber djnn_thread_t;
+} // namespace djnn
+#define DJNN_THREAD_IS_POINTER 0
 
 #elif DJNN_USE_STD_THREAD
-	#include <thread>
-  #include <unistd.h>
-	namespace djnn {
-		namespace this_thread = std::this_thread;
-		typedef std::thread djnn_thread_t;
-    /*inline void sleep(int ms) {
-      ::usleep(1000*ms);
-    }*/
-	}
-	#define DJNN_THREAD_IS_POINTER 0
+#include <thread>
+#include <unistd.h>
+namespace djnn {
+namespace this_thread = std::this_thread;
+typedef std::thread djnn_thread_t;
+/*inline void sleep(int ms) {
+  ::usleep(1000*ms);
+}*/
+} // namespace djnn
+#define DJNN_THREAD_IS_POINTER 0
 
 #elif DJNN_USE_PTHREAD
-	#include <pthread.h>
+#include <pthread.h>
 
 #elif DJNN_USE_QT_THREAD
-	#include <QThread>
-	namespace djnn {
-		typedef QThread djnn_thread_t;
-    /*inline void sleep(int ms) {
-      QThread::currentThread()->usleep(1000*ms);
-    }*/
-	}
-	#define DJNN_THREAD_IS_POINTER 1
+#include <QThread>
+namespace djnn {
+typedef QThread djnn_thread_t;
+/*inline void sleep(int ms) {
+  QThread::currentThread()->usleep(1000*ms);
+}*/
+} // namespace djnn
+#define DJNN_THREAD_IS_POINTER 1
 
 #elif DJNN_USE_SDL_THREAD
-	#include <SDL.h>
-  #define DJNN_THREAD_IS_POINTER 1
+#include <SDL.h>
+#define DJNN_THREAD_IS_POINTER 1
 
-	namespace djnn {
-    typedef SDL_Thread djnn_thread_t;
-    /*inline void sleep(int ms) {
-      SDL_Delay(ms);
-    }*/
-	}
+namespace djnn {
+typedef SDL_Thread djnn_thread_t;
+/*inline void sleep(int ms) {
+  SDL_Delay(ms);
+}*/
+} // namespace djnn
 
 #endif
 

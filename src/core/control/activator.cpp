@@ -14,39 +14,39 @@
  */
 
 #include "activator.h"
-#include "core/utils/error.h"
+
 #include "core/serializer/serializer.h"
+#include "core/utils/error.h"
 
-namespace djnn
+namespace djnn {
+
+Activator::Activator (CoreProcess* parent, const string& name, CoreProcess* action)
+    : FatProcess (name), _action (action)
 {
-  
-
-  Activator::Activator (CoreProcess* parent, const string& name, CoreProcess* action) :
-      FatProcess (name), _action (action)
-  {
     if (_action == nullptr) {
-      error  (this, string("action not found in activator ") + name);
-      return;
+        error (this, string ("action not found in activator ") + name);
+        return;
     }
     finalize_construction (parent, name);
-  }
+}
 
-  Activator::Activator (CoreProcess* parent, const string& name, CoreProcess* action, const string& spec) :
-      Activator (parent, name, action->find_child_impl (spec))
-  {
-  }
+Activator::Activator (CoreProcess* parent, const string& name, CoreProcess* action, const string& spec)
+    : Activator (parent, name, action->find_child_impl (spec))
+{
+}
 
-  Activator::~Activator ()
-  {
-  }
+Activator::~Activator ()
+{
+}
 
 #ifndef DJNN_NO_SERIALIZE
-  void
-  Activator::serialize (const string& format) {
+void
+Activator::serialize (const string& format)
+{
 
     string buf;
 
-    AbstractSerializer::pre_serialize(this, format);
+    AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("core:activator");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
@@ -54,8 +54,8 @@ namespace djnn
     AbstractSerializer::serializer->text_attribute ("action", buf);
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize(this);
-  }
+    AbstractSerializer::post_serialize (this);
+}
 #endif
 
-}
+} // namespace djnn

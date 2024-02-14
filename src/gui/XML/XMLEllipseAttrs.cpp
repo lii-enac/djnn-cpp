@@ -14,9 +14,9 @@
  *
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 // #include "core/cor__e.h"
 #include "gui/gui-dev.h"
 #include "gui/gui-xml.h"
@@ -30,56 +30,63 @@ static int ParseCy (FatProcess**, const char*);
 static int ParseRx (FatProcess**, const char*);
 static int ParseRy (FatProcess**, const char*);
 
-static map <string, djn_XMLAttrHandler> * handlers;
+static map<string, djn_XMLAttrHandler>* handlers;
 
 void
 XMLEllipseAttrs_Hash::init ()
 {
-  if (handlers) return;
-  handlers = new map <string, djn_XMLAttrHandler>;
-  map <string, djn_XMLAttrHandler> handlers_ = {
-    {"ry",{&ParseRy}},
-    {"rx",{&ParseRx}},
-    {"cy",{&ParseCy}},
-    {"cx",{&ParseCx}}
-  };
-  *handlers = std::move(handlers_);
+    if (handlers)
+        return;
+    handlers                                  = new map<string, djn_XMLAttrHandler>;
+    map<string, djn_XMLAttrHandler> handlers_ = {
+        {"ry", {&ParseRy}},
+        {"rx", {&ParseRx}},
+        {"cy", {&ParseCy}},
+        {"cx", {&ParseCx}}};
+    *handlers = std::move (handlers_);
 }
 
 void
 XMLEllipseAttrs_Hash::clear ()
 {
-  delete handlers;
-  handlers = nullptr;
+    delete handlers;
+    handlers = nullptr;
 }
 
 djn_XMLAttrHandler*
-XMLEllipseAttrs_Hash::djn_XMLEllipseAttrsLookup (const char *str, unsigned int len)
+XMLEllipseAttrs_Hash::djn_XMLEllipseAttrsLookup (const char* str, unsigned int len)
 {
-  map<string, djn_XMLAttrHandler>::iterator it;
-  it = handlers->find(string(str));
-  if (it != handlers->end())
-    return &it->second;
-  return 0;
+    map<string, djn_XMLAttrHandler>::iterator it;
+    it = handlers->find (string (str));
+    if (it != handlers->end ())
+        return &it->second;
+    return 0;
 }
-
 
 struct djn_EllipseArgs djn_EllipseArgs = {0., 0., 0., 0.};
 
-static int ParseCx(FatProcess** e, const char* v) {
-	return XML_Utils::djn_XMLParseLength(&djn_EllipseArgs.cx, v);
+static int
+ParseCx (FatProcess** e, const char* v)
+{
+    return XML_Utils::djn_XMLParseLength (&djn_EllipseArgs.cx, v);
 }
 
-static int ParseCy(FatProcess** e, const char* v) {
-	return XML_Utils::djn_XMLParseLength(&djn_EllipseArgs.cy, v);
+static int
+ParseCy (FatProcess** e, const char* v)
+{
+    return XML_Utils::djn_XMLParseLength (&djn_EllipseArgs.cy, v);
 }
 
-static int ParseRx(FatProcess** e, const char* v) {
-	return XML_Utils::djn_XMLParseLength(&djn_EllipseArgs.rx, v);
+static int
+ParseRx (FatProcess** e, const char* v)
+{
+    return XML_Utils::djn_XMLParseLength (&djn_EllipseArgs.rx, v);
 }
 
-static int ParseRy(FatProcess** e, const char* v) {
-	return XML_Utils::djn_XMLParseLength(&djn_EllipseArgs.ry, v);
+static int
+ParseRy (FatProcess** e, const char* v)
+{
+    return XML_Utils::djn_XMLParseLength (&djn_EllipseArgs.ry, v);
 }
 
-}
+} // namespace djnn

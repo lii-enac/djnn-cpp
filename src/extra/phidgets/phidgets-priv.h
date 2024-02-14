@@ -16,5 +16,5 @@
 #include "phidgets-dev.h"
 
 namespace djnn {
-  void p_init_phidgets ();
+void p_init_phidgets ();
 }

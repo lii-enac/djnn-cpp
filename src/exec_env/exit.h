@@ -18,16 +18,16 @@
 #include "core/ontology/process.h"
 #include "core/property/int_property.h"
 
-
 namespace djnn {
 
-  class Exit : public FatProcess
-  {
+class Exit : public FatProcess
+{
   public:
     Exit (CoreProcess* parent, const string& name, int value, bool is_model);
     virtual ~Exit ();
     void impl_activate () override;
     void impl_deactivate () override {}
+
   private:
     IntProperty _value;
 
@@ -35,6 +35,6 @@ namespace djnn {
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
-  };
+};
 
-}
+} // namespace djnn

@@ -15,221 +15,260 @@
 
 #pragma once
 
-#include "core/ontology/process.h"
-#include "core/ontology/coupling.h"
 #include "core/control/action.h"
 #include "core/control/binding.h"
 #include "core/control/template_assignment.h"
+#include "core/ontology/coupling.h"
+#include "core/ontology/process.h"
 
 #define DJNN_connector_INCLUDED 1
 
+namespace djnn {
 
-namespace djnn { 
-
-
-  template <typename X, typename Y>
-  class TCoreConnector : public CoreProcess
-  {
+template <typename X, typename Y>
+class TCoreConnector : public CoreProcess
+{
   public:
-    TCoreConnector (X* src, Y* dst, bool copy_on_activation=true)
-    : _assignment (src, dst, false)
-    , _binding (src, &_assignment)
-    , _copy_on_activation (copy_on_activation)
+    TCoreConnector (X* src, Y* dst, bool copy_on_activation = true)
+        : _assignment (src, dst, false), _binding (src, &_assignment), _copy_on_activation (copy_on_activation)
     {
-      // no need to add edge to graph, assignment already did it
+        // no need to add edge to graph, assignment already did it
     }
-    
-    TCoreConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
-    : TCoreConnector (src, dst, copy_on_activation)
+
+    TCoreConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation = true)
+        : TCoreConnector (src, dst, copy_on_activation)
     {
-      finalize_construction (parent, name);
+        finalize_construction (parent, name);
     }
 
   protected:
-    void impl_activate   () override {  if (_copy_on_activation)  _assignment.perform_action () /* better - instead of calling activate*/;   _binding.activate ();}
-    void impl_deactivate () override { /*_assignment.deactivate (); - does nothing so removed */ _binding.deactivate (); }
+    void impl_activate () override
+    {
+        if (_copy_on_activation)
+            _assignment.perform_action () /* better - instead of calling activate*/;
+        _binding.activate ();
+    }
+    void impl_deactivate () override
+    { /*_assignment.deactivate (); - does nothing so removed */
+        _binding.deactivate ();
+    }
 
   private:
-    TCoreAssignment<X,Y> _assignment;
-    CoreBinding _binding;
-    bool _copy_on_activation;
-public:
+    TCoreAssignment<X, Y> _assignment;
+    CoreBinding           _binding;
+    bool                  _copy_on_activation;
+
+  public:
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
-  };
+};
 
-  template <typename X, typename Y>
-  class TCorePausedConnector : public CoreProcess
-  {
+template <typename X, typename Y>
+class TCorePausedConnector : public CoreProcess
+{
   public:
     TCorePausedConnector (X* src, Y* dst)
-    : _paused_assignment (src, dst, false)
-    , _binding (src, &_paused_assignment)
+        : _paused_assignment (src, dst, false), _binding (src, &_paused_assignment)
     {
-      // no need to add edge to graph, assignment already did it
+        // no need to add edge to graph, assignment already did it
     }
-    
+
     TCorePausedConnector (CoreProcess* parent, const string& name, X* src, Y* dst)
-    : TCorePausedConnector (src, dst)
+        : TCorePausedConnector (src, dst)
     {
-      finalize_construction (parent, name);
+        finalize_construction (parent, name);
     }
 
   protected:
-    void impl_activate   () override { _paused_assignment.perform_action () /* better - instead of calling activate*/;  _binding.activate (); }
-    void impl_deactivate () override { /*_paused_assignment.deactivate ();- does nothing so removed */ _binding.deactivate (); }
+    void impl_activate () override
+    {
+        _paused_assignment.perform_action () /* better - instead of calling activate*/;
+        _binding.activate ();
+    }
+    void impl_deactivate () override
+    { /*_paused_assignment.deactivate ();- does nothing so removed */
+        _binding.deactivate ();
+    }
 
   private:
-    TCorePausedAssignment<X,Y> _paused_assignment;
-    CoreBinding _binding;
-public:
+    TCorePausedAssignment<X, Y> _paused_assignment;
+    CoreBinding                 _binding;
+
+  public:
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
-  };
+};
 
-  template <typename X, typename Y>
-  class TCoreLazyConnector : public CoreProcess
-  {
+template <typename X, typename Y>
+class TCoreLazyConnector : public CoreProcess
+{
   public:
     TCoreLazyConnector (X* src, Y* dst)
-    : _lazy_assignment (src, dst, false)
-    , _binding (src, &_lazy_assignment)
+        : _lazy_assignment (src, dst, false), _binding (src, &_lazy_assignment)
     {
-      // no need to add edge to graph, assignment already did it
+        // no need to add edge to graph, assignment already did it
     }
-    
+
     TCoreLazyConnector (CoreProcess* parent, const string& name, X* src, Y* dst)
-    : TCoreLazyConnector (src, dst)
+        : TCoreLazyConnector (src, dst)
     {
-      finalize_construction (parent, name);
+        finalize_construction (parent, name);
     }
 
   protected:
-    void impl_activate   () override { _lazy_assignment.perform_action () /* better - instead of calling activate*/;  _binding.activate (); }
-    void impl_deactivate () override { /*_paused_assignment.deactivate ();- does nothing so removed */ _binding.deactivate (); }
+    void impl_activate () override
+    {
+        _lazy_assignment.perform_action () /* better - instead of calling activate*/;
+        _binding.activate ();
+    }
+    void impl_deactivate () override
+    { /*_paused_assignment.deactivate ();- does nothing so removed */
+        _binding.deactivate ();
+    }
 
   private:
-    TCoreLazyAssignment<X,Y> _lazy_assignment;
-    CoreBinding _binding;
-public:
+    TCoreLazyAssignment<X, Y> _lazy_assignment;
+    CoreBinding               _binding;
+
+  public:
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
-  };
+};
 
-
-  template <typename X, typename Y>
-  class TConnector : public FatProcess
-  {
+template <typename X, typename Y>
+class TConnector : public FatProcess
+{
   public:
-    TConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
-    : FatProcess (name)
-    , _assignment (src, dst, false)
-    , _binding (src, &_assignment)
-    , _copy_on_activation (copy_on_activation)
+    TConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation = true)
+        : FatProcess (name), _assignment (src, dst, false), _binding (src, &_assignment), _copy_on_activation (copy_on_activation)
     {
-      // no need to add edge to graph, assignment already did it
-      finalize_construction (parent, name);
+        // no need to add edge to graph, assignment already did it
+        finalize_construction (parent, name);
     }
 
     // for legacy reason, to get rid of?
     TConnector (CoreProcess* parent, const string& name,
-                   X* src, const string& sspec,
-                   Y* dst, const string& dspec,
-                   bool copy_on_activation=true)
-    : TConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), copy_on_activation)
-    {}
+                X* src, const string& sspec,
+                Y* dst, const string& dspec,
+                bool copy_on_activation = true)
+        : TConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), copy_on_activation)
+    {
+    }
 
   protected:
-    void impl_activate   () override { if (_copy_on_activation) _assignment.perform_action ()/* better - instead of calling activate*/; _binding.activate ();}
-    void impl_deactivate () override { /* _assignment.deactivate (); - does nothing so removed */ _binding.deactivate (); }
+    void impl_activate () override
+    {
+        if (_copy_on_activation)
+            _assignment.perform_action () /* better - instead of calling activate*/;
+        _binding.activate ();
+    }
+    void impl_deactivate () override
+    { /* _assignment.deactivate (); - does nothing so removed */
+        _binding.deactivate ();
+    }
 
   private:
-    TCoreAssignment<X,Y> _assignment;
-    CoreBinding _binding;
-    bool _copy_on_activation;
-public:
-    //TConnector* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
-#ifndef DJNN_NO_SERIALIZE
-    //void serialize (const string& format) override;
-#endif
-  };
+    TCoreAssignment<X, Y> _assignment;
+    CoreBinding           _binding;
+    bool                  _copy_on_activation;
 
-  template <typename X, typename Y>
-  class TPausedConnector : public FatProcess
-  {
   public:
-    TPausedConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
-    : FatProcess (name)
-    , _paused_assignment (src, dst, false)
-    , _binding (src, &_paused_assignment)
-    , _copy_on_activation (copy_on_activation)
+    // TConnector* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+#ifndef DJNN_NO_SERIALIZE
+    // void serialize (const string& format) override;
+#endif
+};
+
+template <typename X, typename Y>
+class TPausedConnector : public FatProcess
+{
+  public:
+    TPausedConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation = true)
+        : FatProcess (name), _paused_assignment (src, dst, false), _binding (src, &_paused_assignment), _copy_on_activation (copy_on_activation)
     {
-      // no need to add edge to graph, assignment already did it
-      finalize_construction (parent, name);
+        // no need to add edge to graph, assignment already did it
+        finalize_construction (parent, name);
     }
 
     // for legacy reason, to get rid of?
     TPausedConnector (CoreProcess* parent, const string& name,
-                   X* src, const string& sspec,
-                   Y* dst, const string& dspec)
-    : TPausedConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
-    {}
+                      X* src, const string& sspec,
+                      Y* dst, const string& dspec)
+        : TPausedConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
+    {
+    }
 
   protected:
-    void impl_activate   () override { if (_copy_on_activation)  _paused_assignment.activate ()/* better - instead of calling activate*/;  _binding.activate ();}
-    void impl_deactivate () override { /* _paused_assignment.deactivate () - does nothing so removed */ _binding.deactivate (); }
+    void impl_activate () override
+    {
+        if (_copy_on_activation)
+            _paused_assignment.activate () /* better - instead of calling activate*/;
+        _binding.activate ();
+    }
+    void impl_deactivate () override
+    { /* _paused_assignment.deactivate () - does nothing so removed */
+        _binding.deactivate ();
+    }
 
   private:
-    TCorePausedAssignment<X,Y> _paused_assignment;
-    CoreBinding _binding;
-    bool _copy_on_activation;
-public:
+    TCorePausedAssignment<X, Y> _paused_assignment;
+    CoreBinding                 _binding;
+    bool                        _copy_on_activation;
+
+  public:
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
-  };
+};
 
-  template <typename X, typename Y>
-  class TLazyConnector : public FatProcess
-  {
+template <typename X, typename Y>
+class TLazyConnector : public FatProcess
+{
   public:
-    TLazyConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation=true)
-    : FatProcess (name)
-    , _lazy_assignment (src, dst, false)
-    , _binding (src, &_lazy_assignment)
-    , _copy_on_activation (copy_on_activation)
+    TLazyConnector (CoreProcess* parent, const string& name, X* src, Y* dst, bool copy_on_activation = true)
+        : FatProcess (name), _lazy_assignment (src, dst, false), _binding (src, &_lazy_assignment), _copy_on_activation (copy_on_activation)
     {
-      // no need to add edge to graph, assignment already did it
-      finalize_construction (parent, name);
+        // no need to add edge to graph, assignment already did it
+        finalize_construction (parent, name);
     }
 
     // for legacy reason, to get rid of?
     TLazyConnector (CoreProcess* parent, const string& name,
-                   X* src, const string& sspec,
-                   Y* dst, const string& dspec)
-    : TLazyConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
-    {}
+                    X* src, const string& sspec,
+                    Y* dst, const string& dspec)
+        : TLazyConnector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
+    {
+    }
 
   protected:
-    void impl_activate   () override { if (_copy_on_activation)  _lazy_assignment.activate ()/* better - instead of calling activate*/;  _binding.activate ();}
-    void impl_deactivate () override { /* _paused_assignment.deactivate () - does nothing so removed */ _binding.deactivate (); }
+    void impl_activate () override
+    {
+        if (_copy_on_activation)
+            _lazy_assignment.activate () /* better - instead of calling activate*/;
+        _binding.activate ();
+    }
+    void impl_deactivate () override
+    { /* _paused_assignment.deactivate () - does nothing so removed */
+        _binding.deactivate ();
+    }
 
   private:
-    TCoreLazyAssignment<X,Y> _lazy_assignment;
-    CoreBinding _binding;
-    bool _copy_on_activation;
-public:
+    TCoreLazyAssignment<X, Y> _lazy_assignment;
+    CoreBinding               _binding;
+    bool                      _copy_on_activation;
+
+  public:
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
-  };
+};
 
-  template <typename X, typename Y>
-  void TMultiConnector (CoreProcess* parent, X* src, vector <string> src_props, Y* dst, vector <string> dst_props, bool copy_on_activation=true);
-  
-  template <typename X, typename Y>
-  void TMultiConnector (CoreProcess* parent, X* src, Y* dst, bool copy_on_activation=true);
-}
+template <typename X, typename Y>
+void TMultiConnector (CoreProcess* parent, X* src, vector<string> src_props, Y* dst, vector<string> dst_props, bool copy_on_activation = true);
+
+template <typename X, typename Y>
+void TMultiConnector (CoreProcess* parent, X* src, Y* dst, bool copy_on_activation = true);
+} // namespace djnn

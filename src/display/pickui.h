@@ -19,23 +19,28 @@
 
 namespace djnn {
 
-    class PickUI
+class PickUI
+{
+  public:
+    PickUI (bool cache) : _ui (nullptr), _cache (cache) {}
+    ~PickUI ()
     {
-    public:
-        PickUI (bool cache) : _ui (nullptr), _cache (cache) {}
-        ~PickUI () { if (_ui) delete _ui; }
-        bool cache() const { return _cache; }
-        void cache (bool cache) { _cache = cache;}
-        void color (unsigned int c) { _color = c;}
-        unsigned int color () { return _color;}
-        bool has_ui () { return _ui != nullptr; }
-        UI* ui () { return _ui; }
-        virtual void set_mouse_local_coords (double x, double y, bool is_move) = 0;
-    protected:
-        UI* _ui;
+        if (_ui)
+            delete _ui;
+    }
+    bool         cache () const { return _cache; }
+    void         cache (bool cache) { _cache = cache; }
+    void         color (unsigned int c) { _color = c; }
+    unsigned int color () { return _color; }
+    bool         has_ui () { return _ui != nullptr; }
+    UI*          ui () { return _ui; }
+    virtual void set_mouse_local_coords (double x, double y, bool is_move) = 0;
 
-    private:
-        unsigned int _color;
-        bool _cache; 
-    };
-}
+  protected:
+    UI* _ui;
+
+  private:
+    unsigned int _color;
+    bool         _cache;
+};
+} // namespace djnn

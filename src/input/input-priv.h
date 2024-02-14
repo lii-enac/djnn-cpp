@@ -16,7 +16,7 @@
 #include "input-dev.h"
 
 namespace djnn {
-  void p_init_input ();
-  void p_init_gpios ();
-  CoreProcess* p_find_gpio (const djnnstl::string& path, direction_e dir);
-}
+void         p_init_input ();
+void         p_init_gpios ();
+CoreProcess* p_find_gpio (const djnnstl::string& path, direction_e dir);
+} // namespace djnn

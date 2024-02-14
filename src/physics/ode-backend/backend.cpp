@@ -12,33 +12,32 @@
  *
  */
 
-#include "physics_backend.h"
 #include "ode_backend.h"
+#include "physics_backend.h"
 
-namespace djnn
+namespace djnn {
+class PhysicsBackend::Impl
 {
-  class PhysicsBackend::Impl
-  {
   public:
     ODEBackend* ode_backend;
-  };
+};
 
-  PhysicsBackend::Impl* PhysicsBackend::_instance;
+PhysicsBackend::Impl* PhysicsBackend::_instance;
 
-  AbstractPhysicsBackend*
-  PhysicsBackend::instance ()
-  {
+AbstractPhysicsBackend*
+PhysicsBackend::instance ()
+{
     return _instance->ode_backend;
-  }
+}
 
-  void
-  PhysicsBackend::init ()
-  {
+void
+PhysicsBackend::init ()
+{
     if (_instance != nullptr)
-      return;
+        return;
     dInitODE2 (0);
     dAllocateODEDataForThread (dAllocateMaskAll);
-    _instance = new Impl ();
+    _instance              = new Impl ();
     _instance->ode_backend = ODEBackend::instance ();
-  }
 }
+} // namespace djnn

@@ -13,30 +13,30 @@
  */
 
 #include "blank.h"
+
 #include "core/serializer/serializer.h"
 
-
-namespace djnn
-{
+namespace djnn {
 #if !defined(DJNN_NO_SERIALIZE)
-  void
-  Blank::serialize (const string& format) {
+void
+Blank::serialize (const string& format)
+{
 
-    AbstractSerializer::pre_serialize(this, format);
+    AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("core:blank");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize(this);
-  }
+    AbstractSerializer::post_serialize (this);
+}
 #endif
 
-  FatProcess* 
-  Blank::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const 
-  {
-  	auto res = new Blank (nullptr, get_name ());
+FatProcess*
+Blank::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+{
+    auto res           = new Blank (nullptr, get_name ());
     origs_clones[this] = res;
     return res;
-  }
 }
+} // namespace djnn

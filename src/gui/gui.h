@@ -15,10 +15,9 @@
 #pragma once
 
 #include "gui-dev.h"
+#include "interaction/interaction.h"
+#include "layer.h"
 #include "shape/shapes.h"
 #include "style/style.h"
 #include "transformation/transformations.h"
-#include "interaction/interaction.h"
-#include "layer.h"
 #include "widgets/widgets.h"
-

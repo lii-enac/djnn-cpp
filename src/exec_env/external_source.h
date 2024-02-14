@@ -15,14 +15,14 @@
 #pragma once
 
 #include <atomic>
+
 #include "core/utils/containers.h"
 
-namespace djnn
-{
-  //using namespace djnnstl;
+namespace djnn {
+// using namespace djnnstl;
 
-  class ExternalSource
-  {
+class ExternalSource
+{
   public:
     using string = djnnstl::string;
     ExternalSource (const string& name);
@@ -30,9 +30,9 @@ namespace djnn
 
     virtual void start ();
     virtual void please_stop ();
-    virtual void join();
+    virtual void join ();
 
-    void private_run();
+    void          private_run ();
     const string& get_name () const { return _name; }
 
     std::atomic<std::atomic<bool>*> cancelled;
@@ -43,31 +43,31 @@ namespace djnn
     virtual void set_please_stop (bool v) { _please_stop = v; }
     virtual bool get_please_stop () const { return _please_stop; }
 
-    virtual void start_thread();
-    virtual void run() = 0;
+    virtual void start_thread ();
+    virtual void run () = 0;
     friend class MainLoop;
 
-    static void init();
+    static void init ();
 
   protected:
-    static void launch_mutex_lock();
-    static void launch_mutex_unlock();
+    static void launch_mutex_lock ();
+    static void launch_mutex_unlock ();
 
     class Impl;
-    Impl * _impl;
+    Impl* _impl;
 
     string _name;
 
   private:
     std::atomic<bool> _please_stop;
-  };
+};
 
-
-  // not in class ExternalSource as static anymore, because of mingw ld or binutils bug
-  extern
+// not in class ExternalSource as static anymore, because of mingw ld or binutils bug
+extern
 #ifndef __EMSCRIPTEN__
     thread_local
 #endif
-    std::atomic<bool> thread_local_cancelled;
+    std::atomic<bool>
+        thread_local_cancelled;
 
-}
+} // namespace djnn

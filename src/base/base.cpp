@@ -14,28 +14,27 @@
 
 #include "core/ontology/process.h" // vector etc.
 
-namespace djnn
+namespace djnn {
+using namespace djnnstl;
+
+static bool           __module_initialized = false;
+extern vector<string> loadedModules;
+
+void
+init_base ()
 {
-  using namespace djnnstl;
-  
-  static bool __module_initialized = false;
-  extern vector<string> loadedModules;
 
-  void
-  init_base () {
+    if (__module_initialized == false) {
 
-    if ( __module_initialized == false ) {
+        __module_initialized = true;
 
-      __module_initialized = true;
-      
-      djnn::loadedModules.push_back("base");
-      
+        djnn::loadedModules.push_back ("base");
     }
-  }
-
-  void
-  clear_base ()
-  {
-  }
-
 }
+
+void
+clear_base ()
+{
+}
+
+} // namespace djnn

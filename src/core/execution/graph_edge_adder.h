@@ -16,16 +16,16 @@
 
 #include "core/ontology/process.h"
 
-
 namespace djnn {
 
-  class GraphEdgeAdder : public FatProcess
-  {
+class GraphEdgeAdder : public FatProcess
+{
   public:
     GraphEdgeAdder (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst);
     virtual ~GraphEdgeAdder ();
-    void impl_activate () override {};
+    void impl_activate () override{};
     void impl_deactivate () override {}
+
   private:
     CoreProcess *_src, *_dst;
 
@@ -33,5 +33,5 @@ namespace djnn {
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
-  };
-}
+};
+} // namespace djnn

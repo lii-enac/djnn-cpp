@@ -16,34 +16,33 @@
  *
  */
 
-
 #pragma once
 
-#include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
-
+#include "core/ontology/process.h"
 #include "gui/style/abstract_style.h"
 
-
-namespace djnn
+namespace djnn {
+class OutlineMiterLimit : public AbstractStyle
 {
-  class OutlineMiterLimit : public AbstractStyle
-  {
   public:
     OutlineMiterLimit (CoreProcess* parent, const string& name, int limit);
     virtual ~OutlineMiterLimit ();
-    void draw () override;
-    OutlineMiterLimit* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
-    void get_properties_values (int& limit);
+    void                                    draw () override;
+    OutlineMiterLimit*                      impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    void                                    get_properties_values (int& limit);
     const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractIntProperty* limit () { return (AbstractIntProperty*) find_child_impl ("limit"); }
+    virtual CoreProcess*                    find_child_impl (const string&) override;
+    AbstractIntProperty*                    limit () { return (AbstractIntProperty*)find_child_impl ("limit"); }
 
   protected:
-    struct raw_props_t { int limit; };
+    struct raw_props_t
+    {
+        int limit;
+    };
     raw_props_t raw_props;
-    Coupling *_climit;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling*   _climit;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

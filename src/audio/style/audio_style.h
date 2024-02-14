@@ -19,40 +19,35 @@
 #include "audio/audio_backend.h"
 #include "core/ontology/process.h"
 
-
-
-namespace djnn
+namespace djnn {
+class AbstractAudioStyle : public AbstractSObj
 {
-  class AbstractAudioStyle : public AbstractSObj
-  {
   public:
-    AbstractAudioStyle (CoreProcess* parent, const string& name) : AbstractSObj(parent, name) {}
-    virtual ~AbstractAudioStyle () {};
+    AbstractAudioStyle (CoreProcess* parent, const string& name) : AbstractSObj (parent, name) {}
+    virtual ~AbstractAudioStyle (){};
     virtual void impl_activate () override {}
     virtual void impl_deactivate () override {}
-  };
-}
+};
+} // namespace djnn
 
 #include "gen/abstract_volume.h"
 
-namespace djnn
+namespace djnn {
+class Volume : public AbstractVolume
 {
-  class Volume : public AbstractVolume
-  {
   public:
-  	Volume(CoreProcess* parent, const string& name, double volume)
-  	: AbstractVolume(parent, name, volume)
-  	{
-  		finalize_construction (parent, name);
-  	}
+    Volume (CoreProcess* parent, const string& name, double volume)
+        : AbstractVolume (parent, name, volume)
+    {
+        finalize_construction (parent, name);
+    }
 
-  	
-  	void sound () {
-    	if (somehow_activating ()) {
-  			AudioBackend::instance ().load (this);
-  		}
-  	}
+    void sound ()
+    {
+        if (somehow_activating ()) {
+            AudioBackend::instance ().load (this);
+        }
+    }
+};
 
-  };
-
-}
+} // namespace djnn

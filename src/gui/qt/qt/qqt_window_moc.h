@@ -15,49 +15,50 @@
 
 #pragma once
 
-#include "exec_env/external_source.h"
-#include "display/window.h"
+#include <QtWidgets/QWidget>
+
 #include "display/qt/qt_window.h"
 #include "display/qt/qt_window_moc.h"
-
-#include "qt_picking_view.h"
+#include "display/window.h"
+#include "exec_env/external_source.h"
 #include "gui/picking/analytical_picking.h"
-
-#include <QtWidgets/QWidget>
-//#include <QTabletEvent>
-//#include <QOpenGLFunctions>
+#include "qt_picking_view.h"
+// #include <QTabletEvent>
+// #include <QOpenGLFunctions>
 
 namespace djnn {
 
-  // no signal for QWidget events!!!
-  class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
-  {
+// no signal for QWidget events!!!
+class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
+{
     Q_OBJECT
-    // moc src/gui/qt/my_qwindow.h > src/gui/qt/moc_MyQWindow.cpp 
+    // moc src/gui/qt/my_qwindow.h > src/gui/qt/moc_MyQWindow.cpp
 
   public:
-    MyQQWidget(Window *w, QtWindow * qtw) : MyQWidget(w,qtw) {
-      setAttribute(Qt::WA_AcceptTouchEvents, true);
-      _picking_view = new QtPickingView (w);
-      //_picking_view = new AnalyticalPicking (w);
+    MyQQWidget (Window* w, QtWindow* qtw) : MyQWidget (w, qtw)
+    {
+        setAttribute (Qt::WA_AcceptTouchEvents, true);
+        _picking_view = new QtPickingView (w);
+        //_picking_view = new AnalyticalPicking (w);
     }
-    virtual Picking* get_picking_view() override { return _picking_view; }
-    virtual ~MyQQWidget () { 
-      delete _picking_view;
+    virtual Picking* get_picking_view () override { return _picking_view; }
+    virtual ~MyQQWidget ()
+    {
+        delete _picking_view;
     }
-  protected:
 
-    virtual bool event (QEvent *event) override;
-    virtual void mouseReleaseEvent (QMouseEvent *event) override;
-    virtual void mousePressEvent (QMouseEvent *event) override;
-    virtual void mouseMoveEvent (QMouseEvent *event) override;
-    virtual void wheelEvent (QWheelEvent *event) override;
-    virtual void paintEvent (QPaintEvent *event) override;
-    //virtual void tabletEvent (QTabletEvent *event) override;
-    //virtual void paintGL () override;
-    //virtual void initializeGL () override;
-    
-    QtPickingView *_picking_view;
-    //AnalyticalPicking *_picking_view;
-  };
-}
+  protected:
+    virtual bool event (QEvent* event) override;
+    virtual void mouseReleaseEvent (QMouseEvent* event) override;
+    virtual void mousePressEvent (QMouseEvent* event) override;
+    virtual void mouseMoveEvent (QMouseEvent* event) override;
+    virtual void wheelEvent (QWheelEvent* event) override;
+    virtual void paintEvent (QPaintEvent* event) override;
+    // virtual void tabletEvent (QTabletEvent *event) override;
+    // virtual void paintGL () override;
+    // virtual void initializeGL () override;
+
+    QtPickingView* _picking_view;
+    // AnalyticalPicking *_picking_view;
+};
+} // namespace djnn

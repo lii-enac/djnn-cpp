@@ -13,42 +13,40 @@
  *
  */
 
-#include "gui/backend.h"
-#include "gui/abstract_backend.h"
-#include "display/display-dev.h" // DisplayBackend::instance
-#include "display/abstract_display.h" // DisplayBackend::instance
-#include "gui/shape/sdf.h"
-
 #include "gui/shape/defs.h"
 
+#include "display/abstract_display.h" // DisplayBackend::instance
+#include "display/display-dev.h"      // DisplayBackend::instance
+#include "gui/abstract_backend.h"
+#include "gui/backend.h"
+#include "gui/shape/sdf.h"
 
-namespace djnn
+namespace djnn {
+Defs::Defs (CoreProcess* parent, const string& n)
+    : Container (parent, n)
 {
-  Defs::Defs (CoreProcess* parent, const string& n) :
-      Container (parent, n)
-  {
     finalize_construction (parent, n);
-  }
+}
 
-  Defs::~Defs ()
-  {
-  }
+Defs::~Defs ()
+{
+}
 
-  void
-  Defs::impl_activate ()
-  {
+void
+Defs::impl_activate ()
+{
     // No activation propagation
-  }
+}
 
-  void
-  Defs::impl_deactivate ()
-  {
+void
+Defs::impl_deactivate ()
+{
     // No deactivation propagation;
-  }
+}
 
-  Defs* 
-  Defs::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
-  {
+Defs*
+Defs::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+{
     /*Defs* newd = new Defs (nullptr, get_name ());
 
     for (auto c : _children) {
@@ -57,13 +55,13 @@ namespace djnn
 
     return newd;*/
 
-    auto * clone = new Defs (nullptr, get_name ());
+    auto* clone = new Defs (nullptr, get_name ());
     for (auto c : _children) {
-      auto cclone = c->impl_clone (origs_clones);
-      //origs_clones[c] = cclone;
-      clone->add_child (cclone , this->find_child_name(c));
+        auto cclone = c->impl_clone (origs_clones);
+        // origs_clones[c] = cclone;
+        clone->add_child (cclone, this->find_child_name (c));
     }
     origs_clones[this] = clone;
     return clone;
-  }
 }
+} // namespace djnn

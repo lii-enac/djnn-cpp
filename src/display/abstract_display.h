@@ -3,38 +3,40 @@
 #include "core/utils/containers.h"
 
 namespace djnn {
-	using djnnstl::string;
+using djnnstl::string;
 
-	class Window;
+class Window;
 
-	class WinImpl;
+class WinImpl;
 
-	class AbstractDisplay {
-	public:
-    	AbstractDisplay ()
-		: _window (nullptr) {
-    	}
+class AbstractDisplay
+{
+  public:
+    AbstractDisplay ()
+        : _window (nullptr)
+    {
+    }
 
-	    virtual
-	    ~AbstractDisplay ()
-	    {
-	    }
-	    
-	    virtual WinImpl*
-	    create_window (Window *win, const string& title, double x, double y, double w, double h) = 0;
+    virtual ~AbstractDisplay ()
+    {
+    }
 
-	    void
-	    set_window (Window *w)
-	    {
-	      _window = w;
-	    }
+    virtual WinImpl*
+    create_window (Window* win, const string& title, double x, double y, double w, double h) = 0;
 
-	    Window*
-	    window ()
-	    {
-	      return _window;
-	    }
-	protected:
-		Window * _window;
-	};
-}
+    void
+    set_window (Window* w)
+    {
+        _window = w;
+    }
+
+    Window*
+    window ()
+    {
+        return _window;
+    }
+
+  protected:
+    Window* _window;
+};
+} // namespace djnn
