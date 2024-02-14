@@ -3,26 +3,42 @@
 # Utiliser le premier argument comme répertoire. Si aucun argument n'est fourni, utiliser le répertoire courant.
 dir=${1:-.}
 
-# Chemins vers les fichiers d'en-tête (.h)
-HEADER_FILES=$(find $dir -type f -name "*.h")
+# Liste pour stocker les fichiers exclus
+excluded_files=""
 
-# Chemins vers les fichiers de code source (.cpp)
-CPP_FILES=$(find $dir -type f -name "*.cpp")
+# Fonction pour vérifier si un chemin contient "/ext"
+contains_ext() {
+    if [[ $1 == *"/ext/"* ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
 
-# Appliquer clang-format aux fichiers d'en-tête avec une configuration spécifique
-for file in $HEADER_FILES
-do
-    clang-format --style=file:../src/_clang-format_header -i $file
-
+# Appliquer clang-format aux fichiers d'en-tête (.h)
+while IFS= read -r file; do
+    if contains_ext "$file"; then
+        excluded_files+=" $file"
+        continue
+    fi
+    clang-format --style=file:../src/_clang-format_header -i "$file"
     # Afficher le nom du fichier formaté
     echo "header formatted: $file"
-done
+done < <(find "$dir" -type f -name "*.h")
 
-# Appliquer clang-format aux fichiers de code source avec une configuration différente
-for file in $CPP_FILES
-do
-    clang-format --style=file:../src/_clang-format -i $file
-
+# Appliquer clang-format aux fichiers de code source (.cpp)
+while IFS= read -r file; do
+    if contains_ext "$file"; then
+        excluded_files+=" $file"
+        continue
+    fi
+    clang-format --style=file:../src/_clang-format -i "$file"
     # Afficher le nom du fichier formaté
     echo "src formatted: $file"
+done < <(find "$dir" -type f -name "*.cpp")
+
+# Afficher la liste des fichiers exclus
+echo "---------  path containing /ext/ are excluded files  -----------"
+for file in $excluded_files; do
+    echo "$file"
 done
