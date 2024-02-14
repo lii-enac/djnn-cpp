@@ -16,48 +16,50 @@
 #pragma once
 
 #include "component.h"
-#include "core/property/ref_property.h"
 #include "core/property/int_property.h"
+#include "core/property/ref_property.h"
 
 namespace djnn {
 
-  class Set;
+class Set;
 
-  class SetIterator : public FatProcess
-  {
+class SetIterator : public FatProcess
+{
   public:
-    SetIterator (CoreProcess* parent, const string& name, CoreProcess *set, CoreProcess *action, bool model = true);
+    SetIterator (CoreProcess* parent, const string& name, CoreProcess* set, CoreProcess* action, bool model = true);
     virtual ~SetIterator () {}
     virtual process_type_e get_process_type () const override { return CONTAINER_T; }
-    void impl_activate () override;
-    void impl_deactivate () override {};
-    void post_activate () override;
-  private:
-    Set *_set;
-    CoreProcess *_action;
-  };
+    void                   impl_activate () override;
+    void                   impl_deactivate () override{};
+    void                   post_activate () override;
 
-  class Set : public FatProcess
-  {
+  private:
+    Set*         _set;
+    CoreProcess* _action;
+};
+
+class Set : public FatProcess
+{
   public:
     Set (CoreProcess* parent, const string& name);
-    void add_child (CoreProcess* c, const string& name) override;
-    void remove_child (CoreProcess* c) override;
-    void remove_child (const string& name) override;
+    void         add_child (CoreProcess* c, const string& name) override;
+    void         remove_child (CoreProcess* c) override;
+    void         remove_child (const string& name) override;
     CoreProcess* find_child_impl (const string& path) override;
-    void impl_activate () override;
-    void impl_deactivate () override;
+    void         impl_activate () override;
+    void         impl_deactivate () override;
     virtual ~Set ();
+
   private:
     RefProperty _added, _removed;
     IntProperty _size;
 
   public:
 #ifndef DJNN_NO_DEBUG
-    void dump (int level=0) override;
+    void dump (int level = 0) override;
 #endif
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
-  };
-}
+};
+} // namespace djnn

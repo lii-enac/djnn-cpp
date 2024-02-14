@@ -12,39 +12,38 @@
  *
  */
 
-#include "core/core-dev.h"
-#include "core/utils/error.h"
-#include "core/serializer/serializer.h"
-
 #include "graph_edge_adder.h"
 
-namespace djnn
-{
-  
+#include "core/core-dev.h"
+#include "core/serializer/serializer.h"
+#include "core/utils/error.h"
 
-  GraphEdgeAdder::GraphEdgeAdder (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst) :
-      FatProcess (name), _src (src), _dst (dst)
-  {
+namespace djnn {
+
+GraphEdgeAdder::GraphEdgeAdder (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst)
+    : FatProcess (name), _src (src), _dst (dst)
+{
     if (_src == nullptr || _dst == nullptr) {
-      error  (this, "source or destination cannot be null in GraphEdgeAdder ");
-      return;
+        error (this, "source or destination cannot be null in GraphEdgeAdder ");
+        return;
     }
     graph_add_edge (_src, _dst);
     finalize_construction (parent, name);
-  }
+}
 
-  GraphEdgeAdder::~GraphEdgeAdder ()
-  {
+GraphEdgeAdder::~GraphEdgeAdder ()
+{
     graph_remove_edge (_src, _dst);
-  }
+}
 
 #ifndef DJNN_NO_SERIALIZE
-  void
-  GraphEdgeAdder::serialize (const string& format) {
+void
+GraphEdgeAdder::serialize (const string& format)
+{
 
     string buf;
 
-    AbstractSerializer::pre_serialize(this, format);
+    AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("core:graph-edge-adder");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
@@ -54,8 +53,8 @@ namespace djnn
     AbstractSerializer::serializer->text_attribute ("dst", buf);
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize(this);
-  }
+    AbstractSerializer::post_serialize (this);
+}
 #endif
 
-}
+} // namespace djnn

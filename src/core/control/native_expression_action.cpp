@@ -12,77 +12,76 @@
  *
  */
 
+#include "native_expression_action.h"
+
 #include <cassert>
-#include "core/utils/algorithm.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/assignment_sequence.h"
+#include "core/utils/algorithm.h"
 
-#include "native_expression_action.h"
+namespace djnn {
 
-
-namespace djnn
+NativeExpressionAction::NativeExpressionAction (CoreProcess* parent, const string& name, bool model)
+    : Action (parent, name, model),
+      _src (nullptr),
+      _my_parent_is_an_assignmentsequence (false)
 {
-  
 
-  NativeExpressionAction::NativeExpressionAction (CoreProcess* parent, const string& name, bool model): 
-    Action (parent, name, model), 
-    _src(nullptr), 
-    _my_parent_is_an_assignmentsequence (false)
-  {
-    
-    if (dynamic_cast<AssignmentSequence*> (parent) != nullptr ) {
+    if (dynamic_cast<AssignmentSequence*> (parent) != nullptr) {
         _my_parent_is_an_assignmentsequence = true;
         graph_add_edge (parent, this);
     }
-  }
+}
 
-  NativeExpressionAction::~NativeExpressionAction ()
-  {
-    if ( _my_parent_is_an_assignmentsequence ) {
-      graph_remove_edge (get_parent (), this);
+NativeExpressionAction::~NativeExpressionAction ()
+{
+    if (_my_parent_is_an_assignmentsequence) {
+        graph_remove_edge (get_parent (), this);
     }
 
     remove_all_native_edges ();
-  }
+}
 
-  void
-  NativeExpressionAction::add_native_edge (CoreProcess * src, CoreProcess * dst)
-  {
+void
+NativeExpressionAction::add_native_edge (CoreProcess* src, CoreProcess* dst)
+{
     assert (src);
     assert (dst);
     // there may be multiple output to a native expression, but with a single _src
-    if (_src) assert (src == _src);
-    else _src = src;
+    if (_src)
+        assert (src == _src);
+    else
+        _src = src;
     graph_add_edge (src, dst);
 
     _dsts.push_back (dst);
-  }
+}
 
-  void
-  NativeExpressionAction::remove_all_native_edges ()
-  {
-    if(_src) {
+void
+NativeExpressionAction::remove_all_native_edges ()
+{
+    if (_src) {
 
-      for (auto dst: _dsts ) {
-        graph_remove_edge (_src, dst);
-      }
-      _dsts.clear ();
+        for (auto dst : _dsts) {
+            graph_remove_edge (_src, dst);
+        }
+        _dsts.clear ();
     }
-  }
+}
 
-  void
-  NativeExpressionAction::remove_native_edge (CoreProcess * src, CoreProcess * dst)
-  {
+void
+NativeExpressionAction::remove_native_edge (CoreProcess* src, CoreProcess* dst)
+{
     assert (src);
     assert (dst);
     // there may be multiple output to a native expression, but with a single _src
-    //if(_src) assert (src==_src);
-    //else _src = src;
+    // if(_src) assert (src==_src);
+    // else _src = src;
 
     graph_remove_edge (src, dst);
-    
-    //FIXME : remove-->erase ?
-    _dsts.erase(djnnstl::find (_dsts.begin (), _dsts.end (), dst));
-  }
+
+    // FIXME : remove-->erase ?
+    _dsts.erase (djnnstl::find (_dsts.begin (), _dsts.end (), dst));
 }
+} // namespace djnn

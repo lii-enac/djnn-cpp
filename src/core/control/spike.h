@@ -18,20 +18,22 @@
 
 namespace djnn {
 
-  class Spike : public FatProcess {
+class Spike : public FatProcess
+{
   public:
     Spike (CoreProcess* parent, const string& name, bool model = true) : FatProcess (name, model) { finalize_construction (parent, name); };
-    virtual ~Spike () {};
+    virtual ~Spike (){};
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+
   protected:
     bool pre_activate () override;
     void post_activate () override;
-    void impl_activate () override {};
-    void impl_deactivate () override {};
+    void impl_activate () override{};
+    void impl_deactivate () override{};
 
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
-  };
+};
 
-}
+} // namespace djnn

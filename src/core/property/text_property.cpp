@@ -13,154 +13,153 @@
  *
  */
 
+#include "text_property.h"
+
 #include <stdexcept>
 
-#include "text_property.h"
 #include "core/serializer/serializer.h"
+#include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
 #include "core/utils/to_string.h"
-
-#include "core/utils/djnn_dynamic_cast.h"
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include "core/utils/iostream.h"
 #endif
 
-namespace djnn
+namespace djnn {
+
+using namespace djnnstl;
+
+static string null_string = "null string";
+
+string
+toString (const AbstractSimpleProperty& x)
 {
-  
-  using namespace djnnstl;
+    return x.get_string_value ();
+}
 
-  static string null_string = "null string";
+string&
+toString (CoreProcess* p)
+{
+    return getString (p);
+}
 
-  string
-  toString(const AbstractSimpleProperty& x)
-  {
-      return x.get_string_value();
-  }
-
-  string&
-  toString(CoreProcess* p)
-  {
-      return getString (p);
-  }
-
-  string&
-  getString (CoreProcess* p)
-  {
-    TextProperty *tp = djnn_dynamic_cast<TextProperty*> (p);
+string&
+getString (CoreProcess* p)
+{
+    TextProperty* tp = djnn_dynamic_cast<TextProperty*> (p);
     if (tp != nullptr)
-      return tp->get_value();
+        return tp->get_value ();
     else
-      warning (p, "getString only works on text/string properties");
+        warning (p, "getString only works on text/string properties");
     return null_string;
-  }
+}
 
-  void
-  setString (CoreProcess* p, string& v)
-  {
-    TextProperty *tp = djnn_dynamic_cast<TextProperty*> (p);
+void
+setString (CoreProcess* p, string& v)
+{
+    TextProperty* tp = djnn_dynamic_cast<TextProperty*> (p);
     if (tp != nullptr)
-      tp->set_value (v, true);
+        tp->set_value (v, true);
     else
-      warning (p, "setString only works on text/string properties");
-  }
+        warning (p, "setString only works on text/string properties");
+}
 
-  double
-  AbstractTextProperty::get_double_value ()
-  {
+double
+AbstractTextProperty::get_double_value ()
+{
     try {
-      double r = stof (get_ref_value());
-      return r;
+        double r = stof (get_ref_value ());
+        return r;
+    } catch (const std::invalid_argument& ia) {
+        warning (this, " - stof - undefined double value in text property");
+        return 0;
     }
-    catch (const std::invalid_argument& ia) {
-      warning (this, " - stof - undefined double value in text property");
-      return 0;
-    }
-  }
+}
 
-  double
-  AbstractTextProperty::get_double_value () const
-  {
+double
+AbstractTextProperty::get_double_value () const
+{
     try {
-      double r = stof (get_ref_value());
-      return r;
+        double r = stof (get_ref_value ());
+        return r;
+    } catch (const std::invalid_argument& ia) {
+        warning (nullptr, " - stof - undefined double value in text property");
+        return 0;
     }
-    catch (const std::invalid_argument& ia) {
-      warning (nullptr, " - stof - undefined double value in text property");
-      return 0;
-    }
-  }
+}
 
-  void
-  AbstractTextProperty::set_value (int v, bool propagate)
-  {
-    set_value(djnnstl::to_string (v), propagate);
-  }
+void
+AbstractTextProperty::set_value (int v, bool propagate)
+{
+    set_value (djnnstl::to_string (v), propagate);
+}
 
-  void
-  AbstractTextProperty::set_value (double v, bool propagate)
-  {
-    set_value(djnnstl::to_string (v), propagate);
-  }
+void
+AbstractTextProperty::set_value (double v, bool propagate)
+{
+    set_value (djnnstl::to_string (v), propagate);
+}
 
-  void
-  AbstractTextProperty::set_value (bool v, bool propagate)
-  {
-    set_value (v ? string("true") : string("false"), propagate);
-  }
+void
+AbstractTextProperty::set_value (bool v, bool propagate)
+{
+    set_value (v ? string ("true") : string ("false"), propagate);
+}
 
-  void
-  AbstractTextProperty::set_value (const string& v, bool propagate)
-  {
-    get_ref_value() = v;
+void
+AbstractTextProperty::set_value (const string& v, bool propagate)
+{
+    get_ref_value () = v;
     if (is_activable () && propagate) {
-      notify_activation ();
-      notify_parent ();
+        notify_activation ();
+        notify_parent ();
     }
-  }
+}
 
-  void
-  AbstractTextProperty::set_value (CoreProcess* v, bool propagate)
-  {
-    warning(this, "undefined conversion from Process to Text");
-  }
+void
+AbstractTextProperty::set_value (CoreProcess* v, bool propagate)
+{
+    warning (this, "undefined conversion from Process to Text");
+}
 
 #ifndef DJNN_NO_DEBUG
-  void
-  AbstractTextProperty::dump (int level) {
+void
+AbstractTextProperty::dump (int level)
+{
     using namespace djnnstl;
-    cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_ref_value() << " ]" ;
-  }
+    cout << (get_parent () ? get_parent ()->find_child_name (this) : get_name ()) << " [ " << get_ref_value () << " ]";
+}
 #endif
 
 #if !defined(DJNN_NO_SERIALIZE)
-  void
-  AbstractTextProperty::serialize (const string& format) {
+void
+AbstractTextProperty::serialize (const string& format)
+{
 
-    AbstractSerializer::pre_serialize(this, format);
+    AbstractSerializer::pre_serialize (this, format);
 
     AbstractSerializer::serializer->start ("core:textproperty");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->text_attribute ("value", get_value ());
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize(this);
-  }
+    AbstractSerializer::post_serialize (this);
+}
 #endif
 
-  FatProcess* 
-  TextProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
-  {
-    auto res = new TextProperty (nullptr, get_name (), value);
+FatProcess*
+TextProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+{
+    auto res           = new TextProperty (nullptr, get_name (), value);
     origs_clones[this] = res;
     return res;
-  }
+}
 
-  FatProcess* 
-  TextPropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
-  {
+FatProcess*
+TextPropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+{
     error (this, "*PropertyProxy should not be cloned");
     return nullptr;
-  }
 }
+} // namespace djnn

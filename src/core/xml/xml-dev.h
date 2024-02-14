@@ -14,21 +14,18 @@
 
 #pragma once
 
-//#include "core/ontology/process.h"
-//#include "core/utils/utils-dev.h"
-//#include "xml.h"
+// #include "core/ontology/process.h"
+// #include "core/utils/utils-dev.h"
+// #include "xml.h"
 
 #include "core/utils/containers/string.h"
 
-namespace djnn
-{
-  void init_xml ();
-  void clear_xml ();
+namespace djnn {
+void init_xml ();
+void clear_xml ();
 
-  class FatProcess;
-  FatProcess* load_from_XML (const djnnstl::string& uri);
-  FatProcess* load_from_XML_once (const djnnstl::string& uri);
-  FatProcess* loadFromXML (const djnnstl::string& uri);
-}
-
-
+class FatProcess;
+FatProcess* load_from_XML (const djnnstl::string& uri);
+FatProcess* load_from_XML_once (const djnnstl::string& uri);
+FatProcess* loadFromXML (const djnnstl::string& uri);
+} // namespace djnn

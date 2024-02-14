@@ -16,41 +16,39 @@
 
 #include "core/utils/djnn_dynamic_cast.h"
 
-namespace djnn
-{
-  
+namespace djnn {
 
-  NativeAction::NativeAction (CoreProcess* parent, const string& name, NativeCode *action, void* data,
-                              bool isModel) :
-      Action (parent, name), _data (data), _action (action), _activation_source (nullptr)
-  {
+NativeAction::NativeAction (CoreProcess* parent, const string& name, NativeCode* action, void* data,
+                            bool isModel)
+    : Action (parent, name), _data (data), _action (action), _activation_source (nullptr)
+{
     set_is_model (isModel);
     finalize_construction (parent, name);
-  }
-
-  NativeAction::~NativeAction ()
-  {
-  }
-
-  void
-  NativeAction::impl_activate ()
-  {
-    (_action) (this);
-  }
-
-  void*
-  NativeAction::data ()
-  {
-    return _data;
-  }
-
-  void*
-  get_native_user_data (CoreProcess* native_action)
-  {
-    NativeAction *na = djnn_dynamic_cast<NativeAction*> (native_action);
-    if (na == nullptr)
-      return nullptr;
-    return na->data ();
-    //return native_action->data ();
-  }
 }
+
+NativeAction::~NativeAction ()
+{
+}
+
+void
+NativeAction::impl_activate ()
+{
+    (_action) (this);
+}
+
+void*
+NativeAction::data ()
+{
+    return _data;
+}
+
+void*
+get_native_user_data (CoreProcess* native_action)
+{
+    NativeAction* na = djnn_dynamic_cast<NativeAction*> (native_action);
+    if (na == nullptr)
+        return nullptr;
+    return na->data ();
+    // return native_action->data ();
+}
+} // namespace djnn
