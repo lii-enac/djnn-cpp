@@ -14,30 +14,28 @@
 
 #pragma once
 
-#include "core/control/spike.h"
 #include "core/ontology/process.h"
 #include "exec_env/external_source.h"
+#include "core/control/spike.h"
 
 namespace djnn {
-class IOFD : public FatProcess, public ExternalSource
-{
-  public:
-    IOFD (CoreProcess* parent, const CoreProcess::string& name, int readfd);
-    virtual ~IOFD () override;
+	class IOFD : public FatProcess, public ExternalSource {
+	public:
+		IOFD(CoreProcess* parent, const CoreProcess::string& name, int readfd);
+		virtual ~IOFD() override;
 
-    int  readfd () const { return _readfd; }
-    void setfd (int fd) { _readfd = fd; }
+		int readfd() const { return _readfd; }
+		void setfd(int fd) { _readfd = fd; }
 
-  protected:
-    // FatProcess
-    virtual void impl_activate () override;
-    virtual void impl_deactivate () override;
-
-  private:
-    // ExternalSource
-    void run () override;
-
-    int   _readfd;
-    Spike _readable;
-};
-} // namespace djnn
+	protected:
+		// FatProcess
+		virtual void impl_activate () override;
+    	virtual void impl_deactivate () override;
+	private:
+		// ExternalSource
+		void run () override;
+		
+		int _readfd;
+		Spike _readable;
+	};
+}

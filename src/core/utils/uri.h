@@ -16,15 +16,14 @@
 
 #include "core/ontology/process.h"
 
+
 namespace djnn {
-class URI
-{
+  class URI {
   public:
     static CoreProcess* find_by_uri (const djnnstl::string& uri);
-    static void         add_uri (const djnnstl::string& prefix, CoreProcess* p);
-
+    static void add_uri (const djnnstl::string& prefix, CoreProcess* p);
   private:
     typedef djnnstl::map<djnnstl::string, CoreProcess*> uris_t;
-    static uris_t                                       uri_manager;
-};
-} // namespace djnn
+    static uris_t uri_manager;
+  };
+}

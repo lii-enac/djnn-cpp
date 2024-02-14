@@ -12,372 +12,369 @@
  *
  */
 
-#include "core/utils/algorithm.h"
-
-#include "algorithm.h"
 #include "core/core-dev.h" // graph add/remove edge
-#include "core/serializer/serializer.h"
-#include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
+#include "core/utils/djnn_dynamic_cast.h"
+#include "core/serializer/serializer.h"
 
-namespace djnn {
-using namespace djnnstl;
+#include "core/utils/algorithm.h"
+#include "algorithm.h"
 
-Sorter::Sorter (CoreProcess* parent, const string& name, CoreProcess* container, const string& spec)
-    : FatProcess (name),
+
+namespace djnn
+{
+  using namespace djnnstl;
+
+  Sorter::Sorter (CoreProcess* parent, const string& name, CoreProcess *container, const string& spec) :
+      FatProcess (name),
       _ascending (this, "ascending", true),
       _spec (this, "spec", spec),
       _sort_action (this, "sort"),
       _c_spec_action (&_spec, ACTIVATION, &_sort_action, ACTIVATION)
-{
+  {
     _container = djnn_dynamic_cast<Container*> (container);
     if (_container == nullptr)
-        error (this, "Wrong argument: only containers can be sorted");
+      error (this, "Wrong argument: only containers can be sorted");
+
 
     finalize_construction (parent, name);
-}
+  }
 
-Sorter::~Sorter ()
-{
-}
+  Sorter::~Sorter () {
+  }
 
-void
-Sorter::impl_activate ()
-{
+  void
+  Sorter::impl_activate ()
+  {
     _c_spec_action.enable ();
-}
+  }
 
-void
-Sorter::impl_deactivate ()
-{
+  void
+  Sorter::impl_deactivate ()
+  {
     _c_spec_action.disable ();
-}
+  }
 
-AbstractSimpleProperty*
-Sorter::get_and_check (CoreProcess* p)
-{
+  AbstractSimpleProperty*
+  Sorter::get_and_check (CoreProcess *p)
+  {
     AbstractSimpleProperty* r = nullptr;
-    if (p)
-        r = djnn_dynamic_cast<AbstractSimpleProperty*> (p->find_child_impl (_spec.get_value ()));
+    if(p)
+      r = djnn_dynamic_cast<AbstractSimpleProperty*> (p->find_child_impl (_spec.get_value ()));
     if (r == nullptr) {
-        error (this, "Unable to sort children: properties not found or with incorrect type");
-        return nullptr;
+      error (this, "Unable to sort children: properties not found or with incorrect type");
+      return nullptr;
     }
     return r;
-}
+  }
 
-bool
-compare_number (const pair<double, int>& l, const pair<double, int>& r)
-{
+  bool
+  compare_number (const pair<double, int> &l, const pair<double, int> &r)
+  {
     return l.first < r.first;
-}
+  }
 
-bool
-compare_string (const pair<string, int>& l, const pair<string, int>& r)
-{
+  bool
+  compare_string (const pair<string, int> &l, const pair<string, int> &r)
+  {
     return l.first < r.first;
-}
+  }
 
-void
-Sorter::sort ()
-{
-    auto& children = _container->children ();
-    int   sz       = children.size ();
+  void
+  Sorter::sort ()
+  {
+    auto & children = _container->children ();
+    int sz = children.size ();
     if (sz == 0)
-        return;
+      return;
     Container::ordered_children_t cpy (children);
-    auto*                         p    = get_and_check (children[0]);
-    int                           type = p->get_property_type ();
-    switch (type) {
-    case Boolean:
-    case Integer:
-    case Double: {
-        vector<pair<double, int>> to_sort;
-        int                       i = 0;
-        for (auto c : children) {
-            auto* prop = get_and_check (c);
-            if (prop->get_property_type () != type) {
-                error (this, "Cannot compare properties of different types");
-            }
-            to_sort.push_back (pair<double, int> (prop->get_double_value (), i++));
-        }
-        djnn::stable_sort (to_sort.begin (), to_sort.end (), compare_number);
-        i = 0;
-        for (auto v : to_sort) {
-            if (_ascending.get_value ())
-                _container->set_child (cpy[v.second], i);
-            else
-                _container->set_child (cpy[v.second], sz - i - 1);
-            i++;
-        }
-        break;
-    }
-    case String: {
-        vector<pair<string, int>> to_sort;
-        int                       i = 0;
-        for (auto c : children) {
-            auto* prop = get_and_check (c);
-            if (prop->get_property_type () != type) {
-                error (this, "Cannot compare properties of different types");
-            }
-            to_sort.push_back (pair<string, int> (prop->get_string_value (), i++));
-        }
-        djnn::stable_sort (to_sort.begin (), to_sort.end (), compare_string);
-        i = 0;
-        for (auto v : to_sort) {
-            if (_ascending.get_value ())
-                _container->set_child (cpy[v.second], i);
-            else
-                _container->set_child (cpy[v.second], sz - i - 1);
-            i++;
-        }
-        break;
-    }
-    default:
-        return;
-    }
-}
+    auto * p = get_and_check (children[0]);
+    int type = p->get_property_type ();
+    switch (type)
+      {
+      case Boolean:
+      case Integer:
+      case Double:
+    	{
+    	  vector<pair<double, int>> to_sort;
+    	  int i = 0;
+    	  for (auto c : children) {
+    	    auto * prop = get_and_check (c);
+    	    if (prop->get_property_type () != type) {
+    	      error (this, "Cannot compare properties of different types");
+    	    }
+    	    to_sort.push_back (pair<double, int> (prop->get_double_value (), i++));
+    	  }
+    	  djnn::stable_sort (to_sort.begin (), to_sort.end (), compare_number);
+    	  i = 0;
+    	  for (auto v : to_sort) {
+    	    if (_ascending.get_value ())
+    	      _container->set_child (cpy[v.second], i);
+    	    else
+    	      _container->set_child (cpy[v.second], sz - i - 1);
+    	    i++;
+    	  }
+    	  break;
+    	}
+      case String:
+    	{
+    	  vector<pair<string, int>> to_sort;
+    	  int i = 0;
+    	  for (auto c : children) {
+    	    auto * prop = get_and_check (c);
+    	    if (prop->get_property_type () != type) {
+    	      error (this, "Cannot compare properties of different types");
+    	    }
+    	    to_sort.push_back (pair<string, int> (prop->get_string_value (), i++));
+    	  }
+    	  djnn::stable_sort (to_sort.begin (), to_sort.end (), compare_string);
+    	  i = 0;
+    	  for (auto v : to_sort) {
+    	    if (_ascending.get_value ())
+    	      _container->set_child (cpy[v.second], i);
+    	    else
+    	      _container->set_child (cpy[v.second], sz - i - 1);
+    	    i++;
+    	  }
+    	  break;
+    	}
+      default:
+	       return;
+      }
+  }
 
 #ifndef DJNN_NO_SERIALIZE
-void
-Sorter::serialize (const string& type)
-{
-    AbstractSerializer::pre_serialize (this, type);
+  void
+  Sorter::serialize (const string& type)
+  {
+    AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:sort");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
-    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value ());
+    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize (this);
-}
+    AbstractSerializer::post_serialize(this);
+  }
 #endif
 
-ListOperator::ListOperator (CoreProcess* parent, const string& name, CoreProcess* container, const string& spec)
-    : FatProcess (name),
+  ListOperator::ListOperator (CoreProcess* parent, const string& name, CoreProcess *container, const string& spec) :
+      FatProcess (name),
       _spec (this, "spec", spec),
       _update_list (this, "updateListAction"),
       _spec_action (this, "specAction"),
       _c_spec_action (&_spec, ACTIVATION, &_spec_action, ACTIVATION, true)
-{
+  {
 
     _container = djnn_dynamic_cast<Container*> (container);
     if (_container == nullptr)
-        error (this, "Wrong argument: only containers can be used on List Operator");
+      error (this, "Wrong argument: only containers can be used on List Operator");
     _c_update_list_action = new Coupling (container->find_child_impl ("size"), ACTIVATION, &_update_list, ACTIVATION);
-}
+  }
 
-ListOperator::~ListOperator ()
-{
-    for (auto c : _coupling_list) {
-        delete c;
+  ListOperator::~ListOperator()
+  {
+    for (auto c: _coupling_list) {
+      delete c;
     }
 
     delete _c_update_list_action;
-}
+  }
 
-void
-ListOperator::impl_activate ()
-{
+  void
+  ListOperator::impl_activate ()
+  {
     update_list ();
     _c_update_list_action->enable ();
     _c_spec_action.enable ();
-    for (auto c : _coupling_list) {
-        c->enable ();
+    for (auto c: _coupling_list) {
+      c->enable ();
     }
-}
+  }
 
-void
-ListOperator::impl_deactivate ()
-{
+  void
+  ListOperator::impl_deactivate ()
+  {
     _c_update_list_action->disable ();
     _c_spec_action.disable ();
-    for (auto c : _coupling_list) {
-        c->disable ();
+    for (auto c: _coupling_list) {
+      c->disable ();
     }
-}
+  }
 
-void
-ListOperator::update_list ()
-{
-    for (auto c : _coupling_list) {
-        delete c;
+  void
+  ListOperator::update_list ()
+  {
+    for (auto c: _coupling_list) {
+      delete c;
     }
     _coupling_list.clear ();
-    for (auto c : _container->children ()) {
-        auto* s = djnn_dynamic_cast<AbstractSimpleProperty*> (c->find_child_impl (_spec.get_value ()));
-        if (s == nullptr) {
-            warning (this, "Wrong property in ListOperator " + get_name ());
-            continue;
-        }
-        Coupling* cpl = new Coupling (s, ACTIVATION, &_spec_action, ACTIVATION);
-        _coupling_list.push_back (cpl);
+    for (auto c: _container->children ()) {
+      auto * s = djnn_dynamic_cast<AbstractSimpleProperty*> (c->find_child_impl (_spec.get_value ()));
+      if (s == nullptr) {
+        warning (this, "Wrong property in ListOperator " + get_name ());
+        continue;
+      }
+      Coupling *cpl = new Coupling (s, ACTIVATION, &_spec_action, ACTIVATION);
+      _coupling_list.push_back (cpl);
     }
     do_action ();
-}
+  }
 
-SumList::SumList (CoreProcess* parent, const string& name,
-                  CoreProcess* container, const string& spec)
-    : ListOperator (parent, name, container, spec), _output (this, "output", 0)
-{
-    graph_add_edge (&_spec_action, &_output);
-    finalize_construction (parent, name);
-}
+  SumList::SumList(CoreProcess *parent, const string &name,
+  	  CoreProcess *container, const string &spec) :
+	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
+        graph_add_edge(&_spec_action, &_output);
+        finalize_construction (parent, name);
+  }
 
-SumList::~SumList ()
-{
-    graph_remove_edge (&_spec_action, &_output);
-}
+  SumList::~SumList () {
+    graph_remove_edge(&_spec_action, &_output);
+  }
 
-void
-SumList::do_action ()
-{
+  void
+  SumList::do_action ()
+  {
     double sum = 0;
-    for (auto c : _container->children ()) {
-        sum += ((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value ();
+    for (auto c: _container->children ()) {
+      sum += ((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value();
     }
     _output.set_value (sum, true);
-}
+  }
 
 #ifndef DJNN_NO_SERIALIZE
-void
-SumList::serialize (const string& type)
-{
-    AbstractSerializer::pre_serialize (this, type);
+  void
+  SumList::serialize (const string& type)
+  {
+    AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:sum-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
-    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value ());
+    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize (this);
-}
+    AbstractSerializer::post_serialize(this);
+  }
 #endif
 
-ProductList::ProductList (CoreProcess* parent, const string& name,
-                          CoreProcess* container, const string& spec)
-    : ListOperator (parent, name, container, spec), _output (this, "output", 0)
-{
-    graph_add_edge (&_spec_action, &_output);
-    finalize_construction (parent, name);
-}
+  ProductList::ProductList(CoreProcess *parent, const string &name,
+  	  CoreProcess *container, const string &spec) :
+	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
+        graph_add_edge(&_spec_action, &_output);
+        finalize_construction (parent, name);
+  }
 
-ProductList::~ProductList ()
-{
-    graph_remove_edge (&_spec_action, &_output);
-}
+  ProductList::~ProductList () {
+    graph_remove_edge(&_spec_action, &_output);
+  }
 
-void
-ProductList::do_action ()
-{
+  void
+  ProductList::do_action ()
+  {
     double product = 1;
-    for (auto c : _container->children ()) {
-        product *= ((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value ();
+    for (auto c: _container->children ()) {
+      product *= ((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value();
     }
     _output.set_value (product, true);
-}
+  }
 
 #ifndef DJNN_NO_SERIALIZE
-void
-ProductList::serialize (const string& type)
-{
-    AbstractSerializer::pre_serialize (this, type);
+  void
+  ProductList::serialize (const string& type)
+  {
+    AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:product-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
-    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value ());
+    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize (this);
-}
+    AbstractSerializer::post_serialize(this);
+  }
 #endif
 
-MaxList::MaxList (CoreProcess* parent, const string& name,
-                  CoreProcess* container, const string& spec)
-    : ListOperator (parent, name, container, spec), _output (this, "output", 0)
-{
-    graph_add_edge (&_spec_action, &_output);
-    finalize_construction (parent, name);
-}
+  MaxList::MaxList(CoreProcess *parent, const string &name,
+  	  CoreProcess *container, const string &spec) :
+	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
+        graph_add_edge(&_spec_action, &_output);
+        finalize_construction (parent, name);
+  }
 
-void
-MaxList::do_action ()
-{
+  void
+  MaxList::do_action ()
+  {
     double vmax = 0;
-    for (auto c : _container->children ()) {
-        vmax = djnnstl::max (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value (), vmax);
+    for (auto c: _container->children ()) {
+      vmax = djnnstl::max (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmax);
     }
     _output.set_value (vmax, true);
-}
+  }
 
-MaxList::~MaxList ()
-{
-    graph_remove_edge (&_spec_action, &_output);
-}
+  MaxList::~MaxList () {
+    graph_remove_edge(&_spec_action, &_output);
+  }
 
-#ifndef DJNN_NO_SERIALIZE
-void
-MaxList::serialize (const string& type)
-{
-    AbstractSerializer::pre_serialize (this, type);
+  #ifndef DJNN_NO_SERIALIZE
+  void
+  MaxList::serialize (const string& type)
+  {
+    AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:max-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
-    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value ());
+    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize (this);
-}
+    AbstractSerializer::post_serialize(this);
+  }
 #endif
 
-MinList::MinList (CoreProcess* parent, const string& name,
-                  CoreProcess* container, const string& spec)
-    : ListOperator (parent, name, container, spec), _output (this, "output", 0)
-{
-    graph_add_edge (&_spec_action, &_output);
-    finalize_construction (parent, name);
-}
+  MinList::MinList(CoreProcess *parent, const string &name,
+  	  CoreProcess *container, const string &spec) :
+	  ListOperator(parent, name, container, spec), _output(this, "output", 0) {
+        graph_add_edge(&_spec_action, &_output);
+        finalize_construction (parent, name);
+  }
 
-MinList::~MinList ()
-{
-    graph_remove_edge (&_spec_action, &_output);
-}
+  MinList::~MinList () {
+    graph_remove_edge(&_spec_action, &_output);
+  }
 
-void
-MinList::do_action ()
-{
-    double vmin = djnnstl::numeric_limits<double>::max (); // set to double max value
-    for (auto c : _container->children ()) {
-        vmin = djnnstl::min (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value (), vmin);
+  void
+  MinList::do_action ()
+  {
+    double vmin = djnnstl::numeric_limits<double>::max(); // set to double max value
+    for (auto c: _container->children ()) {
+      vmin = djnnstl::min (((AbstractSimpleProperty*)(c->find_child_impl (_spec.get_value ())))->get_double_value(), vmin);
     }
     _output.set_value (vmin, true);
-}
+  }
 
 #ifndef DJNN_NO_SERIALIZE
-void
-MinList::serialize (const string& type)
-{
-    AbstractSerializer::pre_serialize (this, type);
+  void
+  MinList::serialize (const string& type)
+  {
+    AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:min-list");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     string buf;
     AbstractSerializer::compute_path (get_parent (), _container, buf);
     AbstractSerializer::serializer->text_attribute ("container", buf);
-    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value ());
+    AbstractSerializer::serializer->text_attribute ("spec", _spec.get_value());
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize (this);
-}
+    AbstractSerializer::post_serialize(this);
+  }
 #endif
 
-} // namespace djnn
+}

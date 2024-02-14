@@ -18,25 +18,27 @@
 #include "core/serializer/serializer.h"
 #endif
 
-namespace djnn {
-Component*
-Component::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+
+
+namespace djnn
 {
-    auto* clone = new Component (nullptr, get_name ());
+  Component*
+  Component::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+  {
+    auto * clone = new Component (nullptr, get_name ());
     for (auto c : _children) {
-        auto cclone = c->impl_clone (origs_clones);
-        clone->add_child (cclone, this->find_child_name (c));
+      auto cclone = c->impl_clone (origs_clones);
+      clone->add_child (cclone , this->find_child_name(c));
     }
     origs_clones[this] = clone;
     return clone;
-}
+  }
 
 #ifndef DJNN_NO_SERIALIZE
-void
-Component::serialize (const string& format)
-{
+  void
+  Component::serialize (const string& format) {
 
-    AbstractSerializer::pre_serialize (this, format);
+    AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:Component");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
@@ -46,8 +48,9 @@ Component::serialize (const string& format)
 
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize (this);
-}
+    AbstractSerializer::post_serialize(this);
+  }
 #endif
 
-} // namespace djnn
+}
+

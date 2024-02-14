@@ -18,116 +18,114 @@
 #include "core/utils/iostream.h"
 #endif
 
-namespace djnn {
-using namespace djnnstl;
-// using djnnstl::cout;
-
-extern vector<string> loadedModules;
-
-struct djnXMLDumpContext
+namespace djnn
 {
+  using namespace djnnstl;
+  //using djnnstl::cout;
+  
+  extern vector<string> loadedModules;
+
+
+  struct djnXMLDumpContext {
     struct djnXMLDumpContext* parent;
-    int                       haschildren;
-    // const char* classname;
+    int haschildren;
+    //const char* classname;
     string classname;
-}; // __XMLDumpContext;
+  };// __XMLDumpContext;
 
 #if !defined(DJNN_NO_SERIALIZE)
 
-static int __XMLDumpNumAttrs;
-// static __XMLDumpContext* __curXMLDumpContext = 0;
-static djnXMLDumpContext* __curXMLDumpContext = 0;
+  static int __XMLDumpNumAttrs;
+  //static __XMLDumpContext* __curXMLDumpContext = 0;
+  static djnXMLDumpContext* __curXMLDumpContext = 0;
 
-static int __XMLLevel = 0;
+  static int __XMLLevel = 0;
 
-void
-XMLSerializer::start (const string& name)
-{
+  void
+  XMLSerializer::start (const string& name) {
 
+  
     int i;
     //__XMLDumpContext* c;
-    djnXMLDumpContext* c;
+    djnXMLDumpContext *c;
 
     if (__curXMLDumpContext && !__curXMLDumpContext->haschildren) {
-        if (__XMLDumpNumAttrs > 0)
-            cout << " ";
+      if (__XMLDumpNumAttrs > 0)
+        cout << " ";
 
-        cout << ">\n";
-        ++__XMLLevel;
-        __curXMLDumpContext->haschildren = 1;
+      cout << ">\n";
+      ++__XMLLevel;
+      __curXMLDumpContext->haschildren = 1;
     }
 
     for (i = 0; i < __XMLLevel; ++i)
-        cout << "  ";
+      cout << "  ";
     cout << "<" << name;
 
     if (__curXMLDumpContext == 0) {
-        for (auto module_name : djnn::loadedModules) {
-            int l = name.length () + 3;
-            if (module_name.compare ("core") == 0)
-                cout << " xmlns:core=\"http://xml.djnn.net/2012/" << module_name << "\"";
-            else {
-                cout << endl;
-                while (--l)
-                    cout << " ";
-                cout << "xmlns:" << module_name << "=\"http://xml.djnn.net/2012/" << module_name << "\"";
-            }
+      for (auto module_name : djnn::loadedModules) {
+        int l = name.length () + 3;
+        if (module_name.compare("core") == 0)
+          cout << " xmlns:core=\"http://xml.djnn.net/2012/" << module_name << "\"";
+        else {
+          cout << endl ;
+          while (--l)
+            cout << " ";
+          cout << "xmlns:" << module_name << "=\"http://xml.djnn.net/2012/" << module_name << "\"";
         }
+      }
     }
 
-    // c = (djnXMLDumpContext*) malloc (sizeof (djnXMLDumpContext));
-    c              = new djnXMLDumpContext;
+    //c = (djnXMLDumpContext*) malloc (sizeof (djnXMLDumpContext));
+    c = new djnXMLDumpContext;
     c->haschildren = 0;
-    // c->classname = name.c_str();
-    c->classname        = name;
-    c->parent           = __curXMLDumpContext;
+    //c->classname = name.c_str();
+    c->classname = name;
+    c->parent = __curXMLDumpContext;
     __curXMLDumpContext = c;
-    __XMLDumpNumAttrs   = 0;
-}
+    __XMLDumpNumAttrs = 0;
 
-void
-XMLSerializer::text_attribute (const string& name, const string& value)
-{
+  }
+
+  void
+  XMLSerializer::text_attribute (const string& name, const string& value){
     cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
-}
+  }
 
-void
-XMLSerializer::int_attribute (const string& name, int value)
-{
+  void
+  XMLSerializer::int_attribute (const string& name, int value){
     cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
-}
+  }
 
-void
-XMLSerializer::float_attribute (const string& name, double value)
-{
+  void
+  XMLSerializer::float_attribute (const string& name, double value){
     cout << " " << name << "=\"" << value << "\"";
     ++__XMLDumpNumAttrs;
-}
+  }
 
-void
-XMLSerializer::end ()
-{
+  void
+  XMLSerializer::end (){
 
     //__XMLDumpContext* c;
     djnXMLDumpContext* c;
 
     if (__curXMLDumpContext->haschildren) {
-        int i;
-        --__XMLLevel;
-        for (i = 0; i < __XMLLevel; ++i)
-            cout << " ";
-        cout << "</" << __curXMLDumpContext->classname << ">\n";
+      int i;
+      --__XMLLevel;
+      for (i = 0; i < __XMLLevel; ++i)
+        cout << " ";
+      cout << "</" << __curXMLDumpContext->classname << ">\n";
     } else {
-        if (__XMLDumpNumAttrs > 0)
-            cout << " ";
-        cout << "/>\n";
+      if (__XMLDumpNumAttrs > 0)
+        cout << " ";
+      cout << "/>\n";
     }
 
     c = __curXMLDumpContext->parent;
     delete __curXMLDumpContext;
     __curXMLDumpContext = c;
-}
+  }
 #endif
-} // namespace djnn
+}

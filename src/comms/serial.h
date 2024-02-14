@@ -14,42 +14,49 @@
 
 #pragma once
 
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
 #include "core/control/action.h"
 #include "core/core-dev.h" // graph add/remove edge
-#include "core/ontology/coupling.h"
-#include "core/ontology/process.h"
-#include "core/property/int_property.h"
 #include "core/property/text_property.h"
-#include "exec_env/external_source.h"
+#include "core/property/int_property.h"
+
 #include "exec_env/global_mutex.h"
+#include "exec_env/external_source.h"
 
-namespace djnn {
 
-class Serial : public FatProcess, public ExternalSource
+
+
+namespace djnn
 {
 
-    /*** private Class Serial Out Actions ***/
+  class Serial : public FatProcess, public ExternalSource
+  {
+
+  /*** private Class Serial Out Actions ***/
   private:
-    class SerialOutAction : public Action
+     class SerialOutAction : public Action
     {
-      public:
-        SerialOutAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
-        virtual ~SerialOutAction () {}
-        void impl_activate () override { ((Serial*)get_parent ())->serial_write (); };
+    public:
+      SerialOutAction (CoreProcess* parent, const string& name) :
+      Action (parent, name) { finalize_construction (parent, name); }
+      virtual ~SerialOutAction () {}
+      void impl_activate () override { ((Serial*)get_parent())->serial_write (); };
     };
 
-    /*** Serial Class ***/
+
+  /*** Serial Class ***/
 
   public:
-    using string = CoreProcess::string;
+    using string = CoreProcess::string; 
     Serial (CoreProcess* parent, const string& name,
-            const string& port, int baudrate = 9600, char eol = '\n');
-
+      const string& port, int baudrate=9600, char eol='\n');
+    
     virtual ~Serial ();
     void serial_write ();
 
     // make it public
-    bool get_please_stop () const override { return ExternalSource::get_please_stop (); }
+    bool get_please_stop() const override { return ExternalSource::get_please_stop(); }
 
   protected:
     void impl_activate () override;
@@ -57,18 +64,18 @@ class Serial : public FatProcess, public ExternalSource
     void set_parent (CoreProcess* parent) override;
 
   private:
-    const string&   _port;
-    void            init_comm ();
-    TextProperty    _out, _in;
-    IntProperty     _baudrate;
+    const string& _port;
+    void init_comm ();
+    TextProperty _out, _in;
+    IntProperty _baudrate;
     SerialOutAction _out_a;
-    Coupling        _out_c;
-    int             _buf_max;
-    int             _fd;
-    char            _eol;
+    Coupling _out_c;
+    int _buf_max;
+    int _fd;
+    char _eol;
 
     // thread source
     void run () override;
-};
+  };
 
-} // namespace djnn
+}

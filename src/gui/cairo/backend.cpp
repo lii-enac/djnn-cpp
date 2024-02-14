@@ -16,27 +16,28 @@
 
 #include "cairo_backend.h"
 
-namespace djnn {
-class Backend::Impl
+namespace djnn
 {
+  class Backend::Impl
+  {
   public:
     CairoBackend* cairo_backend;
-};
+  };
 
-Backend::Impl* Backend::_instance;
+  Backend::Impl* Backend::_instance;
 
-AbstractBackend*
-Backend::instance ()
-{
+  AbstractBackend*
+  Backend::instance ()
+  {
     return _instance->cairo_backend;
-}
+  }
 
-void
-Backend::init ()
-{
+  void
+  Backend::init ()
+  {
     if (_instance != nullptr)
-        return;
-    _instance                = new Impl ();
+      return;
+    _instance = new Impl ();
     _instance->cairo_backend = CairoBackend::instance ();
+  }
 }
-} // namespace djnn

@@ -15,59 +15,57 @@
 
 #pragma once
 
-#include <cairo.h>
-#include <functional>
-#include <pango/pango.h>
-#include <pango/pangocairo.h>
-
 #include "cairo_context.h"
 #include "cairo_picking_view.h"
 #include "gui/abstract_backend.h"
 #include "gui/backend.h"
 
-namespace djnn {
-extern cairo_t *cur_cairo_state, *cur_cairo_picking_state;
+#include <cairo.h>
+#include <pango/pango.h>
+#include <pango/pangocairo.h>
+#include <functional>
 
-class TextImpl : public AbstractGObjImpl
+namespace djnn
 {
+  extern cairo_t* cur_cairo_state, *cur_cairo_picking_state;
+
+  class TextImpl : public AbstractGObjImpl {
     friend class CairoBackend;
-
+    public:
+      TextImpl (int posX, int posY, int width, int height, int b, PangoLayout *layout):
+        _posX (posX), _posY (posY), _width (width), _height (height), _b (b), _layout (layout) {}
+      virtual ~TextImpl () override { g_object_unref (_layout); }
+      int posX () { return _posX; }
+      int posY () { return _posY; }
+      int width () { return _width; }
+      int height () { return _height; }
+      int b () { return _b; }
+      PangoLayout* layout () { return _layout; }
+    private:
+      int _posX, _posY, _width, _height, _b;
+      PangoLayout* _layout;
+  };
+  class ShapeImpl : public AbstractGObjImpl {
   public:
-    TextImpl (int posX, int posY, int width, int height, int b, PangoLayout* layout) : _posX (posX), _posY (posY), _width (width), _height (height), _b (b), _layout (layout) {}
-    virtual ~TextImpl () override { g_object_unref (_layout); }
-    int          posX () { return _posX; }
-    int          posY () { return _posY; }
-    int          width () { return _width; }
-    int          height () { return _height; }
-    int          b () { return _b; }
-    PangoLayout* layout () { return _layout; }
-
-  private:
-    int          _posX, _posY, _width, _height, _b;
-    PangoLayout* _layout;
-};
-class ShapeImpl : public AbstractGObjImpl
-{
-  public:
-    ShapeImpl (cairo_pattern_t* p, int x, int y, int w, int h) : _pattern (p), _x (x), _y (y), _w (w), _h (h) {}
+    ShapeImpl (cairo_pattern_t *p, int x, int y, int w, int h) : _pattern (p), _x(x), _y(y), _w(w), _h(h){}
     virtual ~ShapeImpl () { cairo_pattern_destroy (_pattern); }
     cairo_pattern_t* pattern () { return _pattern; }
-    int              x () { return _x; }
-    int              y () { return _y; }
-    int              w () { return _w; }
-    int              h () { return _h; }
-
+    int x () { return _x; }
+    int y () { return _y; }
+    int w () { return _w; }
+    int h () { return _h; }
   private:
-    cairo_pattern_t* _pattern;
-    int              _x, _y, _w, _h;
-};
+    cairo_pattern_t *_pattern;
+    int _x, _y, _w, _h;
+  };
 
-class CairoContextManager;
-class CairoBackend : public AbstractBackend
-{
+  class CairoContextManager;
+  class CairoBackend : public AbstractBackend
+  {
   public:
     static CairoBackend* instance ();
-    virtual ~CairoBackend ();
+    virtual
+    ~CairoBackend ();
     void
     save_context ();
     void
@@ -81,29 +79,29 @@ class CairoBackend : public AbstractBackend
     void
     set_stroke_source ();
     void
-    fill_and_stroke (AbstractGShape* s);
+    fill_and_stroke (AbstractGShape *s);
     void
     pick_fill_and_stroke ();
-    // WinImpl*
-    // create_window (Window *win, const string& title, double x, double y, double w, double h) override;
+    //WinImpl*
+    //create_window (Window *win, const string& title, double x, double y, double w, double h) override;
 
-    // shape
+    //shape
     void
-    draw_rectangle (Rectangle* s) override;
+    draw_rectangle (Rectangle *s) override;
     void
-    draw_circle (Circle* s) override;
+    draw_circle (Circle *s) override;
     void
-    draw_ellipse (Ellipse* s) override;
+    draw_ellipse (Ellipse *s) override;
     void
-    draw_line (Line* s) override;
+    draw_line (Line *s) override;
     void
-    draw_text (Text* t) override;
+    draw_text (Text *t) override;
     void
     draw_poly (Poly* p) override;
     void
     draw_poly_point (double x, double y) override;
     void
-    draw_path (Path* p) override;
+    draw_path (Path *p) override;
     void
     draw_path_move (double x, double y) override;
     void
@@ -117,65 +115,65 @@ class CairoBackend : public AbstractBackend
     void
     draw_path_closure () override;
     void
-    draw_rectangle_clip (RectangleClip* r) override;
+    draw_rectangle_clip (RectangleClip *r) override;
     void
-    draw_path_clip (Path* p) override;
+    draw_path_clip (Path *p) override;
     void
-    draw_image (Image* i) override;
+    draw_image (Image *i) override;
     double
     get_cursor_from_index (Text*, int) override;
-    pair<double, int>
+    pair<double,int>
     get_cursor_from_local_x (Text*, double) override;
 
-    // style
+    //style
     void
-    load_fill_color (AbstractColor* c) override;
+    load_fill_color (AbstractColor *c) override;
     void
-    load_outline_color (AbstractColor*) override;
+    load_outline_color (AbstractColor *) override;
     void
-    load_fill_rule (FillRule* fr) override;
+    load_fill_rule (FillRule *fr) override;
     void
     load_no_outline () override;
     void
     load_no_fill () override;
     void
-    load_texture (Texture* t) override;
+    load_texture (Texture *t) override;
     void
-    load_outline_opacity (OutlineOpacity* oo) override;
+    load_outline_opacity (OutlineOpacity *oo) override;
     void
-    load_fill_opacity (FillOpacity* fo) override;
+    load_fill_opacity (FillOpacity *fo) override;
     void
-    load_outline_width (OutlineWidth* ow) override;
+    load_outline_width (OutlineWidth *ow) override;
     void
-    load_outline_cap_style (OutlineCapStyle* ocs) override;
+    load_outline_cap_style (OutlineCapStyle *ocs) override;
     void
-    load_outline_join_style (OutlineJoinStyle* ojs) override;
+    load_outline_join_style (OutlineJoinStyle *ojs) override;
     void
-    load_outline_miter_limit (OutlineMiterLimit* oml) override;
+    load_outline_miter_limit (OutlineMiterLimit *oml) override;
     void
-    load_dash_array (DashArray* da) override;
+    load_dash_array (DashArray *da) override;
     void
     load_no_dash_array () override;
     void
-    load_dash_offset (DashOffset* od) override;
+    load_dash_offset (DashOffset *od) override;
     void
-    load_gradient_stop (GradientStop* gs) override;
+    load_gradient_stop (GradientStop *gs) override;
     void
-    load_linear_gradient (LinearGradient* g) override;
+    load_linear_gradient (LinearGradient *g) override;
     void
-    load_radial_gradient (RadialGradient* g) override;
+    load_radial_gradient (RadialGradient *g) override;
     void
-    load_font_size (FontSize* fs) override;
+    load_font_size (FontSize *fs) override;
     void
-    load_font_weight (FontWeight* fw) override;
+    load_font_weight (FontWeight *fw) override;
     void
-    load_font_style (FontStyle* fs) override;
+    load_font_style (FontStyle *fs) override;
     void
-    load_font_family (FontFamily* ff) override;
+    load_font_family (FontFamily *ff) override;
     void
-    load_text_anchor (TextAnchor* a) override;
+    load_text_anchor (TextAnchor *a) override;
 
-    // transformations
+    //transformations
     void
     load_translation (Translation* t) override;
     void
@@ -198,39 +196,41 @@ class CairoBackend : public AbstractBackend
     load_gradient_skew_y (GradientSkewY* s) override;
     void
     load_homography (AbstractHomography* h)
-        override;
+			 override;
     void
     load_gradient_homography (AbstractHomography* h) override;
     void
-    update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight* fw) override;
+    update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw) override;
     void
-    set_picking_view (CairoPickingView* pick_view) { _pick_view = pick_view; }
-
+    set_picking_view (CairoPickingView *pick_view) { _pick_view = pick_view; }
   private:
-    static CairoBackend* _instance;
-    // static std::once_flag onceFlag;
-    cairo_pattern_t* _cur_cairo_pattern;
+    static CairoBackend *_instance;
+    //static std::once_flag onceFlag;
+    cairo_pattern_t *_cur_cairo_pattern;
     CairoBackend ();
     void
-    load_drawing_context (AbstractGShape* s, double tx, double ty, double width, double height);
+    load_drawing_context (AbstractGShape *s, double tx, double ty, double width, double height);
     void
-    load_pick_context (AbstractGShape* s);
+    load_pick_context (AbstractGShape *s);
     void
-    prepare_gradient (AbstractGradient* g);
+    prepare_gradient (AbstractGradient *g);
     bool
-                         is_in_picking_view (AbstractGShape* s);
-    CairoContextManager* _context_manager;
-    CairoPickingView*    _pick_view;
-    PangoFontMap*        _PFM;
-    PangoContext*        _context;
-    PangoLayout*         _layout;
+    is_in_picking_view (AbstractGShape *s);
+    CairoContextManager *_context_manager;
+    CairoPickingView *_pick_view;
+    PangoFontMap *_PFM;
+    PangoContext *_context;
+    PangoLayout *_layout;
+
 
     struct bounding_box;
     bool
-    test_cache (AbstractGShape* s);
+    test_cache(AbstractGShape *s);
     void
-    build_cache (AbstractGShape* s, const std::function<void (bounding_box& bbox)>& get_bbox, const std::function<void ()>& draw);
+    build_cache(AbstractGShape *s, const std::function <void (bounding_box& bbox)>& get_bbox, const std::function <void ()>& draw);
     void
-    draw_cache (AbstractGShape* s);
+    draw_cache(AbstractGShape *s);
+
+
 };
 } /* namespace djnn */

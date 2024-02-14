@@ -16,43 +16,44 @@
 
 #pragma once
 
-#include "display/display-dev.h" // mouse_button
-#include "display/pickui.h"
 #include "gui/gui-priv.h"
+#include "display/display-dev.h" // mouse_button
 #include "gui/shape/abstract_gshape.h" // touch
+#include "display/pickui.h"
 
 namespace djnn {
 
-class Window;
-class Picking
-{
+  class Window;
+  class Picking
+  {
   public:
-    Picking (Window* win);
-    virtual ~Picking ();
-    virtual void    init ()                   = 0;
+    Picking (Window *win);
+    virtual
+    ~Picking ();
+    virtual void init () = 0;
     virtual PickUI* pick (double x, double y) = 0;
 
     virtual void add_pick_shape (PickUI* pshape, bool cache = false) = 0;
     virtual void object_deactivated (PickUI* gobj);
 
-    void common_press_setting (double x, double y, PickUI* s);
-    void common_press_notify (PickUI* s);
+    void common_press_setting (double x, double y, PickUI *s);
+    void common_press_notify (PickUI *s);
 
-    bool genericMousePress (double x, double y, mouse_button button);
-    bool genericMouseMove (double x, double y);
+    bool genericMousePress(double x, double y, mouse_button button);
+    bool genericMouseMove(double x, double y);
     bool genericCheckShapeAfterDraw (double x, double y);
-    bool genericMouseRelease (double x, double y, mouse_button button);
-    bool genericMouseWheel (double dx, double dy, double cursorx, double cursory);
+    bool genericMouseRelease(double x, double y, mouse_button button);
+    bool genericMouseWheel(double dx, double dy, double cursorx, double cursory);
 
     bool genericTouchPress (double x, double y, int id, float pressure);
     bool genericTouchMove (double x, double y, int id, float pressure);
     bool genericTouchRelease (double x, double y, int id, float pressure);
 
   protected:
-    bool                      genericEnterLeave (PickUI* gobj);
-    Window*                   _win;
-    PickUI *                  _caught_shape, *_hovered_shape;
-    djnnstl::map<int, Touch*> _active_touches;
-    bool                      _mouse_released;
-};
-} // namespace djnn
+    bool genericEnterLeave (PickUI* gobj);
+    Window *_win;
+    PickUI *_caught_shape, *_hovered_shape;
+    djnnstl::map <int, Touch*> _active_touches;
+    bool _mouse_released;
+  };
+}

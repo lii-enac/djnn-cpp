@@ -16,31 +16,33 @@
  *
  */
 
+
 #pragma once
 
-#include "core/ontology/coupling.h"
 #include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
 
-namespace djnn {
-class AbstractPropFontWeight : public AbstractStyle
+
+
+namespace djnn
 {
+  class AbstractPropFontWeight : public AbstractStyle
+  {
   public:
     AbstractPropFontWeight (CoreProcess* parent, const string& name, int weight);
     virtual ~AbstractPropFontWeight ();
-
-    void                                    get_properties_values (int& weight);
+    
+    
+    void get_properties_values (int& weight);
     const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
-    virtual CoreProcess*                    find_child_impl (const string&) override;
-    AbstractIntProperty*                    weight () { return (AbstractIntProperty*)find_child_impl ("weight"); }
+    virtual CoreProcess* find_child_impl (const string&) override;
+		AbstractIntProperty* weight () { return (AbstractIntProperty*) find_child_impl ("weight"); }
 
   protected:
-    struct raw_props_t
-    {
-        int weight;
-    };
+    struct raw_props_t { int weight; };
     raw_props_t raw_props;
-    Coupling*   _cweight;
-    void        impl_activate () override;
-    void        impl_deactivate () override;
-};
-} // namespace djnn
+    Coupling *_cweight;
+    void impl_activate () override;
+    void impl_deactivate () override;
+  };
+}

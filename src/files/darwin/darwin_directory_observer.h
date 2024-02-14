@@ -14,11 +14,12 @@
 
 #pragma once
 
-namespace djnn {
-typedef struct DirectoryObserverData
+namespace djnn
 {
+  typedef struct DirectoryObserverData
+  {
   public:
     int _fd;
     int _kq;
-} DirectoryObserverData;
-} // namespace djnn
+  } DirectoryObserverData;
+}

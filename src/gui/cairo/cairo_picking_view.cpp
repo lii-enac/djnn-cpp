@@ -13,45 +13,46 @@
  *
  */
 
+#include "gui/backend.h"
 #include "cairo_picking_view.h"
 
 #include <assert.h>
 
-#include "gui/backend.h"
-
-namespace djnn {
-
-CairoPickingView::CairoPickingView (Window* win)
-    : ColorPickingView (win), _cur_data (0), _w (0), _h (0), _stride (0)
+namespace djnn
 {
-    assert (win);
-}
 
-CairoPickingView::~CairoPickingView ()
-{
-    // DBG;
-}
+  CairoPickingView::CairoPickingView (Window *win) :
+      ColorPickingView (win),  _cur_data (0), _w (0), _h (0), _stride (0)
+  {
+    assert(win);
+  }
 
-int
-CairoPickingView::get_pixel (unsigned int x, unsigned int y)
-{
+  CairoPickingView::~CairoPickingView ()
+  {
+    //DBG;
+  }
+
+  int
+  CairoPickingView::get_pixel (unsigned int x, unsigned int y)
+  {
     if (_cur_data == nullptr)
-        return 0;
+      return 0;
 
     if (x < 0 || y < 0 || x > _w || y > _h)
-        return 0;
+      return 0;
 
-    // std::cerr << x << " " << y << std::endl;
+    //std::cerr << x << " " << y << std::endl;
 
-    unsigned char* px     = _cur_data + (y * _stride) + x * 4;
-    unsigned int   result = (unsigned int)(px[3] << 24 | (px[2] << 16) | (px[1] << 8) | px[0]);
+    unsigned char *px = _cur_data + (y * _stride) + x * 4;
+    unsigned int result = (unsigned int) (px[3] << 24 | (px[2] << 16) | (px[1] << 8) | px[0]);
     return result;
-}
+  }
 
-void
-CairoPickingView::init ()
-{
+  void
+  CairoPickingView::init ()
+  {
     ColorPickingView::init ();
-}
+  }
 
 } /* namespace djnn */
+

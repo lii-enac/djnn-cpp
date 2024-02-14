@@ -12,29 +12,29 @@
  *
  */
 
-#include "files.h"
 
+#include "files.h"
 #include "core/serializer/serializer.h"
 
-namespace djnn {
-
-static bool __module_initialized = false;
-
-void
-init_files ()
+namespace djnn
 {
+  
+  static bool __module_initialized = false;
 
-    if (__module_initialized == false) {
+  void
+  init_files () {
 
-        __module_initialized = true;
+    if ( __module_initialized == false ) {
 
-        djnn::loadedModules.push_back ("files");
+      __module_initialized = true;
+      
+      djnn::loadedModules.push_back("files");
+      
     }
-}
+  }
 
-void
-clear_files ()
-{
-}
 
-} // namespace djnn
+  void
+  clear_files () {}
+
+}

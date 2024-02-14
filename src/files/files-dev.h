@@ -13,6 +13,7 @@
  */
 
 namespace djnn {
-void init_files ();
-void clear_files ();
-} // namespace djnn
+ void init_files ();
+ void clear_files ();
+}
+

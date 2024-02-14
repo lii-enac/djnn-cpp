@@ -17,26 +17,27 @@
 
 #include "core/utils/error.h"
 
-namespace djnn {
-static djnnstl::map<djnnstl::string, int> name_to_id;
-static djnnstl::vector<StyleSheet*>       style_array;
-
-StyleSheet::StyleSheet (CoreProcess* parent, const string& n)
-    : Container (parent, n), _classname (n)
+namespace djnn
 {
-    map<string, int>::iterator it = name_to_id.find (n);
-    if (it != name_to_id.end ()) {
-        error (this, "Style " + n + " already defined");
+  static djnnstl::map <djnnstl::string, int> name_to_id;
+  static djnnstl::vector<StyleSheet*> style_array;
+
+  StyleSheet::StyleSheet (CoreProcess* parent, const string& n) :
+      Container (parent, n), _classname (n)
+  {
+    map<string,int>::iterator it = name_to_id.find(n);
+    if (it != name_to_id.end()) {
+      error(this, "Style " + n + " already defined");
     }
     style_array.push_back (this);
     _id = style_array.size () - 1;
     name_to_id.insert (djnnstl::pair<djnnstl::string, int> (n, _id));
     finalize_construction (parent, n);
-}
+  }
 
-StyleSheet*
-StyleSheet::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
-{
+  StyleSheet*
+  StyleSheet::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+  {
     /*StyleSheet* newd = new StyleSheet (nullptr, get_name ());
 
     for (auto c : _children) {
@@ -45,34 +46,34 @@ StyleSheet::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) con
 
     return newd;*/
 
-    auto* clone = new StyleSheet (nullptr, get_name ());
+    auto * clone = new StyleSheet (nullptr, get_name ());
     for (auto c : _children) {
-        auto cclone = c->impl_clone (origs_clones);
-        // origs_clones[c] = cclone;
-        clone->add_child (cclone, this->find_child_name (c));
+      auto cclone = c->impl_clone (origs_clones);
+      //origs_clones[c] = cclone;
+      clone->add_child (cclone , this->find_child_name(c));
     }
     origs_clones[this] = clone;
     return clone;
-}
+  }
 
-int
-StyleSheet::get_id (const string& classname)
-{
-    map<string, int>::iterator it = name_to_id.find (classname);
-    if (it != name_to_id.end ()) {
-        return it->second;
+  int
+  StyleSheet::get_id (const string& classname)
+  {
+    map<string,int>::iterator it = name_to_id.find(classname);
+    if (it != name_to_id.end()) {
+      return it->second;
     }
     return -1;
-}
+  }
 
-void
-StyleSheet::draw_style (const vector<int>& classes)
-{
-    for (auto i : classes) {
-        StyleSheet* s = style_array.at (i);
-        for (auto c : s->children ()) {
-            c->draw ();
-        }
+  void
+  StyleSheet::draw_style (const vector<int>& classes)
+  {
+    for (auto i: classes) {
+      StyleSheet *s = style_array.at (i);
+      for (auto c: s->children ()) {
+        c->draw ();
+      }
     }
+  }
 }
-} // namespace djnn

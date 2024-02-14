@@ -12,76 +12,81 @@
  *
  */
 
-#include "abstract_gobj.h"
-#include "backend.h"
-#include "core/utils/algorithm.h"
-#include "core/utils/error.h"
-#include "display/display-dev.h"
-#include "display/window.h"
-#include "exec_env/main_loop.h"
 #include "gui-dev.h"
 #include "gui-priv.h"
 #include "gui-xml.h"
+
+#include "abstract_gobj.h"
+#include "backend.h"
+#include "exec_env/main_loop.h"
+#include "display/display-dev.h"
+#include "display/window.h"
+
+#include "core/utils/error.h"
+
+#include "core/utils/algorithm.h"
+
 #include "utils/debug.h"
 
 #if _DEBUG_SEE_GUI_INFO_PREF
 
-int __nb_Drawing_object         = 0;
+int __nb_Drawing_object = 0;
 int __nb_Drawing_object_picking = 0;
 #endif
 
-namespace djnn {
-extern void                             p_init_p_display ();
-static bool                             __module_initialized = false;
-extern djnnstl::vector<djnnstl::string> loadedModules;
-
-extern CoreProcess*          GenericMouse;
-extern GUIStructureObserver* gui_structure_observer;
-
-int z_order_enabled = 0;
-
-void init_svg_parser ();
-void clear_svg_parser ();
-
-void
-init_gui ()
+namespace djnn
 {
+  extern void p_init_p_display ();
+  static bool __module_initialized = false;
+  extern djnnstl::vector<djnnstl::string> loadedModules;
+
+  extern CoreProcess *GenericMouse;
+  extern GUIStructureObserver * gui_structure_observer;
+
+  int z_order_enabled = 0;
+
+  void init_svg_parser ();
+  void clear_svg_parser ();
+
+  void
+  init_gui ()
+  {
     bool found_display = false;
-    for (auto it = djnn::loadedModules.rbegin (); it != djnn::loadedModules.rend (); ++it) {
-        if (*it == "display") {
-            found_display = true;
-            continue;
-        }
+    for(auto it = djnn::loadedModules.rbegin(); it != djnn::loadedModules.rend(); ++it) {
+      if (*it == "display"){
+        found_display = true;
+        continue;
+      }
     }
     if (!found_display)
         error (nullptr, " module display has not been initialized before module GUI and it should");
 
     if (__module_initialized == false) {
 
-        __module_initialized = true;
+      __module_initialized = true;
 
-        djnn::loadedModules.push_back ("gui");
+      djnn::loadedModules.push_back ("gui");
 
-        Backend::init ();
+      Backend::init ();
+      
+      GenericMouse = new GUIMouse (nullptr, "GenericMouse");
+      GenericMouse->activate ();
+      MainLoop::instance ().add_background_process (DrawingRefreshManager);
+      init_svg_parser ();
+      gui_structure_observer = new GUIStructureObserver ();
+      structure_observer_list.push_back (gui_structure_observer);
 
-        GenericMouse = new GUIMouse (nullptr, "GenericMouse");
-        GenericMouse->activate ();
-        MainLoop::instance ().add_background_process (DrawingRefreshManager);
-        init_svg_parser ();
-        gui_structure_observer = new GUIStructureObserver ();
-        structure_observer_list.push_back (gui_structure_observer);
+      SVG_Utils::init_named_colors ();
+      XMLEllipseAttrs_Hash::init ();
 
-        SVG_Utils::init_named_colors ();
-        XMLEllipseAttrs_Hash::init ();
-
-        p_init_p_display ();
-        p_init_gui ();
+      p_init_p_display ();
+      p_init_gui ();
     }
-}
+  }
 
-void
-clear_gui ()
-{
+  void
+  clear_gui ()
+  {  
     p_clear_gui ();
 
     XMLEllipseAttrs_Hash::clear ();
@@ -89,8 +94,9 @@ clear_gui ()
 
     /* remove container from structure_observer_list */
     structure_observer_list.erase (
-        djnnstl::remove (structure_observer_list.begin (), structure_observer_list.end (), gui_structure_observer),
-        structure_observer_list.end ());
+      djnnstl::remove (structure_observer_list.begin (), structure_observer_list.end (), gui_structure_observer),
+      structure_observer_list.end ()
+    );
     /* and delete it */
     delete gui_structure_observer;
 
@@ -99,8 +105,8 @@ clear_gui ()
     MainLoop::instance ().remove_background_process (DrawingRefreshManager);
 
     delete GenericMouse;
-
+  
     __module_initialized = false;
-}
+  }
 
-} // namespace djnn
+} /* namespace Smala */

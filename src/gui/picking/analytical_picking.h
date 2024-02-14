@@ -4,14 +4,13 @@
 
 namespace djnn {
 
-class AnalyticalPicking : public Picking
-{
-  public:
-    AnalyticalPicking (Window* win);
-    virtual ~AnalyticalPicking ();
-    virtual void            init ();
-    virtual AbstractGShape* pick (double x, double y);
-    virtual void            add_gobj (AbstractGShape* gobj, bool cache = false);
-};
+	class AnalyticalPicking : public Picking {
+	public:
+    	AnalyticalPicking (Window *win);
+    	virtual ~AnalyticalPicking ();
+    	virtual void init ();
+    	virtual AbstractGShape* pick (double x, double y);
+    	virtual void add_gobj (AbstractGShape* gobj, bool cache = false);
+	};
 
-} // namespace djnn
+}

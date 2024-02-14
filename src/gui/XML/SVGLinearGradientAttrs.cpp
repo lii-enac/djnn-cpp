@@ -14,9 +14,9 @@
  *
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "gui/gui-dev.h"
 #include "gui/gui-xml.h"
@@ -29,49 +29,42 @@ static int ParseY1 (FatProcess**, const char*);
 static int ParseX2 (FatProcess**, const char*);
 static int ParseY2 (FatProcess**, const char*);
 
-static map<string, djnn::djn_XMLAttrHandler> handlers = {
-    {"y2", {&ParseY2}},
-    {"y1", {&ParseY1}},
-    {"x2", {&ParseX2}},
-    {"x1", {&ParseX1}}};
+static map <string, djnn::djn_XMLAttrHandler> handlers = {
+  {"y2",{&ParseY2}},
+  {"y1",{&ParseY1}},
+  {"x2",{&ParseX2}},
+  {"x1",{&ParseX1}}
+};
 
 djn_XMLAttrHandler*
-SVGLinearGradientAttrs_Hash::djn_SVGLinearGradientAttrsLookup (const char* str, unsigned int len)
+SVGLinearGradientAttrs_Hash::djn_SVGLinearGradientAttrsLookup (const char *str, unsigned int len)
 {
-    map<string, djn_XMLAttrHandler>::iterator it;
-    it = handlers.find (string (str));
-    if (it != handlers.end ())
-        return &it->second;
-    return 0;
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(string(str));
+  if (it != handlers.end())
+    return &it->second;
+  return 0;
 }
 
 struct djn_LinearGradientArgs djn_LinearGradientArgs = {0., 0., 1., 0.};
 
-static int
-ParseX1 (FatProcess** e, const char* v)
-{
-    djn_GradientArgs.inherited &= ~(1 << djn_GradientX1);
-    return XML_Utils::djn_XMLParseLength (&djn_LinearGradientArgs.x1, v);
+static int ParseX1(FatProcess** e, const char* v) {
+	djn_GradientArgs.inherited &= ~(1 << djn_GradientX1);
+	return XML_Utils::djn_XMLParseLength(&djn_LinearGradientArgs.x1, v);
 }
 
-static int
-ParseY1 (FatProcess** e, const char* v)
-{
-    djn_GradientArgs.inherited &= ~(1 << djn_GradientY1);
-    return XML_Utils::djn_XMLParseLength (&djn_LinearGradientArgs.y1, v);
+static int ParseY1(FatProcess** e, const char* v) {
+	djn_GradientArgs.inherited &= ~(1 << djn_GradientY1);
+	return XML_Utils::djn_XMLParseLength(&djn_LinearGradientArgs.y1, v);
 }
 
-static int
-ParseX2 (FatProcess** e, const char* v)
-{
-    djn_GradientArgs.inherited &= ~(1 << djn_GradientX2);
-    return XML_Utils::djn_XMLParseLength (&djn_LinearGradientArgs.x2, v);
+static int ParseX2(FatProcess** e, const char* v) {
+	djn_GradientArgs.inherited &= ~(1 << djn_GradientX2);
+	return XML_Utils::djn_XMLParseLength(&djn_LinearGradientArgs.x2, v);
 }
 
-static int
-ParseY2 (FatProcess** e, const char* v)
-{
-    djn_GradientArgs.inherited &= ~(1 << djn_GradientY2);
-    return XML_Utils::djn_XMLParseLength (&djn_LinearGradientArgs.y2, v);
+static int ParseY2(FatProcess** e, const char* v) {
+	djn_GradientArgs.inherited &= ~(1 << djn_GradientY2);
+	return XML_Utils::djn_XMLParseLength(&djn_LinearGradientArgs.y2, v);
 }
-} // namespace djnn
+}

@@ -15,12 +15,11 @@
 #include "linux_input.h"
 
 namespace djnn {
-static Udev* udev;
+  static Udev *udev;
 
-void
-p_init_input ()
-{
+  void
+  p_init_input () {
     udev = new Udev ();
     p_init_gpios ();
+  }
 }
-} // namespace djnn

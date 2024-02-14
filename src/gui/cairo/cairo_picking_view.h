@@ -14,34 +14,30 @@
 
 #pragma once
 
+#include "gui/picking/color_picking.h"
 #include "core/core-dev.h"
 #include "display/window.h"
-#include "gui/picking/color_picking.h"
 #include "gui/shape/abstract_gshape.h"
 
-namespace djnn {
 
-class CairoPickingView : public ColorPickingView
+namespace djnn
 {
+
+  class CairoPickingView : public ColorPickingView
+  {
   public:
-    CairoPickingView (Window* win);
+    CairoPickingView (Window *win);
     virtual ~CairoPickingView ();
 
     // Picking
     virtual void init () override;
     // ColorPickingView
-    virtual int get_pixel (unsigned int x, unsigned int y) override;
+    virtual int get_pixel(unsigned int x, unsigned int y) override;
 
-    void set_data (unsigned char* data, int w, int h, int stride)
-    {
-        _cur_data = data;
-        _w        = w;
-        _h        = h;
-        _stride   = stride;
-    }
+    void set_data (unsigned char* data, int w, int h, int stride) { _cur_data = data; _w =w; _h = h; _stride = stride; }
 
   private:
     unsigned char* _cur_data;
-    int            _w, _h, _stride;
-};
+    int _w, _h, _stride;
+  };
 } /* namespace djnn */

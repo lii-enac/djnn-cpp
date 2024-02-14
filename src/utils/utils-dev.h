@@ -14,8 +14,10 @@
 
 #pragma once
 
+
 namespace djnn {
 
-void init_utils ();
-void clear_utils ();
-} // namespace djnn
+	void init_utils ();
+	void clear_utils ();
+}
+

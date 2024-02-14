@@ -15,11 +15,10 @@
 #include "display/drm/drm_display.h"
 
 namespace djnn {
-static DRMUdev* udev;
+  static DRMUdev *udev;
 
-void
-p_init_display ()
-{
+  void
+  p_init_display () {
     udev = new DRMUdev ();
+  }
 }
-} // namespace djnn

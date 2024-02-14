@@ -13,114 +13,117 @@
  *
  */
 
-#include "double_property.h"
-
 #include <stdexcept>
 
+#include "double_property.h"
 #include "core/serializer/serializer.h"
-#include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
 
-namespace djnn {
+#include "core/utils/djnn_dynamic_cast.h"
 
-double
-getDouble (CoreProcess* p)
+
+namespace djnn
 {
-    DoubleProperty* dp = djnn_dynamic_cast<DoubleProperty*> (p);
+  
+
+  double
+  getDouble (CoreProcess* p)
+  {
+    DoubleProperty *dp = djnn_dynamic_cast<DoubleProperty*> (p);
     if (dp != nullptr)
-        return dp->get_value ();
+      return dp->get_value();
     else
-        warning (p, "getDouble only works on double properties");
+      warning (p, "getDouble only works on double properties");
     return 0;
-}
+  }
 
-void
-setDouble (CoreProcess* p, double v)
-{
-    DoubleProperty* dp = djnn_dynamic_cast<DoubleProperty*> (p);
+  void
+  setDouble (CoreProcess* p, double v)
+  {
+    DoubleProperty *dp = djnn_dynamic_cast<DoubleProperty*> (p);
     if (dp != nullptr)
-        dp->set_value (v, true);
+      dp->set_value(v, true);
     else
-        warning (p, "setDouble only works on double properties");
-}
-void
-AbstractDoubleProperty::set_value (int v, bool propagate)
-{
-    set_value ((double)v, propagate);
-}
+      warning (p, "setDouble only works on double properties");
+  }
+  void
+  AbstractDoubleProperty::set_value (int v, bool propagate)
+  {
+    set_value((double)v, propagate);
+  }
 
-void
-AbstractDoubleProperty::set_value (double v, bool propagate)
-{
-    get_ref_value () = v;
+  void
+  AbstractDoubleProperty::set_value (double v, bool propagate)
+  {
+    get_ref_value() = v;
     if (is_activable () && propagate) {
-        notify_activation ();
-        notify_parent ();
+      notify_activation ();
+      notify_parent ();
     }
-}
+  }
 
-void
-AbstractDoubleProperty::set_value (bool v, bool propagate)
-{
-    set_value ((double)(v ? 1 : 0), propagate);
-}
+  void
+  AbstractDoubleProperty::set_value (bool v, bool propagate)
+  {
+    set_value((double)(v ? 1 : 0), propagate);
+  }
 
-void
-AbstractDoubleProperty::set_value (const string& v, bool propagate)
-{
-    double oldVal = get_value ();
+  void
+  AbstractDoubleProperty::set_value (const string& v, bool propagate)
+  {
+    double oldVal = get_value();
     try {
-        if (!v.empty ()) {
-            set_value ((double)stof (v), propagate);
-        }
-    } catch (const std::invalid_argument& ia) {
-        get_ref_value () = oldVal;
-        warning (this, "failed to convert the string \"" + v + "\" into a double property value\n");
+      if (!v.empty ()) {
+        set_value((double)stof (v), propagate);
+      }
     }
-}
+    catch (const std::invalid_argument& ia) {
+      get_ref_value() = oldVal;
+      warning (this, "failed to convert the string \"" + v + "\" into a double property value\n");
+    }
+  }
 
-void
-AbstractDoubleProperty::set_value (CoreProcess* v, bool propagate)
-{
+  void
+  AbstractDoubleProperty::set_value (CoreProcess* v, bool propagate)
+  {
     warning (this, "undefined conversion from Process to Double\n");
-}
+  }
 
 #ifndef DJNN_NO_DEBUG
-void
-AbstractDoubleProperty::dump (int level)
-{
-    loginfonofl ((get_parent () ? get_parent ()->find_child_name (this) : get_name ()) + " [ " + get_string_value () + " ]");
-    // std::cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_value() << " ]";
-}
+  void
+  AbstractDoubleProperty::dump (int level)
+  {
+    loginfonofl ( (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) + " [ " + get_string_value() + " ]");
+    //std::cout << (get_parent () ? get_parent ()->find_child_name(this) : get_name ()) << " [ " << get_value() << " ]";
+  }
 #endif
 
 #ifndef DJNN_NO_SERIALIZE
-void
-AbstractDoubleProperty::serialize (const djnnstl::string& format)
-{
-    AbstractSerializer::pre_serialize (this, format);
+  void
+  AbstractDoubleProperty::serialize (const djnnstl::string& format) {
+    AbstractSerializer::pre_serialize(this, format);
 
     AbstractSerializer::serializer->start ("core:DoubleProperty");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
     AbstractSerializer::serializer->float_attribute ("value", get_value ());
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize (this);
-}
+    AbstractSerializer::post_serialize(this);
+  }
 #endif
 
-DoubleProperty*
-DoubleProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
-{
-    auto res           = new DoubleProperty (nullptr, get_name (), get_value ());
+  DoubleProperty*
+  DoubleProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+  {
+    auto res = new DoubleProperty (nullptr, get_name (), get_value());
     origs_clones[this] = res;
     return res;
-}
+  }
 
-DoublePropertyProxy*
-DoublePropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
-{
+  DoublePropertyProxy*
+  DoublePropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+  {
     error (this, "*PropertyProxy should not be cloned");
     return nullptr;
+  }
 }
-} // namespace djnn

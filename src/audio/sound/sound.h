@@ -5,13 +5,14 @@
 
 namespace djnn {
 
-class Sound : public AbstractPropSound
-{
-  public:
-    Sound (CoreProcess* parent, const string& name);
-    virtual ~Sound ();
 
-  protected:
-};
+	class Sound : public AbstractPropSound
+	{
+	public:
+		Sound (CoreProcess* parent, const string& name);
+		virtual ~Sound ();
+	protected:
 
-} // namespace djnn
+	};
+
+}

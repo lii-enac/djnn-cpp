@@ -1,9 +1,9 @@
 #include "action.h"
 
 namespace djnn {
+    
+	Action::~Action ()
+	{
+	}
 
-Action::~Action ()
-{
 }
-
-} // namespace djnn

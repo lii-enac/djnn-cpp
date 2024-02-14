@@ -12,22 +12,22 @@
  *
  */
 
-#include "files/alt/alt_directory_observer.h"
-
 #include "core/utils/error.h"
+#include "files/alt/alt_directory_observer.h"
 #include "files/files.h"
 
-namespace djnn {
-DirectoryObserverData*
-p_init_directory_watcher (const djnnstl::string& path)
+namespace djnn
 {
+  DirectoryObserverData*
+  p_init_directory_watcher (const djnnstl::string& path)
+  {
     return nullptr;
-}
+  }
 
-djn_dir_event
-p_run_directory_watcher (DirectoryObserverData* data)
-{
+  djn_dir_event
+  p_run_directory_watcher (DirectoryObserverData *data)
+  {
     warning (nullptr, "Directory observer not yet implemented for this platform");
     return DJN_UNKNOWN;
+  }
 }
-} // namespace djnn

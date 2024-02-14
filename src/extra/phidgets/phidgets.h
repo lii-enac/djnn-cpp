@@ -17,10 +17,10 @@
 
 namespace djnn {
 
-extern vector<string> loadedModules;
-extern FatProcess*    Phidgets;
-extern FatProcess*    InterfaceKits;
-
-void init_phidgets ();
-
-} // namespace djnn
+	extern vector<string> loadedModules;
+	extern FatProcess *Phidgets;
+	extern FatProcess *InterfaceKits;
+ 	
+ 	void init_phidgets ();
+  
+}

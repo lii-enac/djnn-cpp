@@ -14,99 +14,103 @@
 
 #pragma once
 
-#include "core/control/action.h"
-#include "core/control/spike.h"
-#include "core/core-dev.h" // graph add/remove edge
-#include "core/ontology/coupling.h"
-#include "core/ontology/process.h"
-#include "core/property/bool_property.h"
-#include "core/property/remote_property.h"
-#include "exec_env/external_source.h"
-#include "exec_env/global_mutex.h"
 #include "socket.h"
 
-namespace djnn {
+#include "core/property/remote_property.h"
+#include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+#include "core/control/action.h"
+#include "core/core-dev.h" // graph add/remove edge
+#include "core/property/bool_property.h"
+#include "core/control/spike.h"
 
-class RemoteProc : public FatProcess
+#include "exec_env/global_mutex.h"
+#include "exec_env/external_source.h"
+
+
+namespace djnn
 {
 
-    /*** private Class SendAction ***/
+  class RemoteProc : public FatProcess
+  {
+
+  /*** private Class SendAction ***/
   private:
     class SendAction : public Action
     {
-      public:
-        SendAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
-        virtual ~SendAction () {}
-        void impl_activate () override;
+    public:
+      SendAction (CoreProcess* parent, const string& name) :
+        Action (parent, name) { finalize_construction (parent, name); }
+      virtual ~SendAction () {}
+      void impl_activate () override;
     };
     class ConnectionAction : public Action
     {
       public:
-        ConnectionAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        ConnectionAction (CoreProcess* parent, const string& name) :
+          Action (parent, name) { finalize_construction (parent, name); }
         virtual ~ConnectionAction () {}
-        void impl_activate () override { ((RemoteProc*)get_parent ())->connection (); }
+        void impl_activate () override { ((RemoteProc*)get_parent ())->connection ();}
     };
     class ReceiveAction : public Action, public ExternalSource
     {
-      public:
-        using string = CoreProcess::string;
-        ReceiveAction (CoreProcess* parent, const string& name) : Action (parent, name), ExternalSource (name) { finalize_construction (parent, name); }
-        virtual ~ReceiveAction () {}
-        void         impl_activate () override;
-        void         impl_deactivate () override;
-        virtual bool pre_activate () override
-        {
-            if (get_parent () != nullptr && !get_parent ()->somehow_activating ())
-                return false;
-            set_activation_state (ACTIVATING);
-            return true;
-        }
-        void post_activate () override
-        {
-        }
+    public:
+      using string = CoreProcess::string; 
+      ReceiveAction (CoreProcess* parent, const string& name) :
+        Action (parent, name), ExternalSource (name) { finalize_construction (parent, name); }
+      virtual ~ReceiveAction () {}
+      void impl_activate () override;
+      void impl_deactivate () override;
+      virtual bool pre_activate () override {
+        if (get_parent () != nullptr && !get_parent ()->somehow_activating () )
+          return false;
+        set_activation_state(ACTIVATING);
+        return true;
+      }
+      void post_activate () override {
 
+      }
       private:
         void run () override;
     };
 
-    /*** RemoteProc Class ***/
+
+  /*** RemoteProc Class ***/
 
   public:
-    RemoteProc (CoreProcess* parent, const string& name,
-                const string& addr = "224.1.2.3", int port = 2010);
+     RemoteProc (CoreProcess* parent, const string& name,
+      const string& addr="224.1.2.3", int port = 2010);
 
     virtual ~RemoteProc ();
 
     typedef map<string, RemoteProperty*> dist_map_t;
 
     CoreProcess* find_child_impl (const string&) override;
-    string&      get_addr () { return _addr; }
-    int          get_port () { return _port; }
-    void         connection ();
-
+    string& get_addr () { return _addr; }
+    int get_port () { return _port; }
+    void connection ();
   protected:
-    void       impl_activate () override;
-    void       impl_deactivate () override;
-    void       subscribe (const string& path);
-    void       subscribe_all ();
-    void       unsubscribe (const string& path);
-    void       unsubscribe_all ();
+    void impl_activate () override;
+    void impl_deactivate () override;
+    void subscribe (const string& path);
+    void subscribe_all ();
+    void unsubscribe (const string& path);
+    void unsubscribe_all ();
     dist_map_t get_send_props () { return _send_map; }
-    SOCKET     get_sock () { return _fd; }
-    void       connection_failure () { _con_status.set_value (false, true); }
-    bool       connected () { return _con_status.get_value (); }
-
+    SOCKET get_sock () { return _fd; }
+    void connection_failure () { _con_status.set_value (false, true); }
+    bool connected () { return _con_status.get_value (); }
   private:
-    string            _addr;
-    int               _port;
-    SOCKET            _fd;
-    SendAction        _send;
-    ReceiveAction     _receive;
-    ConnectionAction  _con;
-    BoolProperty      _con_status;
-    Spike             _con_req;
-    Coupling          _c_con_req;
-    dist_map_t        _send_map;
+    string _addr;
+    int _port;
+    SOCKET _fd;
+    SendAction _send;
+    ReceiveAction _receive;
+    ConnectionAction _con;
+    BoolProperty _con_status;
+    Spike _con_req;
+    Coupling _c_con_req;
+    dist_map_t _send_map;
     vector<Coupling*> _props_c;
-};
-} // namespace djnn
+  };
+}

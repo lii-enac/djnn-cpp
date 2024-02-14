@@ -16,11 +16,12 @@
 
 #include "core/utils/containers.h"
 namespace djnn {
-extern FatProcess* mainloop;
-void               init_exec_env ();
-void               clear_exec_env ();
+	extern FatProcess *mainloop;
+	void init_exec_env();
+	void clear_exec_env();
 
-void   get_monotonic_time (struct timespec* ts);
-void   t1 ();
-double t2 (const djnnstl::string& msg = "", bool display_stderr = false);
-} // namespace djnn
+	void get_monotonic_time (struct timespec *ts);
+ 	void t1 ();
+	double t2 (const djnnstl::string& msg = "", bool display_stderr=false);
+}
+

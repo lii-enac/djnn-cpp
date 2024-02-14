@@ -14,80 +14,77 @@
 
 #include "counter.h"
 
-#include "core/core-dev.h" // graph add/remove edge
 #include "core/ontology/coupling.h"
+#include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"
 
-namespace djnn {
-Counter::Counter (CoreProcess* parent, const string& name, double init, double delta)
-    : FatProcess (name),
-      _reset_occurred (false),
-      _reset (this, "reset"),
-      _step (this, "step"),
-      _output (this, "output", init),
-      _init (this, "init", init),
-      _delta (this, "delta", delta),
-      _action_reset (this, name + "_action_reset", &_reset_occurred),
-      _c_reset (&_reset, ACTIVATION, &_action_reset, ACTIVATION),
-      _action_step (this, name + "_action_step", &_init, &_delta, &_output, &_reset_occurred),
-      _c_step (&_step, ACTIVATION, &_action_step, ACTIVATION)
+namespace djnn
 {
+  Counter::Counter (CoreProcess* parent, const string& name, double init, double delta)
+  : FatProcess (name),
+    _reset_occurred (false),
+    _reset (this, "reset"),
+    _step (this, "step"),
+    _output (this, "output", init),
+    _init (this, "init", init),
+    _delta (this, "delta", delta),
+    _action_reset (this, name + "_action_reset", &_reset_occurred),
+    _c_reset (&_reset, ACTIVATION, &_action_reset, ACTIVATION),
+    _action_step (this, name + "_action_step", &_init, &_delta, &_output, &_reset_occurred),
+    _c_step (&_step, ACTIVATION, &_action_step, ACTIVATION)
+  {
     _c_reset.disable (),
-        _c_step.disable ();
+    _c_step.disable ();
 
     graph_add_edge (&_action_reset, &_output);
-
+    
     graph_add_edge (&_action_step, &_output);
+    
+    if(parent)
+      finalize_construction (parent, name);
+  }
 
-    if (parent)
-        finalize_construction (parent, name);
-}
-
-Counter::~Counter ()
-{
+  Counter::~Counter () {
     if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action_reset);
-        remove_state_dependency (get_parent (), &_action_step);
+      remove_state_dependency (get_parent (), &_action_reset);
+      remove_state_dependency (get_parent (), &_action_step);
     }
     graph_remove_edge (&_action_reset, &_output);
     graph_remove_edge (&_action_step, &_output);
-}
+  }
 
-void
-Counter::set_parent (CoreProcess* parent)
-{
+  void
+  Counter::set_parent (CoreProcess* parent)
+  { 
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action_reset);
-        remove_state_dependency (get_parent (), &_action_step);
+    if (get_parent ()){
+      remove_state_dependency (get_parent (), &_action_reset);
+      remove_state_dependency (get_parent (), &_action_step);
     }
 
     add_state_dependency (parent, &_action_reset);
     add_state_dependency (parent, &_action_step);
 
-    FatProcess::set_parent (parent);
-}
+    FatProcess::set_parent (parent); 
+  }
 
-void
-Counter::impl_activate ()
-{
+  void
+  Counter::impl_activate () {
     _c_reset.enable ();
     _c_step.enable ();
-}
+  }
 
-void
-Counter::impl_deactivate ()
-{
+  void
+  Counter::impl_deactivate () {
     _c_reset.disable ();
     _c_step.disable ();
-}
+  }
 
 #ifndef DJNN_NO_SERIALIZE
-void
-Counter::serialize (const string& type)
-{
-
-    AbstractSerializer::pre_serialize (this, type);
+  void
+  Counter::serialize (const string& type) {
+   
+    AbstractSerializer::pre_serialize(this, type);
 
     AbstractSerializer::serializer->start ("base:counter");
     AbstractSerializer::serializer->text_attribute ("id", get_name ());
@@ -95,8 +92,18 @@ Counter::serialize (const string& type)
     AbstractSerializer::serializer->float_attribute ("delta", _delta.get_value ());
     AbstractSerializer::serializer->end ();
 
-    AbstractSerializer::post_serialize (this);
-}
+    AbstractSerializer::post_serialize(this);
+
+  }
 #endif
 
-} // namespace djnn
+}
+
+
+
+
+
+
+
+
+

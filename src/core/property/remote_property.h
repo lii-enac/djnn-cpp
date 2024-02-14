@@ -17,47 +17,44 @@
 
 #include "abstract_property.h"
 
+
 namespace djnn {
 
-class AbstractRemoteProperty : public AbstractSimpleProperty
-{
+  class AbstractRemoteProperty : public AbstractSimpleProperty {
   public:
-    AbstractRemoteProperty (CoreProcess* parent, const string& name, int notify_mask = notify_none) : AbstractSimpleProperty (parent, name, notify_mask), _send (false) { finalize_construction (parent, name); };
+    AbstractRemoteProperty (CoreProcess* parent, const string& name, int notify_mask=notify_none) : AbstractSimpleProperty (parent, name, notify_mask), _send (false) { finalize_construction (parent, name); };
     virtual property_type_e get_property_type () const override { return Remote; }
 
     // AbstractSimpleProperty interface
-    void    set_value (int newValue, bool propagate) override;
-    void    set_value (double v, bool propagate) override;
-    void    set_value (bool v, bool propagate) override;
-    void    set_value (CoreProcess* v, bool propagate) override;
-    void    set_value (const string& v, bool propagate) override;
-    void    set_incoming_value (const string& v, bool propagate);
-    void    set_value (const char* v, bool propagate) override { set_value (string (v), propagate); };
-    double  get_double_value () override;
-    double  get_double_value () const override;
-    string  get_string_value () override { return get_ref_value (); }
-    string  get_string_value () const override { return get_ref_value (); }
-    string& get_value () { return get_ref_value (); };
-    bool    send () { return _send; }
-
+    void set_value (int newValue, bool propagate) override;
+    void set_value (double v, bool propagate) override;
+    void set_value (bool v, bool propagate) override;
+    void set_value (CoreProcess* v, bool propagate) override;
+    void set_value (const string& v, bool propagate) override;
+    void set_incoming_value (const string& v, bool propagate);
+    void set_value (const char* v, bool propagate) override { set_value(string(v), propagate); };
+    double get_double_value () override;
+    double get_double_value () const override;
+    string get_string_value () override { return get_ref_value (); }
+    string get_string_value () const override { return get_ref_value (); }
+    string& get_value () { return get_ref_value(); };
+    bool send () { return _send; }
   protected:
-    virtual string&       get_ref_value ()       = 0;
-    virtual const string& get_ref_value () const = 0;
-    bool                  _send;
-
+    virtual string& get_ref_value() = 0;
+    virtual const string& get_ref_value() const= 0;
+    bool _send;
   public:
 #ifndef DJNN_NO_DEBUG
-    void dump (int level = 0) override;
+    void dump (int level=0) override;
 #endif
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif
-};
+  };
 
-class RemoteProperty : public AbstractRemoteProperty
-{
+  class RemoteProperty : public AbstractRemoteProperty {
   public:
-    RemoteProperty (CoreProcess* parent, const string& name, const string& v) : AbstractRemoteProperty (parent, name), _value (v) {}
+    RemoteProperty (CoreProcess* parent, const string& name, const string& v) : AbstractRemoteProperty (parent, name), _value(v) { }
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
     /* This method has to be specific because of the duality of a remote property.
@@ -66,25 +63,22 @@ class RemoteProperty : public AbstractRemoteProperty
      * that is read by the GRAPH_EXEC. But, in these case it has no effect because the properties are removed from
      * the execution graph. Consequently, we have to implement a specific behavior.
      */
-    void set_activation_flag (activation_flag_e VALUE) override
-    {
-        switch (VALUE) {
+    void set_activation_flag (activation_flag_e VALUE) override {
+      switch (VALUE){
         case ACTIVATION:
-            set_value ("ACTIVATION", true);
-            break;
+          set_value ("ACTIVATION", true);
+          break;
         case DEACTIVATION:
-            set_value ("DEACTIVATION", true);
-            break;
+          set_value ("DEACTIVATION", true);
+          break;
         default:;
-        }
+      }
     }
     void sent () { _send = false; }
-
   protected:
-    virtual string&       get_ref_value () override { return _value; }
-    virtual const string& get_ref_value () const override { return _value; }
-
+    virtual string& get_ref_value() override { return _value; }
+    virtual const string& get_ref_value() const override { return _value; }
   private:
     string _value;
-};
-} // namespace djnn
+  };
+}

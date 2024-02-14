@@ -16,67 +16,60 @@
 
 #include <libudev.h>
 
+
 #include "display/display-priv.h"
 #include "exec_env/unix/iofd.h"
 
 namespace djnn {
 
-class DRMConnector : public FatProcess
-{
+  class DRMConnector : public FatProcess {
   public:
     DRMConnector (CoreProcess* parent, const string& name, int id, bool connected);
     ~DRMConnector ();
     void impl_activate () {}
     void impl_deactivate () {}
     void set_display (FatProcess* display) { _display = display; }
-
   private:
     FatProcess* _display;
-    int         _id;
-};
+    int _id;
+  };
 
-class DRMDevice : public FatProcess
-{
+  class DRMDevice : public FatProcess {
   public:
     DRMDevice (CoreProcess* parent, const string& name, int fd, int min_width, int max_width, int min_height, int max_height);
     ~DRMDevice ();
     void impl_activate () {}
     void impl_deactivate () {}
-    int  fd () { return _fd; }
-
+    int fd () { return _fd; }
   private:
     int _fd;
-};
+  };
 
-class DRMUdev
-{
-  private:
-    class DRMUdevAction : public Action
-    {
-      public:
-        DRMUdevAction (DRMUdev* udev) : Action (nullptr, "DRMUdevAction"), _udev (udev) {}
-        virtual ~DRMUdevAction () {}
-        void impl_activate ()
-        {
+  class DRMUdev {
+    private:
+      class DRMUdevAction : public Action {
+        public:
+          DRMUdevAction (DRMUdev* udev) :
+            Action (nullptr, "DRMUdevAction"), _udev (udev) {}
+          virtual ~DRMUdevAction () {}
+          void impl_activate ()
+          {
             _udev->handle_udev_msg ();
-        }
-
-      private:
-        DRMUdev* _udev;
+          }
+        private:
+          DRMUdev* _udev;
+      };
+    public:
+      DRMUdev ();
+      ~DRMUdev ();
+      void handle_udev_msg ();
+      void handle_drm_device (const char*, struct udev_device*);
+      void update_drm_device (const char*, struct udev_device*);
+    private:
+      IOFD* _udev_iofd;
+      struct udev *_udev_connection;
+      struct udev_monitor *_udev_mon;
+      DRMUdevAction *_action;
+      Coupling *_readable_cpl;
     };
-
-  public:
-    DRMUdev ();
-    ~DRMUdev ();
-    void handle_udev_msg ();
-    void handle_drm_device (const char*, struct udev_device*);
-    void update_drm_device (const char*, struct udev_device*);
-
-  private:
-    IOFD*                _udev_iofd;
-    struct udev*         _udev_connection;
-    struct udev_monitor* _udev_mon;
-    DRMUdevAction*       _action;
-    Coupling*            _readable_cpl;
-};
-} // namespace djnn
+}

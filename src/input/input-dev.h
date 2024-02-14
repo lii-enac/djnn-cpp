@@ -14,32 +14,28 @@
 
 #pragma once
 
-// #include "input.h"
+//#include "input.h"
 #include "core/ontology/process.h"
-// #include "core/property/bool_property.h"
+//#include "core/property/bool_property.h"
 
 namespace djnn {
-extern djnnstl::vector<djnnstl::string> loadedModules;
-extern FatProcess *                     InputDevices, *Mice, *TouchPanels, *GPIOs;
+  extern djnnstl::vector<djnnstl::string> loadedModules;
+	extern FatProcess *InputDevices, *Mice, *TouchPanels, *GPIOs;
+ 	
+ 	void init_input ();
+	void clear_input ();
 
-void init_input ();
-void clear_input ();
+  typedef enum direction_e {
+    IN, OUT
+  } direction_e;
 
-typedef enum direction_e
-{
-    IN,
-    OUT
-} direction_e;
-
-class GPIOProxy : public FatProcess
-{
+  class GPIOProxy : public FatProcess {
   public:
     GPIOProxy (CoreProcess* parent, const string& n) : FatProcess (n) { set_activation_state (ACTIVATED); }
     virtual ~GPIOProxy () {}
     CoreProcess* find_child_impl (const string& path) override;
-
   protected:
     void impl_activate () override {}
     void impl_deactivate () override {}
-};
-} // namespace djnn
+  };
+}

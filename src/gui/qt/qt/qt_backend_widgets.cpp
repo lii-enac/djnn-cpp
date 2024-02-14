@@ -14,46 +14,49 @@
 
 #include <QtWidgets/QFileDialog>
 
-#include "display/qt/qt_window.h"
-#include "display/qt/qt_window_moc.h"
 #include "gui/backend.h"
 #include "gui/qt/qt_backend.h"
 #include "gui/widgets/file_dialog.h"
 
-namespace djnn {
-void
-QtBackend::open_dialog (FileDialog* dialog)
-{
-    string    title  = dialog->title ().get_value ();
-    string    from   = dialog->from ().get_value ();
-    string    filter = dialog->filter ().get_value ();
-    auto      frame  = dialog->get_frame ();
-    QtWindow* impl   = dynamic_cast<QtWindow*> (frame->win_impl ());
-    if (impl == nullptr)
-        return;
-    impl->qwidget ()->set_building (true);
-    QString filename = QFileDialog::getOpenFileName (impl->qwidget (),
-                                                     QString::fromStdString (title), QString::fromStdString (from), QString::fromStdString (filter));
-    impl->qwidget ()->set_building (false);
-    if (!filename.isEmpty ())
-        dialog->set_file_selected (filename.toStdString ());
-}
+#include "display/qt/qt_window.h"
+#include "display/qt/qt_window_moc.h"
 
-void
-QtBackend::save_dialog (FileDialog* dialog)
+
+namespace djnn
 {
-    string    title  = dialog->title ().get_value ();
-    string    from   = dialog->from ().get_value ();
-    string    filter = dialog->filter ().get_value ();
-    auto      frame  = dialog->get_frame ();
-    QtWindow* impl   = dynamic_cast<QtWindow*> (frame->win_impl ());
+  void
+  QtBackend::open_dialog(FileDialog *dialog)
+  {
+    string title = dialog->title().get_value();
+    string from = dialog->from().get_value();
+    string filter = dialog->filter().get_value();
+    auto frame = dialog->get_frame();
+    QtWindow *impl = dynamic_cast<QtWindow *>(frame->win_impl());
     if (impl == nullptr)
-        return;
-    impl->qwidget ()->set_building (true);
-    QString filename = QFileDialog::getSaveFileName (impl->qwidget (),
-                                                     QString::fromStdString (title), QString::fromStdString (from), QString::fromStdString (filter));
-    impl->qwidget ()->set_building (false);
-    if (!filename.isEmpty ())
-        dialog->set_file_selected (filename.toStdString ());
+      return;
+    impl->qwidget()->set_building(true);
+    QString filename = QFileDialog::getOpenFileName(impl->qwidget(),
+                                                    QString::fromStdString(title), QString::fromStdString(from), QString::fromStdString(filter));
+    impl->qwidget()->set_building(false);
+    if (!filename.isEmpty())
+      dialog->set_file_selected(filename.toStdString());
+  }
+
+  void
+  QtBackend::save_dialog(FileDialog *dialog)
+  {
+    string title = dialog->title().get_value();
+    string from = dialog->from().get_value();
+    string filter = dialog->filter().get_value();
+    auto frame = dialog->get_frame();
+    QtWindow *impl = dynamic_cast<QtWindow *>(frame->win_impl());
+    if (impl == nullptr)
+      return;
+    impl->qwidget()->set_building(true);
+    QString filename = QFileDialog::getSaveFileName(impl->qwidget(),
+                                                    QString::fromStdString(title), QString::fromStdString(from), QString::fromStdString(filter));
+    impl->qwidget()->set_building(false);
+    if (!filename.isEmpty())
+      dialog->set_file_selected(filename.toStdString());
+  }
 }
-} // namespace djnn

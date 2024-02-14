@@ -16,76 +16,80 @@
 #include <functional>
 #include <locale>
 
-#include "core/serializer/serializer.h"
 #include "utils.h"
 
-namespace djnn {
-void
-Properties::PropertiesAction::impl_activate ()
-{
-    ((Properties*)get_parent ())->add_property ();
-}
+#include "core/serializer/serializer.h"
 
-Properties::Properties (CoreProcess* parent, const string& name, const string& filename)
-    : FatProcess (name)
+
+
+namespace djnn
 {
-    _input   = new TextProperty (this, "input", "");
-    _action  = new PropertiesAction (this, "action");
+  void
+  Properties::PropertiesAction::impl_activate ()
+  {
+    ((Properties*)get_parent ())->add_property ();
+  }
+
+  Properties::Properties (CoreProcess* parent, const string& name, const string& filename)
+  : FatProcess (name)
+  {
+    _input = new TextProperty (this, "input", "");
+    _action = new PropertiesAction (this, "action");
     _c_input = new Coupling (_input, ACTIVATION, _action, ACTIVATION, true);
-    if (!filename.empty ()) {
-        std::ifstream file (filename.c_str ());
-        if (file.is_open ()) {
-            std::string line;
-            while (getline (file, line)) {
-                _input->set_value (line.c_str (), false);
-                add_property ();
-            }
-            file.close ();
+    if (!filename.empty()) {
+      std::ifstream file (filename.c_str());
+      if (file.is_open()) {
+        std::string line;
+        while (getline(file, line)) {
+          _input->set_value (line.c_str(), false);
+          add_property ();
         }
+      file.close();
+      }
     }
     finalize_construction (parent, name);
-}
+  }
 
-Properties::~Properties ()
-{
+  Properties::~Properties ()
+  {
     delete _c_input;
     delete _input;
     delete _action;
     symtable_t::iterator it;
-    auto&                map = symtable ();
+    auto& map = symtable ();
     for (it = map.begin (); it != map.end (); ++it) {
-        delete it->second;
+      delete it->second;
     }
-}
+  }
 
-void
-Properties::impl_activate ()
-{
+  void
+  Properties::impl_activate ()
+  {
     _c_input->enable ();
-}
+  }
 
-void
-Properties::impl_deactivate ()
-{
+  void
+  Properties::impl_deactivate ()
+  {
     _c_input->disable ();
-}
+  }
 
-void
-Properties::add_property ()
-{
-    string s     = _input->get_value ();
+  void
+  Properties::add_property ()
+  {
+    string s = _input->get_value();
     size_t found = s.find_first_of ('=');
     if (found == string::npos)
-        return;
-    string key   = strTrim (s.substr (0, found));
+      return;
+    string key = strTrim (s.substr (0, found));
     string value = strTrim (s.substr (found + 1));
     new TextProperty (this, key, value);
-}
+  }
 
 #ifndef DJNN_NO_SERIALIZE
-void
-Properties::serialize (const string& type)
-{
+  void
+  Properties::serialize (const string& type)
+  {
     AbstractSerializer::pre_serialize (this, type);
 
     AbstractSerializer::serializer->start ("utils:properties");
@@ -93,29 +97,30 @@ Properties::serialize (const string& type)
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize (this);
-}
-#endif
+  }
+  #endif
 
-/* this code is adapted from
- * https://stackoverflow.com/questions/1798112/removing-leading-and-trailing-spaces-from-a-string
- */
-typedef unsigned char BYTE;
+  /* this code is adapted from
+   * https://stackoverflow.com/questions/1798112/removing-leading-and-trailing-spaces-from-a-string
+   */
+  typedef unsigned char BYTE;
 
-djnnstl::string
-strTrim (djnnstl::string s)
-{
+  djnnstl::string
+  strTrim (djnnstl::string s)
+  {
     // convert all whitespace characters to a standard space
     std::replace_if (s.begin (), s.end (), (std::function<int (BYTE)>)::isspace, ' ');
 
     // remove leading and trailing spaces
     size_t f = s.find_first_not_of (' ');
     if (f == djnnstl::string::npos)
-        return "";
+      return "";
     s = s.substr (f, s.find_last_not_of (' ') - f + 1);
 
     // remove consecutive spaces
-    s = djnnstl::string (s.begin (), std::unique (s.begin (), s.end (), [] (BYTE l, BYTE r) { return l == ' ' && r == ' '; }));
+    s = djnnstl::string (s.begin (), std::unique (s.begin (), s.end (), [](BYTE l, BYTE r) {return l == ' ' && r == ' ';}));
 
     return s;
+  }
 }
-} // namespace djnn
+

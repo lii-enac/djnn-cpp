@@ -12,15 +12,17 @@
  *
  */
 
-#include "display/display-priv.h"
+ #include "display/display-priv.h"
 
 namespace djnn {
-void
-p_init_display ()
-{
+  void
+  p_init_display ()
+  {
+
+  }
+    void
+  p_clear_display ()
+  {
+
+  }
 }
-void
-p_clear_display ()
-{
-}
-} // namespace djnn

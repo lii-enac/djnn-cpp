@@ -14,9 +14,9 @@
  *
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "gui/gui-dev.h"
 #include "gui/gui-xml.h"
@@ -26,24 +26,26 @@ using namespace djnnstl;
 
 static int IgnoreAttr (FatProcess**, const char*);
 
-static map<string, djn_XMLAttrHandler> handlers = {
-    {"viewBox", {&IgnoreAttr}},
-    {"contentStyleType", {&IgnoreAttr}},
-    {"contentScriptType", {&IgnoreAttr}},
-    {"preserveAspectRatio", {&IgnoreAttr}}};
+static map <string, djn_XMLAttrHandler> handlers = {
+  {"viewBox",{&IgnoreAttr}},
+  {"contentStyleType",{&IgnoreAttr}},
+  {"contentScriptType",{&IgnoreAttr}},
+  {"preserveAspectRatio",{&IgnoreAttr}}
+};
 
 djn_XMLAttrHandler*
-SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup (const char* str, unsigned int len)
+SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup (const char *str, unsigned int len)
 {
-    map<string, djn_XMLAttrHandler>::iterator it;
-    it = handlers.find (string (str));
-    if (it != handlers.end ())
-        return &it->second;
-    return 0;
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(string(str));
+  if (it != handlers.end())
+    return &it->second;
+  return 0;
 }
 
 static int
 IgnoreAttr (FatProcess** e, const char* v)
 {
-    return 1;
+	return 1;
 }
+

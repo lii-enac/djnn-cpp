@@ -15,18 +15,18 @@
 
 #pragma once
 
-namespace djnn {
-class AbstractBackend;
 
-class Backend
-{
+namespace djnn {
+  class AbstractBackend;
+
+  class Backend
+  {
   public:
     static AbstractBackend* instance ();
-    static void             init ();
-    static void             clear ();
-
+    static void init ();
+    static void clear ();
   private:
     class Impl;
     static Impl* _instance;
-};
-} // namespace djnn
+  };
+}

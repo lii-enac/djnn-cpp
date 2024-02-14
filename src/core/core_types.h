@@ -16,20 +16,21 @@
 
 namespace djnn {
 
-class Graph;
-class FatProcess;
-class AbstractProperty;
-class Container;
-class Assignment;
-class Binding;
-class Component;
-class Coupling;
-class InternalAction;
-class IntProperty;
-class DoubleProperty;
-class BoolProperty;
-class TextProperty;
-class RefProperty;
-class Spike;
-class NativeAction;
-} // namespace djnn
+  class Graph;
+  class FatProcess;
+  class AbstractProperty;
+  class Container;
+  class Assignment;
+  class Binding;
+  class Component;
+  class Coupling;
+  class InternalAction;
+  class IntProperty;
+  class DoubleProperty;
+  class BoolProperty;
+  class TextProperty;
+  class RefProperty;
+  class Spike;
+  class NativeAction;
+}
+

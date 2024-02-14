@@ -17,11 +17,11 @@
 
 #ifndef YY_DECL
 
-#define YY_DECL                             \
-    css::Parser::token_type                 \
-    css::Scanner::lex (                     \
-        css::Parser::semantic_type* yylval, \
-        css::Parser::location_type* yylloc)
+#define	YY_DECL						\
+  css::Parser::token_type				\
+  css::Scanner::lex(				\
+  css::Parser::semantic_type* yylval,		\
+  css::Parser::location_type* yylloc)
 #endif
 
 #ifndef __FLEX_LEXER_H
@@ -32,9 +32,10 @@
 
 #include "parser.hpp"
 
-namespace css {
-class Scanner : public CssFlexLexer
+namespace css
 {
+  class Scanner : public CssFlexLexer
+  {
   public:
     Scanner (std::istream* arg_yyin = 0, std::ostream* arg_yyout = 0);
 
@@ -44,8 +45,8 @@ class Scanner : public CssFlexLexer
     lex (Parser::semantic_type* yylval, Parser::location_type* yylloc);
 
     void set_debug (bool b);
-};
+  };
 
-} // namespace css
+}
 
 #endif

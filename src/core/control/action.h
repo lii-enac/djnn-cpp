@@ -16,42 +16,40 @@
 
 #pragma once
 
-#include "core/ontology/coupling.h"
 #include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
 
 namespace djnn {
 
-class Action : public FatProcess
-{
+  class Action : public FatProcess {
   public:
-    Action (CoreProcess* parent, const string& n, bool model = false) : // ChildProcess (model)
-                                                                        FatProcess (n, model)
+    Action (CoreProcess* parent, const string& n, bool model = false) :
+    //ChildProcess (model)
+    FatProcess (n, model)
     {
-        /* note:
-         * finalize_constructor for action
-         * they add a symbol process but do not appear in the _children of its parent
-         * so they have to be deleted manually from destructor // FIXME: not done??
-         */
-        if (parent) {
-            set_state_dependency (parent->get_state_dependency ());
-            set_parent (parent);
-        }
+      /* note:
+       * finalize_constructor for action 
+       * they add a symbol process but do not appear in the _children of its parent
+       * so they have to be deleted manually from destructor // FIXME: not done??
+       */ 
+      if (parent) {
+        set_state_dependency (parent->get_state_dependency ());
+        set_parent (parent);
+      }
     }
     virtual ~Action ();
     virtual process_type_e get_process_type () const override { return ACTION_T; }
-    void                   impl_deactivate () override {} // save from providing it in inherited actions
+    void impl_deactivate () override {} // save from providing it in inherited actions
 
   protected:
-    virtual bool pre_activate () override
-    {
-        if (get_parent () != nullptr && !get_parent ()->somehow_activating ())
-            return false;
-        set_activation_state (ACTIVATING);
-        return true;
+    virtual bool pre_activate () override {
+      if (get_parent () != nullptr && !get_parent ()->somehow_activating () )
+        return false;
+      set_activation_state(ACTIVATING);
+      return true;
     }
-    void post_activate () override
-    {
-        post_activate_auto_deactivate ();
+    void post_activate () override {
+      post_activate_auto_deactivate ();
     }
-};
-} // namespace djnn
+  };
+}

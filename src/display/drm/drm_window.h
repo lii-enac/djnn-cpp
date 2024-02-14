@@ -14,37 +14,36 @@
 
 #pragma once
 
-#include "core/ontology/process.h"
 #include "display/drm/drm_display.h"
 #include "display/window.h"
+#include "core/ontology/process.h"
 #include "exec_env/external_source.h"
+
 
 namespace djnn {
 
-class DRMWindow : public WinImpl
-{
+  class DRMWindow : public WinImpl
+  {
   public:
-    DRMWindow (Window* win, const string& title, double x, double y, double w, double h);
+    DRMWindow (Window *win, const string& title, double x, double y, double w, double h);
     virtual ~DRMWindow ();
-    buff*       get_next_buff ();
-    void        flip_page ();
-    void        flip_page_fb (uint32_t fb);
-    void        set_cursor (const string& path, int hotX, int hotY) override {}
-    void        set_cursor (int cursor_shape) override {}
-    FatProcess* get_vblank ()
-    {
-        if (_conn == nullptr)
-            return nullptr;
-        else
-            return _conn->get_vblank ();
+    buff* get_next_buff ();
+    void flip_page ();
+    void flip_page_fb (uint32_t fb);
+    void set_cursor (const string& path, int hotX, int hotY) override {}
+    void set_cursor (int cursor_shape) override {}
+    FatProcess* get_vblank () {
+      if (_conn == nullptr)
+        return nullptr;
+      else
+        return _conn->get_vblank ();
     }
     bool is_waiting_for_vblank () const;
-    int  set_dpy_connection ();
-
-  protected:
+    int set_dpy_connection ();
+   protected:
     djnn::Window* _window;
     DRMConnector* _conn;
-    bool          is_activated;
-};
+    bool is_activated;
+  };
 
-} // namespace djnn
+}

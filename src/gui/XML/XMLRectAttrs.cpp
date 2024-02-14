@@ -14,9 +14,9 @@
  *
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "gui/gui-dev.h"
 #include "gui/gui-xml.h"
@@ -25,6 +25,7 @@ using namespace djnnstl;
 
 namespace djnn {
 
+
 static int ParseX (FatProcess**, const char*);
 static int ParseY (FatProcess**, const char*);
 static int ParseWidth (FatProcess**, const char*);
@@ -32,22 +33,23 @@ static int ParseHeight (FatProcess**, const char*);
 static int ParseRx (FatProcess**, const char*);
 static int ParseRy (FatProcess**, const char*);
 
-static map<string, djn_XMLAttrHandler> handlers = {
-    {"x", {&ParseX}},
-    {"y", {&ParseY}},
-    {"width", {&ParseWidth}},
-    {"height", {&ParseHeight}},
-    {"rx", {&ParseRx}},
-    {"ry", {&ParseRy}}};
+static map <string, djn_XMLAttrHandler> handlers = {
+  {"x",{&ParseX}},
+  {"y",{&ParseY}},
+  {"width",{&ParseWidth}},
+  {"height",{&ParseHeight}},
+  {"rx",{&ParseRx}},
+  {"ry",{&ParseRy}}
+};
 
 djn_XMLAttrHandler*
-XMLRectAttrs_Hash::djn_XMLRectAttrsLookup (const char* str, unsigned int len)
+XMLRectAttrs_Hash::djn_XMLRectAttrsLookup (const char *str, unsigned int len)
 {
-    map<string, djn_XMLAttrHandler>::iterator it;
-    it = handlers.find (string (str));
-    if (it != handlers.end ())
-        return &it->second;
-    return 0;
+  map<string, djn_XMLAttrHandler>::iterator it;
+  it = handlers.find(string(str));
+  if (it != handlers.end())
+    return &it->second;
+  return 0;
 }
 
 struct djn_RectArgs djn_RectArgs = {0., 0., 0., 0., -1., -1.};
@@ -55,42 +57,42 @@ struct djn_RectArgs djn_RectArgs = {0., 0., 0., 0., -1., -1.};
 static int
 ParseX (FatProcess** e, const char* v)
 {
-    return XML_Utils::djn_XMLParseLength (&djn_RectArgs.x, v);
+  return XML_Utils::djn_XMLParseLength (&djn_RectArgs.x, v);
 }
 
 static int
 ParseY (FatProcess** e, const char* v)
 {
-    return XML_Utils::djn_XMLParseLength (&djn_RectArgs.y, v);
+  return XML_Utils::djn_XMLParseLength (&djn_RectArgs.y, v);
 }
 
 static int
 ParseWidth (FatProcess** e, const char* v)
 {
-    return XML_Utils::djn_XMLParseLength (&djn_RectArgs.w, v);
+  return XML_Utils::djn_XMLParseLength (&djn_RectArgs.w, v);
 }
 
 static int
 ParseHeight (FatProcess** e, const char* v)
 {
-    return XML_Utils::djn_XMLParseLength (&djn_RectArgs.h, v);
+  return XML_Utils::djn_XMLParseLength (&djn_RectArgs.h, v);
 }
 
 static int
 ParseRx (FatProcess** e, const char* v)
 {
-    int r = XML_Utils::djn_XMLParseLength (&djn_RectArgs.rx, v);
-    if (r && djn_RectArgs.ry == -1)
-        djn_RectArgs.ry = djn_RectArgs.rx;
-    return r;
+  int r = XML_Utils::djn_XMLParseLength (&djn_RectArgs.rx, v);
+  if (r && djn_RectArgs.ry == -1)
+    djn_RectArgs.ry = djn_RectArgs.rx;
+  return r;
 }
 
 static int
 ParseRy (FatProcess** e, const char* v)
 {
-    int r = XML_Utils::djn_XMLParseLength (&djn_RectArgs.ry, v);
-    if (r && djn_RectArgs.rx == -1)
-        djn_RectArgs.rx = djn_RectArgs.ry;
-    return r;
+  int r = XML_Utils::djn_XMLParseLength (&djn_RectArgs.ry, v);
+  if (r && djn_RectArgs.rx == -1)
+    djn_RectArgs.rx = djn_RectArgs.ry;
+  return r;
 }
-} // namespace djnn
+}

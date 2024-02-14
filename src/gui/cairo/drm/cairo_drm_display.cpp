@@ -12,62 +12,61 @@
  *
  */
 
-#include <mutex> // std::call_once
-
-#include "core/utils/iostream.h"
-#include "display/abstract_display.h"
 #include "display/display.h"
+#include "display/abstract_display.h"
+
 #include "display/drm/drm_window.h"
 #include "gui/cairo/drm/cairo_drm_window.h"
+#include <mutex> // std::call_once
+#include "core/utils/iostream.h"
 
 namespace djnn {
 
-class CairoDRMDisplayBackend : public AbstractDisplay
-{
+	class CairoDRMDisplayBackend : public AbstractDisplay {
   public:
     static CairoDRMDisplayBackend* instance ();
-    WinImpl*                       create_window (Window* win, const string& title, double x, double y, double w, double h);
+    WinImpl* create_window (Window *win, const string& title,  double x, double y, double w, double h);
 
     struct Impl;
-    Impl* impl;
+    Impl *impl;
 
     static std::shared_ptr<CairoDRMDisplayBackend> _instance;
-    static std::once_flag                          onceFlag;
-};
+    static std::once_flag onceFlag;
+  };
 
-std::shared_ptr<CairoDRMDisplayBackend> CairoDRMDisplayBackend::_instance;
-std::once_flag                          CairoDRMDisplayBackend::onceFlag;
+  std::shared_ptr<CairoDRMDisplayBackend> CairoDRMDisplayBackend::_instance;
+  std::once_flag CairoDRMDisplayBackend::onceFlag;
 
-WinImpl*
-CairoDRMDisplayBackend::create_window (Window* win, const string& title, double x, double y, double w, double h)
-{
-    DRMWindow* implwin = new CairoDRMWindow (win, title, x, y, w, h);
+  WinImpl*
+  CairoDRMDisplayBackend::create_window (Window *win, const string& title,  double x, double y, double w, double h)
+  {
+    DRMWindow *implwin = new CairoDRMWindow (win, title, x, y, w, h);
     set_window (win);
     return implwin;
-}
+  }
 
-CairoDRMDisplayBackend*
-CairoDRMDisplayBackend::instance ()
-{
+  CairoDRMDisplayBackend*
+  CairoDRMDisplayBackend::instance ()
+  {
     std::call_once (CairoDRMDisplayBackend::onceFlag, [] () {
-        _instance.reset (new CairoDRMDisplayBackend);
+      _instance.reset(new CairoDRMDisplayBackend);
     });
 
     return _instance.get ();
-}
+  }
 
-void
-DisplayBackend::init ()
-{
+  void
+  DisplayBackend::init ()
+  {
     if (_instance != nullptr)
-        return;
-    _instance          = new Impl ();
+      return;
+    _instance = new Impl ();
     _instance->backend = CairoDRMDisplayBackend::instance ();
-}
+  }
 
-void
-p_init_p_display ()
-{
+	void
+  p_init_p_display ()
+  {
     DisplayBackend::init ();
+  }
 }
-} // namespace djnn

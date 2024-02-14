@@ -14,169 +14,147 @@
  */
 
 #include "coupling.h"
-
-#include "core/core-dev.h" // graph add/remove edge
-#include "core/utils/error.h"
 #include "process.h"
 
-namespace djnn {
+#include "core/core-dev.h" // graph add/remove edge
 
-// -----------------------------------------------------------------------
-// construction / destruction
+#include "core/utils/error.h"
 
-Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag,
-                    CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
-    : _src (src), _dst (dst), _bitset (0)
+namespace djnn
 {
+
+  // -----------------------------------------------------------------------
+  // construction / destruction
+
+  Coupling::Coupling (CoreProcess* src, activation_flag_e src_flag,
+                      CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
+  : _src (src), _dst (dst), _bitset (0)
+  {
     init (src, src_flag, dst, dst_flag, immediate_propagation);
-}
+  }
 
-Coupling::Coupling ()
-    : _src (nullptr), _dst (nullptr), _bitset (0)
-{
-}
+  Coupling::Coupling ()
+  : _src(nullptr), _dst(nullptr), _bitset (0)
+  {
+  }
 
-Coupling::~Coupling ()
-{
+  Coupling::~Coupling ()
+  {
     uninit ();
-}
+  }
 
-void
-Coupling::init (CoreProcess* src, activation_flag_e src_flag,
-                CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
-{
+  void
+  Coupling::init (CoreProcess* src, activation_flag_e src_flag,
+                  CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation)
+  {
     set_is_enabled (true);
     set_src_activation_flag (src_flag);
     set_dst_activation_flag (dst_flag);
     set_immediate_propagation (immediate_propagation);
 
     switch (src_flag) {
-    case ACTIVATION:
-        src->add_activation_coupling (this);
-        break;
-    case DEACTIVATION:
-        src->add_deactivation_coupling (this);
-        break;
-    default:
-        warning (src, "wrong activation flag in coupling creation");
-        break;
+      case   ACTIVATION: src->add_activation_coupling (this); break;
+      case DEACTIVATION: src->add_deactivation_coupling (this); break;
+      default: warning (src, "wrong activation flag in coupling creation"); break;
     }
     replace_edge (src, dst, immediate_propagation);
 
     _src = src;
     _dst = dst;
-}
+  }
 
-void
-Coupling::uninit ()
-{
-    if (_src == nullptr) {
-        return;
-    }
+  void
+  Coupling::uninit ()
+  {
+    if (_src == nullptr) { return; }
 
     switch (get_src_activation_flag ()) {
-    case ACTIVATION:
-        _src->remove_activation_coupling (this);
-        break;
-    case DEACTIVATION:
-        _src->remove_deactivation_coupling (this);
-        break;
-    case NONE_ACTIVATION:
-        break;
+      case   ACTIVATION: _src->remove_activation_coupling (this); break;
+      case DEACTIVATION: _src->remove_deactivation_coupling (this); break;
+      case NONE_ACTIVATION: break;
     }
     if (get_has_edge ()) {
-        graph_remove_edge (_src, _dst);
-        set_has_edge (false);
+      graph_remove_edge (_src, _dst);
+      set_has_edge (false);
     }
-}
+  }
 
-// -----------------------------------------------------------------------
-// management
 
-void
-Coupling::set_src (CoreProcess* src)
-{
-    switch (get_src_activation_flag ()) {
-    case ACTIVATION:
-        if (_src != nullptr) {
-            _src->remove_activation_coupling (this);
-        }
-        if (src != nullptr) {
-            src->add_activation_coupling (this);
-        }
-        break;
-    case DEACTIVATION:
-        if (_src != nullptr) {
-            _src->remove_deactivation_coupling (this);
-        }
-        if (src != nullptr) {
-            src->add_deactivation_coupling (this);
-        }
-        break;
-    case NONE_ACTIVATION:
-        break;
+  // -----------------------------------------------------------------------
+  // management
+
+  void
+  Coupling::set_src (CoreProcess *src)
+  {
+    switch(get_src_activation_flag ()) {
+      case ACTIVATION:
+        if (_src != nullptr) { _src->remove_activation_coupling (this); }
+        if ( src != nullptr) {  src->add_activation_coupling    (this); }
+      break;
+      case DEACTIVATION:
+        if (_src != nullptr) { _src->remove_deactivation_coupling (this); }
+        if ( src != nullptr) {  src->add_deactivation_coupling    (this); }
+      break;
+      case NONE_ACTIVATION:
+      break;
     }
-    replace_edge (src, _dst, is_immediate ());
+    replace_edge (src, _dst, is_immediate());
     _src = src;
-}
+  }
 
-void
-Coupling::set_dst (CoreProcess* dst)
-{
-    replace_edge (_src, dst, is_immediate ());
+  void
+  Coupling::set_dst (CoreProcess *dst)
+  {
+    replace_edge (_src, dst, is_immediate());
     _dst = dst;
-}
+  }
 
-void
-Coupling::about_to_delete_src ()
-{
+  void
+  Coupling::about_to_delete_src () 
+  {
     if (get_has_edge ()) {
-        graph_remove_edge (_src, _dst);
-        set_has_edge (false);
+      graph_remove_edge (_src, _dst);
+      set_has_edge (false);
     }
     _src = nullptr;
-}
+  }
 
-void
-Coupling::replace_edge (CoreProcess* src, CoreProcess* dst, bool immediate_propagation)
-{
+  void
+  Coupling::replace_edge (CoreProcess* src, CoreProcess* dst, bool immediate_propagation)
+  {
     if (get_has_edge ()) {
-        graph_remove_edge (_src, _dst);
-        set_has_edge (false);
+      graph_remove_edge (_src, _dst);
+      set_has_edge (false);
     }
     if (!immediate_propagation && src && dst) {
-        graph_add_edge (src, dst);
-        set_has_edge (true);
+      graph_add_edge (src, dst);
+      set_has_edge (true);
     }
-}
+  }
 
-// -----------------------------------------------------------------------
-// behavior
 
-void
-Coupling::propagate ()
-{
+  // -----------------------------------------------------------------------
+  // behavior
+
+  void
+  Coupling::propagate ()
+  {
     _dst->set_activation_source (_src);
     if (is_immediate ()) {
-        propagate_immediately ();
+      propagate_immediately ();
     } else {
-        _dst->set_activation_flag (get_dst_activation_flag ());
+      _dst->set_activation_flag (get_dst_activation_flag());
     }
-}
+  }
 
-void
-Coupling::propagate_immediately ()
-{
-    switch (get_dst_activation_flag ()) {
-    case ACTIVATION:
-        _dst->activate ();
-        break;
-    case DEACTIVATION:
-        _dst->deactivate ();
-        break;
-    case NONE_ACTIVATION:
-        break;
+  void
+  Coupling::propagate_immediately ()
+  {
+    switch(get_dst_activation_flag ()) {
+    case      ACTIVATION: _dst->activate ();   break;
+    case    DEACTIVATION: _dst->deactivate (); break;
+    case NONE_ACTIVATION: break;
     }
-}
+  }
 
-} // namespace djnn
+}

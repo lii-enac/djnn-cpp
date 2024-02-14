@@ -12,38 +12,39 @@
  *
  */
 
-#include "animation.h"
 
+#include "animation.h"
 #include "core/serializer/serializer.h"
 
-namespace djnn {
-
-static bool __module_initialized = false;
-
-void
-init_animation ()
+namespace djnn
 {
+  
+  static bool __module_initialized = false;
 
-    if (__module_initialized == false) {
+  void
+  init_animation () {
 
-        __module_initialized = true;
+    if ( __module_initialized == false ) {
 
-        djnn::loadedModules.push_back ("animation");
+      __module_initialized = true;
+      
+      djnn::loadedModules.push_back("animation");
+      
     }
-}
+  }
 
-void
-clear_animation ()
-{
-}
-
-SlowInSlowOutInterpolator::SlowInSlowOutInterpolator (CoreProcess* parent, const string& name)
-    : HermiteCurve (parent, name, 0, 1, 0, 0) {}
+  void
+  clear_animation ()
+  {
+  }
+  
+  SlowInSlowOutInterpolator::SlowInSlowOutInterpolator (CoreProcess* parent, const string& name) :
+        HermiteCurve (parent, name, 0, 1, 0, 0) {}
 
 #ifndef DJNN_NO_SERIALIZE
-void
-SlowInSlowOutInterpolator::serialize (const string& type)
-{
+  void
+  SlowInSlowOutInterpolator::serialize (const string& type)
+  {
 
     AbstractSerializer::pre_serialize (this, type);
 
@@ -52,7 +53,8 @@ SlowInSlowOutInterpolator::serialize (const string& type)
     AbstractSerializer::serializer->end ();
 
     AbstractSerializer::post_serialize (this);
-}
+
+  }
 #endif
 
-} // namespace djnn
+}

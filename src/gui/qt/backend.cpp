@@ -15,31 +15,33 @@
 #include "gui/backend.h"
 
 #include "display/abstract_display.h"
-#include "exec_env/qt/qt_mainloop.h"
-#include "qt_backend.h"
 
-namespace djnn {
-class Backend::Impl
+#include "qt_backend.h"
+#include "exec_env/qt/qt_mainloop.h"
+
+namespace djnn
 {
+  class Backend::Impl
+  {
   public:
     QtBackend* qt_backend;
-};
+  };
 
-Backend::Impl* Backend::_instance;
+  Backend::Impl* Backend::_instance;
 
-AbstractBackend*
-Backend::instance ()
-{
+  AbstractBackend*
+  Backend::instance ()
+  {
     return _instance->qt_backend;
-}
+  }
 
-void
-Backend::init ()
-{
+  void
+  Backend::init ()
+  {
     if (_instance != nullptr)
-        return;
-    _instance             = new Impl ();
+      return;
+    _instance = new Impl ();
     _instance->qt_backend = QtBackend::instance ();
     QtMainloop::instance ();
+  }
 }
-} // namespace djnn

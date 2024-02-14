@@ -14,23 +14,24 @@
 
 #pragma once
 
-#include <cairo.h>
-
 #include "cairo_backend.h"
-#include "display/window.h"
 #include "exec_env/external_source.h"
+#include "display/window.h"
+
+
+#include <cairo.h>
 
 namespace djnn {
 
-class MyCairoSurface
-{
+  class MyCairoSurface
+  {
   public:
-    MyCairoSurface (Window* win);
+    MyCairoSurface (Window *win);
     virtual ~MyCairoSurface ();
     void update (cairo_surface_t* drawing_surface, cairo_surface_t* picking_surface, int width = 0, int height = 0);
 
   private:
     Window* _window;
-};
+  };
 
-} // namespace djnn
+}

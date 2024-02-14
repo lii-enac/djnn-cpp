@@ -12,51 +12,54 @@
  *
  */
 
+
 #include "comms.h"
 
 #ifdef _WIN32
-/* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#pragma comment(lib, "Ws2_32.lib")
+  /* See http://stackoverflow.com/questions/12765743/getaddrinfo-on-win32 */
+  #include <winsock2.h>
+  #include <ws2tcpip.h>
+  #pragma comment(lib, "Ws2_32.lib")
 #endif
 
-namespace djnn {
 
-static bool __module_initialized = false;
-
-int
-clean_socket ()
+namespace djnn
 {
-#ifdef _WIN32
-    return WSACleanup ();
-#else
-    return 0;
-#endif
-}
+  
+  static bool __module_initialized = false;
 
-void
-init_comms ()
-{
 
-    if (__module_initialized == false) {
+  int clean_socket()
+  {
+    #ifdef _WIN32
+      return WSACleanup();
+    #else
+      return 0;
+    #endif
+  }
 
-        __module_initialized = true;
+  void
+  init_comms () {
 
-        djnn::loadedModules.push_back ("comms");
+    if ( __module_initialized == false ) {
+
+      __module_initialized = true;
+      
+      djnn::loadedModules.push_back("comms");
+      
     }
 
 #ifdef _WIN32
-    WSADATA wsa_data;
-    WSAStartup (MAKEWORD (2, 2), &wsa_data);
+      WSADATA wsa_data;
+      WSAStartup(MAKEWORD(2,2), &wsa_data);
 #endif
-}
+  }
 
-void
-clear_comms ()
-{
-    // TODO: We should clean winsock
-    clean_socket ();
-}
 
-} // namespace djnn
+  void
+  clear_comms () {
+    //TODO: We should clean winsock
+    clean_socket (); 
+  }
+  
+}

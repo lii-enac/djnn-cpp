@@ -12,17 +12,15 @@
  *
  */
 
-#include "gui/gui-priv.h"
+ #include "gui/gui-priv.h"
 
 namespace djnn {
 
-void
-p_init_gui ()
-{
-}
+  void
+  p_init_gui () {
+  }
 
-void
-p_clear_gui ()
-{
+  void
+  p_clear_gui () {
+  }
 }
-} // namespace djnn

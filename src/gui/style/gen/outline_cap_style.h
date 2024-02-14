@@ -16,33 +16,34 @@
  *
  */
 
+
 #pragma once
 
-#include "core/ontology/coupling.h"
 #include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+
 #include "gui/style/abstract_style.h"
 
-namespace djnn {
-class OutlineCapStyle : public AbstractStyle
+
+namespace djnn
 {
+  class OutlineCapStyle : public AbstractStyle
+  {
   public:
     OutlineCapStyle (CoreProcess* parent, const string& name, int cap);
     virtual ~OutlineCapStyle ();
-    void                                    draw () override;
-    OutlineCapStyle*                        impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
-    void                                    get_properties_values (int& cap);
+    void draw () override;
+    OutlineCapStyle* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    void get_properties_values (int& cap);
     const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
-    virtual CoreProcess*                    find_child_impl (const string&) override;
-    AbstractIntProperty*                    cap () { return (AbstractIntProperty*)find_child_impl ("cap"); }
+    virtual CoreProcess* find_child_impl (const string&) override;
+		AbstractIntProperty* cap () { return (AbstractIntProperty*) find_child_impl ("cap"); }
 
   protected:
-    struct raw_props_t
-    {
-        int cap;
-    };
+    struct raw_props_t { int cap; };
     raw_props_t raw_props;
-    Coupling*   _ccap;
-    void        impl_activate () override;
-    void        impl_deactivate () override;
-};
-} // namespace djnn
+    Coupling *_ccap;
+    void impl_activate () override;
+    void impl_deactivate () override;
+  };
+}

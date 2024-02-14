@@ -34,6 +34,7 @@ TODO:?
 
 */
 
+
 #pragma once
 
 #include <chrono>
@@ -43,67 +44,67 @@ TODO:?
 
 namespace djnn_internal {
 
-namespace Time {
-
-template <typename xxx>
-time_point
-time_point_cast (const xxx& tp)
-{
-    return std::chrono::time_point_cast<std::chrono::microseconds> (tp);
-}
-
-struct lesser
-{
-    bool
-    operator() (const djnn_internal::Time::Timer* t1, const djnn_internal::Time::Timer* t2) const
-    {
-        return t1->get_end_time () < t2->get_end_time () || (t1->get_end_time () == t2->get_end_time () ? t1 < t2 : false); // need to distinguish between Timer*'s
+  namespace Time {
+    
+    template <typename xxx>
+    time_point
+    time_point_cast (const xxx& tp)  {
+      return std::chrono::time_point_cast<std::chrono::microseconds>(tp);
     }
-};
 
-class Manager
-{
-  public:
-    Manager (duration precision = std::chrono::microseconds (100));
-    virtual ~Manager () {}
+    struct lesser {
+      bool
+      operator() (const djnn_internal::Time::Timer* t1, const djnn_internal::Time::Timer* t2) const
+      {
+        return
+            t1->get_end_time()  < t2->get_end_time()
+        || (t1->get_end_time() == t2->get_end_time() ? t1<t2 : false); // need to distinguish between Timer*'s
+      }
+    };
 
-    // struct exc {};
-    // struct TimerAlreadyScheduled : exc {};
-    // struct TimerListEmpty : exc {};
 
-    void              update_ref_now ();
-    void              set_ref_now (time_point now);
-    const time_point& get_ref_now () const { return _ref_now; }
+    class Manager {
+    public:
+      Manager (duration precision=std::chrono::microseconds(100));
+      virtual ~Manager() {}
 
-    void         schedule (Timer* timer, duration);                        // throw(TimerAlreadyScheduled);
-    void         schedule (Timer* timer, duration, time_point start_time); // throw(TimerAlreadyScheduled);
-    void         cancel (Timer* timer);
-    void         reset (Timer* timer);
-    void         cleanup ();
-    bool         empty () const { return _timers.empty (); }
-    Timer*       get_next ();
-    const Timer* get_next () const;
-    void         pop_next ();
-    void         time_has_elapsed (time_point now);
-    bool         has_time_elapsed () const;
+      //struct exc {};
+      //struct TimerAlreadyScheduled : exc {};
+      //struct TimerListEmpty : exc {};
 
-    duration get_precision () const { return _precision; }
+      void update_ref_now ();
+      void set_ref_now (time_point now);
+      const time_point& get_ref_now () const { return _ref_now; } 
 
-    // debug
-    const Timer* find (Timer*) const;
-    bool         is_already_scheduled (Timer* timer) const;
-    void         debug () const;
+      void schedule(Timer* timer, duration) ; //throw(TimerAlreadyScheduled);
+      void schedule(Timer* timer, duration, time_point start_time) ; //throw(TimerAlreadyScheduled);
+      void cancel  (Timer* timer);
+      void reset   (Timer* timer);
+      void cleanup ();
+      bool empty   () const { return _timers.empty(); }
+      Timer*  get_next ();
+      const Timer*   get_next () const;
+      void    pop_next ();
+      void time_has_elapsed (time_point now);
+      bool has_time_elapsed () const;
 
-  protected:
-    virtual void                     firstTimerHasChanged () = 0;
-    typedef std::set<Timer*, lesser> Timers;
-    Timers                           _timers;
+      duration get_precision () const { return _precision; }
 
-  private:
-    duration   _precision;
-    bool       _dontCallTimerHasChanged;
-    time_point _ref_now;
-};
+      // debug
+      const Timer* find (Timer *) const;
+      bool is_already_scheduled (Timer* timer) const;
+      void debug () const;
 
-} // namespace Time
-} // namespace djnn_internal
+    protected:
+      virtual void firstTimerHasChanged()=0;
+      typedef std::set<Timer*, lesser> Timers;
+      Timers _timers;
+    private:
+      duration _precision;
+      bool _dontCallTimerHasChanged;
+      time_point _ref_now;
+    };
+
+    
+  }
+}

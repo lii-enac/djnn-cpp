@@ -14,32 +14,33 @@
 
 #pragma once
 
-#include "connector.h"
 #include "core/tree/component.h"
 #include "text.h"
+#include "connector.h"
 
-namespace djnn {
+namespace djnn
+{
 
 // NOTE: NEW_LOG can't not be used now because of the delete in ~container/~process
 #define NEW_LOG_PLAIN_OBJ 0
 
-class LogPrinter : public Component
-{
+  class LogPrinter : public Component
+  {
   public:
     LogPrinter (CoreProcess* parent, const string& n, const string& label);
-#ifndef DJNN_NO_SERIALIZE
+ #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif
   private:
 #if NEW_LOG_PLAIN_OBJ
     TextCatenator _tc;
-    TextPrinter   _tp;
-    Connector     _c;
+    TextPrinter _tp;
+    Connector _c;
 #else
     TextCatenator* _tc;
-    TextPrinter*   _tp;
-    Connector*     _c;
+    TextPrinter* _tp;
+    Connector* _c;
 #endif
-};
+  };
 
-} // namespace djnn
+}
