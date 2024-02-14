@@ -49,10 +49,12 @@ namespace djnn
   /** Turn off -Wunused-result for a specific function call */
   #define __ignore_unused(M) if(1==((int)M)){;}
 
-  #define __djnn_str(x) #x
-  #define __djnn_str1(x) __djnn_str(x)
+#ifndef __djnn_str1
+#define __djnn_str(x)  #x
+#define __djnn_str1(x) __djnn_str (x)
+#endif
 
-  #ifndef __DJNN_FUNCTION__
+#ifndef __DJNN_FUNCTION__
     #ifdef __PRETTY_FUNCTION__
       #define __DJNN_FUNCTION__ __PRETTY_FUNCTION__
     #else
