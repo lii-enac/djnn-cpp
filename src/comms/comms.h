@@ -14,9 +14,8 @@
 
 #pragma once
 
-#include "proc_exporter.h"
 #include "IvyAccess.h"
+#include "comms/comms-dev.h"
+#include "proc_exporter.h"
 #include "remote_proc.h"
 #include "serial.h"
-#include "comms/comms-dev.h"
-

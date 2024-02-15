@@ -14,48 +14,48 @@
 
 #pragma once
 
-#include "exec_env/external_source.h"
-
 #include <SDL.h>
 #include <memory>
 #include <mutex> // std::call_once
 
+#include "exec_env/external_source.h"
+
 namespace djnn {
 
-  class SDLWindow;
+class SDLWindow;
 
-  class SDLMainloop : public ExternalSource {
-    public:
-      static SDLMainloop& instance ();
-      ~SDLMainloop();
+class SDLMainloop : public ExternalSource
+{
+  public:
+    static SDLMainloop& instance ();
+    ~SDLMainloop ();
 
-      void add_window (SDLWindow* win);
-      void remove_window (SDLWindow* win);
+    void add_window (SDLWindow* win);
+    void remove_window (SDLWindow* win);
 
-      // ExternalSource
-      virtual void please_stop () override;
-      virtual void wakeup(SDLWindow * requestingWin);
+    // ExternalSource
+    virtual void please_stop () override;
+    virtual void wakeup (SDLWindow* requestingWin);
 
-      void sdl_run_coop () ;
-    
-    protected:
-      // ExternalSource
-      virtual void run () override;
+    void sdl_run_coop ();
 
-    private:
-      void sdl_run () ;
-      
-      void handle_events(SDL_Event&) ;
-      void handle_single_event(SDL_Event&) ;
+  protected:
+    // ExternalSource
+    virtual void run () override;
 
-      map<Uint32, SDLWindow*> _windows;
+  private:
+    void sdl_run ();
 
-      SDLMainloop();
-      static SDLMainloop* _instance;
-      static std::once_flag onceFlag;
+    void handle_events (SDL_Event&);
+    void handle_single_event (SDL_Event&);
 
-      std::atomic<bool> _wakeup_already_triggered;
+    map<Uint32, SDLWindow*> _windows;
 
-  };
+    SDLMainloop ();
+    static SDLMainloop*   _instance;
+    static std::once_flag onceFlag;
 
-}
+    std::atomic<bool> _wakeup_already_triggered;
+};
+
+} // namespace djnn

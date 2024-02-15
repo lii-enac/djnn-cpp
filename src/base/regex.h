@@ -16,43 +16,46 @@
 
 #include <regex>
 
+#include "core/control/action.h"
 #include "core/ontology/coupling.h"
 #include "core/property/text_property.h"
-#include "core/control/action.h"
 
 namespace djnn {
 
-  class Regex : public FatProcess
-  {
+class Regex : public FatProcess
+{
   private:
-    class RegexAction : public Action {
-    public:
-      RegexAction (CoreProcess* parent, const string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
-      virtual ~RegexAction () {}
-      void impl_activate () override;
-    private:
-      Regex& _reg;
+    class RegexAction : public Action
+    {
+      public:
+        RegexAction (CoreProcess* parent, const string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
+        virtual ~RegexAction () {}
+        void impl_activate () override;
+
+      private:
+        Regex& _reg;
     };
+
   public:
     Regex (CoreProcess* parent, const string& name, const string& Regex = "");
     virtual ~Regex ();
     void impl_activate () override;
     void impl_deactivate () override;
 
- #ifndef DJNN_NO_SERIALIZE
+#ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif
-    
+
     FatProcess* find_child_impl (const string&) override;
 
   private:
-    void set_parent (CoreProcess* parent) override;
-    TextProperty _input;
-    TextProperty _init;
-    std::regex _regex;
-    RegexAction _reg_action;
-    Coupling _c_reg;
-    map <int, TextProperty*> _in_map;
-  };
+    void                    set_parent (CoreProcess* parent) override;
+    TextProperty            _input;
+    TextProperty            _init;
+    std::regex              _regex;
+    RegexAction             _reg_action;
+    Coupling                _c_reg;
+    map<int, TextProperty*> _in_map;
+};
 
-}
+} // namespace djnn

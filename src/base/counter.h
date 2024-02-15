@@ -14,75 +14,72 @@
 
 #pragma once
 
-#include "core/ontology/process.h"
-#include "core/ontology/coupling.h"
 #include "core/control/action.h"
 #include "core/control/spike.h"
+#include "core/ontology/coupling.h"
+#include "core/ontology/process.h"
 #include "core/property/double_property.h"
 
-namespace djnn
+namespace djnn {
+
+class Counter : public FatProcess
 {
-
-  class Counter : public FatProcess
-  {
   private:
-
     /* RESET ACTION */
     class CounterResetAction : public Action
     {
-    public:
-      CounterResetAction (CoreProcess* parent, const string& name, bool* reset_occurred) :
-        Action (parent, name), _reset_occurred(reset_occurred) {};
-    
-      virtual ~CounterResetAction () {}
-      void impl_activate () override { *_reset_occurred = true; }
-    private:
-      bool *_reset_occurred;
+      public:
+        CounterResetAction (CoreProcess* parent, const string& name, bool* reset_occurred) : Action (parent, name), _reset_occurred (reset_occurred){};
+
+        virtual ~CounterResetAction () {}
+        void impl_activate () override { *_reset_occurred = true; }
+
+      private:
+        bool* _reset_occurred;
     };
 
     /* STEP ACTION */
     class CounterStepAction : public Action
     {
-    public:
-      CounterStepAction (CoreProcess* parent, const string& name, DoubleProperty *init, DoubleProperty *delta, DoubleProperty *output, bool* reset_occurred) :
-        Action (parent, name), _init(init), _delta (delta), _output (output), _reset_occurred(reset_occurred) {};
-    
-      virtual ~CounterStepAction () {}
-      void impl_activate () override
-      {
-        /* if reset occured wew send _init else (_output + _delta ) */
-        if (*_reset_occurred) {
-          _output->set_value (_init->get_value (), true);
-          *_reset_occurred = false;
+      public:
+        CounterStepAction (CoreProcess* parent, const string& name, DoubleProperty* init, DoubleProperty* delta, DoubleProperty* output, bool* reset_occurred) : Action (parent, name), _init (init), _delta (delta), _output (output), _reset_occurred (reset_occurred){};
+
+        virtual ~CounterStepAction () {}
+        void impl_activate () override
+        {
+            /* if reset occured wew send _init else (_output + _delta ) */
+            if (*_reset_occurred) {
+                _output->set_value (_init->get_value (), true);
+                *_reset_occurred = false;
+            } else
+                _output->set_value (_output->get_value () + _delta->get_value (), true);
         }
-        else
-          _output->set_value (_output->get_value () +  _delta->get_value (), true);
-      }
-    private:
-      DoubleProperty *_init;
-    	DoubleProperty *_delta;
-    	DoubleProperty *_output;
-      bool *_reset_occurred;
+
+      private:
+        DoubleProperty* _init;
+        DoubleProperty* _delta;
+        DoubleProperty* _output;
+        bool*           _reset_occurred;
     };
 
   public:
     Counter (CoreProcess* parent, const string& n, double init, double delta);
-    ~Counter();
+    ~Counter ();
     void impl_activate () override;
     void impl_deactivate () override;
- #ifndef DJNN_NO_SERIALIZE
+#ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif
 
   private:
-    void set_parent (CoreProcess* parent) override;
-    bool _reset_occurred;
-    Spike _reset, _step;
-    DoubleProperty _output, _init, _delta;
+    void               set_parent (CoreProcess* parent) override;
+    bool               _reset_occurred;
+    Spike              _reset, _step;
+    DoubleProperty     _output, _init, _delta;
     CounterResetAction _action_reset;
-    Coupling _c_reset;
-    CounterStepAction _action_step;
-    Coupling _c_step;
-  };
+    Coupling           _c_reset;
+    CounterStepAction  _action_step;
+    Coupling           _c_step;
+};
 
-}
+} // namespace djnn

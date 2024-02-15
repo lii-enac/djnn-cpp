@@ -15,23 +15,23 @@
 #pragma once
 
 #include "core/tree/component.h"
-#include "display/ui.h"
 #include "display/pickui.h"
+#include "display/ui.h"
 
 namespace djnn {
 
-  class Window;
+class Window;
 
-  class BackgroundRect : public Component, public PickUI
-  {
+class BackgroundRect : public Component, public PickUI
+{
   public:
-    BackgroundRect(CoreProcess* parent, const string&);
-    ~BackgroundRect();
+    BackgroundRect (CoreProcess* parent, const string&);
+    ~BackgroundRect ();
 
-    CoreProcess* find_child_impl(const string&) override;
-    void set_mouse_local_coords (double x, double y, bool is_move) override {};
+    CoreProcess* find_child_impl (const string&) override;
+    void         set_mouse_local_coords (double x, double y, bool is_move) override{};
 
   protected:
-    Window* get_frame() { return (Window*)get_parent(); }
-  };
-}
+    Window* get_frame () { return (Window*)get_parent (); }
+};
+} // namespace djnn
