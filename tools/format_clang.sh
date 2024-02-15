@@ -21,9 +21,8 @@ while IFS= read -r file; do
         excluded_files+=" $file"
         continue
     fi
-    clang-format --style=file:../src/_clang-format_header -i "$file"
-    # Afficher le nom du fichier formaté
-    echo "header formatted: $file"
+    clang-format --style=file:../src/_clang-format_header -i "$file" --verbose
+    
 done < <(find "$dir" -type f -name "*.h")
 
 # Appliquer clang-format aux fichiers de code source (.cpp)
@@ -32,9 +31,8 @@ while IFS= read -r file; do
         excluded_files+=" $file"
         continue
     fi
-    clang-format --style=file:../src/_clang-format -i "$file"
-    # Afficher le nom du fichier formaté
-    echo "src formatted: $file"
+    clang-format --style=file:../src/_clang-format -i "$file" --verbose
+    
 done < <(find "$dir" -type f -name "*.cpp")
 
 # Afficher la liste des fichiers exclus
