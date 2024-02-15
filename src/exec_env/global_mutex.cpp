@@ -13,7 +13,6 @@
  */
 
 #include "global_mutex.h"
-#include "cpp-mutex.h"
 #include "cpp-mutex-priv.h"
 #include "exec_env/djnn_time_manager.h"
 

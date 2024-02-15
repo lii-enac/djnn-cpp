@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include "cpp-mutex.h"
+
 namespace djnn {
   inline djnn_mutex_t* create_lock() {
     #if DJNN_USE_BOOST_FIBER
