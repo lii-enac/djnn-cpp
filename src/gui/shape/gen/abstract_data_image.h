@@ -24,6 +24,7 @@
 
 #include "gui/shape/gen/abstract_image.h"
 using AbstractTextpProperty = void; // hack to make 'AbstractTextpProperty* data ()' compile
+#include "gui/shape/abstract_gshape.h"
 
 
 namespace djnn

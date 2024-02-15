@@ -21,8 +21,8 @@
 
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
+#include "gui/transformation/abstract_transformation.h"
 
-#include "gui/transformation/homography.h"
 
 
 namespace djnn

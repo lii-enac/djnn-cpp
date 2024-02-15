@@ -23,6 +23,7 @@
 #include "core/ontology/coupling.h"
 
 #include "gui/shape/gen/abstract_image.h"
+#include "gui/shape/abstract_gshape.h"
 
 namespace djnn
 {

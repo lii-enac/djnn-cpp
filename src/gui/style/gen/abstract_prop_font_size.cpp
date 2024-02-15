@@ -19,7 +19,6 @@
 
 #include "gui/shape/abstract_gshape.h"
 #include "display/window.h"
-#include "gui/style/abstract_style.h"
 
 #include "gui/backend.h"
 #include "gui/abstract_backend.h"

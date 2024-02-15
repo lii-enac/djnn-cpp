@@ -21,6 +21,7 @@
 
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
+#include "gui/shape/abstract_gshape.h"
 
 
 
