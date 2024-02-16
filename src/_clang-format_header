@@ -4,13 +4,14 @@ Language:        Cpp
 # Nous utiliserons les valeurs par défaut du style LLVM.
 BasedOnStyle: LLVM
 IndentWidth: 4
+UseTab: Never
 BreakBeforeBraces: Mozilla 
 ColumnLimit: 0
 PointerAlignment: Left
 ReferenceAlignment: Left
 SpaceBeforeParens: Always
 AlignConsecutiveAssignments: true
-AllowShortFunctionsOnASingleLine: Inline
+#AllowShortFunctionsOnASingleLine: Inline
 AlignConsecutiveBitFields: true
 AlignConsecutiveDeclarations: true
 AlignConsecutiveMacros: true

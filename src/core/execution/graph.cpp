@@ -266,7 +266,7 @@ Graph::add_output_node (CoreProcess* c)
     for (auto v : _output_nodes) {
         if (v->get_process () == c)
             return; // what about multiple gui windows?
-        // assert (0); // programming error
+                    // assert (0); // programming error
     }
     auto* v = new Vertex (c);
     _output_nodes.push_back (v);
