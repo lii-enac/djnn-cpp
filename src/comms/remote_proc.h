@@ -35,14 +35,16 @@ class RemoteProc : public FatProcess
     class SendAction : public Action
     {
       public:
-        SendAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        SendAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~SendAction () {}
         void impl_activate () override;
     };
     class ConnectionAction : public Action
     {
       public:
-        ConnectionAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        ConnectionAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~ConnectionAction () {}
         void impl_activate () override { ((RemoteProc*)get_parent ())->connection (); }
     };
@@ -50,7 +52,8 @@ class RemoteProc : public FatProcess
     {
       public:
         using string = CoreProcess::string;
-        ReceiveAction (CoreProcess* parent, const string& name) : Action (parent, name), ExternalSource (name) { finalize_construction (parent, name); }
+        ReceiveAction (CoreProcess* parent, const string& name)
+            : Action (parent, name), ExternalSource (name) { finalize_construction (parent, name); }
         virtual ~ReceiveAction () {}
         void         impl_activate () override;
         void         impl_deactivate () override;

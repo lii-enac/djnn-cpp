@@ -29,7 +29,8 @@ class Finder : public FatProcess
     class FinderAction : public Action
     {
       public:
-        FinderAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        FinderAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~FinderAction () {}
         void impl_activate () override;
     };

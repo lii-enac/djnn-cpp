@@ -60,7 +60,7 @@ void
 run_stats (CoreProcess* p)
 {
     int i = 0;
-    depth_first_traverse (p, [&i] (CoreProcess* p) {  ++i; });
+    depth_first_traverse (p, [&i] (CoreProcess* p) { ++i; });
     cerr << endl
          << "count items: " << i << endl;
 

@@ -47,7 +47,8 @@ class DRMConnector : public FatProcess
     class UpdatePosAction : public Action
     {
       public:
-        UpdatePosAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        UpdatePosAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~UpdatePosAction () {}
         void impl_activate () { ((DRMConnector*)get_parent ())->update_pos (); }
     };
@@ -101,7 +102,8 @@ class DRMDevice : public FatProcess
     class VBlankAction : public Action
     {
       public:
-        VBlankAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        VBlankAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~VBlankAction () {}
         void impl_activate () { static_cast<DRMDevice*> (get_parent ())->read_vblank (); }
     };
@@ -127,7 +129,8 @@ class DRMUdev
     class DRMUdevAction : public Action
     {
       public:
-        DRMUdevAction (DRMUdev* udev) : Action (nullptr, "DRMUdevAction"), _udev (udev) {}
+        DRMUdevAction (DRMUdev* udev)
+            : Action (nullptr, "DRMUdevAction"), _udev (udev) {}
         virtual ~DRMUdevAction () {}
         void impl_activate ()
         {

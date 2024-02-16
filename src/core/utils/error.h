@@ -107,7 +107,8 @@ class Context
     const djnnstl::string& filename () const { return _filename; }
 
   private:
-    Context () : _line (-1), _filename ("") {}
+    Context ()
+        : _line (-1), _filename ("") {}
     static Context* _instance;
     int             _line;
     int             _begcol;

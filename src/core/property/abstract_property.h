@@ -23,8 +23,9 @@ namespace djnn {
 class SuperAbstractProperty : public FatProcess
 {
   public:
-    SuperAbstractProperty (CoreProcess* parent, const string& name, unsigned int nm = notify_none) : FatProcess (name),
-                                                                                                     _notify_mask (nm) {}
+    SuperAbstractProperty (CoreProcess* parent, const string& name, unsigned int nm = notify_none)
+        : FatProcess (name),
+          _notify_mask (nm) {}
     // virtual ~SuperAbstractProperty () override {}
     virtual process_type_e  get_process_type () const override { return PROPERTY_T; }
     virtual property_type_e get_property_type () const = 0;
@@ -50,7 +51,8 @@ class SuperAbstractProperty : public FatProcess
 class AbstractSimpleProperty : public SuperAbstractProperty
 {
   public:
-    AbstractSimpleProperty (CoreProcess* parent, const string& name, unsigned int nm = notify_none) : SuperAbstractProperty (parent, name, nm) {}
+    AbstractSimpleProperty (CoreProcess* parent, const string& name, unsigned int nm = notify_none)
+        : SuperAbstractProperty (parent, name, nm) {}
     virtual void   set_value (int v, bool propagate)           = 0;
     virtual void   set_value (double v, bool propagate)        = 0;
     virtual void   set_value (bool v, bool propagate)          = 0;

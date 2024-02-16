@@ -57,7 +57,8 @@ class FSMTransition : public FatProcess
     class FSMTransitionAction : public Action
     {
       public:
-        FSMTransitionAction (CoreProcess* parent, const string& name, FSMState* src, FSMState* dst, CoreProcess* action) : Action (parent, name), _src (src), _dst (dst) { _t = dynamic_cast<FSMTransition*> (parent); }
+        FSMTransitionAction (CoreProcess* parent, const string& name, FSMState* src, FSMState* dst, CoreProcess* action)
+            : Action (parent, name), _src (src), _dst (dst) { _t = dynamic_cast<FSMTransition*> (parent); }
         virtual ~FSMTransitionAction (){};
         void impl_activate ();
 
@@ -104,7 +105,8 @@ class FSM : public FatProcess
     class FSMPostTriggerAction : public Action
     {
       public:
-        FSMPostTriggerAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        FSMPostTriggerAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~FSMPostTriggerAction (){};
         void impl_activate () { ((FSM*)get_parent ())->set_triggered (0); };
     };

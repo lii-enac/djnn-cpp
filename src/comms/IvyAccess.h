@@ -34,7 +34,8 @@ class IvyAccess : public FatProcess, public ExternalSource
     class IvyOutAction : public Action
     {
       public:
-        IvyOutAction (CoreProcess* parent, const string& name, TextProperty* out) : Action (parent, name), _out (out) { finalize_construction (parent, name); }
+        IvyOutAction (CoreProcess* parent, const string& name, TextProperty* out)
+            : Action (parent, name), _out (out) { finalize_construction (parent, name); }
         virtual ~IvyOutAction () {}
         // void coupling_activation_hook () override;
         void impl_activate () override;

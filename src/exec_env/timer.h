@@ -30,7 +30,8 @@ class Timer : public FatProcess, public djnn_internal::Time::Timer
     class TimerAction : public Action
     {
       public:
-        TimerAction (CoreProcess* parent, const string& name) : Action (parent, name){};
+        TimerAction (CoreProcess* parent, const string& name)
+            : Action (parent, name){};
         virtual ~TimerAction () {}
         void impl_activate () override { ((Timer*)get_parent ())->update_period (); }
     };
@@ -38,7 +39,8 @@ class Timer : public FatProcess, public djnn_internal::Time::Timer
     class ResetAction : public Action
     {
       public:
-        ResetAction (CoreProcess* parent, const string& name) : Action (parent, name){};
+        ResetAction (CoreProcess* parent, const string& name)
+            : Action (parent, name){};
         virtual ~ResetAction () {}
         void impl_activate () override { ((Timer*)get_parent ())->update_period (); }
     };

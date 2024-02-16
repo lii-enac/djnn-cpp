@@ -18,9 +18,9 @@
 
 #pragma once
 
+#include "audio/abstract_sobj.h"
 #include "core/ontology/coupling.h"
 #include "core/ontology/process.h"
-#include "audio/abstract_sobj.h"
 
 namespace djnn {
 class AbstractPropSound : public AbstractSObj

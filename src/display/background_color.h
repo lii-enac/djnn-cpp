@@ -17,7 +17,8 @@ class BackgroundColor : public FatProcess
     class ToValueAction : public Action
     {
       public:
-        ToValueAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); };
+        ToValueAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); };
         ~ToValueAction () {}
         void impl_activate () override
         {
@@ -27,7 +28,8 @@ class BackgroundColor : public FatProcess
     class ToRGBAction : public Action
     {
       public:
-        ToRGBAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); };
+        ToRGBAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); };
         ~ToRGBAction () {}
         void impl_activate () override
         {

@@ -24,7 +24,8 @@ namespace djnn {
 class AbstractIntProperty : public AbstractSimpleProperty
 {
   public:
-    AbstractIntProperty (CoreProcess* parent, const string& name, int notify_mask = notify_none) : AbstractSimpleProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
+    AbstractIntProperty (CoreProcess* parent, const string& name, int notify_mask = notify_none)
+        : AbstractSimpleProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
     virtual property_type_e get_property_type () const override { return Integer; }
     // virtual process_type_e get_process_type () const override { return INT_PROPERTY_T; }
 
@@ -58,7 +59,8 @@ class AbstractIntProperty : public AbstractSimpleProperty
 class IntProperty : public AbstractIntProperty
 {
   public:
-    IntProperty (CoreProcess* parent, const string& name, int v) : AbstractIntProperty (parent, name), value (v) {}
+    IntProperty (CoreProcess* parent, const string& name, int v)
+        : AbstractIntProperty (parent, name), value (v) {}
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
   protected:
@@ -72,7 +74,8 @@ class IntProperty : public AbstractIntProperty
 class IntPropertyProxy : public AbstractIntProperty
 {
   public:
-    IntPropertyProxy (CoreProcess* parent, const string& name, int& v, int notify_mask = notify_none) : AbstractIntProperty (parent, name, notify_mask), value (v) {}
+    IntPropertyProxy (CoreProcess* parent, const string& name, int& v, int notify_mask = notify_none)
+        : AbstractIntProperty (parent, name, notify_mask), value (v) {}
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
   protected:

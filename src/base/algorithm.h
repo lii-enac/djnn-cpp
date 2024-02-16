@@ -31,7 +31,8 @@ class Sorter : public FatProcess
     class SortAction : public Action
     {
       public:
-        SortAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        SortAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~SortAction () {}
         void impl_activate () { ((Sorter*)get_parent ())->sort (); }
     };
@@ -63,14 +64,16 @@ class ListOperator : public FatProcess
     class SpecListOperatorAction : public Action
     {
       public:
-        SpecListOperatorAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        SpecListOperatorAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~SpecListOperatorAction () {}
         void impl_activate () { ((ListOperator*)get_parent ())->do_action (); }
     };
     class UpdateListOperatorAction : public Action
     {
       public:
-        UpdateListOperatorAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        UpdateListOperatorAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~UpdateListOperatorAction () {}
         void impl_activate () { ((ListOperator*)get_parent ())->update_list (); }
     };

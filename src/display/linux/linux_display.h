@@ -54,7 +54,8 @@ class DRMUdev
     class DRMUdevAction : public Action
     {
       public:
-        DRMUdevAction (DRMUdev* udev) : Action (nullptr, "DRMUdevAction"), _udev (udev) {}
+        DRMUdevAction (DRMUdev* udev)
+            : Action (nullptr, "DRMUdevAction"), _udev (udev) {}
         virtual ~DRMUdevAction () {}
         void impl_activate ()
         {

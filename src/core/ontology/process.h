@@ -267,7 +267,8 @@ class CoreProcess
 class VoidProcess : public CoreProcess
 {
   public:
-    VoidProcess () : CoreProcess () {}
+    VoidProcess ()
+        : CoreProcess () {}
     ~VoidProcess () {}
     void impl_activate () override {}
     void impl_deactivate () override {}
@@ -276,7 +277,8 @@ class VoidProcess : public CoreProcess
 class CouplingProcess : public CoreProcess
 {
   public:
-    CouplingProcess (bool model = false) : CoreProcess (model) {}
+    CouplingProcess (bool model = false)
+        : CoreProcess (model) {}
     virtual ~CouplingProcess ();
 
     // coupling
@@ -297,7 +299,8 @@ class CouplingProcess : public CoreProcess
 class ChildProcess : public CouplingProcess
 {
   public:
-    ChildProcess (bool model = false) : CouplingProcess (model), _parent (nullptr), _state_dependency (nullptr) {}
+    ChildProcess (bool model = false)
+        : CouplingProcess (model), _parent (nullptr), _state_dependency (nullptr) {}
     virtual void      set_parent (CoreProcess* p) override;
     FatProcess*       get_parent () override { return _parent; }
     const FatProcess* get_parent () const override { return _parent; }
@@ -377,14 +380,29 @@ using ParentProcess   = CoreProcess;
 
 // --- public c-like API
 
-inline void activate (CoreProcess* p) { p->activate (); }
-inline void deactivate (CoreProcess* p) { p->deactivate (); }
+inline void activate (CoreProcess* p)
+{
+    p->activate ();
+}
+inline void deactivate (CoreProcess* p)
+{
+    p->deactivate ();
+}
 
-inline CoreProcess* find (CoreProcess* parent, const CoreProcess::string& path) { return parent->find_child (path); }
-inline CoreProcess* find_optional (CoreProcess* parent, const CoreProcess::string& path) { return parent->find_optional_child (path); }
+inline CoreProcess* find (CoreProcess* parent, const CoreProcess::string& path)
+{
+    return parent->find_child (path);
+}
+inline CoreProcess* find_optional (CoreProcess* parent, const CoreProcess::string& path)
+{
+    return parent->find_optional_child (path);
+}
 
 template <typename P>
-P* clone (P* p) { return dynamic_cast<P*> (p->clone ()); } // FIXME will make code size grow :-/...
+P* clone (P* p)
+{
+    return dynamic_cast<P*> (p->clone ());
+} // FIXME will make code size grow :-/...
 // inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
 
 void alias_children (CoreProcess* parent, FatProcess* to);
@@ -392,9 +410,15 @@ void alias (CoreProcess* parent, const CoreProcess::string& name, CoreProcess* f
 void merge_children (CoreProcess* parent1, const CoreProcess::string& sy1, CoreProcess* parent2, const CoreProcess::string& sy2);
 
 // internal c-like API
-inline FatProcess* find (FatProcess* p) { return p; }                              // helper for smalac
-inline FatProcess* find (CoreProcess* p) { return dynamic_cast<FatProcess*> (p); } // helper for smalac
-void               remove_from_parentless_name (CoreProcess* child);
+inline FatProcess* find (FatProcess* p)
+{
+    return p;
+} // helper for smalac
+inline FatProcess* find (CoreProcess* p)
+{
+    return dynamic_cast<FatProcess*> (p);
+} // helper for smalac
+void remove_from_parentless_name (CoreProcess* child);
 
 void add_state_dependency (CoreProcess* parent, CoreProcess* p);
 void remove_state_dependency (CoreProcess* parent, CoreProcess* p);

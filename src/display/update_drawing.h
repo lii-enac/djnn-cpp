@@ -35,7 +35,8 @@ class UpdateDrawing : public FatProcess
     class RedrawAction : public Action
     {
       public:
-        RedrawAction (UpdateDrawing* parent, const string& name) : Action (parent, name), _ud (parent) { finalize_construction (parent, name); }
+        RedrawAction (UpdateDrawing* parent, const string& name)
+            : Action (parent, name), _ud (parent) { finalize_construction (parent, name); }
         virtual ~RedrawAction () {}
         void impl_activate () override;
 
@@ -45,7 +46,8 @@ class UpdateDrawing : public FatProcess
     class UndelayedSpike : public FatProcess
     {
       public:
-        UndelayedSpike (UpdateDrawing* parent, const string& name) : FatProcess (name), _ud (parent)
+        UndelayedSpike (UpdateDrawing* parent, const string& name)
+            : FatProcess (name), _ud (parent)
         {
             set_is_model (true);
             finalize_construction (parent, name);
@@ -61,7 +63,8 @@ class UpdateDrawing : public FatProcess
     class AutoRefreshAction : public Action
     {
       public:
-        AutoRefreshAction (UpdateDrawing* parent, const string& name) : Action (parent, name), _ud (parent) {}
+        AutoRefreshAction (UpdateDrawing* parent, const string& name)
+            : Action (parent, name), _ud (parent) {}
         virtual ~AutoRefreshAction () {}
         void impl_activate () override { _ud->update_auto_refresh (); };
 

@@ -13,7 +13,8 @@ class Incr : public FatProcess
     class StepAction : public Action
     {
       public:
-        StepAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        StepAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~StepAction () {}
         void impl_activate () { ((Incr*)get_parent ())->step (); }
     };

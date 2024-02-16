@@ -28,7 +28,8 @@ class Synchronizer : public FatProcess
     class SynchronizerAction : public NativeExpressionAction
     {
       public:
-        SynchronizerAction (CoreProcess* parent, const string& name) : NativeExpressionAction (parent, name) {}
+        SynchronizerAction (CoreProcess* parent, const string& name)
+            : NativeExpressionAction (parent, name) {}
         virtual ~SynchronizerAction (){};
         void impl_activate () override
         {

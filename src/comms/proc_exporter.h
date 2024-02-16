@@ -34,14 +34,16 @@ class Receiver : public FatProcess, public ExternalSource
     class SendAction : public Action
     {
       public:
-        SendAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        SendAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~SendAction () {}
         void impl_activate () override;
     };
     class BuildSendAction : public Action
     {
       public:
-        BuildSendAction (CoreProcess* parent, const string& name) : Action (parent, name), _src (nullptr) { finalize_construction (parent, name); }
+        BuildSendAction (CoreProcess* parent, const string& name)
+            : Action (parent, name), _src (nullptr) { finalize_construction (parent, name); }
         virtual ~BuildSendAction () {}
         void         impl_activate () override;
         void         set_activation_source (CoreProcess* src) override { _src = src; }

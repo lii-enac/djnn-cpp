@@ -28,7 +28,8 @@ class Regex : public FatProcess
     class RegexAction : public Action
     {
       public:
-        RegexAction (CoreProcess* parent, const string& name, Regex& reg) : Action (parent, name), _reg (reg) {}
+        RegexAction (CoreProcess* parent, const string& name, Regex& reg)
+            : Action (parent, name), _reg (reg) {}
         virtual ~RegexAction () {}
         void impl_activate () override;
 

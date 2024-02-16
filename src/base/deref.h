@@ -31,14 +31,16 @@ class AbstractDeref : public FatProcess
     class DerefAction : public Action
     {
       public:
-        DerefAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        DerefAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~DerefAction () {}
         void impl_activate () override { ((AbstractDeref*)get_parent ())->update_src (); };
     };
     class GetAction : public Action
     {
       public:
-        GetAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        GetAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~GetAction () {}
         void impl_activate () override
         {
@@ -48,7 +50,8 @@ class AbstractDeref : public FatProcess
     class SetAction : public Action
     {
       public:
-        SetAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        SetAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~SetAction () {}
         void impl_activate () override
         {

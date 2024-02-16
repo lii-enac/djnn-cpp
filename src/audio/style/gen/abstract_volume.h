@@ -18,9 +18,9 @@
 
 #pragma once
 
+#include "audio/style/audio_abstract_style.h"
 #include "core/ontology/coupling.h"
 #include "core/ontology/process.h"
-#include "audio/style/audio_abstract_style.h"
 
 namespace djnn {
 class AbstractVolume : public AbstractAudioStyle

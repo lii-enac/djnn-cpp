@@ -62,7 +62,8 @@ enum cursor_t
 class WinImpl
 {
   public:
-    WinImpl () : _picking_view (nullptr) {}
+    WinImpl ()
+        : _picking_view (nullptr) {}
     virtual ~WinImpl () {}
     virtual void impl_activate ()                                             = 0;
     virtual void impl_deactivate ()                                           = 0;
@@ -86,7 +87,8 @@ class Window : public FatProcess
     class UndelayedSpike : public FatProcess
     {
       public:
-        UndelayedSpike (Window* parent, const string& name) : FatProcess (name)
+        UndelayedSpike (Window* parent, const string& name)
+            : FatProcess (name)
         {
             set_is_model (true);
             finalize_construction (parent, name);
@@ -100,37 +102,43 @@ class Window : public FatProcess
     class ScreenshotAction : public Action
     {
       public:
-        ScreenshotAction (Window* parent, const string& name) : Action (parent, name) {}
+        ScreenshotAction (Window* parent, const string& name)
+            : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->perform_screenshot (); }
     };
     class OpacityAction : public Action
     {
       public:
-        OpacityAction (Window* parent, const string& name) : Action (parent, name) {}
+        OpacityAction (Window* parent, const string& name)
+            : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->set_opacity (); }
     };
     class BackgroundOpacityAction : public Action
     {
       public:
-        BackgroundOpacityAction (Window* parent, const string& name) : Action (parent, name) {}
+        BackgroundOpacityAction (Window* parent, const string& name)
+            : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
     };
     class BackgroundColorAction : public Action
     {
       public:
-        BackgroundColorAction (Window* parent, const string& name) : Action (parent, name) {}
+        BackgroundColorAction (Window* parent, const string& name)
+            : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
     };
     class GeometryAction : public Action
     {
       public:
-        GeometryAction (Window* parent, const string& name) : Action (parent, name) {}
+        GeometryAction (Window* parent, const string& name)
+            : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->update_geometry (); }
     };
     class MinimumSizeAction : public Action
     {
       public:
-        MinimumSizeAction (Window* parent, const string& name) : Action (parent, name) {}
+        MinimumSizeAction (Window* parent, const string& name)
+            : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->set_minimum_size (); }
     };
 
@@ -278,14 +286,16 @@ class Cursor : public FatProcess
     class UpdateCursorAction : public Action
     {
       public:
-        UpdateCursorAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        UpdateCursorAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         ~UpdateCursorAction () {}
         void impl_activate () override;
     };
     class UpdateCursorShapeAction : public Action
     {
       public:
-        UpdateCursorShapeAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        UpdateCursorShapeAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         ~UpdateCursorShapeAction () {}
         void impl_activate () override { ((Cursor*)get_parent ())->update_cursor_shape (); }
     };

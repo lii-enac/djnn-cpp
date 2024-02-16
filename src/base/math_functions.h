@@ -188,7 +188,8 @@ class BoundedValue : public FatProcess
     class BoundedValueAction : public Action
     {
       public:
-        BoundedValueAction (CoreProcess* parent, const string& name, BoundedValue& bv) : Action (parent, name), _bv (bv) {}
+        BoundedValueAction (CoreProcess* parent, const string& name, BoundedValue& bv)
+            : Action (parent, name), _bv (bv) {}
         virtual ~BoundedValueAction () {}
         void impl_activate () override
         {

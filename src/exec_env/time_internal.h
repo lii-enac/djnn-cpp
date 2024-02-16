@@ -13,7 +13,8 @@ typedef std::chrono::time_point<clock, duration>     time_point;
 class Timer
 {
   public:
-    Timer () : _scheduled (false) {}
+    Timer ()
+        : _scheduled (false) {}
     virtual ~Timer () {}
     virtual void      do_it (const duration& actualduration) = 0;
     const time_point& get_start_time () const { return _start; }

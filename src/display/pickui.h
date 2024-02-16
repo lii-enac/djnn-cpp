@@ -22,7 +22,8 @@ namespace djnn {
 class PickUI
 {
   public:
-    PickUI (bool cache) : _ui (nullptr), _cache (cache) {}
+    PickUI (bool cache)
+        : _ui (nullptr), _cache (cache) {}
     ~PickUI ()
     {
         if (_ui)

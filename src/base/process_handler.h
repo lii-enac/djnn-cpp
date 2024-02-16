@@ -31,7 +31,8 @@ class ProcessDeleter : public FatProcess
     class DeleteOneAction : public Action
     {
       public:
-        DeleteOneAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        DeleteOneAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~DeleteOneAction () {}
         void impl_activate () override { ((ProcessDeleter*)get_parent ())->delete_one (); };
     };
@@ -60,7 +61,8 @@ class CollectionDeleter : public FatProcess
     class DeleteAllAction : public Action
     {
       public:
-        DeleteAllAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        DeleteAllAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~DeleteAllAction () {}
         void impl_activate () override { ((CollectionDeleter*)get_parent ())->delete_all (); };
     };
@@ -85,7 +87,8 @@ class CollectionActivator : public FatProcess
     class ActivateAllAction : public Action
     {
       public:
-        ActivateAllAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        ActivateAllAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~ActivateAllAction () {}
         void impl_activate () override { ((CollectionActivator*)get_parent ())->activate_all (); };
     };
@@ -112,7 +115,8 @@ class AbstractCollectionSetValue : public FatProcess
     class SetValueAction : public Action
     {
       public:
-        SetValueAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        SetValueAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~SetValueAction () {}
         void impl_activate () override { ((AbstractCollectionSetValue*)get_parent ())->set_value (); };
     };
@@ -163,21 +167,24 @@ class ProcessCollector : public FatProcess
     class AddOneAction : public Action
     {
       public:
-        AddOneAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        AddOneAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~AddOneAction () {}
         void impl_activate () override { ((ProcessCollector*)get_parent ())->add_one (); };
     };
     class RemoveOneAction : public Action
     {
       public:
-        RemoveOneAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        RemoveOneAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~RemoveOneAction () {}
         void impl_activate () override { ((ProcessCollector*)get_parent ())->remove_one (); };
     };
     class RemoveAllAction : public Action
     {
       public:
-        RemoveAllAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
+        RemoveAllAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
         virtual ~RemoveAllAction () {}
         void impl_activate () override { ((ProcessCollector*)get_parent ())->remove_all (); };
     };

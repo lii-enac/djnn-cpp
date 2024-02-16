@@ -27,7 +27,8 @@ class TextPrinter : public FatProcess
     class TextPrinterAction : public Action
     {
       public:
-        TextPrinterAction (CoreProcess* parent, const string& name, TextProperty* input) : Action (parent, name), _input (input) {}
+        TextPrinterAction (CoreProcess* parent, const string& name, TextProperty* input)
+            : Action (parent, name), _input (input) {}
         virtual ~TextPrinterAction () {}
         void impl_activate () override;
 
@@ -142,7 +143,8 @@ class TextBinaryOperator : public FatProcess
 class TextCatenatorAction : public Action
 {
   public:
-    TextCatenatorAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo) : Action (parent, name), _tbo (tbo) { finalize_construction (parent, name); }
+    TextCatenatorAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo)
+        : Action (parent, name), _tbo (tbo) { finalize_construction (parent, name); }
     virtual ~TextCatenatorAction () {}
     void impl_activate () override
     {
@@ -162,7 +164,8 @@ class TextCatenatorAction : public Action
 class TextComparatorAction : public Action
 {
   public:
-    TextComparatorAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextComparatorAction, BoolProperty>& tbo) : Action (parent, name), _tbo (tbo) { finalize_construction (parent, name); }
+    TextComparatorAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextComparatorAction, BoolProperty>& tbo)
+        : Action (parent, name), _tbo (tbo) { finalize_construction (parent, name); }
     virtual ~TextComparatorAction () {}
     void impl_activate ()
     {
@@ -181,7 +184,8 @@ class TextComparatorAction : public Action
 class TextContainerAction : public Action
 {
   public:
-    TextContainerAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextContainerAction, BoolProperty>& tbo) : Action (parent, name), _tbo (tbo) { finalize_construction (parent, name); }
+    TextContainerAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextContainerAction, BoolProperty>& tbo)
+        : Action (parent, name), _tbo (tbo) { finalize_construction (parent, name); }
     virtual ~TextContainerAction () {}
     void impl_activate ()
     {
@@ -206,7 +210,8 @@ class TextAccumulator : public FatProcess
     class AccumulateAction : public Action
     {
       public:
-        AccumulateAction (CoreProcess* parent, const string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
+        AccumulateAction (CoreProcess* parent, const string& name, TextAccumulator& ta)
+            : Action (parent, name), _ta (ta) {}
         virtual ~AccumulateAction () {}
         void impl_activate () override
         {
@@ -220,7 +225,8 @@ class TextAccumulator : public FatProcess
     class DeleteAction : public Action
     {
       public:
-        DeleteAction (CoreProcess* parent, const string& name, TextAccumulator& ta) : Action (parent, name), _ta (ta) {}
+        DeleteAction (CoreProcess* parent, const string& name, TextAccumulator& ta)
+            : Action (parent, name), _ta (ta) {}
         virtual ~DeleteAction () {}
         void impl_activate () override
         {
@@ -258,7 +264,8 @@ class DoubleFormatter : public FatProcess
     class DoubleFormatterAction : public Action
     {
       public:
-        DoubleFormatterAction (CoreProcess* parent, const string& name, DoubleFormatter& df) : Action (parent, name), _df (df) { finalize_construction (parent, name); }
+        DoubleFormatterAction (CoreProcess* parent, const string& name, DoubleFormatter& df)
+            : Action (parent, name), _df (df) { finalize_construction (parent, name); }
         virtual ~DoubleFormatterAction () {}
         void impl_activate () override
         {

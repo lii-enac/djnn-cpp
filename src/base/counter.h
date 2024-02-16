@@ -29,7 +29,8 @@ class Counter : public FatProcess
     class CounterResetAction : public Action
     {
       public:
-        CounterResetAction (CoreProcess* parent, const string& name, bool* reset_occurred) : Action (parent, name), _reset_occurred (reset_occurred){};
+        CounterResetAction (CoreProcess* parent, const string& name, bool* reset_occurred)
+            : Action (parent, name), _reset_occurred (reset_occurred){};
 
         virtual ~CounterResetAction () {}
         void impl_activate () override { *_reset_occurred = true; }
@@ -42,7 +43,8 @@ class Counter : public FatProcess
     class CounterStepAction : public Action
     {
       public:
-        CounterStepAction (CoreProcess* parent, const string& name, DoubleProperty* init, DoubleProperty* delta, DoubleProperty* output, bool* reset_occurred) : Action (parent, name), _init (init), _delta (delta), _output (output), _reset_occurred (reset_occurred){};
+        CounterStepAction (CoreProcess* parent, const string& name, DoubleProperty* init, DoubleProperty* delta, DoubleProperty* output, bool* reset_occurred)
+            : Action (parent, name), _init (init), _delta (delta), _output (output), _reset_occurred (reset_occurred){};
 
         virtual ~CounterStepAction () {}
         void impl_activate () override

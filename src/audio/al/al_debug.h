@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "openal.h"
 #include "utils/debug.h"
 

@@ -33,7 +33,8 @@ class Serial : public FatProcess, public ExternalSource
     class SerialOutAction : public Action
     {
       public:
-        SerialOutAction (CoreProcess* parent, const string& name) : Action (parent, name) { finalize_construction (parent, name); }
+        SerialOutAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~SerialOutAction () {}
         void impl_activate () override { ((Serial*)get_parent ())->serial_write (); };
     };

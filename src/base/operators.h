@@ -38,7 +38,8 @@ class BinaryOperatorAction : public Action
   public:
     typedef BinaryOperator<Left, Right, Result, BinaryFunction, Left_init, Right_init> BinOperator;
 
-    BinaryOperatorAction (CoreProcess* parent, const string& name, BinOperator& binop) : Action (parent, name), _binop (binop)
+    BinaryOperatorAction (CoreProcess* parent, const string& name, BinOperator& binop)
+        : Action (parent, name), _binop (binop)
     {
         finalize_construction (parent, name);
     }
@@ -61,7 +62,8 @@ struct name_info
 class BinaryOperatorCommon : public FatProcess
 {
   public:
-    BinaryOperatorCommon (const string& name) : FatProcess (name) {}
+    BinaryOperatorCommon (const string& name)
+        : FatProcess (name) {}
     virtual ~BinaryOperatorCommon () {}
 };
 
@@ -143,8 +145,10 @@ class UnaryOperatorAction : public Action
   public:
     typedef UnaryOperator<Input, Output, UnaryFunction, Input_init> UnOperator;
 
-    UnaryOperatorAction (UnOperator& unop) : _unop (unop) {}
-    UnaryOperatorAction (CoreProcess* parent, const string& name, UnOperator& unop) : Action (parent, name), _unop (unop)
+    UnaryOperatorAction (UnOperator& unop)
+        : _unop (unop) {}
+    UnaryOperatorAction (CoreProcess* parent, const string& name, UnOperator& unop)
+        : Action (parent, name), _unop (unop)
     {
         finalize_construction (parent, name);
     }
@@ -162,7 +166,8 @@ class UnaryOperatorAction : public Action
 class UnaryOperatorCommon : public FatProcess
 {
   public:
-    UnaryOperatorCommon (const string& name) : FatProcess (name) {}
+    UnaryOperatorCommon (const string& name)
+        : FatProcess (name) {}
     virtual ~UnaryOperatorCommon () {}
 };
 

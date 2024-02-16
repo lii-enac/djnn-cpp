@@ -30,7 +30,8 @@ class Clock : public FatProcess, public djnn_internal::Time::Timer
     class ClockUpdateAction : public Action
     {
       public:
-        ClockUpdateAction (CoreProcess* parent, const string& name) : Action (parent, name){};
+        ClockUpdateAction (CoreProcess* parent, const string& name)
+            : Action (parent, name){};
 
         virtual ~ClockUpdateAction () {}
         void impl_activate () override { ((Clock*)get_parent ())->update_period (); }

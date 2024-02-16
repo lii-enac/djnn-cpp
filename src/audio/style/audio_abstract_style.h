@@ -29,4 +29,4 @@ class AbstractAudioStyle : public AbstractSObj
     virtual void impl_activate () override {}
     virtual void impl_deactivate () override {}
 };
-}
+} // namespace djnn
