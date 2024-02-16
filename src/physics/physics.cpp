@@ -12,30 +12,29 @@
  *
  */
 
-
 #include "physics_backend.h"
 // #include "core/cor__e.h"
 #include "core/serializer/serializer.h"
 
+namespace djnn {
+extern vector<string> loadedModules;
 
-namespace djnn
+static bool __module_initialized = false;
+
+void
+init_physics ()
 {
-  extern vector<string> loadedModules;
-  
-  static bool __module_initialized = false;
 
-  void
-  init_physics () {
+    if (__module_initialized == false) {
 
-    if ( __module_initialized == false ) {
+        __module_initialized = true;
 
-      __module_initialized = true;
-      
-      djnn::loadedModules.push_back ("physics");
-      PhysicsBackend::init ();
+        djnn::loadedModules.push_back ("physics");
+        PhysicsBackend::init ();
     }
-  }
-  void
-  clear_physics () {
-  }
 }
+void
+clear_physics ()
+{
+}
+} // namespace djnn

@@ -15,13 +15,14 @@
 #include "unix_phidgets.h"
 
 namespace djnn {
-  static PhidgetsMonitor *mon;
-  bool in_init;
-  void
-  p_init_phidgets () {
+static PhidgetsMonitor* mon;
+bool                    in_init;
+void
+p_init_phidgets ()
+{
     in_init = true;
-    mon = new PhidgetsMonitor (nullptr, "PhidgetMonitor");
+    mon     = new PhidgetsMonitor (nullptr, "PhidgetMonitor");
     mon->activate ();
     in_init = false;
-  }
 }
+} // namespace djnn
