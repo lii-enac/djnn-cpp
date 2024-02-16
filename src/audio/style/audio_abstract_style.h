@@ -15,26 +15,18 @@
 
 #pragma once
 
+#include "audio/abstract_sobj.h"
 #include "audio/audio_backend.h"
 #include "core/ontology/process.h"
-#include "gen/abstract_volume.h"
 
 namespace djnn {
-class Volume : public AbstractVolume
+class AbstractAudioStyle : public AbstractSObj
 {
   public:
-    Volume (CoreProcess* parent, const string& name, double volume)
-        : AbstractVolume (parent, name, volume)
-    {
-        finalize_construction (parent, name);
-    }
-
-    void sound ()
-    {
-        if (somehow_activating ()) {
-            AudioBackend::instance ().load (this);
-        }
-    }
+    AbstractAudioStyle (CoreProcess* parent, const string& name)
+        : AbstractSObj (parent, name) {}
+    virtual ~AbstractAudioStyle (){};
+    virtual void impl_activate () override {}
+    virtual void impl_deactivate () override {}
 };
-
-} // namespace djnn
+}

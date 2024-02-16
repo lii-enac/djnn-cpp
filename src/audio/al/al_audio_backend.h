@@ -1,17 +1,19 @@
-#include "audio/audio_backend.h"
 #include "audio/abstract_sobj.h"
+#include "audio/audio_backend.h"
 
 namespace djnn {
 
-  class ALAudioBackend : public AudioBackend {
+class ALAudioBackend : public AudioBackend
+{
   public:
     virtual void sound (Sample* s);
     virtual void load (Volume* s);
-  };
+};
 
-  class ALSoundImpl : public AbstractSObjImpl {
+class ALSoundImpl : public AbstractSObjImpl
+{
   public:
-    virtual ~ALSoundImpl() {}
+    virtual ~ALSoundImpl () {}
 
     /*void load_wav(const string& path);
     unsigned int bufferid, format;
@@ -21,14 +23,14 @@ namespace djnn {
     int size;
 
     char * data;*/
+};
 
-  };
-
-  class ALTransformationImpl : public AbstractSObjImpl {
+class ALTransformationImpl : public AbstractSObjImpl
+{
   public:
-    virtual ~ALTransformationImpl() {}
-    //bool damaged;
-  };
+    virtual ~ALTransformationImpl () {}
+    // bool damaged;
+};
 
-  //using GLStyleImpl = GLTransformationImpl;
-}
+// using GLStyleImpl = GLTransformationImpl;
+} // namespace djnn
