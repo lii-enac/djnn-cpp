@@ -13,9 +13,9 @@
  *
  */
 
-#include "remote_property.h"
-
 #include <stdexcept>
+
+#include "remote_property.h"
 
 #include "core/serializer/serializer.h"
 #include "core/utils/djnn_dynamic_cast.h"

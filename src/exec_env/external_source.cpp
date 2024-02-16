@@ -12,9 +12,9 @@
  *
  */
 
-#include "external_source.h"
-
 #include <mutex>
+
+#include "external_source.h"
 
 #include "cpp-mutex.h"
 #include "cpp-thread.h"

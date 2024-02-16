@@ -13,9 +13,9 @@
  *
  */
 
-#include "interaction.h"
-
 #include <cmath>
+
+#include "interaction.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/list.h"

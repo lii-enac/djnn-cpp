@@ -1,7 +1,7 @@
-#include "assignment.h"
-
 #include <cassert>
 #include <stdexcept>
+
+#include "assignment.h"
 
 #include "core/property/abstract_property.h"
 #include "core/property/bool_property.h"

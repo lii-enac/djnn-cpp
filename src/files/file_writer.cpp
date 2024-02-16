@@ -12,10 +12,10 @@
  *
  */
 
-#include "file_writer.h"
-
 #include <fstream>
 #include <iomanip>
+
+#include "file_writer.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"

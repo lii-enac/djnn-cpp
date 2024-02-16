@@ -12,10 +12,10 @@
  *
  */
 
-#include "driver.h"
-
 #include <fstream>
 #include <sstream>
+
+#include "driver.h"
 
 #include "core/utils/iostream.h"
 #include "scanner.h"

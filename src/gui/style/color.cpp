@@ -14,9 +14,9 @@
  *
  */
 
-#include "color.h"
-
 #include <cmath>
+
+#include "color.h"
 
 #include "core/control/action.h"
 #include "core/core-dev.h" // graph add/remove edge

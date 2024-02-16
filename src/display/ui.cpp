@@ -13,10 +13,10 @@
  *
  */
 
-#include "display/ui.h"
-
 #include <float.h>
 #include <math.h>
+
+#include "display/ui.h"
 
 #include "core/core-dev.h" //  add/remove edge
 #include "core/tree/list.h"

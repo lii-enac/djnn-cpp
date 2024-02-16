@@ -14,9 +14,9 @@
  *
  */
 
-#include "qt_picking_view.h"
-
 #include <QtGui/QImage>
+
+#include "qt_picking_view.h"
 
 #include "core/utils/remotery.h"
 #include "core/utils/utils-dev.h"

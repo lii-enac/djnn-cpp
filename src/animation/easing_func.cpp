@@ -12,9 +12,9 @@
  *
  */
 
-#include "easing_func.h"
-
 #include <cmath>
+
+#include "easing_func.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/serializer/serializer.h"

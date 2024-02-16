@@ -12,12 +12,12 @@
  *
  */
 
-#include "qt_backend.h"
-
 #include <QtCore/QtMath>
 #include <QtGui/QPainter>
 #include <QtWidgets/QWidget>
 #include <cmath>
+
+#include "qt_backend.h"
 
 #include "core/utils/iostream.h"
 #include "core/utils/remotery.h"

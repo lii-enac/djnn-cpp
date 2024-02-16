@@ -12,9 +12,9 @@
  *
  */
 
-#include "finder.h"
-
 #include <stdexcept>
+
+#include "finder.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/ontology/coupling.h"

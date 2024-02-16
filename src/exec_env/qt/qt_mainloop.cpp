@@ -14,9 +14,9 @@
  *
  */
 
-#include "qt_mainloop.h"
-
 #include <mutex> // std::call_once
+
+#include "qt_mainloop.h"
 
 #include "exec_env/global_mutex.h"
 #include "exec_env/main_loop.h"

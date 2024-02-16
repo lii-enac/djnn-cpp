@@ -12,14 +12,14 @@
  *
  */
 
-#include "serial.h"
-
 #include <cstring> // strlen
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>
+
+#include "serial.h"
 
 #include "core/utils/error.h"
 #include "exec_env/main_loop.h"

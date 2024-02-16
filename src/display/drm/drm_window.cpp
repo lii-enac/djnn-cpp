@@ -12,11 +12,11 @@
  *
  */
 
-#include "display/drm/drm_window.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "display/drm/drm_window.h"
 
 #include "core/utils/error.h"
 

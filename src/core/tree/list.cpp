@@ -14,9 +14,9 @@
  *
  */
 
-#include "list.h"
-
 #include <stdexcept>
+
+#include "list.h"
 
 #include "core/control/spike.h"
 #include "core/core-dev.h" // graph add/remove edge

@@ -13,11 +13,11 @@
  *
  */
 
-#include "exec_env/exec_env.h"
-
 #include <locale.h>
 #include <stdio.h>
 #include <sys/time.h>
+
+#include "exec_env/exec_env.h"
 
 #include "exec_env/djnn_time_manager.h"
 #include "exec_env/global_mutex.h"

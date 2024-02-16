@@ -12,10 +12,10 @@
  *
  */
 
-#include "remote_proc.h"
-
 #include <stdio.h>
 #include <string.h>
+
+#include "remote_proc.h"
 
 #include "core/utils/error.h"
 #include "core/utils/to_string.h"

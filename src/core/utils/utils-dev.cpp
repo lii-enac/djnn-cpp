@@ -12,9 +12,9 @@
  *
  */
 
-#include "utils-dev.h"
-
 #include <cstdint>
+
+#include "utils-dev.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/ontology/coupling.h"

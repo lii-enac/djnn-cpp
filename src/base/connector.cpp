@@ -1,6 +1,6 @@
-#include "connector.h"
-
 #include <cassert>
+
+#include "connector.h"
 
 #include "core/tree/component.h"
 #include "core/utils/error.h"

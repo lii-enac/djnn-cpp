@@ -12,9 +12,9 @@
  *
  */
 
-#include "native_expression_action.h"
-
 #include <cassert>
+
+#include "native_expression_action.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/assignment_sequence.h"

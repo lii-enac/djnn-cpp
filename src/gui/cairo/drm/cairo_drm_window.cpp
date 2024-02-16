@@ -12,9 +12,9 @@
  *
  */
 
-#include "gui/cairo/drm/cairo_drm_window.h"
-
 #include <stdio.h>
+
+#include "gui/cairo/drm/cairo_drm_window.h"
 
 #include "display/abstract_display.h"
 #include "display/display.h"

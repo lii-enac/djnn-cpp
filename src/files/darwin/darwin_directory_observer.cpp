@@ -12,10 +12,10 @@
  *
  */
 
-#include "files/darwin/darwin_directory_observer.h"
-
 #include <fcntl.h>
 #include <sys/event.h>
+
+#include "files/darwin/darwin_directory_observer.h"
 
 #include "core/utils/error.h"
 #include "core/utils/iostream.h"

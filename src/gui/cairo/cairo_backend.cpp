@@ -12,11 +12,11 @@
  *
  */
 
-#include "cairo_backend.h"
-
 #include <atomic>
 #include <cmath>
 #include <locale.h>
+
+#include "cairo_backend.h"
 
 #include "cairo_context.h"
 #include "core/utils/iostream.h"

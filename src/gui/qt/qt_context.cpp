@@ -12,11 +12,11 @@
  *
  */
 
-#include "qt_context.h"
-
 #include <QtCore/QFileInfo>
 #include <QtCore/QtMath>
 #include <QtWidgets/QWidget>
+
+#include "qt_context.h"
 
 #include "qt_backend.h"
 #if DJNN_STL_DJNN

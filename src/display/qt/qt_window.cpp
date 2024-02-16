@@ -13,14 +13,14 @@
  *
  */
 
-#include "qt_window.h"
-
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPixmap>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 #include <iostream>
+
+#include "qt_window.h"
 
 #include "core/control/blank.h"
 #include "core/core-dev.h" // graph add/remove edge

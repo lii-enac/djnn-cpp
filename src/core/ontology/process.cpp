@@ -13,9 +13,9 @@
  *
  */
 
-#include "process.h"
-
 #include <cassert>
+
+#include "process.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/execution/graph.h"

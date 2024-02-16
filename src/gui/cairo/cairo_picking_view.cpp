@@ -13,9 +13,9 @@
  *
  */
 
-#include "cairo_picking_view.h"
-
 #include <assert.h>
+
+#include "cairo_picking_view.h"
 
 #include "gui/backend.h"
 

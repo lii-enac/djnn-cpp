@@ -13,9 +13,9 @@
  *
  */
 
-#include "text.h"
-
 #include <stdexcept>
+
+#include "text.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/property/text_property.h"

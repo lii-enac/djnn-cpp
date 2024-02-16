@@ -1,6 +1,6 @@
-#include "qt_display.h"
-
 #include <QtCore>
+
+#include "qt_display.h"
 
 #include "core/utils/algorithm.h"
 #include "qt_window.h"

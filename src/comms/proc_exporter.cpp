@@ -12,10 +12,10 @@
  *
  */
 
-#include "proc_exporter.h"
-
 #include <stdio.h>
 #include <string.h>
+
+#include "proc_exporter.h"
 
 #include "core/utils/error.h"
 #include "core/utils/to_string.h"

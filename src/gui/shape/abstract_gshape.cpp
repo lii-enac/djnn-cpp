@@ -13,10 +13,10 @@
  *
  */
 
-#include "abstract_gshape.h"
-
 #include <float.h>
 #include <math.h>
+
+#include "abstract_gshape.h"
 
 #include "core/control/spike.h"
 #include "core/tree/component_observer.h"

@@ -1,8 +1,8 @@
-#include "wall_clock.h"
-
 #include <cassert>
 #include <chrono>
 #include <iomanip> // put_time
+
+#include "wall_clock.h"
 
 #include "core/utils/to_string.h"
 

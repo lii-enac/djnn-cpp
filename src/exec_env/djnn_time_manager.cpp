@@ -12,11 +12,11 @@
  *
  */
 
-#include "djnn_time_manager.h"
-
 #include <cassert>
 #include <condition_variable>
 #include <mutex>
+
+#include "djnn_time_manager.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/property/int_property.h"

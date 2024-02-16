@@ -13,12 +13,12 @@
  *
  */
 
-#include "cairo_sdl_window.h"
-
 #include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "cairo_sdl_window.h"
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/iostream.h"
