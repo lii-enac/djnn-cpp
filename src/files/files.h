@@ -14,109 +14,117 @@
 
 #pragma once
 
-#include "core/ontology/process.h"
-#include "core/ontology/coupling.h"
-#include "core/property/text_property.h"
-#include "core/property/bool_property.h"
-#include "core/control/spike.h"
-#include "core/control/blank.h"
-#include "core/tree/list.h"
+#include "base/process_handler.h"
 #include "core/control/action.h"
+#include "core/control/blank.h"
+#include "core/control/spike.h"
+#include "core/ontology/coupling.h"
+#include "core/ontology/process.h"
+#include "core/property/bool_property.h"
+#include "core/property/text_property.h"
+#include "core/tree/list.h"
 #include "exec_env/external_source.h"
 #include "files/file_writer.h"
 #include "files/files-dev.h"
-#include "base/process_handler.h"
 
-namespace djnn
+namespace djnn {
+typedef enum djn_dir_event
 {
-  typedef enum djn_dir_event {
     DJN_CHANGE,
     DJN_DELETE,
     DJN_RENAME,
     DJN_UNKNOWN,
     DJN_ERROR
-  } djn_dir_event;
+} djn_dir_event;
 
-  struct DirectoryObserverData;
-  extern djnnstl::vector<djnnstl::string> loadedModules; 
+struct DirectoryObserverData;
+extern djnnstl::vector<djnnstl::string> loadedModules;
 
-  class FileReader : public FatProcess
-  {
+class FileReader : public FatProcess
+{
   private:
     class FileReaderAction : public Action
     {
-    public:
-      FileReaderAction (CoreProcess* parent, const string& name) : Action (parent, name) {}
-      void impl_activate () override;
+      public:
+        FileReaderAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
+        void impl_activate () override;
     };
+
   public:
     FileReader (CoreProcess* parent, const string& name, const string& filename);
     virtual ~FileReader ();
     void impl_activate () override;
     void impl_deactivate () override;
-#ifndef DJNN_NO_SERIALIZE    
+#ifndef DJNN_NO_SERIALIZE
     void serialize (const string& type) override;
 #endif
     void read ();
-  private:
-    TextProperty *_input, *_output;
-    Coupling* _c_input;
-    FileReaderAction* _action;
-  };
 
-  class DirectoryObserver : public FatProcess, public ExternalSource
-  {
   private:
-     class UpdateAction : public Action
-     {
-     public:
-       UpdateAction (CoreProcess *parent, const string& name) : Action (parent, name) {}
-       void impl_activate () override { ((DirectoryObserver*)get_parent ())->iterate (); };
-       void impl_deactivate () override {}
-     };
-     class ChangePathAction : public Action
-     {
-     public:
-       ChangePathAction (CoreProcess *parent, const string& name) : Action (parent, name) {}
-       void impl_activate () override { ((DirectoryObserver*)get_parent ())->change_path (); };
-       void impl_deactivate () override {}
-     };
+    TextProperty *    _input, *_output;
+    Coupling*         _c_input;
+    FileReaderAction* _action;
+};
+
+class DirectoryObserver : public FatProcess, public ExternalSource
+{
+  private:
+    class UpdateAction : public Action
+    {
+      public:
+        UpdateAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
+        void impl_activate () override { ((DirectoryObserver*)get_parent ())->iterate (); };
+        void impl_deactivate () override {}
+    };
+    class ChangePathAction : public Action
+    {
+      public:
+        ChangePathAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
+        void impl_activate () override { ((DirectoryObserver*)get_parent ())->change_path (); };
+        void impl_deactivate () override {}
+    };
+
   public:
-    using string = CoreProcess::string; 
-    DirectoryObserver (CoreProcess *parent, const string& name, const string& path);
+    using string = CoreProcess::string;
+    DirectoryObserver (CoreProcess* parent, const string& name, const string& path);
     virtual ~DirectoryObserver ();
     void impl_activate () override;
     void impl_deactivate () override;
     void iterate ();
     void change_path ();
-  private:
-    void run () override;
-    TextProperty _path;
-    Spike _update, _s_added, _s_removed;
-    Blank _delete, _rename, _change;
-    UpdateAction _update_action;
-    ChangePathAction _change_path_action;
-    Coupling _c_path, _c_update;
-    List _files;
-    ProcessCollector _added_files, _removed_files;
-  };
 
-  class File : public FatProcess
-  {
+  private:
+    void             run () override;
+    TextProperty     _path;
+    Spike            _update, _s_added, _s_removed;
+    Blank            _delete, _rename, _change;
+    UpdateAction     _update_action;
+    ChangePathAction _change_path_action;
+    Coupling         _c_path, _c_update;
+    List             _files;
+    ProcessCollector _added_files, _removed_files;
+};
+
+class File : public FatProcess
+{
   public:
-    File (CoreProcess *parent, const string &name, const string &path, const string &filename, bool is_dir) :
-          FatProcess (name), _path (this, "full_path", path), _filename (this, "filename", filename),
+    File (CoreProcess* parent, const string& name, const string& path, const string& filename, bool is_dir)
+        : FatProcess (name), _path (this, "full_path", path), _filename (this, "filename", filename),
           _is_dir (this, "is_dir", is_dir) { finalize_construction (parent, name); }
     virtual ~File () {}
-    void impl_activate () override {};
-    void impl_deactivate () override {}
-    const string& get_filename () { return _filename.get_value(); }
-    const string& get_path () { return _path.get_value(); }
-    bool is_dir () { return _is_dir.get_value (); }
+    void          impl_activate () override{};
+    void          impl_deactivate () override {}
+    const string& get_filename () { return _filename.get_value (); }
+    const string& get_path () { return _path.get_value (); }
+    bool          is_dir () { return _is_dir.get_value (); }
+
   private:
     TextProperty _path, _filename;
     BoolProperty _is_dir;
-  };
-  DirectoryObserverData* p_init_directory_watcher (const djnnstl::string& path);
-  djn_dir_event p_run_directory_watcher (DirectoryObserverData* data);
-}
+};
+DirectoryObserverData* p_init_directory_watcher (const djnnstl::string& path);
+djn_dir_event          p_run_directory_watcher (DirectoryObserverData* data);
+} // namespace djnn

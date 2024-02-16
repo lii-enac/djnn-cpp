@@ -15,6 +15,6 @@
 #include "easing_func.h"
 
 namespace djnn {
-    void init_animation ();
-    void clear_animation ();
-}
+void init_animation ();
+void clear_animation ();
+} // namespace djnn
