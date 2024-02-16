@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class AbstractOpacity : public AbstractStyle
-{
+class AbstractOpacity : public AbstractStyle {
   public:
     AbstractOpacity (CoreProcess* parent, const string& name, double a);
     virtual ~AbstractOpacity ();
@@ -35,8 +34,7 @@ class AbstractOpacity : public AbstractStyle
     AbstractDoubleProperty*                 a () { return (AbstractDoubleProperty*)find_child_impl ("a"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double a;
     };
     raw_props_t raw_props;

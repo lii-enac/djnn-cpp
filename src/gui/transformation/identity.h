@@ -3,8 +3,7 @@
 #include "abstract_transformation.h"
 
 namespace djnn {
-class Identity : public AbstractTransformation
-{
+class Identity : public AbstractTransformation {
   public:
     Identity (CoreProcess* parent, const string& name);
     Identity ();

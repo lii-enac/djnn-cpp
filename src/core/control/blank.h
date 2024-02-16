@@ -24,8 +24,7 @@ namespace djnn {
  * But a component, for example an external source, can use it and call explicitly its notify_(de)activate method.
  */
 
-class Blank : public FatProcess
-{
+class Blank : public FatProcess {
   public:
     Blank (CoreProcess* parent, const string& name)
         : FatProcess (name) { finalize_construction (parent, name); }

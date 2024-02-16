@@ -9,8 +9,7 @@
 namespace djnn {
 class ImageWatcher;
 
-class Image : public AbstractPathImage
-{
+class Image : public AbstractPathImage {
   public:
     Image (CoreProcess* parent, const string& name, const string& path, double x, double y, double w, double h);
     virtual ~Image ();
@@ -37,8 +36,7 @@ class Image : public AbstractPathImage
 };
 
 class DataImageWatcher;
-class DataImage : public AbstractDataImage
-{
+class DataImage : public AbstractDataImage {
   public:
     DataImage (CoreProcess* parent, const string& name, string* data, int format, double x, double y, double w, double h);
     DataImage (CoreProcess* parent, const string& name, string* data, double x, double y, double w, double h);
@@ -64,14 +62,12 @@ class DataImage : public AbstractDataImage
     bool              _invalid_cache;
 };
 
-class ImageWatcher : public Action
-{
+class ImageWatcher : public Action {
   public:
     ImageWatcher (Image* i)
         : Action (i, "ImageWatcher"), _img (i) {}
     virtual ~ImageWatcher () {}
-    void impl_activate () override
-    {
+    void impl_activate () override {
         _img->set_invalid_cache (true);
     }
 
@@ -79,14 +75,12 @@ class ImageWatcher : public Action
     Image* _img;
 };
 
-class DataImageWatcher : public Action
-{
+class DataImageWatcher : public Action {
   public:
     DataImageWatcher (DataImage* i)
         : Action (i, "DataImageWatcher"), _img (i) {}
     virtual ~DataImageWatcher () {}
-    void impl_activate () override
-    {
+    void impl_activate () override {
         _img->set_invalid_cache (true);
     }
 

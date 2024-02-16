@@ -23,8 +23,7 @@ namespace css {
 using djnnstl::string;
 
 class Scanner;
-class Driver
-{
+class Driver {
   public:
     Driver ();
 

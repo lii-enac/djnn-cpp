@@ -1,8 +1,7 @@
 #pragma once
 
 namespace djnn {
-class PickAnalyticalContext
-{
+class PickAnalyticalContext {
   public:
     double x;
     double y;

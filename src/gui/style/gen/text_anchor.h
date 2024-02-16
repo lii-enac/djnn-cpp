@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class TextAnchor : public AbstractStyle
-{
+class TextAnchor : public AbstractStyle {
   public:
     TextAnchor (CoreProcess* parent, const string& name, int anchor);
     virtual ~TextAnchor ();
@@ -36,8 +35,7 @@ class TextAnchor : public AbstractStyle
     AbstractIntProperty*                    anchor () { return (AbstractIntProperty*)find_child_impl ("anchor"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int anchor;
     };
     raw_props_t raw_props;

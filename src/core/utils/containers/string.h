@@ -38,8 +38,7 @@ template <typename T>
 class string_impl_t;
 
 // template <typename T>
-class string
-{
+class string {
   public:
     string (const char*);
     using T              = char;

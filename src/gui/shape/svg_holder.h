@@ -3,8 +3,7 @@
 #include "core/tree/component.h"
 
 namespace djnn {
-class SVGHolder : public Container
-{
+class SVGHolder : public Container {
   public:
     SVGHolder (CoreProcess* parent, const string& name)
         : Container (parent, name), _gobj (nullptr) { finalize_construction (parent, name); }

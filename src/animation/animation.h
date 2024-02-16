@@ -24,8 +24,7 @@ extern djnnstl::vector<djnnstl::string> loadedModules;
 
 void init_animation ();
 
-class SlowInSlowOutInterpolator : public HermiteCurve
-{
+class SlowInSlowOutInterpolator : public HermiteCurve {
   public:
     SlowInSlowOutInterpolator (CoreProcess* parent, const string& name);
 #ifndef DJNN_NO_SERIALIZE
@@ -33,11 +32,9 @@ class SlowInSlowOutInterpolator : public HermiteCurve
 #endif
 };
 
-class Oscillator : public FatProcess
-{
+class Oscillator : public FatProcess {
   private:
-    class OscillatorAction : public Action
-    {
+    class OscillatorAction : public Action {
       public:
         OscillatorAction (CoreProcess* parent, const string& name, DoubleProperty* m, DoubleProperty* k,
                           DoubleProperty* b, DoubleProperty* v, DoubleProperty* output,

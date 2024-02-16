@@ -33,8 +33,7 @@
 #include "parser.hpp"
 
 namespace css {
-class Scanner : public CssFlexLexer
-{
+class Scanner : public CssFlexLexer {
   public:
     Scanner (std::istream* arg_yyin = 0, std::ostream* arg_yyout = 0);
 

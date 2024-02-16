@@ -29,11 +29,9 @@
 
 namespace djnn {
 
-class UpdateDrawing : public FatProcess
-{
+class UpdateDrawing : public FatProcess {
   private:
-    class RedrawAction : public Action
-    {
+    class RedrawAction : public Action {
       public:
         RedrawAction (UpdateDrawing* parent, const string& name)
             : Action (parent, name), _ud (parent) { finalize_construction (parent, name); }
@@ -43,12 +41,10 @@ class UpdateDrawing : public FatProcess
       private:
         UpdateDrawing* _ud;
     };
-    class UndelayedSpike : public FatProcess
-    {
+    class UndelayedSpike : public FatProcess {
       public:
         UndelayedSpike (UpdateDrawing* parent, const string& name)
-            : FatProcess (name), _ud (parent)
-        {
+            : FatProcess (name), _ud (parent) {
             set_is_model (true);
             finalize_construction (parent, name);
         }
@@ -60,8 +56,7 @@ class UpdateDrawing : public FatProcess
       private:
         UpdateDrawing* _ud;
     };
-    class AutoRefreshAction : public Action
-    {
+    class AutoRefreshAction : public Action {
       public:
         AutoRefreshAction (UpdateDrawing* parent, const string& name)
             : Action (parent, name), _ud (parent) {}

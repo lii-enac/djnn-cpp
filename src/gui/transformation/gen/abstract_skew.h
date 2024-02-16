@@ -23,8 +23,7 @@
 #include "gui/transformation/abstract_transformation.h"
 
 namespace djnn {
-class AbstractSkew : public AbstractTransformation
-{
+class AbstractSkew : public AbstractTransformation {
   public:
     AbstractSkew (CoreProcess* parent, const string& name, double a);
     virtual ~AbstractSkew ();
@@ -35,8 +34,7 @@ class AbstractSkew : public AbstractTransformation
     AbstractDoubleProperty*                 a () { return (AbstractDoubleProperty*)find_child_impl ("a"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double a;
     };
     raw_props_t raw_props;

@@ -21,18 +21,15 @@
 
 namespace djnn {
 struct FileWriterImpl;
-class FileWriter : public FatProcess
-{
+class FileWriter : public FatProcess {
   private:
-    class FileWriterAction : public Action
-    {
+    class FileWriterAction : public Action {
       public:
         FileWriterAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         void impl_activate () override;
     };
-    class FileNameAction : public Action
-    {
+    class FileNameAction : public Action {
       public:
         FileNameAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}

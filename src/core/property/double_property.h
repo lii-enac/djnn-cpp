@@ -21,8 +21,7 @@
 
 namespace djnn {
 
-class AbstractDoubleProperty : public AbstractSimpleProperty
-{
+class AbstractDoubleProperty : public AbstractSimpleProperty {
   public:
     AbstractDoubleProperty (CoreProcess* parent, const string& name, int notify_mask = notify_none)
         : AbstractSimpleProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
@@ -56,8 +55,7 @@ class AbstractDoubleProperty : public AbstractSimpleProperty
 #endif
 };
 
-class DoubleProperty : public AbstractDoubleProperty
-{
+class DoubleProperty : public AbstractDoubleProperty {
   public:
     DoubleProperty (CoreProcess* parent, const string& name, double v)
         : AbstractDoubleProperty (parent, name), value (v) {}
@@ -71,8 +69,7 @@ class DoubleProperty : public AbstractDoubleProperty
     double value;
 };
 
-class DoublePropertyProxy : public AbstractDoubleProperty
-{
+class DoublePropertyProxy : public AbstractDoubleProperty {
   public:
     DoublePropertyProxy (CoreProcess* parent, const string& name, double& v, int notify_mask = notify_none)
         : AbstractDoubleProperty (parent, name, notify_mask), value (v) {}

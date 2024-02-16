@@ -17,8 +17,7 @@
 #endif
 
 inline const char*
-alErrorString (ALenum e)
-{
+alErrorString (ALenum e) {
     switch (e) {
     case ALC_NO_ERROR:
         return "ALC_NO_ERROR";

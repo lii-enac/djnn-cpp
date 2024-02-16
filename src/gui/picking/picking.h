@@ -24,8 +24,7 @@
 namespace djnn {
 
 class Window;
-class Picking
-{
+class Picking {
   public:
     Picking (Window* win);
     virtual ~Picking ();

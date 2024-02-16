@@ -25,8 +25,7 @@
 
 namespace djnn {
 
-class AbstractList : public Container
-{
+class AbstractList : public Container {
   public:
     AbstractList (CoreProcess* parent, const string& name);
     void         add_child (CoreProcess* c, const string& name) override;
@@ -52,8 +51,7 @@ class AbstractList : public Container
 #endif
 };
 
-class List : public AbstractList
-{
+class List : public AbstractList {
   public:
     List (CoreProcess* parent, const string& name);
     virtual ~List ();
@@ -68,8 +66,7 @@ class List : public AbstractList
 #endif
 };
 
-class ListIterator : public FatProcess
-{
+class ListIterator : public FatProcess {
   public:
     ListIterator (CoreProcess* parent, const string& name, CoreProcess* list, CoreProcess* action, bool model = true);
     virtual ~ListIterator () {}
@@ -82,11 +79,9 @@ class ListIterator : public FatProcess
     List*        _list;
 };
 
-class BidirectionalListIterator : public FatProcess
-{
+class BidirectionalListIterator : public FatProcess {
   private:
-    class IterAction : public Action
-    {
+    class IterAction : public Action {
       public:
         IterAction (CoreProcess* parent, const string& name, CoreProcess* list, RefProperty* iter, IntProperty* index, bool forward);
         virtual ~IterAction () {}
@@ -98,8 +93,7 @@ class BidirectionalListIterator : public FatProcess
         IntProperty* _index;
         bool         _forward;
     };
-    class ResetAction : public Action
-    {
+    class ResetAction : public Action {
       public:
         ResetAction (CoreProcess* parent, const string& name, IntProperty* index);
         virtual ~ResetAction () {}

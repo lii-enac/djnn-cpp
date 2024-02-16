@@ -29,9 +29,8 @@ void exit(int status) ; // noexcept;
 #include "containers.h"
 
 #ifdef DJNN_CRAZYFLIE
-extern "C"
-{
-    void DJNN_DEBUG_PRINT (const char* fmt);
+extern "C" {
+void DJNN_DEBUG_PRINT (const char* fmt);
 }
 #endif
 
@@ -44,8 +43,7 @@ void       djnn__warning (const CoreProcess* p, const char* msg, const char* ctx
 void       djnn__warning (const CoreProcess* p, const djnnstl::string& msg, const char* ctxinfo = nullptr);
 void       djnn__info (const djnnstl::string& msg, bool cr, const char* ctxinfo = nullptr);
 void       djnn__debug (const char* file, const char* function, const char* lineno);
-inline int djnn__exit (int ret)
-{
+inline int djnn__exit (int ret) {
     exit (ret);
     return 1;
 }
@@ -81,17 +79,14 @@ inline int djnn__exit (int ret)
 #define error(p, msg)   djnn_error (p, msg)
 #define warning(p, msg) djnn_warning (p, msg)
 
-class Context
-{
+class Context {
   public:
     static Context* instance ();
-    void            new_line (int line, const djnnstl::string& filename)
-    {
+    void            new_line (int line, const djnnstl::string& filename) {
         _line     = line;
         _filename = filename;
     }
-    void parser_info (int begline, int begcol, int endline, int endcol, const djnnstl::string& filename)
-    {
+    void parser_info (int begline, int begcol, int endline, int endcol, const djnnstl::string& filename) {
         _line     = begline;
         _begcol   = begcol;
         _endline  = endline;

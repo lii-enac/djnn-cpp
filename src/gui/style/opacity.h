@@ -3,8 +3,7 @@
 #include "gen/abstract_opacity.h"
 
 namespace djnn {
-class OutlineOpacity : public AbstractOpacity
-{
+class OutlineOpacity : public AbstractOpacity {
   public:
     OutlineOpacity (CoreProcess* parent, const string& name, double alpha)
         : AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }
@@ -13,8 +12,7 @@ class OutlineOpacity : public AbstractOpacity
     OutlineOpacity* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class FillOpacity : public AbstractOpacity
-{
+class FillOpacity : public AbstractOpacity {
   public:
     FillOpacity (CoreProcess* parent, const string& name, double alpha)
         : AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }

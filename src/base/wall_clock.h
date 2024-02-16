@@ -19,10 +19,8 @@
 #include "core/property/text_property.h"
 
 namespace djnn {
-class WallClock : public FatProcess
-{
-    struct WallClockDoubleProperty : public AbstractDoubleProperty
-    {
+class WallClock : public FatProcess {
+    struct WallClockDoubleProperty : public AbstractDoubleProperty {
         WallClockDoubleProperty (FatProcess* parent, const string& name)
             : AbstractDoubleProperty (parent, name) { finalize_construction (parent, name); }
 
@@ -31,8 +29,7 @@ class WallClock : public FatProcess
         const double& get_ref_value () const override;
         double        _ref;
     };
-    struct WallClockTextProperty : public AbstractTextProperty
-    {
+    struct WallClockTextProperty : public AbstractTextProperty {
         WallClockTextProperty (FatProcess* parent, const string& name)
             : AbstractTextProperty (parent, name) { finalize_construction (parent, name); }
 
@@ -47,8 +44,7 @@ class WallClock : public FatProcess
         : FatProcess (name),
           _state (this, "state"),
           _state_text (this, "state_text"),
-          _format (this, "format", "%Y-%m-%d_%Hh%Mm%Ss")
-    {
+          _format (this, "format", "%Y-%m-%d_%Hh%Mm%Ss") {
         finalize_construction (parent, name);
     }
 

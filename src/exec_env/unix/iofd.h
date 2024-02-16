@@ -19,8 +19,7 @@
 #include "exec_env/external_source.h"
 
 namespace djnn {
-class IOFD : public FatProcess, public ExternalSource
-{
+class IOFD : public FatProcess, public ExternalSource {
   public:
     IOFD (CoreProcess* parent, const CoreProcess::string& name, int readfd);
     virtual ~IOFD () override;

@@ -19,15 +19,12 @@
 
 namespace djnn {
 
-class AbstractPhysicsBackend
-{
+class AbstractPhysicsBackend {
   public:
-    AbstractPhysicsBackend ()
-    {
+    AbstractPhysicsBackend () {
     }
 
-    virtual ~AbstractPhysicsBackend ()
-    {
+    virtual ~AbstractPhysicsBackend () {
     }
 
     virtual WorldImpl* create_world (World* world, double x, double y, double z) = 0;

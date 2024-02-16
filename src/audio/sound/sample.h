@@ -21,8 +21,7 @@
 
 namespace djnn {
 
-class Sample : public Sound
-{
+class Sample : public Sound {
   public:
     Sample (CoreProcess* parent, const string& name, const string& path);
     virtual ~Sample ();
@@ -47,13 +46,11 @@ class Sample : public Sound
     // 	}
     // };
     // end_timer _end_timer;
-    struct control_timer : djnn_internal::Time::Timer
-    {
+    struct control_timer : djnn_internal::Time::Timer {
         Sample& s;
         control_timer (Sample& s_)
             : s (s_) {}
-        virtual void do_it (const djnn_internal::Time::duration& actualduration) override
-        {
+        virtual void do_it (const djnn_internal::Time::duration& actualduration) override {
             s.do_control ();
         }
     };

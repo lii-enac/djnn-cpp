@@ -24,8 +24,7 @@
 
 namespace djnn {
 
-class NativeAsyncAction : public NativeAction, public ExternalSource
-{
+class NativeAsyncAction : public NativeAction, public ExternalSource {
   public:
     NativeAsyncAction (CoreProcess* parent, const CoreProcess::string& name, NativeCode action, void* data, bool isModel);
     virtual ~NativeAsyncAction ();
@@ -40,16 +39,14 @@ class NativeAsyncAction : public NativeAction, public ExternalSource
     // ExternalSource
     virtual void run () override;
 
-    void post_activate () override
-    {
+    void post_activate () override {
         // contrarily to Action and NativeAction, do not auto deactivate
         // post_activate_auto_deactivate ();
         CoreProcess::post_activate ();
     }
 
   private:
-    class RestartAction : public Action
-    {
+    class RestartAction : public Action {
       public:
         RestartAction (CoreProcess* parent, const string& name)
             : Action (parent, name){};

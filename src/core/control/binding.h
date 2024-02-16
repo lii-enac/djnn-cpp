@@ -21,12 +21,10 @@
 
 namespace djnn {
 
-class CoreBinding : public CoreProcess
-{
+class CoreBinding : public CoreProcess {
   public:
     CoreBinding (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
-        : _c (src, src_flag, dst, dst_flag, false)
-    {
+        : _c (src, src_flag, dst, dst_flag, false) {
         _c.disable ();
     }
 
@@ -34,16 +32,14 @@ class CoreBinding : public CoreProcess
         : CoreBinding (src, ACTIVATION, dst, ACTIVATION) {}
 
     CoreBinding (CoreProcess* parent, const string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
-        : CoreBinding (src, src_flag, dst, dst_flag)
-    {
+        : CoreBinding (src, src_flag, dst, dst_flag) {
         finalize_construction (parent, name);
     }
 
     CoreBinding (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst)
         : CoreBinding (parent, name, src, ACTIVATION, dst, ACTIVATION) {}
 
-    ~CoreBinding ()
-    {
+    ~CoreBinding () {
     }
 
     CoreProcess*       get_src () { return _c.get_src (); } // delegate to coupling to save space
@@ -75,36 +71,31 @@ class Binding : public FatProcess //, virtual CoreBinding
   public:
     Binding (CoreProcess* parent, const string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
         : FatProcess (name),
-          _b (src, src_flag, dst, dst_flag)
-    {
+          _b (src, src_flag, dst, dst_flag) {
         finalize_construction (parent, name);
     }
 
     Binding (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst)
-        : Binding (parent, name, src, ACTIVATION, dst, ACTIVATION)
-    {
+        : Binding (parent, name, src, ACTIVATION, dst, ACTIVATION) {
     }
 
     // for legacy reason, to get rid of?
     Binding (CoreProcess* parent, const string& name,
              CoreProcess* src, const string& sspec,
              CoreProcess* dst, const string& dspec)
-        : Binding (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec))
-    {
+        : Binding (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec)) {
     }
 
     Binding (CoreProcess* parent, const string& name,
              CoreProcess* src, const string& sspec, activation_flag_e src_flag,
              CoreProcess* dst, const string& dspec, activation_flag_e dst_flag)
-        : Binding (parent, name, src->find_child_impl (sspec), src_flag, dst->find_child_impl (dspec), dst_flag)
-    {
+        : Binding (parent, name, src->find_child_impl (sspec), src_flag, dst->find_child_impl (dspec), dst_flag) {
     }
 
     Binding (CoreProcess* parent, const string& name,
              CoreProcess* src, const string& sspec, bool b_src_flag,
              CoreProcess* dst, const string& dspec, bool b_dst_flag)
-        : Binding (parent, name, src->find_child_impl (sspec), (b_src_flag) ? ACTIVATION : DEACTIVATION, dst->find_child_impl (dspec), (b_dst_flag) ? ACTIVATION : DEACTIVATION)
-    {
+        : Binding (parent, name, src->find_child_impl (sspec), (b_src_flag) ? ACTIVATION : DEACTIVATION, dst->find_child_impl (dspec), (b_dst_flag) ? ACTIVATION : DEACTIVATION) {
     }
 
     virtual ~Binding ();

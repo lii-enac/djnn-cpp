@@ -18,8 +18,7 @@ namespace djnn {
 // #ifndef DJNN_NO_DYNAMIC_CAST
 
 template <typename X, typename P>
-inline X djnn_dynamic_cast (P p)
-{
+inline X djnn_dynamic_cast (P p) {
     return dynamic_cast<X> (p);
 }
 
@@ -39,8 +38,7 @@ template <typename X> inline X djnn_dynamic_cast(CoreProcess* p)
 }
 */
 template <>
-inline AbstractIntProperty* djnn_dynamic_cast (AbstractSimpleProperty* p)
-{
+inline AbstractIntProperty* djnn_dynamic_cast (AbstractSimpleProperty* p) {
     if (p->get_property_type () == Integer) {
         return static_cast<AbstractIntProperty*> (p);
     }
@@ -48,8 +46,7 @@ inline AbstractIntProperty* djnn_dynamic_cast (AbstractSimpleProperty* p)
 }
 
 template <>
-inline AbstractBoolProperty* djnn_dynamic_cast (AbstractSimpleProperty* p)
-{
+inline AbstractBoolProperty* djnn_dynamic_cast (AbstractSimpleProperty* p) {
     if (p->get_property_type () == Boolean) {
         return static_cast<AbstractBoolProperty*> (p);
     }
@@ -57,8 +54,7 @@ inline AbstractBoolProperty* djnn_dynamic_cast (AbstractSimpleProperty* p)
 }
 
 template <>
-inline AbstractDoubleProperty* djnn_dynamic_cast (AbstractSimpleProperty* p)
-{
+inline AbstractDoubleProperty* djnn_dynamic_cast (AbstractSimpleProperty* p) {
     if (p->get_property_type () == Double) {
         return static_cast<AbstractDoubleProperty*> (p);
     }
@@ -66,8 +62,7 @@ inline AbstractDoubleProperty* djnn_dynamic_cast (AbstractSimpleProperty* p)
 }
 
 template <>
-inline AbstractTextProperty* djnn_dynamic_cast (AbstractSimpleProperty* p)
-{
+inline AbstractTextProperty* djnn_dynamic_cast (AbstractSimpleProperty* p) {
     if (p->get_property_type () == String) {
         return static_cast<AbstractTextProperty*> (p);
     }
@@ -75,8 +70,7 @@ inline AbstractTextProperty* djnn_dynamic_cast (AbstractSimpleProperty* p)
 }
 
 template <>
-inline RefProperty* djnn_dynamic_cast (AbstractSimpleProperty* p)
-{
+inline RefProperty* djnn_dynamic_cast (AbstractSimpleProperty* p) {
     if (p->get_property_type () == Reference) {
         return static_cast<RefProperty*> (p);
     }
@@ -85,8 +79,7 @@ inline RefProperty* djnn_dynamic_cast (AbstractSimpleProperty* p)
 
 // specialization for CoreProcess* argument
 template <>
-inline AbstractBoolProperty* djnn_dynamic_cast (CoreProcess* p)
-{
+inline AbstractBoolProperty* djnn_dynamic_cast (CoreProcess* p) {
     AbstractSimpleProperty* ap = djnn_dynamic_cast<AbstractSimpleProperty*> (p);
     if (ap)
         return djnn_dynamic_cast<AbstractBoolProperty*> (ap);
@@ -94,8 +87,7 @@ inline AbstractBoolProperty* djnn_dynamic_cast (CoreProcess* p)
         return nullptr;
 }
 template <>
-inline AbstractIntProperty* djnn_dynamic_cast (CoreProcess* p)
-{
+inline AbstractIntProperty* djnn_dynamic_cast (CoreProcess* p) {
     AbstractSimpleProperty* ap = djnn_dynamic_cast<AbstractSimpleProperty*> (p);
     if (ap)
         return djnn_dynamic_cast<AbstractIntProperty*> (ap);
@@ -103,8 +95,7 @@ inline AbstractIntProperty* djnn_dynamic_cast (CoreProcess* p)
         return nullptr;
 }
 template <>
-inline AbstractDoubleProperty* djnn_dynamic_cast (CoreProcess* p)
-{
+inline AbstractDoubleProperty* djnn_dynamic_cast (CoreProcess* p) {
     AbstractSimpleProperty* ap = djnn_dynamic_cast<AbstractSimpleProperty*> (p);
     if (ap)
         return djnn_dynamic_cast<AbstractDoubleProperty*> (ap);
@@ -112,8 +103,7 @@ inline AbstractDoubleProperty* djnn_dynamic_cast (CoreProcess* p)
         return nullptr;
 }
 template <>
-inline AbstractTextProperty* djnn_dynamic_cast (CoreProcess* p)
-{
+inline AbstractTextProperty* djnn_dynamic_cast (CoreProcess* p) {
     AbstractSimpleProperty* ap = djnn_dynamic_cast<AbstractSimpleProperty*> (p);
     if (ap)
         return djnn_dynamic_cast<AbstractTextProperty*> (ap);
@@ -124,8 +114,7 @@ inline AbstractTextProperty* djnn_dynamic_cast (CoreProcess* p)
 // ************  untested  ***************
 
 template <>
-inline Action* djnn_dynamic_cast (CoreProcess* p)
-{
+inline Action* djnn_dynamic_cast (CoreProcess* p) {
     auto t = p->get_process_type ();
     if (t == ACTION_T || t == ACTION_T) {
         return static_cast<Action*> (p);
@@ -134,8 +123,7 @@ inline Action* djnn_dynamic_cast (CoreProcess* p)
 }
 
 template <>
-inline NativeAction* djnn_dynamic_cast (CoreProcess* p)
-{
+inline NativeAction* djnn_dynamic_cast (CoreProcess* p) {
     if (p->get_process_type () == NATIVE_ACTION_T) {
         return static_cast<NativeAction*> (p);
     }
@@ -143,8 +131,7 @@ inline NativeAction* djnn_dynamic_cast (CoreProcess* p)
 }
 
 template <>
-inline Container* djnn_dynamic_cast (CoreProcess* p)
-{
+inline Container* djnn_dynamic_cast (CoreProcess* p) {
     if (p->get_process_type () == CONTAINER_T) {
         return static_cast<Container*> (p);
     }

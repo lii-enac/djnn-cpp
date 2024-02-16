@@ -3,15 +3,13 @@
 
 namespace djnn {
 
-class ALAudioBackend : public AudioBackend
-{
+class ALAudioBackend : public AudioBackend {
   public:
     virtual void sound (Sample* s);
     virtual void load (Volume* s);
 };
 
-class ALSoundImpl : public AbstractSObjImpl
-{
+class ALSoundImpl : public AbstractSObjImpl {
   public:
     virtual ~ALSoundImpl () {}
 
@@ -25,8 +23,7 @@ class ALSoundImpl : public AbstractSObjImpl
     char * data;*/
 };
 
-class ALTransformationImpl : public AbstractSObjImpl
-{
+class ALTransformationImpl : public AbstractSObjImpl {
   public:
     virtual ~ALTransformationImpl () {}
     // bool damaged;

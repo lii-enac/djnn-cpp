@@ -20,28 +20,23 @@
 #include "core/control/action.h"
 
 namespace djnn {
-class AbstractColor : public AbstractStyle
-{
+class AbstractColor : public AbstractStyle {
   private:
-    class ToValueAction : public Action
-    {
+    class ToValueAction : public Action {
       public:
         ToValueAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); };
         ~ToValueAction () {}
-        void impl_activate () override
-        {
+        void impl_activate () override {
             ((AbstractColor*)get_parent ())->update_hex_from_rvb ();
         }
     };
-    class ToRGBAction : public Action
-    {
+    class ToRGBAction : public Action {
       public:
         ToRGBAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); };
         ~ToRGBAction () {}
-        void impl_activate () override
-        {
+        void impl_activate () override {
             ((AbstractColor*)get_parent ())->update_rvb_from_hex ();
         }
     };
@@ -59,8 +54,7 @@ class AbstractColor : public AbstractStyle
     AbstractIntProperty* value () { return (AbstractIntProperty*)find_child_impl ("value"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int r;
         int g;
         int b;
@@ -78,8 +72,7 @@ class AbstractColor : public AbstractStyle
     void              update_hex_from_rvb ();
 };
 
-class FillColor : public AbstractColor
-{
+class FillColor : public AbstractColor {
   public:
     FillColor (CoreProcess* parent, const string& name, int r, int g, int b)
         : AbstractColor (parent, name, r, g, b) { finalize_construction (parent, name); }
@@ -90,8 +83,7 @@ class FillColor : public AbstractColor
     FillColor* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class OutlineColor : public AbstractColor
-{
+class OutlineColor : public AbstractColor {
   public:
     OutlineColor (CoreProcess* parent, const string& name, int r, int g, int b)
         : AbstractColor (parent, name, r, g, b) { finalize_construction (parent, name); }
@@ -102,11 +94,9 @@ class OutlineColor : public AbstractColor
     OutlineColor* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class RGBToLCHConverter : public FatProcess
-{
+class RGBToLCHConverter : public FatProcess {
   private:
-    class ConverterAction : public Action
-    {
+    class ConverterAction : public Action {
       public:
         ConverterAction (RGBToLCHConverter* p, const string& n);
         virtual ~ConverterAction () {}
@@ -130,11 +120,9 @@ class RGBToLCHConverter : public FatProcess
     Coupling *       _cr, *_cg, *_cb;
 };
 
-class LCHToRGBConverter : public FatProcess
-{
+class LCHToRGBConverter : public FatProcess {
   private:
-    class ConverterAction : public Action
-    {
+    class ConverterAction : public Action {
       public:
         ConverterAction (LCHToRGBConverter* p, const string& n);
         virtual ~ConverterAction () {}

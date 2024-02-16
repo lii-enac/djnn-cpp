@@ -35,8 +35,7 @@ class SimpleText;
 class MultilineEditor;
 class TextField;
 class FileDialog;
-class AbstractBackend
-{
+class AbstractBackend {
   public:
     AbstractBackend () {}
 
@@ -44,341 +43,261 @@ class AbstractBackend
 
     /* shapes */
     virtual void
-    draw_rectangle (Rectangle* s)
-    {
+    draw_rectangle (Rectangle* s) {
     }
     virtual void
-    draw_circle (Circle* s)
-    {
+    draw_circle (Circle* s) {
     }
     virtual void
-    draw_ellipse (Ellipse* s)
-    {
+    draw_ellipse (Ellipse* s) {
     }
     virtual void
-    draw_line (Line* s)
-    {
+    draw_line (Line* s) {
     }
     virtual void
-    draw_text (Text*)
-    {
+    draw_text (Text*) {
     }
     virtual void
-    draw_poly (Poly* p)
-    {
+    draw_poly (Poly* p) {
     }
     virtual void
-    draw_poly_point (double x, double y)
-    {
+    draw_poly_point (double x, double y) {
     }
     virtual void
-    draw_path (Path* p)
-    {
+    draw_path (Path* p) {
     }
     virtual void
-    draw_path_move (double x, double y)
-    {
+    draw_path_move (double x, double y) {
     }
     virtual void
-    draw_path_line (double x, double y)
-    {
+    draw_path_line (double x, double y) {
     }
     virtual void
-    draw_path_quadratic (double x1, double y1, double x, double y)
-    {
+    draw_path_quadratic (double x1, double y1, double x, double y) {
     }
     virtual void
-    draw_path_cubic (double x1, double y1, double x2, double y2, double x, double y)
-    {
+    draw_path_cubic (double x1, double y1, double x2, double y2, double x, double y) {
     }
     virtual void
-    draw_path_arc (double rx, double ry, double rotx, double fl, double swfl, double x, double y)
-    {
+    draw_path_arc (double rx, double ry, double rotx, double fl, double swfl, double x, double y) {
     }
     virtual void
-    draw_path_closure ()
-    {
+    draw_path_closure () {
     }
     virtual void
-    draw_rectangle_clip (RectangleClip* s)
-    {
+    draw_rectangle_clip (RectangleClip* s) {
     }
     virtual void
-    draw_path_clip (Path* p)
-    {
+    draw_path_clip (Path* p) {
     }
     virtual void
-    draw_image (Image* i)
-    {
+    draw_image (Image* i) {
     }
     virtual bool
-    pre_draw_layer (Layer* l)
-    {
+    pre_draw_layer (Layer* l) {
         return false;
     }
     virtual void
-    post_draw_layer (Layer* l)
-    {
+    post_draw_layer (Layer* l) {
     }
     virtual int
-    get_pixel (Image* i, double x, double y)
-    {
+    get_pixel (Image* i, double x, double y) {
         return 0;
     }
     virtual void
-    draw_data_image (DataImage* i)
-    {
+    draw_data_image (DataImage* i) {
     }
     /*widgets*/
     virtual void
-    open_dialog (FileDialog*)
-    {
+    open_dialog (FileDialog*) {
     }
     virtual void
-    save_dialog (FileDialog*)
-    {
+    save_dialog (FileDialog*) {
     }
     virtual void
-    draw_simple_text_edit (MultilineEditor*)
-    {
+    draw_simple_text_edit (MultilineEditor*) {
     }
     virtual void
-    draw_text_field (TextField*)
-    {
+    draw_text_field (TextField*) {
     }
     virtual size_t
-    compute_index (FontMetricsImpl fm, SimpleText* t, int x)
-    {
+    compute_index (FontMetricsImpl fm, SimpleText* t, int x) {
         return 0;
     }
     virtual int
-    compute_x (FontMetricsImpl fm, SimpleText* t, size_t index)
-    {
+    compute_x (FontMetricsImpl fm, SimpleText* t, size_t index) {
         return 0;
     }
     virtual int
-    compute_text_width (FontMetricsImpl fm, SimpleText* t)
-    {
+    compute_text_width (FontMetricsImpl fm, SimpleText* t) {
         return 0;
     }
     virtual int
-    get_average_char_width (FontMetricsImpl fm)
-    {
+    get_average_char_width (FontMetricsImpl fm) {
         return 0;
     }
     virtual double
-    get_cursor_from_index (Text*, int)
-    {
+    get_cursor_from_index (Text*, int) {
         return 0;
     }
     virtual pair<double, int>
-    get_cursor_from_local_x (Text*, double)
-    {
+    get_cursor_from_local_x (Text*, double) {
         return pair<double, int> (0, 0);
     }
     virtual void
-    pick_gshape (AbstractGShape* s)
-    {
+    pick_gshape (AbstractGShape* s) {
     }
     virtual void
-    draw_z_ordered_group (ZOrderedGroup* g)
-    {
+    draw_z_ordered_group (ZOrderedGroup* g) {
     }
 
     /* style */
     virtual void
-    load_fill_color (AbstractColor* c)
-    {
+    load_fill_color (AbstractColor* c) {
     }
     virtual void
-    load_outline_color (AbstractColor* c)
-    {
+    load_outline_color (AbstractColor* c) {
     }
     virtual void
-    load_fill_rule (FillRule* fr)
-    {
+    load_fill_rule (FillRule* fr) {
     }
     virtual void
-    load_no_outline ()
-    {
+    load_no_outline () {
     }
     virtual void
-    load_no_fill ()
-    {
+    load_no_fill () {
     }
     virtual void
-    load_no_pick_outline ()
-    {
+    load_no_pick_outline () {
     }
     virtual void
-    load_no_pick_fill ()
-    {
+    load_no_pick_fill () {
     }
     virtual void
-    load_pick_outline ()
-    {
+    load_pick_outline () {
     }
     virtual void
-    load_pick_fill ()
-    {
+    load_pick_fill () {
     }
     virtual void
-    load_texture (Texture* t)
-    {
+    load_texture (Texture* t) {
     }
     virtual void
-    load_outline_opacity (OutlineOpacity* oo)
-    {
+    load_outline_opacity (OutlineOpacity* oo) {
     }
     virtual void
-    load_fill_opacity (FillOpacity* fo)
-    {
+    load_fill_opacity (FillOpacity* fo) {
     }
     virtual void
-    load_outline_width (OutlineWidth* ow)
-    {
+    load_outline_width (OutlineWidth* ow) {
     }
     virtual void
-    load_outline_cap_style (OutlineCapStyle* ocs)
-    {
+    load_outline_cap_style (OutlineCapStyle* ocs) {
     }
     virtual void
-    load_outline_join_style (OutlineJoinStyle* ojs)
-    {
+    load_outline_join_style (OutlineJoinStyle* ojs) {
     }
     virtual void
-    load_outline_miter_limit (OutlineMiterLimit* oml)
-    {
+    load_outline_miter_limit (OutlineMiterLimit* oml) {
     }
     virtual void
-    load_dash_array (DashArray* da)
-    {
+    load_dash_array (DashArray* da) {
     }
     virtual void
-    load_no_dash_array ()
-    {
+    load_no_dash_array () {
     }
     virtual void
-    load_dash_offset (DashOffset* od)
-    {
+    load_dash_offset (DashOffset* od) {
     }
     virtual void
-    load_gradient_stop (GradientStop* gs)
-    {
+    load_gradient_stop (GradientStop* gs) {
     }
     virtual void
-    load_linear_gradient (LinearGradient* g)
-    {
+    load_linear_gradient (LinearGradient* g) {
     }
     virtual void
-    load_radial_gradient (RadialGradient* g)
-    {
+    load_radial_gradient (RadialGradient* g) {
     }
     virtual void
-    load_font_size (FontSize* fs)
-    {
+    load_font_size (FontSize* fs) {
     }
     virtual void
-    load_font_weight (FontWeight* fw)
-    {
+    load_font_weight (FontWeight* fw) {
     }
     virtual void
-    load_font_style (FontStyle* fs)
-    {
+    load_font_style (FontStyle* fs) {
     }
     virtual void
-    load_font_family (FontFamily* ff)
-    {
+    load_font_family (FontFamily* ff) {
     }
     virtual void
-    load_text_anchor (TextAnchor* a)
-    {
+    load_text_anchor (TextAnchor* a) {
     }
 
     /* transform */
     virtual void
-    load_identity (Identity*)
-    {
+    load_identity (Identity*) {
     }
     virtual void
-    load_translation (Translation*)
-    {
+    load_translation (Translation*) {
     }
     virtual void
-    load_gradient_translation (GradientTranslation*)
-    {
+    load_gradient_translation (GradientTranslation*) {
     }
     virtual void
-    load_rotation (Rotation*)
-    {
+    load_rotation (Rotation*) {
     }
     virtual void
-    load_gradient_rotation (GradientRotation*)
-    {
+    load_gradient_rotation (GradientRotation*) {
     }
     virtual void
-    load_scaling (Scaling*)
-    {
+    load_scaling (Scaling*) {
     }
     virtual void
-    load_gradient_scaling (GradientScaling*)
-    {
+    load_gradient_scaling (GradientScaling*) {
     }
     virtual void
-    load_skew_x (SkewX*)
-    {
+    load_skew_x (SkewX*) {
     }
     virtual void
-    load_gradient_skew_x (GradientSkewX*)
-    {
+    load_gradient_skew_x (GradientSkewX*) {
     }
     virtual void
-    load_skew_y (SkewY*)
-    {
+    load_skew_y (SkewY*) {
     }
     virtual void
-    load_gradient_skew_y (GradientSkewY*)
-    {
+    load_gradient_skew_y (GradientSkewY*) {
     }
     virtual void
-    load_homography (AbstractHomography*)
-    {
+    load_homography (AbstractHomography*) {
     }
     virtual void
-    load_gradient_homography (AbstractHomography*)
-    {
+    load_gradient_homography (AbstractHomography*) {
     }
     void
-    load_simple_gradient_transform (AbstractHomography* g)
-    {
+    load_simple_gradient_transform (AbstractHomography* g) {
     }
     virtual void
-    load_zorder (int z)
-    {
+    load_zorder (int z) {
     }
     virtual void
-    update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight* fw)
-    {
+    update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight* fw) {
     }
 
     virtual void
-    delete_text_impl (Text* text)
-    {
+    delete_text_impl (Text* text) {
     }
 
     virtual void
-    delete_image_impl (Image* image)
-    {
+    delete_image_impl (Image* image) {
     }
 
     virtual void
-    activate_gobj (AbstractGObj*)
-    {
+    activate_gobj (AbstractGObj*) {
     }
 
     virtual void
-    deactivate_gobj (AbstractGObj*)
-    {
+    deactivate_gobj (AbstractGObj*) {
     }
 };
 } // namespace djnn

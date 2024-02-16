@@ -1,11 +1,10 @@
 #pragma once
 
 #ifdef DJNN_CRAZYFLIE
-extern "C"
-{
-    void DJNN_DEBUG_PRINT (const char* fmt);
-    // extern void vTaskDelay (const unsigned uint_32);
-    // extern void vTaskDelay( const TickType_t xTicksToDelay ) PRIVILEGED_FUNCTION;
+extern "C" {
+void DJNN_DEBUG_PRINT (const char* fmt);
+// extern void vTaskDelay (const unsigned uint_32);
+// extern void vTaskDelay( const TickType_t xTicksToDelay ) PRIVILEGED_FUNCTION;
 }
 #ifdef CRAZYFLIE_FW
 #include "freertos.h"

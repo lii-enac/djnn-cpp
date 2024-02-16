@@ -20,8 +20,7 @@
 namespace djnn {
 class MainLoop;
 
-class FreeRTOSMainloop : public ExternalSource
-{
+class FreeRTOSMainloop : public ExternalSource {
 
   public:
     static void              build_instance (MainLoop*);

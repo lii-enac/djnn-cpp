@@ -3,8 +3,7 @@
 #include "gui/abstract_gobj.h"
 
 namespace djnn {
-class ZOrder : public AbstractGObj
-{
+class ZOrder : public AbstractGObj {
   public:
     ZOrder (CoreProcess* parent, const string& name, int z);
     ~ZOrder () {}

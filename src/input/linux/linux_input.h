@@ -29,8 +29,7 @@
 #include "input/input-priv.h"
 
 namespace djnn {
-enum dev_type
-{
+enum dev_type {
     MOUSE,
     KEYBOARD,
     TOUCH_PANEL
@@ -44,8 +43,7 @@ enum dev_type
 #define MT_CY       (1 << 5)
 #define MT_PRESSURE (1 << 6)
 
-class LinuxDevice : public FatProcess
-{
+class LinuxDevice : public FatProcess {
   public:
     LinuxDevice (CoreProcess* parent, const string& name, dev_type type)
         : FatProcess (name), _type (type) {}
@@ -59,17 +57,14 @@ class LinuxDevice : public FatProcess
 
 LinuxDevice* map_device (const struct libevdev* _dev, const djnnstl::string& n);
 
-class Evdev
-{
+class Evdev {
   private:
-    class EvdevAction : public Action
-    {
+    class EvdevAction : public Action {
       public:
         EvdevAction (Evdev* evdev)
             : Action (nullptr, "EvdevAction"), _evdev (evdev) {}
         virtual ~EvdevAction () {}
-        void impl_activate ()
-        {
+        void impl_activate () {
             _evdev->handle_evdev_msg ();
         }
 
@@ -94,17 +89,14 @@ class Evdev
     bool             _aborted;
 };
 
-class Udev
-{
+class Udev {
   private:
-    class UdevAction : public Action
-    {
+    class UdevAction : public Action {
       public:
         UdevAction (Udev* udev)
             : Action (nullptr, "UdevAction"), _udev (udev) {}
         virtual ~UdevAction () {}
-        void impl_activate ()
-        {
+        void impl_activate () {
             _udev->handle_udev_msg ();
         }
 
@@ -127,8 +119,7 @@ class Udev
     Coupling*                             _readable_cpl;
 };
 
-class LinuxMouse : public LinuxDevice
-{
+class LinuxMouse : public LinuxDevice {
   public:
     LinuxMouse (CoreProcess* parent, const string& name, const struct libevdev* dev);
     ~LinuxMouse ();
@@ -143,15 +134,13 @@ class LinuxMouse : public LinuxDevice
     TextProperty* _btn_name;
 };
 
-enum touch_state
-{
+enum touch_state {
     UNUSED,
     NEW,
     USED
 };
 
-class LinuxTouch : public FatProcess
-{
+class LinuxTouch : public FatProcess {
   public:
     LinuxTouch (unsigned int fieldmap);
     ~LinuxTouch ();
@@ -172,8 +161,7 @@ class LinuxTouch : public FatProcess
     IntProperty *_x, *_y, *_width, *_height, *_cx, *_cy, *_pressure;
 };
 
-class LinuxTouchPanel : public LinuxDevice
-{
+class LinuxTouchPanel : public LinuxDevice {
   public:
     LinuxTouchPanel (CoreProcess* parent, const string& name, const struct libevdev* dev);
     ~LinuxTouchPanel ();
@@ -190,10 +178,8 @@ class LinuxTouchPanel : public LinuxDevice
     LinuxTouch*         _cur_touch;
 };
 
-class GPIOLine : public FatProcess
-{
-    class GPIOLineWriteAction : public Action
-    {
+class GPIOLine : public FatProcess {
+    class GPIOLineWriteAction : public Action {
       public:
         GPIOLineWriteAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -202,8 +188,7 @@ class GPIOLine : public FatProcess
       protected:
         void impl_activate () override { ((GPIOLine*)get_parent ())->write_value (); }
     };
-    class GPIOLineReadAction : public Action
-    {
+    class GPIOLineReadAction : public Action {
       public:
         GPIOLineReadAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}

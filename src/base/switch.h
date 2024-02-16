@@ -22,11 +22,9 @@
 
 namespace djnn {
 
-class Switch : public Container
-{
+class Switch : public Container {
   private:
-    class SwitchAction : public Action
-    {
+    class SwitchAction : public Action {
       public:
         SwitchAction (Switch* parent, const string& name);
         virtual ~SwitchAction (){};

@@ -5,8 +5,7 @@
 #include "gui/shape/abstract_gshape.h"
 
 namespace djnn {
-class Rectangle : public AbstractPropRectangle
-{
+class Rectangle : public AbstractPropRectangle {
   public:
     Rectangle (CoreProcess* parent, const string& name, double x, double y, double width, double height, double rx = 0, double ry = 0);
     Rectangle* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;

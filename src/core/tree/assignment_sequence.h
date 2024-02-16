@@ -18,8 +18,7 @@
 
 namespace djnn {
 
-class AssignmentSequence : public Container
-{
+class AssignmentSequence : public Container {
   public:
     AssignmentSequence (CoreProcess* parent, const string& name, bool is_model);
     virtual ~AssignmentSequence ();

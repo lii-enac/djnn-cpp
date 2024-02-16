@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class AbstractPropFontWeight : public AbstractStyle
-{
+class AbstractPropFontWeight : public AbstractStyle {
   public:
     AbstractPropFontWeight (CoreProcess* parent, const string& name, int weight);
     virtual ~AbstractPropFontWeight ();
@@ -35,8 +34,7 @@ class AbstractPropFontWeight : public AbstractStyle
     AbstractIntProperty*                    weight () { return (AbstractIntProperty*)find_child_impl ("weight"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int weight;
     };
     raw_props_t raw_props;

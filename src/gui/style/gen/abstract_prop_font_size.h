@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class AbstractPropFontSize : public AbstractStyle
-{
+class AbstractPropFontSize : public AbstractStyle {
   public:
     AbstractPropFontSize (CoreProcess* parent, const string& name, int unit, double size);
     virtual ~AbstractPropFontSize ();
@@ -36,8 +35,7 @@ class AbstractPropFontSize : public AbstractStyle
     AbstractDoubleProperty*                 size () { return (AbstractDoubleProperty*)find_child_impl ("size"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int    unit;
         double size;
     };

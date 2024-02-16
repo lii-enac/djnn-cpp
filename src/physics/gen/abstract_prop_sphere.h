@@ -22,8 +22,7 @@
 #include "core/ontology/process.h"
 
 namespace djnn {
-class AbstractPropSphere : public PhyObj
-{
+class AbstractPropSphere : public PhyObj {
   public:
     AbstractPropSphere (CoreProcess* parent, const string& name, double radius);
     virtual ~AbstractPropSphere ();
@@ -34,8 +33,7 @@ class AbstractPropSphere : public PhyObj
     AbstractDoubleProperty* radius () { return (AbstractDoubleProperty*)find_child_impl ("radius"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double radius;
     };
     raw_props_t raw_props;

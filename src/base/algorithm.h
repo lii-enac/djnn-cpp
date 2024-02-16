@@ -25,11 +25,9 @@
 
 namespace djnn {
 
-class Sorter : public FatProcess
-{
+class Sorter : public FatProcess {
   private:
-    class SortAction : public Action
-    {
+    class SortAction : public Action {
       public:
         SortAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); }
@@ -58,19 +56,16 @@ class Sorter : public FatProcess
     Coupling     _c_spec_action;
 };
 
-class ListOperator : public FatProcess
-{
+class ListOperator : public FatProcess {
   private:
-    class SpecListOperatorAction : public Action
-    {
+    class SpecListOperatorAction : public Action {
       public:
         SpecListOperatorAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~SpecListOperatorAction () {}
         void impl_activate () { ((ListOperator*)get_parent ())->do_action (); }
     };
-    class UpdateListOperatorAction : public Action
-    {
+    class UpdateListOperatorAction : public Action {
       public:
         UpdateListOperatorAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); }
@@ -97,8 +92,7 @@ class ListOperator : public FatProcess
     vector<Coupling*>        _coupling_list;
 };
 
-class SumList : public ListOperator
-{
+class SumList : public ListOperator {
   public:
     SumList (CoreProcess* parent, const string& name, CoreProcess* container, const string& spec);
     virtual ~SumList ();
@@ -112,8 +106,7 @@ class SumList : public ListOperator
     DoubleProperty _output;
 };
 
-class ProductList : public ListOperator
-{
+class ProductList : public ListOperator {
   public:
     ProductList (CoreProcess* parent, const string& name, CoreProcess* container, const string& spec);
     virtual ~ProductList ();
@@ -127,8 +120,7 @@ class ProductList : public ListOperator
     DoubleProperty _output;
 };
 
-class MaxList : public ListOperator
-{
+class MaxList : public ListOperator {
   public:
     MaxList (CoreProcess* parent, const string& name, CoreProcess* container, const string& spec);
     virtual ~MaxList ();
@@ -142,8 +134,7 @@ class MaxList : public ListOperator
     DoubleProperty _output;
 };
 
-class MinList : public ListOperator
-{
+class MinList : public ListOperator {
   public:
     MinList (CoreProcess* parent, const string& name, CoreProcess* container, const string& spec);
     virtual ~MinList ();

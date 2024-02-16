@@ -28,11 +28,9 @@ extern djnnstl::vector<djnnstl::string> loadedModules;
 
 djnnstl::string strTrim (djnnstl::string s);
 
-class Properties : public FatProcess
-{
+class Properties : public FatProcess {
   private:
-    class PropertiesAction : public Action
-    {
+    class PropertiesAction : public Action {
       public:
         PropertiesAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -57,8 +55,7 @@ class Properties : public FatProcess
 };
 
 inline void
-depth_first_traverse (CoreProcess* p, std::function<void (FatProcess*)> f)
-{
+depth_first_traverse (CoreProcess* p, std::function<void (FatProcess*)> f) {
     auto* fp = dynamic_cast<FatProcess*> (p);
     if (!fp)
         return;

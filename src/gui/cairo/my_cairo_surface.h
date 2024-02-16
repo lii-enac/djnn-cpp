@@ -22,8 +22,7 @@
 
 namespace djnn {
 
-class MyCairoSurface
-{
+class MyCairoSurface {
   public:
     MyCairoSurface (Window* win);
     virtual ~MyCairoSurface ();

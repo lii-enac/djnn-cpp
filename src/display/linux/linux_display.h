@@ -21,8 +21,7 @@
 
 namespace djnn {
 
-class DRMConnector : public FatProcess
-{
+class DRMConnector : public FatProcess {
   public:
     DRMConnector (CoreProcess* parent, const string& name, int id, bool connected);
     ~DRMConnector ();
@@ -35,8 +34,7 @@ class DRMConnector : public FatProcess
     int         _id;
 };
 
-class DRMDevice : public FatProcess
-{
+class DRMDevice : public FatProcess {
   public:
     DRMDevice (CoreProcess* parent, const string& name, int fd, int min_width, int max_width, int min_height, int max_height);
     ~DRMDevice ();
@@ -48,17 +46,14 @@ class DRMDevice : public FatProcess
     int _fd;
 };
 
-class DRMUdev
-{
+class DRMUdev {
   private:
-    class DRMUdevAction : public Action
-    {
+    class DRMUdevAction : public Action {
       public:
         DRMUdevAction (DRMUdev* udev)
             : Action (nullptr, "DRMUdevAction"), _udev (udev) {}
         virtual ~DRMUdevAction () {}
-        void impl_activate ()
-        {
+        void impl_activate () {
             _udev->handle_udev_msg ();
         }
 

@@ -11,19 +11,16 @@
 namespace djnn {
 
 template <typename T>
-class TPrevious : public FatProcess
-{
+class TPrevious : public FatProcess {
   private:
-    class PreviousAction : public Action
-    {
+    class PreviousAction : public Action {
       public:
         PreviousAction (CoreProcess* parent, const string& name, TPrevious& np, const T& init_val)
             : Action (parent, name),
               _np (np),
               _prev (init_val) { finalize_construction (parent, name); }
         virtual ~PreviousAction () {}
-        void impl_activate ()
-        {
+        void impl_activate () {
             _np._output.set_value (_prev, true);
             _prev = _np._input.get_value ();
         }
@@ -36,13 +33,11 @@ class TPrevious : public FatProcess
   public:
     TPrevious (CoreProcess* parent, const string& name, const T& i_val);
     virtual ~TPrevious () { uninit_unary_couplings (this, _input, _output, _action, _coupling); }
-    void impl_activate () override
-    {
+    void impl_activate () override {
         _coupling.enable ();
         _action.activate ();
     }
-    void impl_deactivate () override
-    {
+    void impl_deactivate () override {
         _coupling.disable ();
         _action.deactivate ();
     };
@@ -76,8 +71,7 @@ TPrevious<T>::TPrevious (CoreProcess* parent, const string& name, const T& i_val
       _input (this, "input", i_val),
       _output (this, "output", i_val),
       _action (this, "action", *this, i_val),
-      _coupling (&_input, ACTIVATION, &_action, ACTIVATION)
-{
+      _coupling (&_input, ACTIVATION, &_action, ACTIVATION) {
     init_unary_couplings (_input, _output, _action, _coupling);
     finalize_construction (parent, name);
 }
@@ -85,8 +79,7 @@ TPrevious<T>::TPrevious (CoreProcess* parent, const string& name, const T& i_val
 #ifndef DJNN_NO_SERIALIZE
 // inline
 template <typename T>
-void TPrevious<T>::serialize (const string& type)
-{
+void TPrevious<T>::serialize (const string& type) {
 
     AbstractSerializer::pre_serialize (this, type);
 

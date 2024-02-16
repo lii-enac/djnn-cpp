@@ -20,8 +20,7 @@
 
 namespace djnn {
 
-class Exit : public FatProcess
-{
+class Exit : public FatProcess {
   public:
     Exit (CoreProcess* parent, const string& name, int value, bool is_model);
     virtual ~Exit ();

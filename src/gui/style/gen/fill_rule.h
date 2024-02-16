@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class FillRule : public AbstractStyle
-{
+class FillRule : public AbstractStyle {
   public:
     FillRule (CoreProcess* parent, const string& name, int rule);
     virtual ~FillRule ();
@@ -36,8 +35,7 @@ class FillRule : public AbstractStyle
     AbstractIntProperty*                    rule () { return (AbstractIntProperty*)find_child_impl ("rule"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int rule;
     };
     raw_props_t raw_props;

@@ -20,20 +20,17 @@
 namespace djnn {
 
 template <typename X>
-struct TemplatePropertyType
-{
+struct TemplatePropertyType {
     static const property_type_e type = UserDefined; // by default
 };
 
 template <typename X>
-class AbstractTemplateProperty : public SuperAbstractProperty
-{
+class AbstractTemplateProperty : public SuperAbstractProperty {
   public:
     AbstractTemplateProperty (CoreProcess* parent, const string& name, int notify_mask = notify_none)
         : SuperAbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); }
     virtual property_type_e get_property_type () const override { return TemplatePropertyType<X>::type; }
-    void                    my_set_value (const X& v, bool propagate)
-    {
+    void                    my_set_value (const X& v, bool propagate) {
         get_ref_value () = v;
         if (is_activable () && propagate) {
             notify_activation ();
@@ -65,19 +62,16 @@ class AbstractTemplateProperty : public SuperAbstractProperty
 
 template <class X>
 inline const X&
-get_property_value (const AbstractTemplateProperty<X>* ap)
-{
+get_property_value (const AbstractTemplateProperty<X>* ap) {
     return ap->get_value ();
 }
 
 template <typename X>
-class TemplateProperty : public AbstractTemplateProperty<X>
-{
+class TemplateProperty : public AbstractTemplateProperty<X> {
   public:
     TemplateProperty (CoreProcess* parent, const string& name, const X& v)
         : AbstractTemplateProperty<X> (parent, name), value (v) {}
-    CoreProcess* impl_clone (djnnstl::map<const CoreProcess*, CoreProcess*>& origs_clones) const override
-    {
+    CoreProcess* impl_clone (djnnstl::map<const CoreProcess*, CoreProcess*>& origs_clones) const override {
         error (this, "*PropertyProxy should not be cloned");
         return nullptr;
     }
@@ -97,13 +91,11 @@ class TemplateProperty : public AbstractTemplateProperty<X>
 };
 
 template <typename X>
-class TemplatePropertyProxy : public AbstractTemplateProperty<X>
-{
+class TemplatePropertyProxy : public AbstractTemplateProperty<X> {
   public:
     TemplatePropertyProxy (CoreProcess* parent, const string& name, const X& v, int notify_mask = notify_none)
         : AbstractTemplateProperty<X> (parent, name, notify_mask), value (v) {}
-    CoreProcess* impl_clone (djnnstl::map<const CoreProcess*, CoreProcess*>& origs_clones) const override
-    {
+    CoreProcess* impl_clone (djnnstl::map<const CoreProcess*, CoreProcess*>& origs_clones) const override {
         error (this, "*PropertyProxy should not be cloned");
         return nullptr;
     }

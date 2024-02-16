@@ -24,14 +24,12 @@ namespace djnn {
 
 extern djnnstl::vector<djnnstl::string> __ui_interface;
 
-class UI
-{
+class UI {
   public:
     UI (CoreProcess* parent, FatProcess* f);
     bool is_pickable () { return pickable->get_value (); }
     // void activate (FatProcess* frame) { cpick->enable (frame); }
-    void activate (FatProcess* frame)
-    {
+    void activate (FatProcess* frame) {
         /*
             if the frame was null in the UI constructor cpick was not correctly initialized
             we have to re-set the coupling dst to the actual frame.

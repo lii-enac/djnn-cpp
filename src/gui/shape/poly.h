@@ -8,8 +8,7 @@
 namespace djnn {
 class List;
 
-class PolyPoint : public AbstractGObj
-{
+class PolyPoint : public AbstractGObj {
   public:
     PolyPoint (CoreProcess* parent, const string& name, double x, double y);
     virtual ~PolyPoint ();
@@ -19,15 +18,13 @@ class PolyPoint : public AbstractGObj
     void                    draw () override;
     PolyPoint*              impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
     // notify polygon ( (grand-grand-)parent polygon-list-point)
-    void notify_change (unsigned int nm) override
-    {
+    void notify_change (unsigned int nm) override {
         _damaged |= nm;
         get_parent ()->get_parent ()->notify_change (nm);
     }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double x, y;
     };
     raw_props_t       raw_props;
@@ -36,8 +33,7 @@ class PolyPoint : public AbstractGObj
     void              impl_deactivate () override;
 };
 
-class Poly : public AbstractGShape
-{
+class Poly : public AbstractGShape {
   public:
     Poly (CoreProcess* parent, const string& name, int closed);
     virtual ~Poly ();
@@ -66,16 +62,14 @@ class Poly : public AbstractGShape
     GUIStructureHolder* _points_GH; // HACK to get access directly to GUIstructureHolder of points
 };
 
-class Polygon : public Poly
-{
+class Polygon : public Poly {
   public:
     Polygon (CoreProcess* parent, const string& name)
         : Poly (parent, name, 1){};
     virtual ~Polygon (){};
 };
 
-class Polyline : public Poly
-{
+class Polyline : public Poly {
   public:
     Polyline (CoreProcess* parent, const string& name)
         : Poly (parent, name, 0){};

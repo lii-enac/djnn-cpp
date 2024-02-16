@@ -5,12 +5,10 @@
 #include "gen/abstract_prop_homography.h"
 
 namespace djnn {
-class AbstractHomography : public AbstractPropHomography
-{
+class AbstractHomography : public AbstractPropHomography {
     /*** private Class rightTranslateBy Actions ***/
   private:
-    class RightTranslateByAction : public Action
-    {
+    class RightTranslateByAction : public Action {
       public:
         RightTranslateByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
             : Action (parent, name), _h (h) {}
@@ -23,8 +21,7 @@ class AbstractHomography : public AbstractPropHomography
 
     /*** private Class leftTranslateBy Actions ***/
   private:
-    class LeftTranslateByAction : public Action
-    {
+    class LeftTranslateByAction : public Action {
       public:
         LeftTranslateByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
             : Action (parent, name), _h (h) {}
@@ -37,8 +34,7 @@ class AbstractHomography : public AbstractPropHomography
 
     /*** private Class rightScaleBy Actions ***/
   private:
-    class RightScaleByAction : public Action
-    {
+    class RightScaleByAction : public Action {
       public:
         RightScaleByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
             : Action (parent, name), _h (h) {}
@@ -51,8 +47,7 @@ class AbstractHomography : public AbstractPropHomography
 
     /*** private Class leftScaleBy Actions ***/
   private:
-    class LeftScaleByAction : public Action
-    {
+    class LeftScaleByAction : public Action {
       public:
         LeftScaleByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
             : Action (parent, name), _h (h) {}
@@ -65,8 +60,7 @@ class AbstractHomography : public AbstractPropHomography
 
     /*** private Class rightRotateBy Actions ***/
   private:
-    class RightRotateByAction : public Action
-    {
+    class RightRotateByAction : public Action {
       public:
         RightRotateByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
             : Action (parent, name), _h (h) {}
@@ -79,8 +73,7 @@ class AbstractHomography : public AbstractPropHomography
 
     /*** private Class leftRotateBy Actions ***/
   private:
-    class LeftRotateByAction : public Action
-    {
+    class LeftRotateByAction : public Action {
       public:
         LeftRotateByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
             : Action (parent, name), _h (h) {}
@@ -93,8 +86,7 @@ class AbstractHomography : public AbstractPropHomography
 
     /*** private Class right_skew_X_By Actions ***/
   private:
-    class Right_Skew_X_ByAction : public Action
-    {
+    class Right_Skew_X_ByAction : public Action {
       public:
         Right_Skew_X_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
             : Action (parent, name), _h (h) {}
@@ -107,8 +99,7 @@ class AbstractHomography : public AbstractPropHomography
 
     /*** private Class left_skew_X_By Actions ***/
   private:
-    class Left_Skew_X_ByAction : public Action
-    {
+    class Left_Skew_X_ByAction : public Action {
       public:
         Left_Skew_X_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
             : Action (parent, name), _h (h) {}
@@ -121,8 +112,7 @@ class AbstractHomography : public AbstractPropHomography
 
     /*** private Class right_skew_Y_By Actions ***/
   private:
-    class Right_Skew_Y_ByAction : public Action
-    {
+    class Right_Skew_Y_ByAction : public Action {
       public:
         Right_Skew_Y_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
             : Action (parent, name), _h (h) {}
@@ -135,8 +125,7 @@ class AbstractHomography : public AbstractPropHomography
 
     /*** private Class left_skew_Y_By Actions ***/
   private:
-    class Left_Skew_Y_ByAction : public Action
-    {
+    class Left_Skew_Y_ByAction : public Action {
       public:
         Left_Skew_Y_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
             : Action (parent, name), _h (h) {}

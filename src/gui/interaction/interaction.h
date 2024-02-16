@@ -21,16 +21,14 @@ namespace djnn {
 
 class AbstractHomography;
 
-typedef enum State
-{
+typedef enum State {
     START,
     DRAGGING,
     RRR
 } State;
 
 class Point;
-class Vector
-{
+class Vector {
     friend Point;
 
   public:
@@ -54,8 +52,7 @@ class Vector
     double _dx, _dy;
 };
 
-class Point
-{
+class Point {
     friend Vector;
 
   public:
@@ -64,18 +61,15 @@ class Point
     Point (const Point& p)
         : _x (p._x), _y (p._y) {}
     virtual ~Point () {}
-    void set_values (double x, double y)
-    {
+    void set_values (double x, double y) {
         _x = x;
         _y = y;
     }
-    void set_values (const Point& p)
-    {
+    void set_values (const Point& p) {
         _x = p._x;
         _y = p._y;
     }
-    void set_values (Point* p)
-    {
+    void set_values (Point* p) {
         _x = p->_x;
         _y = p->_y;
     }
@@ -92,8 +86,7 @@ class Point
     double _y;
 };
 
-class Matrix4x4
-{
+class Matrix4x4 {
   public:
     Matrix4x4 ();
     Matrix4x4 (const Matrix4x4& m);
@@ -121,8 +114,7 @@ class Matrix4x4
 
 class ScaleRotateTranslate;
 
-class TouchAlive
-{
+class TouchAlive {
   public:
     TouchAlive (ScaleRotateTranslate*, Touch*); //, Action*);
     virtual ~TouchAlive ();
@@ -130,8 +122,7 @@ class TouchAlive
     Touch* _t;
 
   private:
-    class MoveTouchAction : public Action
-    {
+    class MoveTouchAction : public Action {
       public:
         MoveTouchAction (CoreProcess* parent, const string& name, TouchAlive* ta)
             : Action (parent, name), _ta (ta) {}
@@ -147,19 +138,16 @@ class TouchAlive
     Coupling _c_update;
 };
 
-class ScaleRotateTranslate : public FatProcess
-{
+class ScaleRotateTranslate : public FatProcess {
   private:
-    class ScaleRotateTranslateAction : public Action
-    {
+    class ScaleRotateTranslateAction : public Action {
       public:
         ScaleRotateTranslateAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         ~ScaleRotateTranslateAction () {}
         void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->update (); };
     };
-    class AddTouchAction : public Action
-    {
+    class AddTouchAction : public Action {
       public:
         AddTouchAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -167,8 +155,7 @@ class ScaleRotateTranslate : public FatProcess
         void impl_activate () override { ((ScaleRotateTranslate*)get_parent ())->add_touch (); };
     };
 
-    class RemoveTouchAction : public Action
-    {
+    class RemoveTouchAction : public Action {
       public:
         RemoveTouchAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}

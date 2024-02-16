@@ -25,36 +25,30 @@
 #include "core/property/text_property.h"
 
 namespace djnn {
-class AbstractDeref : public FatProcess
-{
+class AbstractDeref : public FatProcess {
   private:
-    class DerefAction : public Action
-    {
+    class DerefAction : public Action {
       public:
         DerefAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~DerefAction () {}
         void impl_activate () override { ((AbstractDeref*)get_parent ())->update_src (); };
     };
-    class GetAction : public Action
-    {
+    class GetAction : public Action {
       public:
         GetAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~GetAction () {}
-        void impl_activate () override
-        {
+        void impl_activate () override {
             ((AbstractDeref*)get_parent ())->get ();
         };
     };
-    class SetAction : public Action
-    {
+    class SetAction : public Action {
       public:
         SetAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~SetAction () {}
-        void impl_activate () override
-        {
+        void impl_activate () override {
             ((AbstractDeref*)get_parent ())->set ();
         };
     };
@@ -88,8 +82,7 @@ class AbstractDeref : public FatProcess
     bool         _src_updated;
 };
 
-class Deref : public AbstractDeref
-{
+class Deref : public AbstractDeref {
   private:
   public:
     Deref (CoreProcess* parent, const string& name, CoreProcess* ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
@@ -107,8 +100,7 @@ class Deref : public AbstractDeref
     Coupling     _cdst_to_src;
 };
 
-class DerefProperty : public AbstractDeref
-{
+class DerefProperty : public AbstractDeref {
   private:
   public:
     DerefProperty (CoreProcess* parent, const string& name, CoreProcess* ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE);
@@ -119,29 +111,25 @@ class DerefProperty : public AbstractDeref
 };
 
 template <typename T>
-class TDeref : public DerefProperty
-{
+class TDeref : public DerefProperty {
   public:
     TDeref (CoreProcess* parent, const string& name, CoreProcess* ref_prop, const string& path, djnn_dir_t dir = DJNN_IGNORE)
         : DerefProperty (parent, name, ref_prop, path, dir),
-          _value (this, "value", T ())
-    {
+          _value (this, "value", T ()) {
         _cset.init (&_value, ACTIVATION, &_set, ACTIVATION);
         finalize_construction (parent, name);
     }
 
     virtual ~TDeref () { _cset.uninit (); }
 
-    void get () override
-    {
+    void get () override {
         if (_src) {
             _cset.disable ();
             _value.set_value (PropertyTrait<T>::get_value (_src), true);
             _cset.enable ();
         }
     }
-    void set () override
-    {
+    void set () override {
         if (_src) {
             _cget.disable ();
             _src->set_value (_value.get_value (), true);
@@ -149,8 +137,7 @@ class TDeref : public DerefProperty
         }
     }
 
-    CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override
-    {
+    CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override {
         auto ref              = origs_clones.find (get_ref ());
         auto s                = ref != origs_clones.end () ? ref->second : get_ref ();
         auto res              = new TDeref<T> (nullptr, get_name (), const_cast<CoreProcess*> (s), get_str_path (), get_dir ());

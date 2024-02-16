@@ -33,8 +33,7 @@ class BackgroundColor;
 class BackgroundRect;
 
 class Picking;
-enum cursor_t
-{
+enum cursor_t {
     DJNN_ARROW,
     DJNN_UP_ARROW,
     DJNN_CROSS,
@@ -59,8 +58,7 @@ enum cursor_t
     DJNN_DRAG_LINK
 };
 
-class WinImpl
-{
+class WinImpl {
   public:
     WinImpl ()
         : _picking_view (nullptr) {}
@@ -82,14 +80,11 @@ class WinImpl
     Picking* _picking_view;
 };
 
-class Window : public FatProcess
-{
-    class UndelayedSpike : public FatProcess
-    {
+class Window : public FatProcess {
+    class UndelayedSpike : public FatProcess {
       public:
         UndelayedSpike (Window* parent, const string& name)
-            : FatProcess (name)
-        {
+            : FatProcess (name) {
             set_is_model (true);
             finalize_construction (parent, name);
         }
@@ -99,43 +94,37 @@ class Window : public FatProcess
         void impl_deactivate () override{};
     };
 
-    class ScreenshotAction : public Action
-    {
+    class ScreenshotAction : public Action {
       public:
         ScreenshotAction (Window* parent, const string& name)
             : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->perform_screenshot (); }
     };
-    class OpacityAction : public Action
-    {
+    class OpacityAction : public Action {
       public:
         OpacityAction (Window* parent, const string& name)
             : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->set_opacity (); }
     };
-    class BackgroundOpacityAction : public Action
-    {
+    class BackgroundOpacityAction : public Action {
       public:
         BackgroundOpacityAction (Window* parent, const string& name)
             : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
     };
-    class BackgroundColorAction : public Action
-    {
+    class BackgroundColorAction : public Action {
       public:
         BackgroundColorAction (Window* parent, const string& name)
             : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
     };
-    class GeometryAction : public Action
-    {
+    class GeometryAction : public Action {
       public:
         GeometryAction (Window* parent, const string& name)
             : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->update_geometry (); }
     };
-    class MinimumSizeAction : public Action
-    {
+    class MinimumSizeAction : public Action {
       public:
         MinimumSizeAction (Window* parent, const string& name)
             : Action (parent, name) {}
@@ -281,18 +270,15 @@ class Window : public FatProcess
     Coupling*       _c_geometry_height;
 };
 
-class Cursor : public FatProcess
-{
-    class UpdateCursorAction : public Action
-    {
+class Cursor : public FatProcess {
+    class UpdateCursorAction : public Action {
       public:
         UpdateCursorAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         ~UpdateCursorAction () {}
         void impl_activate () override;
     };
-    class UpdateCursorShapeAction : public Action
-    {
+    class UpdateCursorShapeAction : public Action {
       public:
         UpdateCursorShapeAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -312,8 +298,7 @@ class Cursor : public FatProcess
     CoreProcess* find_child_impl (const string& n) override;
 
   private:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int    hot_x;
         int    hot_y;
         string path;

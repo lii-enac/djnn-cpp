@@ -9,21 +9,18 @@
 
 namespace djnn {
 
-class AbstractSObjImpl
-{
+class AbstractSObjImpl {
   public:
     virtual ~AbstractSObjImpl ();
 };
 
 // place holder fo gen_prop
-class AudioScene : public CoreProcess
-{
+class AudioScene : public CoreProcess {
   public:
     CoreProcess* damaged () { return nullptr; }
 };
 
-class AbstractSObj : public FatProcess
-{
+class AbstractSObj : public FatProcess {
   public:
     AbstractSObj (CoreProcess* parent, const string& name)
         : FatProcess (name), _impl (nullptr) {}

@@ -23,8 +23,7 @@
 #include "gui/transformation/abstract_transformation.h"
 
 namespace djnn {
-class AbstractPropHomography : public AbstractTransformation
-{
+class AbstractPropHomography : public AbstractTransformation {
   public:
     AbstractPropHomography (CoreProcess* parent, const string& name, double m11 = 1, double m12 = 0, double m13 = 0, double m14 = 0, double m21 = 0, double m22 = 1, double m23 = 0, double m24 = 0, double m31 = 0, double m32 = 0, double m33 = 1, double m34 = 0, double m41 = 0, double m42 = 0, double m43 = 0, double m44 = 1);
     virtual ~AbstractPropHomography ();
@@ -50,8 +49,7 @@ class AbstractPropHomography : public AbstractTransformation
     AbstractDoubleProperty*                 m44 () { return (AbstractDoubleProperty*)find_child_impl ("m44"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double m11;
         double m12;
         double m13;

@@ -28,8 +28,7 @@
 namespace djnn {
 extern cairo_t *cur_cairo_state, *cur_cairo_picking_state;
 
-class TextImpl : public AbstractGObjImpl
-{
+class TextImpl : public AbstractGObjImpl {
     friend class CairoBackend;
 
   public:
@@ -47,8 +46,7 @@ class TextImpl : public AbstractGObjImpl
     int          _posX, _posY, _width, _height, _b;
     PangoLayout* _layout;
 };
-class ShapeImpl : public AbstractGObjImpl
-{
+class ShapeImpl : public AbstractGObjImpl {
   public:
     ShapeImpl (cairo_pattern_t* p, int x, int y, int w, int h)
         : _pattern (p), _x (x), _y (y), _w (w), _h (h) {}
@@ -65,8 +63,7 @@ class ShapeImpl : public AbstractGObjImpl
 };
 
 class CairoContextManager;
-class CairoBackend : public AbstractBackend
-{
+class CairoBackend : public AbstractBackend {
   public:
     static CairoBackend* instance ();
     virtual ~CairoBackend ();

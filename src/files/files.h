@@ -28,8 +28,7 @@
 #include "files/files-dev.h"
 
 namespace djnn {
-typedef enum djn_dir_event
-{
+typedef enum djn_dir_event {
     DJN_CHANGE,
     DJN_DELETE,
     DJN_RENAME,
@@ -40,11 +39,9 @@ typedef enum djn_dir_event
 struct DirectoryObserverData;
 extern djnnstl::vector<djnnstl::string> loadedModules;
 
-class FileReader : public FatProcess
-{
+class FileReader : public FatProcess {
   private:
-    class FileReaderAction : public Action
-    {
+    class FileReaderAction : public Action {
       public:
         FileReaderAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -67,19 +64,16 @@ class FileReader : public FatProcess
     FileReaderAction* _action;
 };
 
-class DirectoryObserver : public FatProcess, public ExternalSource
-{
+class DirectoryObserver : public FatProcess, public ExternalSource {
   private:
-    class UpdateAction : public Action
-    {
+    class UpdateAction : public Action {
       public:
         UpdateAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         void impl_activate () override { ((DirectoryObserver*)get_parent ())->iterate (); };
         void impl_deactivate () override {}
     };
-    class ChangePathAction : public Action
-    {
+    class ChangePathAction : public Action {
       public:
         ChangePathAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -108,8 +102,7 @@ class DirectoryObserver : public FatProcess, public ExternalSource
     ProcessCollector _added_files, _removed_files;
 };
 
-class File : public FatProcess
-{
+class File : public FatProcess {
   public:
     File (CoreProcess* parent, const string& name, const string& path, const string& filename, bool is_dir)
         : FatProcess (name), _path (this, "full_path", path), _filename (this, "filename", filename),

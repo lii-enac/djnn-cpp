@@ -4,8 +4,7 @@ class IntProperty;
 class Binding;
 class Connector; // in base :-/ => put all visitor stuff in its own module, not in core?
 
-class Visitor
-{
+class Visitor {
   public:
     virtual void visit (CoreProcess*) {}
     virtual void visit (IntProperty*) {}

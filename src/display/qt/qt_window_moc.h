@@ -29,15 +29,13 @@ namespace djnn {
 class Picking;
 
 // no signal for QWidget events!!!
-class MyQWidget : public QTWIDGET
-{
+class MyQWidget : public QTWIDGET {
     Q_OBJECT
     // moc src/display/qt/my_qwindow.h > src/display/qt/moc_MyQWindow.cpp
 
   public:
     MyQWidget (Window* w, QtWindow* qtw);
-    virtual ~MyQWidget ()
-    {
+    virtual ~MyQWidget () {
         // delete _picking_view;
     }
     virtual Picking* get_picking_view () { return nullptr; }

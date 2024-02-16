@@ -27,8 +27,7 @@ namespace djnn {
 
 extern bool in_init;
 
-class PhidgetsMonitor : public FatProcess
-{
+class PhidgetsMonitor : public FatProcess {
   public:
     PhidgetsMonitor (CoreProcess* parent, const string& n)
         : FatProcess (n), _handle (nullptr) {}
@@ -42,11 +41,9 @@ class PhidgetsMonitor : public FatProcess
     PhidgetManagerHandle _handle;
 };
 
-class VoltageInputChannel : public FatProcess
-{
+class VoltageInputChannel : public FatProcess {
   private:
-    class ChangeRateAction : public Action
-    {
+    class ChangeRateAction : public Action {
       public:
         ChangeRateAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -55,8 +52,7 @@ class VoltageInputChannel : public FatProcess
       protected:
         void impl_activate () override { ((VoltageInputChannel*)get_parent ())->update_rate (); }
     };
-    class ChangeTriggerAction : public Action
-    {
+    class ChangeTriggerAction : public Action {
       public:
         ChangeTriggerAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -89,8 +85,7 @@ class VoltageInputChannel : public FatProcess
     Coupling *                _c_rate, *_c_trigger;
     PhidgetVoltageInputHandle _sw_ch;
 };
-class IFaceKit888 : public FatProcess
-{
+class IFaceKit888 : public FatProcess {
     friend PhidgetsMonitor;
 
   public:

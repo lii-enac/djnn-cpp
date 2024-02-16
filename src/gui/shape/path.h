@@ -8,8 +8,7 @@
 namespace djnn {
 class List;
 
-class PathPoint : public AbstractGObj
-{
+class PathPoint : public AbstractGObj {
   public:
     PathPoint (CoreProcess* parent, const string& name, double x, double y);
     virtual ~PathPoint ();
@@ -18,15 +17,13 @@ class PathPoint : public AbstractGObj
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override = 0;
     // notify polygon ( (grand-grand-)parent polygon-list-point)
-    void notify_change (unsigned int nm) override
-    {
+    void notify_change (unsigned int nm) override {
         _damaged |= nm;
         get_parent ()->get_parent ()->notify_change (nm);
     }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double x, y;
     };
     raw_props_t       raw_props;
@@ -35,8 +32,7 @@ class PathPoint : public AbstractGObj
     void              impl_deactivate () override;
 };
 
-class PathMove : public PathPoint
-{
+class PathMove : public PathPoint {
   public:
     PathMove (CoreProcess* parent, const string& name, double x, double y)
         : PathPoint (parent, name, x, y) {}
@@ -44,8 +40,7 @@ class PathMove : public PathPoint
     PathMove* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class PathLine : public PathPoint
-{
+class PathLine : public PathPoint {
   public:
     PathLine (CoreProcess* parent, const string& name, double x, double y)
         : PathPoint (parent, name, x, y) {}
@@ -53,8 +48,7 @@ class PathLine : public PathPoint
     PathLine* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class PathQuadratic : public AbstractGObj
-{
+class PathQuadratic : public AbstractGObj {
   public:
     PathQuadratic (CoreProcess* parent, const string& name, double x1, double y1, double x, double y);
     virtual ~PathQuadratic ();
@@ -67,8 +61,7 @@ class PathQuadratic : public AbstractGObj
     PathQuadratic*          impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
   private:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double x1, y1, x, y;
     };
     raw_props_t       raw_props;
@@ -77,8 +70,7 @@ class PathQuadratic : public AbstractGObj
     void              impl_deactivate () override;
 };
 
-class PathCubic : public AbstractGObj
-{
+class PathCubic : public AbstractGObj {
   public:
     PathCubic (CoreProcess* parent, const string& name, double x1, double y1, double x2, double y2, double x, double y);
     virtual ~PathCubic ();
@@ -93,8 +85,7 @@ class PathCubic : public AbstractGObj
     PathCubic*              impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
   private:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double x1, y1, x2, y2, x, y;
     };
     raw_props_t       raw_props;
@@ -103,8 +94,7 @@ class PathCubic : public AbstractGObj
     void              impl_deactivate () override;
 };
 
-class PathArc : public AbstractGObj
-{
+class PathArc : public AbstractGObj {
   public:
     PathArc (CoreProcess* parent, const string& name, double rx, double ry, double rotx, double fl, double swfl, double x,
              double y);
@@ -121,8 +111,7 @@ class PathArc : public AbstractGObj
     PathArc*                impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
   private:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double rx, ry, rotx, fl, swfl, x, y;
     };
     raw_props_t       raw_props;
@@ -131,8 +120,7 @@ class PathArc : public AbstractGObj
     void              impl_deactivate () override;
 };
 
-class PathClosure : public AbstractGObj
-{
+class PathClosure : public AbstractGObj {
   public:
     PathClosure (CoreProcess* parent, const string& name);
     virtual ~PathClosure () {}
@@ -140,18 +128,15 @@ class PathClosure : public AbstractGObj
     PathClosure* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
   private:
-    void impl_activate () override
-    {
+    void impl_activate () override {
         AbstractGObj::impl_activate ();
     }
-    void impl_deactivate () override
-    {
+    void impl_deactivate () override {
         AbstractGObj::impl_deactivate ();
     }
 };
 
-class Path : public AbstractGShape
-{
+class Path : public AbstractGShape {
   public:
     Path (CoreProcess* parent, const string& name);
     Path (CoreProcess* parent, const string& name, const string& path_spec);

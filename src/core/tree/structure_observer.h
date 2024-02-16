@@ -9,8 +9,7 @@ namespace djnn {
 class FatProcess;
 class CoreProcess;
 
-class StructureObserver
-{
+class StructureObserver {
   public:
     StructureObserver (){};
     virtual ~StructureObserver (){};

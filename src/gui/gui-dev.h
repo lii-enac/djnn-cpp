@@ -38,8 +38,7 @@ typedef unsigned int named_color_t;
 
 extern int djn__GrphIsInClip;
 
-typedef enum
-{
+typedef enum {
     djnStrokeUndef,
     djnStrokeNone,
     djnStrokeColor

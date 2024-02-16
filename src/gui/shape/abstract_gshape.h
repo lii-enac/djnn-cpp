@@ -23,15 +23,13 @@
 
 namespace djnn {
 
-class AbstractGShape : public AbstractGObj, public PickUI
-{
+class AbstractGShape : public AbstractGObj, public PickUI {
   public:
     AbstractGShape (CoreProcess* parent, const string& name, int z_order = 0);
     virtual ~AbstractGShape ();
     FatProcess* matrix () { return _matrix; }
     FatProcess* inverted_matrix () { return _inverted_matrix; }
-    void        set_origin (double x, double y)
-    {
+    void        set_origin (double x, double y) {
         _origin_x->set_value (x, true);
         _origin_y->set_value (y, true);
     }
@@ -63,13 +61,11 @@ class AbstractGShape : public AbstractGObj, public PickUI
     CouplingWithData* _c_z_prop;
 };
 
-inline bool is_pickable (AbstractGShape* s)
-{
+inline bool is_pickable (AbstractGShape* s) {
     return s->has_ui () && s->ui ()->is_pickable ();
 }
 
-class Touch : public FatProcess
-{
+class Touch : public FatProcess {
   public:
     Touch (CoreProcess* parent, const string& name, int id, double init_x, double init_y, double init_pressure);
     void        impl_activate () override{};
@@ -95,8 +91,7 @@ class Touch : public FatProcess
     PickUI*     current_shape () { return dynamic_cast<PickUI*> (_last_shape->get_value ()); }
     void        set_init_shape (PickUI* s) { _shape = s; }
     void        set_touch_local_coords (PickUI* t, double x, double y, bool is_move);
-    void        set_current_shape (PickUI* s)
-    {
+    void        set_current_shape (PickUI* s) {
         CoreProcess* ss = dynamic_cast<CoreProcess*> (s);
         if (ss)
             _last_shape->set_value ((CoreProcess*)ss, true);

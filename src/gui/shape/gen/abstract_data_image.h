@@ -25,8 +25,7 @@ using AbstractTextpProperty = void; // hack to make 'AbstractTextpProperty* data
 #include "gui/shape/abstract_gshape.h"
 
 namespace djnn {
-class AbstractDataImage : public AbstractImage
-{
+class AbstractDataImage : public AbstractImage {
   public:
     AbstractDataImage (CoreProcess* parent, const string& name, string*& data, int format, double x, double y, double width, double height);
     virtual ~AbstractDataImage ();
@@ -38,8 +37,7 @@ class AbstractDataImage : public AbstractImage
     AbstractIntProperty*                    format () { return (AbstractIntProperty*)find_child_impl ("format"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         string* data;
         int     format;
     };

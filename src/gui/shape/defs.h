@@ -4,8 +4,7 @@
 
 namespace djnn {
 
-class Defs : public Container
-{
+class Defs : public Container {
   public:
     Defs (CoreProcess* parent, const string& name);
     virtual ~Defs () override;

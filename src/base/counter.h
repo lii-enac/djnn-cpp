@@ -22,12 +22,10 @@
 
 namespace djnn {
 
-class Counter : public FatProcess
-{
+class Counter : public FatProcess {
   private:
     /* RESET ACTION */
-    class CounterResetAction : public Action
-    {
+    class CounterResetAction : public Action {
       public:
         CounterResetAction (CoreProcess* parent, const string& name, bool* reset_occurred)
             : Action (parent, name), _reset_occurred (reset_occurred){};
@@ -40,15 +38,13 @@ class Counter : public FatProcess
     };
 
     /* STEP ACTION */
-    class CounterStepAction : public Action
-    {
+    class CounterStepAction : public Action {
       public:
         CounterStepAction (CoreProcess* parent, const string& name, DoubleProperty* init, DoubleProperty* delta, DoubleProperty* output, bool* reset_occurred)
             : Action (parent, name), _init (init), _delta (delta), _output (output), _reset_occurred (reset_occurred){};
 
         virtual ~CounterStepAction () {}
-        void impl_activate () override
-        {
+        void impl_activate () override {
             /* if reset occured wew send _init else (_output + _delta ) */
             if (*_reset_occurred) {
                 _output->set_value (_init->get_value (), true);

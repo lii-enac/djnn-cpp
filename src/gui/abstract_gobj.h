@@ -31,18 +31,15 @@ class Window;
 class Layer;
 extern bool gui_initialized;
 
-class AbstractGObjImpl
-{
+class AbstractGObjImpl {
   public:
     virtual ~AbstractGObjImpl ();
 };
 
-class AbstractGObj : public FatProcess
-{
+class AbstractGObj : public FatProcess {
   public:
     AbstractGObj (CoreProcess* parent, const string& name)
-        : FatProcess (name), _frame (nullptr), _damaged (notify_none), _impl (nullptr)
-    {
+        : FatProcess (name), _frame (nullptr), _damaged (notify_none), _impl (nullptr) {
         // if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
     virtual ~AbstractGObj (){};
@@ -55,8 +52,7 @@ class AbstractGObj : public FatProcess
     void update_drawing () override;
     void impl_activate () override;
     void impl_deactivate () override;
-    void notify_change (unsigned int nm) override
-    {
+    void notify_change (unsigned int nm) override {
         _damaged |= nm;
         FatProcess::notify_change (nm);
     }

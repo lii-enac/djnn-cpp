@@ -22,8 +22,7 @@ namespace djnn {
 
 class Window;
 
-class BackgroundRect : public Component, public PickUI
-{
+class BackgroundRect : public Component, public PickUI {
   public:
     BackgroundRect (CoreProcess* parent, const string&);
     ~BackgroundRect ();

@@ -9,30 +9,25 @@ class Window;
 
 class WinImpl;
 
-class AbstractDisplay
-{
+class AbstractDisplay {
   public:
     AbstractDisplay ()
-        : _window (nullptr)
-    {
+        : _window (nullptr) {
     }
 
-    virtual ~AbstractDisplay ()
-    {
+    virtual ~AbstractDisplay () {
     }
 
     virtual WinImpl*
     create_window (Window* win, const string& title, double x, double y, double w, double h) = 0;
 
     void
-    set_window (Window* w)
-    {
+    set_window (Window* w) {
         _window = w;
     }
 
     Window*
-    window ()
-    {
+    window () {
         return _window;
     }
 

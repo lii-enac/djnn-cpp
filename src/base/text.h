@@ -21,11 +21,9 @@
 
 namespace djnn {
 
-class TextPrinter : public FatProcess
-{
+class TextPrinter : public FatProcess {
   private:
-    class TextPrinterAction : public Action
-    {
+    class TextPrinterAction : public Action {
       public:
         TextPrinterAction (CoreProcess* parent, const string& name, TextProperty* input)
             : Action (parent, name), _input (input) {}
@@ -77,8 +75,7 @@ template <>
 const char name_info<TextContainerAction>::serialize[];
 
 template <typename Action, typename Result>
-class TextBinaryOperator : public FatProcess
-{
+class TextBinaryOperator : public FatProcess {
   public:
     TextBinaryOperator (CoreProcess* parent, const string& name, const string& l_val, const string& r_val)
         : FatProcess (name),
@@ -87,8 +84,7 @@ class TextBinaryOperator : public FatProcess
           _result (this, "output", Action::perform (l_val, r_val)),
           _action (this, "action", *this),
           _c_left (&_left, ACTIVATION, &_action, ACTIVATION),
-          _c_right (&_right, ACTIVATION, &_action, ACTIVATION)
-    {
+          _c_right (&_right, ACTIVATION, &_action, ACTIVATION) {
         init_binary_couplings (_left, _right, _result, _action, _c_left, _c_right);
         finalize_construction (parent, name);
     }
@@ -99,31 +95,26 @@ class TextBinaryOperator : public FatProcess
           _result (this, "output", Action::default_value ()),
           _action (this, "action", *this),
           _c_left (&_left, ACTIVATION, &_action, ACTIVATION),
-          _c_right (&_right, ACTIVATION, &_action, ACTIVATION)
-    {
+          _c_right (&_right, ACTIVATION, &_action, ACTIVATION) {
         init_binary_couplings (_left, _right, _result, _action, _c_left, _c_right);
         finalize_construction (parent, name);
     }
-    virtual ~TextBinaryOperator ()
-    {
+    virtual ~TextBinaryOperator () {
         uninit_binary_couplings (this, _left, _right, _result, _action, _c_left, _c_right);
     }
-    void impl_activate () override
-    {
+    void impl_activate () override {
         _c_left.enable ();
         _c_right.enable ();
         _action.activate ();
     }
-    void impl_deactivate () override
-    {
+    void impl_deactivate () override {
         _c_left.disable ();
         _c_right.disable ();
         _action.deactivate ();
     }
 
   protected:
-    void set_parent (CoreProcess* parent) override
-    {
+    void set_parent (CoreProcess* parent) override {
         // in case of re-parenting remove edge dependency in graph
         if (get_parent ()) {
             remove_state_dependency (get_parent (), &_action);
@@ -140,14 +131,12 @@ class TextBinaryOperator : public FatProcess
     Coupling     _c_left, _c_right;
 };
 
-class TextCatenatorAction : public Action
-{
+class TextCatenatorAction : public Action {
   public:
     TextCatenatorAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextCatenatorAction, TextProperty>& tbo)
         : Action (parent, name), _tbo (tbo) { finalize_construction (parent, name); }
     virtual ~TextCatenatorAction () {}
-    void impl_activate () override
-    {
+    void impl_activate () override {
         const string& head = _tbo._left.get_value ();
         const string& tail = _tbo._right.get_value ();
         // string out = head + tail;
@@ -161,14 +150,12 @@ class TextCatenatorAction : public Action
     TextBinaryOperator<TextCatenatorAction, TextProperty>& _tbo;
 };
 
-class TextComparatorAction : public Action
-{
+class TextComparatorAction : public Action {
   public:
     TextComparatorAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextComparatorAction, BoolProperty>& tbo)
         : Action (parent, name), _tbo (tbo) { finalize_construction (parent, name); }
     virtual ~TextComparatorAction () {}
-    void impl_activate ()
-    {
+    void impl_activate () {
         const string& left  = _tbo._left.get_value ();
         const string& right = _tbo._right.get_value ();
         //_tbo._result.set_value (left.compare (right) == 0, true);
@@ -181,14 +168,12 @@ class TextComparatorAction : public Action
     TextBinaryOperator<TextComparatorAction, BoolProperty>& _tbo;
 };
 
-class TextContainerAction : public Action
-{
+class TextContainerAction : public Action {
   public:
     TextContainerAction (CoreProcess* parent, const string& name, TextBinaryOperator<TextContainerAction, BoolProperty>& tbo)
         : Action (parent, name), _tbo (tbo) { finalize_construction (parent, name); }
     virtual ~TextContainerAction () {}
-    void impl_activate ()
-    {
+    void impl_activate () {
         const string& left  = _tbo._left.get_value ();
         const string& right = _tbo._right.get_value ();
         _tbo._result.set_value (perform (left, right), true);
@@ -204,17 +189,14 @@ typedef TextBinaryOperator<TextCatenatorAction, TextProperty>  TextCatenator;
 typedef TextBinaryOperator<TextComparatorAction, BoolProperty> TextComparator;
 typedef TextBinaryOperator<TextContainerAction, BoolProperty>  TextContainer;
 
-class TextAccumulator : public FatProcess
-{
+class TextAccumulator : public FatProcess {
   private:
-    class AccumulateAction : public Action
-    {
+    class AccumulateAction : public Action {
       public:
         AccumulateAction (CoreProcess* parent, const string& name, TextAccumulator& ta)
             : Action (parent, name), _ta (ta) {}
         virtual ~AccumulateAction () {}
-        void impl_activate () override
-        {
+        void impl_activate () override {
             string new_state = _ta._state.get_value () + _ta._input.get_value ();
             _ta._state.set_value (new_state, true);
         }
@@ -222,14 +204,12 @@ class TextAccumulator : public FatProcess
       private:
         TextAccumulator& _ta;
     };
-    class DeleteAction : public Action
-    {
+    class DeleteAction : public Action {
       public:
         DeleteAction (CoreProcess* parent, const string& name, TextAccumulator& ta)
             : Action (parent, name), _ta (ta) {}
         virtual ~DeleteAction () {}
-        void impl_activate () override
-        {
+        void impl_activate () override {
             int    sz        = _ta._state.get_value ().size ();
             string new_state = "";
             if (sz > 1)
@@ -258,17 +238,14 @@ class TextAccumulator : public FatProcess
     Coupling         _c_acc, _c_del;
 };
 
-class DoubleFormatter : public FatProcess
-{
+class DoubleFormatter : public FatProcess {
   private:
-    class DoubleFormatterAction : public Action
-    {
+    class DoubleFormatterAction : public Action {
       public:
         DoubleFormatterAction (CoreProcess* parent, const string& name, DoubleFormatter& df)
             : Action (parent, name), _df (df) { finalize_construction (parent, name); }
         virtual ~DoubleFormatterAction () {}
-        void impl_activate () override
-        {
+        void impl_activate () override {
             int         decimal = _df._decimal.get_value ();
             double      value   = _df._input.get_value ();
             string      res     = djnnstl::to_string (value);

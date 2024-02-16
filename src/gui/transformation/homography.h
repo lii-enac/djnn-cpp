@@ -7,8 +7,7 @@
 
 namespace djnn {
 
-class Homography : public AbstractHomography
-{
+class Homography : public AbstractHomography {
   public:
     Homography (CoreProcess* parent, const string& name, double m11 = 1, double m12 = 0, double m13 = 0, double m14 = 0,
                 double m21 = 0, double m22 = 1, double m23 = 0, double m24 = 0,
@@ -25,8 +24,7 @@ class Homography : public AbstractHomography
     FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class GradientHomography : public AbstractHomography
-{
+class GradientHomography : public AbstractHomography {
   public:
     GradientHomography (CoreProcess* parent, const string& name, double m11 = 1, double m12 = 0, double m13 = 0,
                         double m21 = 0, double m22 = 1, double m23 = 0,
@@ -39,8 +37,7 @@ class GradientHomography : public AbstractHomography
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class SimpleGradientTransform : public AbstractHomography
-{
+class SimpleGradientTransform : public AbstractHomography {
   public:
     SimpleGradientTransform (CoreProcess* parent, const string& name, double a, double b, double c, double d, double e,
                              double f);

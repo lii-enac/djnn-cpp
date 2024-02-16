@@ -5,8 +5,7 @@
 #include "gui/shape/abstract_gshape.h"
 
 namespace djnn {
-class RectangleClip : public AbstractPropRectangleClip
-{
+class RectangleClip : public AbstractPropRectangleClip {
   public:
     RectangleClip (CoreProcess* parent, const string& name, double x, double y, double width, double height);
     RectangleClip*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;

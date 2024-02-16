@@ -23,8 +23,7 @@
 #include "core/ontology/process.h"
 
 namespace djnn {
-class AbstractPropSound : public AbstractSObj
-{
+class AbstractPropSound : public AbstractSObj {
   public:
     AbstractPropSound (CoreProcess* parent, const string& name, double gain, double lowpass_gain, double lowpass_freq, double x, double y, double z, double pitch_mul, int loop);
     virtual ~AbstractPropSound ();
@@ -42,8 +41,7 @@ class AbstractPropSound : public AbstractSObj
     AbstractIntProperty*                    loop () { return (AbstractIntProperty*)find_child_impl ("loop"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double gain;
         double lowpass_gain;
         double lowpass_freq;

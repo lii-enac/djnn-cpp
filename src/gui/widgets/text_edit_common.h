@@ -20,8 +20,7 @@
 
 namespace djnn {
 
-class SimpleText : public AbstractGShape
-{
+class SimpleText : public AbstractGShape {
   public:
     SimpleText (CoreProcess* parent, const string& name, double x, double y, const string& text);
     virtual ~SimpleText ();
@@ -38,8 +37,7 @@ class SimpleText : public AbstractGShape
     virtual CoreProcess* find_child_impl (const string&) override;
 
   private:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double x, y;
         string text;
     };

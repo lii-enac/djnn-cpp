@@ -5,7 +5,7 @@ Language:        Cpp
 BasedOnStyle: LLVM
 IndentWidth: 4
 UseTab: Never
-BreakBeforeBraces: Mozilla 
+BreakBeforeBraces: Attach #Mozilla 
 ColumnLimit: 0
 PointerAlignment: Left
 ReferenceAlignment: Left

@@ -23,8 +23,7 @@
 #include "gui/shape/abstract_gshape.h"
 
 namespace djnn {
-class AbstractPropEllipse : public AbstractGShape
-{
+class AbstractPropEllipse : public AbstractGShape {
   public:
     AbstractPropEllipse (CoreProcess* parent, const string& name, double cx, double cy, double rx, double ry);
     virtual ~AbstractPropEllipse ();
@@ -38,8 +37,7 @@ class AbstractPropEllipse : public AbstractGShape
     AbstractDoubleProperty*                 ry () { return (AbstractDoubleProperty*)find_child_impl ("ry"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double cx;
         double cy;
         double rx;

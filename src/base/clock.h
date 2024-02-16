@@ -25,10 +25,8 @@
 
 namespace djnn {
 
-class Clock : public FatProcess, public djnn_internal::Time::Timer
-{
-    class ClockUpdateAction : public Action
-    {
+class Clock : public FatProcess, public djnn_internal::Time::Timer {
+    class ClockUpdateAction : public Action {
       public:
         ClockUpdateAction (CoreProcess* parent, const string& name)
             : Action (parent, name){};

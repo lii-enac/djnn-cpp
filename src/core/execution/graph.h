@@ -26,8 +26,7 @@ using vertices_t         = djnnstl::list<Vertex*>;
 using edges_t            = djnnstl::vector<Vertex*>;
 using ordered_vertices_t = djnnstl::vector<Vertex*>;
 
-class Vertex
-{
+class Vertex {
   public:
     // constructor
     Vertex (CoreProcess* c);
@@ -79,8 +78,7 @@ class Vertex
     vertices_t::iterator       _pos;
 };
 
-class Graph
-{
+class Graph {
   public:
     // constructor
     static Graph& instance ();

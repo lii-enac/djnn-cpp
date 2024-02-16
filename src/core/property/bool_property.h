@@ -21,8 +21,7 @@
 
 namespace djnn {
 
-class AbstractBoolProperty : public AbstractSimpleProperty
-{
+class AbstractBoolProperty : public AbstractSimpleProperty {
   public:
     AbstractBoolProperty (CoreProcess* parent, const string& name, int notify_mask = notify_none);
     virtual ~AbstractBoolProperty ();
@@ -56,8 +55,7 @@ class AbstractBoolProperty : public AbstractSimpleProperty
 #endif
 };
 
-class BoolProperty : public AbstractBoolProperty
-{
+class BoolProperty : public AbstractBoolProperty {
   public:
     BoolProperty (CoreProcess* parent, const string& name, bool v)
         : AbstractBoolProperty (parent, name), value (v) { finalize_construction (parent, name); }
@@ -71,8 +69,7 @@ class BoolProperty : public AbstractBoolProperty
     bool value;
 };
 
-class BoolPropertyProxy : public AbstractBoolProperty
-{
+class BoolPropertyProxy : public AbstractBoolProperty {
   public:
     BoolPropertyProxy (CoreProcess* parent, const string& name, bool& v, int notify_mask = notify_none)
         : AbstractBoolProperty (parent, name, notify_mask), value (v) { finalize_construction (parent, name); }

@@ -21,8 +21,7 @@
 
 namespace djnn {
 
-class DRMWindow : public WinImpl
-{
+class DRMWindow : public WinImpl {
   public:
     DRMWindow (Window* win, const string& title, double x, double y, double w, double h);
     virtual ~DRMWindow ();
@@ -31,8 +30,7 @@ class DRMWindow : public WinImpl
     void        flip_page_fb (uint32_t fb);
     void        set_cursor (const string& path, int hotX, int hotY) override {}
     void        set_cursor (int cursor_shape) override {}
-    FatProcess* get_vblank ()
-    {
+    FatProcess* get_vblank () {
         if (_conn == nullptr)
             return nullptr;
         else

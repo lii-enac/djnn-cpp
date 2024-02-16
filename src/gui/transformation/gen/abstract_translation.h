@@ -23,8 +23,7 @@
 #include "gui/transformation/abstract_transformation.h"
 
 namespace djnn {
-class AbstractTranslation : public AbstractTransformation
-{
+class AbstractTranslation : public AbstractTransformation {
   public:
     AbstractTranslation (CoreProcess* parent, const string& name, double tx, double ty);
     virtual ~AbstractTranslation ();
@@ -36,8 +35,7 @@ class AbstractTranslation : public AbstractTransformation
     AbstractDoubleProperty*                 ty () { return (AbstractDoubleProperty*)find_child_impl ("ty"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double tx;
         double ty;
     };

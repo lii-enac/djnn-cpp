@@ -18,8 +18,7 @@
 
 namespace djnn {
 
-class Spike : public FatProcess
-{
+class Spike : public FatProcess {
   public:
     Spike (CoreProcess* parent, const string& name, bool model = true)
         : FatProcess (name, model) { finalize_construction (parent, name); };

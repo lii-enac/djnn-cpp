@@ -3,8 +3,7 @@
 #include "gui/shape/path.h"
 
 namespace djnn {
-class PathClip : public Path
-{
+class PathClip : public Path {
   public:
     PathClip (CoreProcess* parent, const string& name)
         : Path (parent, name) {}

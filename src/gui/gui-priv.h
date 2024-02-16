@@ -22,8 +22,7 @@
 namespace djnn {
 
 typedef djnnstl::vector<djnnstl::pair<CoreProcess*, size_t>> children_t; // TODO better structure ??
-class GUIStructureHolder : public FatProcess
-{
+class GUIStructureHolder : public FatProcess {
   public:
     GUIStructureHolder (FatProcess* content)
         : FatProcess ("GUIStructureHolder_of_" + content->get_debug_name ()), content_process (content) {}
@@ -46,8 +45,7 @@ class GUIStructureHolder : public FatProcess
 
 typedef djnnstl::map<CoreProcess*, GUIStructureHolder*>           structures_t;
 typedef djnnstl::map<CoreProcess*, GUIStructureHolder*>::iterator structures_t_it;
-class GUIStructureObserver : public StructureObserver
-{
+class GUIStructureObserver : public StructureObserver {
   public:
     GUIStructureObserver () {}
     virtual ~GUIStructureObserver () override;
@@ -67,12 +65,10 @@ class GUIStructureObserver : public StructureObserver
     structures_t _structure_map;
 };
 
-class GUIMouseButton : public FatProcess
-{
+class GUIMouseButton : public FatProcess {
   public:
     GUIMouseButton (CoreProcess* parent, const string& name);
-    ~GUIMouseButton ()
-    {
+    ~GUIMouseButton () {
         delete _press;
         delete _release;
     }
@@ -85,13 +81,11 @@ class GUIMouseButton : public FatProcess
     FatProcess *_press, *_release;
 };
 
-class GUIMouse : public FatProcess
-{
+class GUIMouse : public FatProcess {
   public:
     GUIMouse (CoreProcess* parent, const string& name);
     ~GUIMouse ();
-    void impl_activate ()
-    {
+    void impl_activate () {
         _left->activate ();
         _right->activate ();
         _middle->activate ();

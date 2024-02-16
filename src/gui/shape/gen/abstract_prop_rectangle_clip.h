@@ -23,8 +23,7 @@
 #include "gui/shape/abstract_gshape.h"
 
 namespace djnn {
-class AbstractPropRectangleClip : public AbstractGShape
-{
+class AbstractPropRectangleClip : public AbstractGShape {
   public:
     AbstractPropRectangleClip (CoreProcess* parent, const string& name, double x, double y, double width, double height);
     virtual ~AbstractPropRectangleClip ();
@@ -38,8 +37,7 @@ class AbstractPropRectangleClip : public AbstractGShape
     AbstractDoubleProperty*                 height () { return (AbstractDoubleProperty*)find_child_impl ("height"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double x;
         double y;
         double width;

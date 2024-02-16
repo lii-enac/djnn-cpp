@@ -19,8 +19,7 @@
 namespace djnn {
 class ContextManager;
 
-class ComponentObserver
-{
+class ComponentObserver {
   public:
     static ComponentObserver& instance ();
     void                      end_component ();
@@ -42,8 +41,7 @@ class ComponentObserver
     djnnstl::vector<ContextManager*> _draw_manager_list;
 };
 
-class ContextManager
-{
+class ContextManager {
   public:
     ContextManager (){};
     virtual ~ContextManager (){};

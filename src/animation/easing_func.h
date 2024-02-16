@@ -21,11 +21,9 @@
 
 namespace djnn {
 typedef double (easing_function) (double);
-class EasingGenerator : public FatProcess
-{
+class EasingGenerator : public FatProcess {
   private:
-    class EasingAction : public Action
-    {
+    class EasingAction : public Action {
       public:
         EasingAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}

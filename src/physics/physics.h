@@ -25,16 +25,14 @@ void                                    init_physics ();
 void                                    clear_physics ();
 
 class PhyObj;
-class WorldImpl
-{
+class WorldImpl {
   public:
     WorldImpl () {}
     virtual ~WorldImpl () {}
     virtual void step (double dt) = 0;
 };
 
-class PhyObjImpl
-{
+class PhyObjImpl {
   public:
     PhyObjImpl () {}
     virtual ~PhyObjImpl () {}
@@ -44,11 +42,9 @@ class PhyObjImpl
 #include "physics/gen/abstract_prop_world.h"
 
 namespace djnn {
-class World : public AbstractPropWorld
-{
+class World : public AbstractPropWorld {
     typedef vector<PhyObj*> phy_obj_list;
-    class StepAction : public Action
-    {
+    class StepAction : public Action {
       public:
         StepAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -86,18 +82,15 @@ class World : public AbstractPropWorld
 #include "physics/gen/abstract_prop_phy_obj.h"
 
 namespace djnn {
-class PhyObj : public AbstractPropPhyObj
-{
-    class D3PhyObjUpdatePosition : public Action
-    {
+class PhyObj : public AbstractPropPhyObj {
+    class D3PhyObjUpdatePosition : public Action {
       public:
         D3PhyObjUpdatePosition (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         ~D3PhyObjUpdatePosition () {}
         void impl_activate () override;
     };
-    class D3PhyObjUpdateVelocity : public Action
-    {
+    class D3PhyObjUpdateVelocity : public Action {
       public:
         D3PhyObjUpdateVelocity (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -148,8 +141,7 @@ class PhyObj : public AbstractPropPhyObj
 #include "physics/gen/abstract_prop_box.h"
 
 namespace djnn {
-class Box : public AbstractPropBox
-{
+class Box : public AbstractPropBox {
   public:
     Box (CoreProcess* parent, const string& name, double x, double y, double z, double w, double h, double d, double mass);
     virtual ~Box ();
@@ -165,8 +157,7 @@ class Box : public AbstractPropBox
 #include "physics/gen/abstract_prop_plane.h"
 
 namespace djnn {
-class Plane : public AbstractPropPlane
-{
+class Plane : public AbstractPropPlane {
   public:
     Plane (CoreProcess* parent, const string& name, double a, double b, double c, double d);
     virtual ~Plane ();
@@ -185,8 +176,7 @@ class Plane : public AbstractPropPlane
 #include "physics/gen/abstract_prop_sphere.h"
 
 namespace djnn {
-class Sphere : public AbstractPropSphere
-{
+class Sphere : public AbstractPropSphere {
   public:
     Sphere (CoreProcess* parent, const string& name, double x, double y, double z, double radius, double mass);
     virtual ~Sphere ();

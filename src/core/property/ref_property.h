@@ -18,8 +18,7 @@
 
 namespace djnn {
 
-class AbstractRefProperty : public AbstractSimpleProperty
-{ // for GET_CHILD_VALUE to work...
+class AbstractRefProperty : public AbstractSimpleProperty { // for GET_CHILD_VALUE to work...
   public:
     AbstractRefProperty (CoreProcess* parent, const string& name, unsigned int nm = notify_none)
         : AbstractSimpleProperty (parent, name, nm) {}
@@ -27,8 +26,7 @@ class AbstractRefProperty : public AbstractSimpleProperty
     virtual CoreProcess* get_value () = 0;
 };
 
-class RefProperty : public AbstractRefProperty
-{
+class RefProperty : public AbstractRefProperty {
   public:
     RefProperty (CoreProcess* parent, const string& name, CoreProcess* v, unsigned int nm = notify_none)
         : AbstractRefProperty (parent, name, nm), _value (v) { finalize_construction (parent, name); }

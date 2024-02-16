@@ -25,11 +25,9 @@
 
 namespace djnn {
 
-class ProcessDeleter : public FatProcess
-{
+class ProcessDeleter : public FatProcess {
   private:
-    class DeleteOneAction : public Action
-    {
+    class DeleteOneAction : public Action {
       public:
         DeleteOneAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -55,11 +53,9 @@ class ProcessDeleter : public FatProcess
 //TODO
 };*/
 
-class CollectionDeleter : public FatProcess
-{
+class CollectionDeleter : public FatProcess {
   private:
-    class DeleteAllAction : public Action
-    {
+    class DeleteAllAction : public Action {
       public:
         DeleteAllAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -81,11 +77,9 @@ class CollectionDeleter : public FatProcess
     Coupling        _c_del_all;
 };
 
-class CollectionActivator : public FatProcess
-{
+class CollectionActivator : public FatProcess {
   private:
-    class ActivateAllAction : public Action
-    {
+    class ActivateAllAction : public Action {
       public:
         ActivateAllAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -109,11 +103,9 @@ class CollectionActivator : public FatProcess
     Coupling          _c_act_all;
 };
 
-class AbstractCollectionSetValue : public FatProcess
-{
+class AbstractCollectionSetValue : public FatProcess {
   private:
-    class SetValueAction : public Action
-    {
+    class SetValueAction : public Action {
       public:
         SetValueAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -133,8 +125,7 @@ class AbstractCollectionSetValue : public FatProcess
     SetValueAction _act_set_val;
 };
 
-class CollectionSetDoubleValue : public AbstractCollectionSetValue
-{
+class CollectionSetDoubleValue : public AbstractCollectionSetValue {
   public:
     CollectionSetDoubleValue (CoreProcess* parent, const string& name, CoreProcess* collection = nullptr, const string& path = string (""));
     virtual ~CollectionSetDoubleValue ();
@@ -147,8 +138,7 @@ class CollectionSetDoubleValue : public AbstractCollectionSetValue
     Coupling       _c_act_set_val;
 };
 
-class CollectionSetStringValue : public AbstractCollectionSetValue
-{
+class CollectionSetStringValue : public AbstractCollectionSetValue {
   public:
     CollectionSetStringValue (CoreProcess* parent, const string& name, CoreProcess* collection = nullptr, const string& path = string (""));
     virtual ~CollectionSetStringValue ();
@@ -161,27 +151,23 @@ class CollectionSetStringValue : public AbstractCollectionSetValue
     Coupling     _c_act_set_val;
 };
 
-class ProcessCollector : public FatProcess
-{
+class ProcessCollector : public FatProcess {
   private:
-    class AddOneAction : public Action
-    {
+    class AddOneAction : public Action {
       public:
         AddOneAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~AddOneAction () {}
         void impl_activate () override { ((ProcessCollector*)get_parent ())->add_one (); };
     };
-    class RemoveOneAction : public Action
-    {
+    class RemoveOneAction : public Action {
       public:
         RemoveOneAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~RemoveOneAction () {}
         void impl_activate () override { ((ProcessCollector*)get_parent ())->remove_one (); };
     };
-    class RemoveAllAction : public Action
-    {
+    class RemoveAllAction : public Action {
       public:
         RemoveAllAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -217,8 +203,7 @@ class ProcessCollector : public FatProcess
 
 typedef void (NativeCollectionCode) (CoreProcess*, djnnstl::vector<CoreProcess*>);
 
-class NativeCollectionAction : public Action
-{
+class NativeCollectionAction : public Action {
   public:
     NativeCollectionAction (CoreProcess* parent, const string& name, NativeCollectionCode* action, CoreProcess* coll, void* data, bool isModel);
     virtual ~NativeCollectionAction ();

@@ -13,10 +13,8 @@
 namespace djnn {
 typedef void* FontMetricsImpl;
 
-class Text : public AbstractGShape
-{
-    class TextSizeAction : public Action
-    {
+class Text : public AbstractGShape {
+    class TextSizeAction : public Action {
         friend Text;
 
       public:
@@ -67,8 +65,7 @@ class Text : public AbstractGShape
 
   private:
     void set_parent (CoreProcess* parent) override;
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double x, y, dx, dy;
         int    dxU, dyU, encoding;
         string text;

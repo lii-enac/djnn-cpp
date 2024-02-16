@@ -39,8 +39,7 @@ typedef struct
 } djn_XMLTagHandler;
 
 typedef struct djn__XMLTagHandlerList djn__XMLTagHandlerList;
-struct djn__XMLTagHandlerList
-{
+struct djn__XMLTagHandlerList {
     djn_XMLTagHandler*             handler;
     struct djn__XMLTagHandlerList* next;
 };
@@ -54,8 +53,7 @@ typedef struct
     const char*          format;
 } djn__XMLParser;
 
-class XML
-{
+class XML {
   public:
     using string = djnnstl::string;
     static FatProcess* djnLoadFromXML (const string& uri);

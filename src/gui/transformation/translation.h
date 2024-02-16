@@ -4,8 +4,7 @@
 #include "gen/abstract_translation.h"
 
 namespace djnn {
-class Translation : public AbstractTranslation
-{
+class Translation : public AbstractTranslation {
   public:
     Translation (CoreProcess* parent, const string& name, double tx, double ty);
     Translation (double tx, double ty);

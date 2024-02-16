@@ -3,8 +3,7 @@
 #include "abstract_style.h"
 
 namespace djnn {
-class PickOutline : public AbstractStyle
-{
+class PickOutline : public AbstractStyle {
   public:
     PickOutline (CoreProcess* parent, const string& name)
         : AbstractStyle (parent, name) { finalize_construction (parent, name); }
@@ -15,8 +14,7 @@ class PickOutline : public AbstractStyle
     PickOutline* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class PickFill : public AbstractStyle
-{
+class PickFill : public AbstractStyle {
   public:
     PickFill (CoreProcess* parent, const string& name)
         : AbstractStyle (parent, name) { finalize_construction (parent, name); }
@@ -27,8 +25,7 @@ class PickFill : public AbstractStyle
     PickFill* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class NoPickOutline : public AbstractStyle
-{
+class NoPickOutline : public AbstractStyle {
   public:
     NoPickOutline (CoreProcess* parent, const string& name)
         : AbstractStyle (parent, name) { finalize_construction (parent, name); }
@@ -39,8 +36,7 @@ class NoPickOutline : public AbstractStyle
     NoPickOutline* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class NoPickFill : public AbstractStyle
-{
+class NoPickFill : public AbstractStyle {
   public:
     NoPickFill (CoreProcess* parent, const string& name)
         : AbstractStyle (parent, name) { finalize_construction (parent, name); }

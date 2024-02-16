@@ -4,8 +4,7 @@
 #include "gui/shape/abstract_gshape.h"
 
 namespace djnn {
-class Group : public Container
-{
+class Group : public Container {
   public:
     Group (CoreProcess* parent, const string& name);
     virtual ~Group () override;
@@ -20,8 +19,7 @@ class Group : public Container
     AbstractGObj* _gobj;
 };
 
-class ZOrderedGroup : public Group
-{
+class ZOrderedGroup : public Group {
   public:
     ZOrderedGroup (CoreProcess* parent, const string& name)
         : Group (parent, name) {}

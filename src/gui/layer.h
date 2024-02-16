@@ -23,14 +23,11 @@
 
 namespace djnn {
 
-struct LayerCache
-{
+struct LayerCache {
     virtual ~LayerCache () {}
 };
-class Layer : public Container
-{
-    class LayerDamagedAction : public Action
-    {
+class Layer : public Container {
+    class LayerDamagedAction : public Action {
       public:
         LayerDamagedAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -56,23 +53,20 @@ class Layer : public Container
     process_type_e get_process_type () const override { return LAYER_T; }
 
     Spike*       damaged () { return &_damaged; }
-    virtual void notify_change (unsigned int nm) override
-    {
+    virtual void notify_change (unsigned int nm) override {
         if (_auto_redisplay.get_value ())
             set_invalid_cache (true);
         FatProcess::notify_change (nm);
     }
 
-    void get_xywhp (int& x, int& y, int& w, int& h, int& pad)
-    {
+    void get_xywhp (int& x, int& y, int& w, int& h, int& pad) {
         x   = _x->get_value ();
         y   = _y->get_value ();
         w   = _w->get_value ();
         h   = _h->get_value ();
         pad = _pad->get_value ();
     }
-    void set_xy (int x, int y)
-    {
+    void set_xy (int x, int y) {
         _x->set_value (x, true);
         _y->set_value (y, true);
     }

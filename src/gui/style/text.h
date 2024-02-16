@@ -9,8 +9,7 @@
 #include "style_types.h"
 
 namespace djnn {
-class FontSize : public AbstractPropFontSize
-{
+class FontSize : public AbstractPropFontSize {
   public:
     FontSize (CoreProcess* parent, const string& name, djnLengthUnit unit, double size);
     FontSize (CoreProcess* parent, const string& name, int unit, double size);

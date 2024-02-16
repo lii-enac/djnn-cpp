@@ -9,13 +9,11 @@
 namespace djnn {
 
 // should be world ??
-class PhysicScene : public CoreProcess
-{
+class PhysicScene : public CoreProcess {
   public:
     CoreProcess* damaged () { return nullptr; }
 };
-class AbstractPObj : public FatProcess
-{
+class AbstractPObj : public FatProcess {
   public:
     AbstractPObj (CoreProcess* parent, const string& name)
         : FatProcess (name) {}

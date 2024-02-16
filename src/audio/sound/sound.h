@@ -5,8 +5,7 @@
 
 namespace djnn {
 
-class Sound : public AbstractPropSound
-{
+class Sound : public AbstractPropSound {
   public:
     Sound (CoreProcess* parent, const string& name);
     virtual ~Sound ();

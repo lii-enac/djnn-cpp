@@ -23,8 +23,7 @@ namespace djnn {
 // NOTE: NEW_LOG can't not be used now because of the delete in ~container/~process
 #define NEW_LOG_PLAIN_OBJ 0
 
-class LogPrinter : public Component
-{
+class LogPrinter : public Component {
   public:
     LogPrinter (CoreProcess* parent, const string& n, const string& label);
 #ifndef DJNN_NO_SERIALIZE

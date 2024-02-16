@@ -19,13 +19,11 @@
 
 namespace djnn {
 
-class PickUI
-{
+class PickUI {
   public:
     PickUI (bool cache)
         : _ui (nullptr), _cache (cache) {}
-    ~PickUI ()
-    {
+    ~PickUI () {
         if (_ui)
             delete _ui;
     }

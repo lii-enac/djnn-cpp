@@ -20,17 +20,14 @@
 #include "gen/abstract_volume.h"
 
 namespace djnn {
-class Volume : public AbstractVolume
-{
+class Volume : public AbstractVolume {
   public:
     Volume (CoreProcess* parent, const string& name, double volume)
-        : AbstractVolume (parent, name, volume)
-    {
+        : AbstractVolume (parent, name, volume) {
         finalize_construction (parent, name);
     }
 
-    void sound ()
-    {
+    void sound () {
         if (somehow_activating ()) {
             AudioBackend::instance ().load (this);
         }

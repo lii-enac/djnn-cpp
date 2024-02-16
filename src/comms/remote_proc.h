@@ -27,29 +27,25 @@
 
 namespace djnn {
 
-class RemoteProc : public FatProcess
-{
+class RemoteProc : public FatProcess {
 
     /*** private Class SendAction ***/
   private:
-    class SendAction : public Action
-    {
+    class SendAction : public Action {
       public:
         SendAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~SendAction () {}
         void impl_activate () override;
     };
-    class ConnectionAction : public Action
-    {
+    class ConnectionAction : public Action {
       public:
         ConnectionAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~ConnectionAction () {}
         void impl_activate () override { ((RemoteProc*)get_parent ())->connection (); }
     };
-    class ReceiveAction : public Action, public ExternalSource
-    {
+    class ReceiveAction : public Action, public ExternalSource {
       public:
         using string = CoreProcess::string;
         ReceiveAction (CoreProcess* parent, const string& name)
@@ -57,15 +53,13 @@ class RemoteProc : public FatProcess
         virtual ~ReceiveAction () {}
         void         impl_activate () override;
         void         impl_deactivate () override;
-        virtual bool pre_activate () override
-        {
+        virtual bool pre_activate () override {
             if (get_parent () != nullptr && !get_parent ()->somehow_activating ())
                 return false;
             set_activation_state (ACTIVATING);
             return true;
         }
-        void post_activate () override
-        {
+        void post_activate () override {
         }
 
       private:

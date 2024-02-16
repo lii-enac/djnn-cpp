@@ -22,11 +22,9 @@
 
 namespace djnn {
 
-class SwitchList : public AbstractList
-{
+class SwitchList : public AbstractList {
   private:
-    class Next : public Action
-    {
+    class Next : public Action {
       public:
         Next (SwitchList* p);
         virtual ~Next () {}
@@ -35,8 +33,7 @@ class SwitchList : public AbstractList
       private:
         SwitchList* _sw;
     };
-    class Previous : public Action
-    {
+    class Previous : public Action {
       public:
         Previous (SwitchList* p);
         virtual ~Previous () {}
@@ -45,8 +42,7 @@ class SwitchList : public AbstractList
       private:
         SwitchList* _sw;
     };
-    class ChangeIndex : public Action
-    {
+    class ChangeIndex : public Action {
       public:
         ChangeIndex (SwitchList* p);
         virtual ~ChangeIndex () {}

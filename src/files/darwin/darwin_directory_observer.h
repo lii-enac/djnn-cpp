@@ -15,8 +15,7 @@
 #pragma once
 
 namespace djnn {
-typedef struct DirectoryObserverData
-{
+typedef struct DirectoryObserverData {
   public:
     int _fd;
     int _kq;

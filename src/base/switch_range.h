@@ -23,8 +23,7 @@
 
 namespace djnn {
 
-class SwitchRangeBranch : public Container
-{
+class SwitchRangeBranch : public Container {
   public:
     SwitchRangeBranch (CoreProcess* parent, const string& name, double lower, bool left_open, double upper, bool right_open);
     ~SwitchRangeBranch ();
@@ -37,11 +36,9 @@ class SwitchRangeBranch : public Container
     DoubleProperty _lower, _upper;
 };
 
-class SwitchRange : public Container
-{
+class SwitchRange : public Container {
   private:
-    class SwitchRangeAction : public Action
-    {
+    class SwitchRangeAction : public Action {
       public:
         SwitchRangeAction (SwitchRange* parent, const string& name);
         virtual ~SwitchRangeAction (){};

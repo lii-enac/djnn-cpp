@@ -24,8 +24,7 @@ using DoubleArray = djnnstl::vector<double>;
 // using DoubleArray = TemplateProperty<double_array>*;
 
 const DoubleArray
-operator+ (const DoubleArray& l, const DoubleArray& r)
-{
+operator+ (const DoubleArray& l, const DoubleArray& r) {
     djnnstl::vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
@@ -37,8 +36,7 @@ operator+ (const DoubleArray& l, const DoubleArray& r)
 }
 
 const DoubleArray
-operator- (const DoubleArray& l, const DoubleArray& r)
-{
+operator- (const DoubleArray& l, const DoubleArray& r) {
     djnnstl::vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
@@ -50,8 +48,7 @@ operator- (const DoubleArray& l, const DoubleArray& r)
 }
 
 const DoubleArray
-operator* (const DoubleArray& l, const DoubleArray& r)
-{
+operator* (const DoubleArray& l, const DoubleArray& r) {
     djnnstl::vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
@@ -63,8 +60,7 @@ operator* (const DoubleArray& l, const DoubleArray& r)
 }
 
 const DoubleArray
-operator/ (const DoubleArray& l, const DoubleArray& r)
-{
+operator/ (const DoubleArray& l, const DoubleArray& r) {
     djnnstl::vector<double> res;
     res.resize (l.size ());
     if (l.size () == r.size ()) {
@@ -75,8 +71,7 @@ operator/ (const DoubleArray& l, const DoubleArray& r)
     return res;
 }
 
-void set_value (TemplateProperty<DoubleArray>* array, size_t at, double v, int propagate)
-{
+void set_value (TemplateProperty<DoubleArray>* array, size_t at, double v, int propagate) {
     if (array->get_value ().size () > at)
         array->get_value ().at (at) = v;
     if (array->is_activable () && propagate) {

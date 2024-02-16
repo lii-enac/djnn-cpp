@@ -24,11 +24,9 @@
 
 namespace djnn {
 
-class HermiteCurve : public FatProcess
-{
+class HermiteCurve : public FatProcess {
   private:
-    class HermiteCurveAction : public Action
-    {
+    class HermiteCurveAction : public Action {
       public:
         HermiteCurveAction (CoreProcess* parent, const string& name, AbstractSimpleProperty* input, AbstractSimpleProperty* p1,
                             AbstractSimpleProperty* p2, AbstractSimpleProperty* t1, AbstractSimpleProperty* t2,

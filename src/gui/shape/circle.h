@@ -5,8 +5,7 @@
 #include "gui/shape/abstract_gshape.h"
 
 namespace djnn {
-class Circle : public AbstractPropCircle
-{
+class Circle : public AbstractPropCircle {
   public:
     Circle (CoreProcess* parent, const string& name, double cx, double cy, double r);
     Circle* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;

@@ -22,8 +22,7 @@ namespace djnn {
 using ProcessForNative = CoreProcess;
 typedef void (NativeCode) (ProcessForNative*);
 
-class NativeAction : public Action
-{
+class NativeAction : public Action {
   public:
     NativeAction (CoreProcess* parent, const string& name, NativeCode* action, void* data, bool isModel);
     virtual ~NativeAction ();

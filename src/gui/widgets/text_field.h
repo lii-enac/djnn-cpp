@@ -26,75 +26,65 @@
 
 namespace djnn {
 
-class TextField : public AbstractGShape
-{
+class TextField : public AbstractGShape {
   private:
-    class EnableEditAction : public Action
-    {
+    class EnableEditAction : public Action {
       public:
         EnableEditAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~EnableEditAction () {}
         void impl_activate () override { ((TextField*)get_parent ())->set_editable (true); }
     };
-    class DisableEditAction : public Action
-    {
+    class DisableEditAction : public Action {
       public:
         DisableEditAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~DisableEditAction () {}
         void impl_activate () override { ((TextField*)get_parent ())->set_editable (false); }
     };
-    class MousePressAction : public Action
-    {
+    class MousePressAction : public Action {
       public:
         MousePressAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~MousePressAction () {}
         void impl_activate () override { ((TextField*)get_parent ())->mouse_press (); }
     };
-    class MouseReleaseAction : public Action
-    {
+    class MouseReleaseAction : public Action {
       public:
         MouseReleaseAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~MouseReleaseAction () {}
         void impl_activate () override { ((TextField*)get_parent ())->mouse_release (); }
     };
-    class MouseMoveAction : public Action
-    {
+    class MouseMoveAction : public Action {
       public:
         MouseMoveAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~MouseMoveAction () {}
         void impl_activate () override { ((TextField*)get_parent ())->mouse_move (); }
     };
-    class KeyPressedAction : public Action
-    {
+    class KeyPressedAction : public Action {
       public:
         KeyPressedAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~KeyPressedAction () {}
         void impl_activate () override { ((TextField*)get_parent ())->key_pressed (); }
     };
-    class KeyReleasedAction : public Action
-    {
+    class KeyReleasedAction : public Action {
       public:
         KeyReleasedAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~KeyReleasedAction () {}
         void impl_activate () override { ((TextField*)get_parent ())->key_released (); }
     };
-    class StrInputAction : public Action
-    {
+    class StrInputAction : public Action {
       public:
         StrInputAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~StrInputAction () {}
         void impl_activate () override { ((TextField*)get_parent ())->add_string_input (); }
     };
-    class ClearAction : public Action
-    {
+    class ClearAction : public Action {
       public:
         ClearAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}

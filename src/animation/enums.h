@@ -1,8 +1,7 @@
 #pragma once
 
 namespace djnn {
-enum easing_function_t
-{
+enum easing_function_t {
     DJN_IN_SINE,
     DJN_OUT_SINE,
     DJN_IN_OUT_SINE,

@@ -18,8 +18,7 @@
 namespace djnn {
 class AbstractBackend;
 
-class Backend
-{
+class Backend {
   public:
     static AbstractBackend* instance ();
     static void             init ();

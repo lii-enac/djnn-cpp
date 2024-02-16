@@ -4,8 +4,7 @@
 
 namespace djnn {
 
-class AnalyticalPicking : public Picking
-{
+class AnalyticalPicking : public Picking {
   public:
     AnalyticalPicking (Window* win);
     virtual ~AnalyticalPicking ();

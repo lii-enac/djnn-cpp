@@ -21,19 +21,16 @@
 #include "gui/shape/abstract_gshape.h"
 
 namespace djnn {
-class FileDialog : public AbstractGShape
-{
+class FileDialog : public AbstractGShape {
   private:
-    class OpenAction : public Action
-    {
+    class OpenAction : public Action {
       public:
         OpenAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         virtual ~OpenAction () {}
         void impl_activate () override { ((FileDialog*)get_parent ())->open_dialog (); }
     };
-    class SaveAction : public Action
-    {
+    class SaveAction : public Action {
       public:
         SaveAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}

@@ -11,28 +11,23 @@ namespace djnn {
 // class IntPropertyProxy;
 class Window;
 
-class BackgroundColor : public FatProcess
-{
+class BackgroundColor : public FatProcess {
   private:
-    class ToValueAction : public Action
-    {
+    class ToValueAction : public Action {
       public:
         ToValueAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); };
         ~ToValueAction () {}
-        void impl_activate () override
-        {
+        void impl_activate () override {
             ((BackgroundColor*)get_parent ())->update_hex_from_rvb ();
         }
     };
-    class ToRGBAction : public Action
-    {
+    class ToRGBAction : public Action {
       public:
         ToRGBAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); };
         ~ToRGBAction () {}
-        void impl_activate () override
-        {
+        void impl_activate () override {
             ((BackgroundColor*)get_parent ())->update_rvb_from_hex ();
         }
     };
@@ -54,8 +49,7 @@ class BackgroundColor : public FatProcess
     virtual void        create_Gobj_update_coupling (CoreProcess** prop, CouplingWithData** cprop);
     virtual FatProcess* create_GObj_prop (IntPropertyProxy** prop, CouplingWithData** cprop, int* rawp, const string& name, int notify_mask);
 
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int r;
         int g;
         int b;

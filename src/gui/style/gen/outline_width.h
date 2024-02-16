@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class OutlineWidth : public AbstractStyle
-{
+class OutlineWidth : public AbstractStyle {
   public:
     OutlineWidth (CoreProcess* parent, const string& name, double width);
     virtual ~OutlineWidth ();
@@ -36,8 +35,7 @@ class OutlineWidth : public AbstractStyle
     AbstractDoubleProperty*                 width () { return (AbstractDoubleProperty*)find_child_impl ("width"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double width;
     };
     raw_props_t raw_props;

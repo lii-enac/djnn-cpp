@@ -20,8 +20,7 @@
 #include "core/ontology/process.h"
 
 namespace djnn {
-class AbstractAudioStyle : public AbstractSObj
-{
+class AbstractAudioStyle : public AbstractSObj {
   public:
     AbstractAudioStyle (CoreProcess* parent, const string& name)
         : AbstractSObj (parent, name) {}

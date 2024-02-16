@@ -10,8 +10,7 @@ typedef std::chrono::duration<long long, std::micro> duration;
 typedef std::chrono::steady_clock                    clock;
 typedef std::chrono::time_point<clock, duration>     time_point;
 
-class Timer
-{
+class Timer {
   public:
     Timer ()
         : _scheduled (false) {}

@@ -1,6 +1,5 @@
 namespace djnn {
-struct ALContext
-{
+struct ALContext {
     double volume;
     double pan;
 };

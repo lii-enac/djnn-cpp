@@ -26,13 +26,11 @@
 
 namespace djnn {
 
-class IvyAccess : public FatProcess, public ExternalSource
-{
+class IvyAccess : public FatProcess, public ExternalSource {
 
     /*** private Class Ivy Out Actions ***/
   private:
-    class IvyOutAction : public Action
-    {
+    class IvyOutAction : public Action {
       public:
         IvyOutAction (CoreProcess* parent, const string& name, TextProperty* out)
             : Action (parent, name), _out (out) { finalize_construction (parent, name); }
@@ -51,8 +49,7 @@ class IvyAccess : public FatProcess, public ExternalSource
     typedef map<string, vector<djnnstl::pair<int, TextProperty*>>> in_map_t;
     typedef djnnstl::pair<string, in_map_t*>                       regexp_keypair_t;
 
-    struct msg_callback_user_data
-    {
+    struct msg_callback_user_data {
         IvyAccess*        access;
         regexp_keypair_t* keypair;
     };

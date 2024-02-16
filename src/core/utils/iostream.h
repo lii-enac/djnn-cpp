@@ -15,29 +15,24 @@ namespace djnnstl {
 
 class ostream_proxy;
 
-class ostream
-{
+class ostream {
   public:
     virtual ostream_proxy& get_proxy () = 0;
 };
-class cout_ostream : public ostream
-{
+class cout_ostream : public ostream {
   public:
     ostream_proxy& get_proxy () override;
 };
-class cerr_ostream : public ostream
-{
+class cerr_ostream : public ostream {
   public:
     ostream_proxy& get_proxy () override;
 };
 
-class iomanip
-{
+class iomanip {
   public:
     virtual void do_manip (ostream&) const = 0;
 };
-class endl_iomanip : public iomanip
-{
+class endl_iomanip : public iomanip {
   private:
     void do_manip (ostream&) const override;
 };
@@ -56,20 +51,17 @@ ostream& operator<< (ostream& o, const char*);
 ostream& operator<< (ostream& o, const void*);
 
 template <typename T>
-ostream& operator<< (ostream& o, const T* t)
-{
+ostream& operator<< (ostream& o, const T* t) {
     o << (const void*)t;
     return o;
 }
 template <typename T>
-ostream& operator<< (ostream& o, T* t)
-{
+ostream& operator<< (ostream& o, T* t) {
     o << (const void*)t;
     return o;
 }
 
-inline ostream& operator<< (ostream& o, iomanip& manip)
-{
+inline ostream& operator<< (ostream& o, iomanip& manip) {
     manip.do_manip (o);
     return o;
 }
@@ -109,8 +101,7 @@ namespace eastl {
 // In general you should have the insertion operators in the same namespace as the class upon which it operates.
 
 inline std::ostream&
-operator<< (std::ostream& out, const eastl::string& s)
-{
+operator<< (std::ostream& out, const eastl::string& s) {
     out << s.c_str ();
     return out;
 }

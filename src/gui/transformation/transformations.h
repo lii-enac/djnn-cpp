@@ -28,8 +28,7 @@
 #include "translation.h"
 
 namespace djnn {
-class GradientTranslation : public AbstractTranslation
-{
+class GradientTranslation : public AbstractTranslation {
   public:
     GradientTranslation (CoreProcess* parent, const string& name, double tx, double ty);
     GradientTranslation (double tx, double ty);
@@ -43,8 +42,7 @@ class GradientTranslation : public AbstractTranslation
 
 namespace djnn {
 
-class Rotation : public AbstractRotation
-{
+class Rotation : public AbstractRotation {
   public:
     Rotation (CoreProcess* parent, const string& name, double a, double cx, double cy);
     Rotation (double a, double cx, double cy);
@@ -55,8 +53,7 @@ class Rotation : public AbstractRotation
     FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class GradientRotation : public AbstractRotation
-{
+class GradientRotation : public AbstractRotation {
   public:
     GradientRotation (CoreProcess* parent, const string& name, double a, double cx, double cy);
     GradientRotation (double a, double cx, double cy);
@@ -70,8 +67,7 @@ class GradientRotation : public AbstractRotation
 
 namespace djnn {
 
-class GradientScaling : public AbstractScaling
-{
+class GradientScaling : public AbstractScaling {
   public:
     GradientScaling (CoreProcess* parent, const string& name, double sx, double sy, double cx, double cy);
     GradientScaling (double sx, double sy, double cx, double cy);
@@ -86,8 +82,7 @@ class GradientScaling : public AbstractScaling
 
 namespace djnn {
 
-class SkewX : public AbstractSkew
-{
+class SkewX : public AbstractSkew {
   public:
     SkewX (CoreProcess* parent, const string& name, double a);
     SkewX (double a);
@@ -98,8 +93,7 @@ class SkewX : public AbstractSkew
     FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class GradientSkewX : public AbstractSkew
-{
+class GradientSkewX : public AbstractSkew {
   public:
     GradientSkewX (CoreProcess* parent, const string& name, double a);
     GradientSkewX (double a);
@@ -108,8 +102,7 @@ class GradientSkewX : public AbstractSkew
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class SkewY : public AbstractSkew
-{
+class SkewY : public AbstractSkew {
   public:
     SkewY (CoreProcess* parent, const string& name, double a);
     SkewY (double a);
@@ -120,8 +113,7 @@ class SkewY : public AbstractSkew
     FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class GradientSkewY : public AbstractSkew
-{
+class GradientSkewY : public AbstractSkew {
   public:
     GradientSkewY (CoreProcess* parent, const string& name, double a);
     GradientSkewY (double a);
@@ -130,12 +122,10 @@ class GradientSkewY : public AbstractSkew
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class ScreenToLocal : public FatProcess
-{
+class ScreenToLocal : public FatProcess {
     /*** private Class stl_action Actions ***/
   private:
-    class stl_action : public Action
-    {
+    class stl_action : public Action {
       public:
         stl_action (CoreProcess* parent, const string& name, ScreenToLocal* stl)
             : Action (parent, name), _stl (stl) {}
@@ -161,12 +151,10 @@ class ScreenToLocal : public FatProcess
     Coupling *      _cinX, *_cinY;
 };
 
-class LocalToScreen : public FatProcess
-{
+class LocalToScreen : public FatProcess {
     /*** private Class lts_action Actions ***/
   private:
-    class lts_action : public Action
-    {
+    class lts_action : public Action {
       public:
         lts_action (CoreProcess* parent, const string& name, LocalToScreen* lts)
             : Action (parent, name), _lts (lts) {}

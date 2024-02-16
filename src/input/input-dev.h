@@ -25,14 +25,12 @@ extern FatProcess *                     InputDevices, *Mice, *TouchPanels, *GPIO
 void init_input ();
 void clear_input ();
 
-typedef enum direction_e
-{
+typedef enum direction_e {
     IN,
     OUT
 } direction_e;
 
-class GPIOProxy : public FatProcess
-{
+class GPIOProxy : public FatProcess {
   public:
     GPIOProxy (CoreProcess* parent, const string& n)
         : FatProcess (n) { set_activation_state (ACTIVATED); }

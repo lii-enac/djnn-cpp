@@ -3,8 +3,7 @@
 #include "core/xml/xml.h"
 
 namespace djnn {
-class XMLRectAttrs_Hash
-{
+class XMLRectAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -13,8 +12,7 @@ class XMLRectAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_XMLRectAttrsLookup (const char* str, unsigned int len);
 };
-class SVGColors_Hash
-{
+class SVGColors_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -23,8 +21,7 @@ class SVGColors_Hash
     static named_color_t
     djn_SVGColorsLookup (const char* str, unsigned int len);
 };
-class SVGElements_Hash
-{
+class SVGElements_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -33,8 +30,7 @@ class SVGElements_Hash
     static djnn::djn_XMLTagHandler*
     djn_SVGElementsLookup (const char* str, unsigned int len);
 };
-class SVGGradientAttrs_Hash
-{
+class SVGGradientAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -43,8 +39,7 @@ class SVGGradientAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_SVGGradientAttrsLookup (const char* str, unsigned int len);
 };
-class SVGGradientStopAttrs_Hash
-{
+class SVGGradientStopAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -53,8 +48,7 @@ class SVGGradientStopAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_SVGGradientStopAttrsLookup (const char* str, unsigned int len);
 };
-class SVGGradientTransformAttrs_Hash
-{
+class SVGGradientTransformAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -63,8 +57,7 @@ class SVGGradientTransformAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_SVGGradientTransformAttrsLookup (const char* str, unsigned int len);
 };
-class SVGLinearGradientAttrs_Hash
-{
+class SVGLinearGradientAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -73,8 +66,7 @@ class SVGLinearGradientAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_SVGLinearGradientAttrsLookup (const char* str, unsigned int len);
 };
-class SVGRadialGradientAttrs_Hash
-{
+class SVGRadialGradientAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -83,8 +75,7 @@ class SVGRadialGradientAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_SVGRadialGradientAttrsLookup (const char* str, unsigned int len);
 };
-class SVGShapeAttrs_Hash
-{
+class SVGShapeAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -93,8 +84,7 @@ class SVGShapeAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_SVGShapeAttrsLookup (const char* str, unsigned int len);
 };
-class SVGSvgAttrs_Hash
-{
+class SVGSvgAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -103,8 +93,7 @@ class SVGSvgAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_SVGSvgAttrsLookup (const char* str, unsigned int len);
 };
-class XMLCircleAttrs_Hash
-{
+class XMLCircleAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -113,8 +102,7 @@ class XMLCircleAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_XMLCircleAttrsLookup (const char* str, unsigned int len);
 };
-class XMLEllipseAttrs_Hash
-{
+class XMLEllipseAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -125,8 +113,7 @@ class XMLEllipseAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_XMLEllipseAttrsLookup (const char* str, unsigned int len);
 };
-class XMLImgAttrs_Hash
-{
+class XMLImgAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -135,8 +122,7 @@ class XMLImgAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_XMLImgAttrsLookup (const char* str, unsigned int len);
 };
-class XMLLineAttrs_Hash
-{
+class XMLLineAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -145,8 +131,7 @@ class XMLLineAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_XMLLineAttrsLookup (const char* str, unsigned int len);
 };
-class XMLPathAttrs_Hash
-{
+class XMLPathAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -155,8 +140,7 @@ class XMLPathAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_XMLPathAttrsLookup (const char* str, unsigned int len);
 };
-class XMLPolylineAttrs_Hash
-{
+class XMLPolylineAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -165,8 +149,7 @@ class XMLPolylineAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_XMLPolylineAttrsLookup (const char* str, unsigned int len);
 };
-class XMLRectAreaAttrs_Hash
-{
+class XMLRectAreaAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -175,8 +158,7 @@ class XMLRectAreaAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_XMLRectAreaAttrsLookup (const char* str, unsigned int len);
 };
-class XMLUseAttrs_Hash
-{
+class XMLUseAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -185,8 +167,7 @@ class XMLUseAttrs_Hash
     static djnn::djn_XMLAttrHandler*
     djn_XMLUseAttrsLookup (const char* str, unsigned int len);
 };
-class XMLTextAttrs_Hash
-{
+class XMLTextAttrs_Hash {
   private:
     static inline unsigned int
     hash (const char* str, unsigned int len);
@@ -196,8 +177,7 @@ class XMLTextAttrs_Hash
     djn_XMLTextAttrsLookup (const char* str, unsigned int len);
 };
 
-class XML_Utils
-{
+class XML_Utils {
   public:
     static int
     djn_XMLParseLength (double*, const char*);
@@ -209,8 +189,7 @@ class XML_Utils
     djn_XMLRemoveSpacesAndComma (char**);
 };
 
-class SVG_Utils
-{
+class SVG_Utils {
   public:
     static void
     init_named_colors ();
@@ -228,15 +207,13 @@ class SVG_Utils
     djn__get_color_from_name (const djnnstl::string& name);
 };
 
-extern struct djn_GraphicalShapeArgs
-{
+extern struct djn_GraphicalShapeArgs {
     djnnstl::string id;
     djnnstl::string classname;
     djnStrokeType   strokeType;
 } djn_GraphicalShapeArgs;
 
-extern struct djn_RectArgs
-{
+extern struct djn_RectArgs {
     double x;
     double y;
     double w;
@@ -245,8 +222,7 @@ extern struct djn_RectArgs
     double ry;
 } djn_RectArgs;
 
-extern struct djn_ImgArgs
-{
+extern struct djn_ImgArgs {
     double          x;
     double          y;
     double          w;
@@ -255,31 +231,27 @@ extern struct djn_ImgArgs
     djnnstl::string data;
 } djn_ImgArgs;
 
-extern struct djn_CircleArgs
-{
+extern struct djn_CircleArgs {
     double cx;
     double cy;
     double r;
 } djn_CircleArgs;
 
-extern struct djn_EllipseArgs
-{
+extern struct djn_EllipseArgs {
     double cx;
     double cy;
     double rx;
     double ry;
 } djn_EllipseArgs;
 
-extern struct djn_LineArgs
-{
+extern struct djn_LineArgs {
     double x1;
     double y1;
     double x2;
     double y2;
 } djn_LineArgs;
 
-extern struct djn_TextArgs
-{
+extern struct djn_TextArgs {
     double        x;      //
     double        y;      //
     double        dx;     // FIXME all these values should be arrays instead of scalars
@@ -290,30 +262,25 @@ extern struct djn_TextArgs
     char*         data;
 } djn_TextArgs;
 
-extern struct djn_PolyArgs
-{
+extern struct djn_PolyArgs {
     int         isPolygon;
     FatProcess* e;
 } djn_PolyArgs;
 
-extern struct djn_PolylineArg
-{
+extern struct djn_PolylineArg {
     int closed;
 } djn_PolylineArg;
 
-extern struct djn_PointArgs
-{
+extern struct djn_PointArgs {
     double x;
     double y;
 } djn_PointArgs;
 
-extern struct djn_PathArgs
-{
+extern struct djn_PathArgs {
     FatProcess* e;
 } djn_PathArgs;
 
-extern struct djn_PathItemArgs
-{
+extern struct djn_PathItemArgs {
     double x;
     double y;
     double x1;
@@ -327,8 +294,7 @@ extern struct djn_PathItemArgs
     double swfl;
 } djn_PathItemArgs;
 
-extern struct djn_ColorArgs
-{
+extern struct djn_ColorArgs {
     unsigned int r;
     unsigned int g;
     unsigned int b;
@@ -336,8 +302,7 @@ extern struct djn_ColorArgs
     double       offset;
 } djn_ColorArgs;
 
-extern struct djn_StyleArgs
-{
+extern struct djn_StyleArgs {
     djnCapStyle     cap;
     djnJoinStyle    join;
     djnFillRuleType rule;
@@ -349,8 +314,7 @@ extern struct djn_StyleArgs
     const char*     path;
 } djn_StyleArgs;
 
-typedef enum djn_InheritedGradientAttrs
-{
+typedef enum djn_InheritedGradientAttrs {
     djn_GradientCoords = 0,
     djn_GradientSpread,
     djn_GradientStopPoints,
@@ -365,8 +329,7 @@ typedef enum djn_InheritedGradientAttrs
     djn_GradientFy
 } djn_InheritedGradientAttrs;
 
-extern struct djn_GradientArgs
-{
+extern struct djn_GradientArgs {
     const char*   id;
     const char*   transform;
     djnFillCoords coords;
@@ -375,16 +338,14 @@ extern struct djn_GradientArgs
     unsigned int  inherited;
 } djn_GradientArgs;
 
-extern struct djn_LinearGradientArgs
-{
+extern struct djn_LinearGradientArgs {
     double x1;
     double y1;
     double x2;
     double y2;
 } djn_LinearGradientArgs;
 
-extern struct djn_RadialGradientArgs
-{
+extern struct djn_RadialGradientArgs {
     double cx;
     double cy;
     double r;
@@ -392,8 +353,7 @@ extern struct djn_RadialGradientArgs
     double fy;
 } djn_RadialGradientArgs;
 
-extern struct djn_GradientStopArgs
-{
+extern struct djn_GradientStopArgs {
     unsigned int r;
     unsigned int g;
     unsigned int b;
@@ -401,8 +361,7 @@ extern struct djn_GradientStopArgs
     double       offset;
 } djn_GradientStopArgs;
 
-extern struct djn_FontArgs
-{
+extern struct djn_FontArgs {
     double        size;
     djnLengthUnit unit;
     double        weight;
@@ -411,8 +370,7 @@ extern struct djn_FontArgs
     const char*   family;
 } djn_FontArgs;
 
-extern struct djn_AllGradientArgs
-{
+extern struct djn_AllGradientArgs {
     double        x1;
     double        y1;
     double        x2;
@@ -426,8 +384,7 @@ extern struct djn_AllGradientArgs
     djnFillSpread spread;
 } djn_AllGradientArgs;
 
-extern struct djn_TransformationArgs
-{
+extern struct djn_TransformationArgs {
     double tx;
     double ty;
     double cx;
@@ -453,8 +410,7 @@ extern struct djn_TransformationArgs
     double m44;
 } djn_TransformationArgs;
 
-extern struct djn_RectAreaArgs
-{
+extern struct djn_RectAreaArgs {
     double      x;
     double      y;
     double      width;
@@ -462,8 +418,7 @@ extern struct djn_RectAreaArgs
     const char* title;
 } djn_RectAreaArgs;
 
-extern struct djn_UseArgs
-{
+extern struct djn_UseArgs {
     double          x;
     double          y;
     double          width;

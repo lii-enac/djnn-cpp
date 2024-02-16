@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class Texture : public AbstractStyle
-{
+class Texture : public AbstractStyle {
   public:
     Texture (CoreProcess* parent, const string& name, const string& path);
     virtual ~Texture ();
@@ -36,8 +35,7 @@ class Texture : public AbstractStyle
     AbstractTextProperty*                   path () { return (AbstractTextProperty*)find_child_impl ("path"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         string path;
     };
     raw_props_t raw_props;

@@ -28,8 +28,7 @@ class FSM;
 class FSMState;
 class FSMTransition;
 
-class FSMState : public Container
-{
+class FSMState : public Container {
   public:
     FSMState (CoreProcess* parent, const string& name);
     ~FSMState ();
@@ -40,8 +39,7 @@ class FSMState : public Container
 #endif
     bool is_highest_priority (FSMTransition* t);
     void disable_transitions (FSMTransition* t);
-    void add_transition (FSMTransition* t)
-    {
+    void add_transition (FSMTransition* t) {
         FSMTransition* pt = t;
         _transitions.push_front (pt);
     };
@@ -51,11 +49,9 @@ class FSMState : public Container
     FSM*                 _parent_fsm;
 };
 
-class FSMTransition : public FatProcess
-{
+class FSMTransition : public FatProcess {
   private:
-    class FSMTransitionAction : public Action
-    {
+    class FSMTransitionAction : public Action {
       public:
         FSMTransitionAction (CoreProcess* parent, const string& name, FSMState* src, FSMState* dst, CoreProcess* action)
             : Action (parent, name), _src (src), _dst (dst) { _t = dynamic_cast<FSMTransition*> (parent); }
@@ -83,8 +79,7 @@ class FSMTransition : public FatProcess
     Action* transition_action () { return &_transition_action; }
 
   protected:
-    struct Init
-    {
+    struct Init {
         Init (FSMTransition* t, CoreProcess* parent,
               const string& tspec, const string& aspec);
     };
@@ -100,10 +95,8 @@ class FSMTransition : public FatProcess
     Coupling            _c_src, _c_trigger_to_action;
 };
 
-class FSM : public FatProcess
-{
-    class FSMPostTriggerAction : public Action
-    {
+class FSM : public FatProcess {
+    class FSMPostTriggerAction : public Action {
       public:
         FSMPostTriggerAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -116,21 +109,18 @@ class FSM : public FatProcess
     void                   impl_activate () override;
     void                   impl_deactivate () override;
     virtual process_type_e get_process_type () const override { return FSM_T; }
-    void                   update_state (FSMState* s, const string& name)
-    {
+    void                   update_state (FSMState* s, const string& name) {
         _cur_state = s;
         _fsm_state.set_value (name, true);
     };
-    void set_initial (const string& n)
-    {
+    void set_initial (const string& n) {
         if (_initial.get_value ().length () == 0)
             _initial.set_value (n, false);
     };
     void            draw () override;
     void            pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
-    void            add_state (FSMState* st)
-    {
+    void            add_state (FSMState* st) {
         graph_add_edge (st, &_fsm_state);
         _states.push_back (st);
     };
@@ -139,8 +129,7 @@ class FSM : public FatProcess
     int  priority () { return _priority; }
     void increase_priority () { _priority++; }
     void set_parent (CoreProcess* parent) override;
-    void set_triggered (int v)
-    {
+    void set_triggered (int v) {
         _already_triggered = v;
         if (v)
             _post_trigger.set_activation_flag (ACTIVATION);
@@ -161,8 +150,7 @@ class FSM : public FatProcess
 
 #ifdef DJNN_NO_DYNAMIC_CAST
 template <>
-inline FSM* djnn_dynamic_cast (CoreProcess* p)
-{
+inline FSM* djnn_dynamic_cast (CoreProcess* p) {
     if (p->get_process_type () == FSM_T) {
         return static_cast<FSM*> (p);
     }

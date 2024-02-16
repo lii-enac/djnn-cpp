@@ -25,13 +25,11 @@
 
 namespace djnn {
 
-class Serial : public FatProcess, public ExternalSource
-{
+class Serial : public FatProcess, public ExternalSource {
 
     /*** private Class Serial Out Actions ***/
   private:
-    class SerialOutAction : public Action
-    {
+    class SerialOutAction : public Action {
       public:
         SerialOutAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); }

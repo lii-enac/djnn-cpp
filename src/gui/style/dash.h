@@ -4,8 +4,7 @@
 #include "gen/dash_offset.h"
 
 namespace djnn {
-class DashArray : public AbstractStyle
-{
+class DashArray : public AbstractStyle {
   public:
     DashArray (CoreProcess* parent, const string& name)
         : AbstractStyle (parent, name) { finalize_construction (parent, name); }
@@ -16,8 +15,7 @@ class DashArray : public AbstractStyle
 
     virtual ~DashArray () { _dash_array.clear (); }
     const vector<double>& dash_array () const { return _dash_array; }
-    void                  add_sub_pattern (double dash, double space)
-    {
+    void                  add_sub_pattern (double dash, double space) {
         _dash_array.push_back (dash);
         _dash_array.push_back (space);
     }
@@ -30,8 +28,7 @@ class DashArray : public AbstractStyle
     vector<double> _dash_array;
 };
 
-class NoDashArray : public AbstractStyle
-{
+class NoDashArray : public AbstractStyle {
   public:
     NoDashArray (CoreProcess* parent, const string& name)
         : AbstractStyle (parent, name) { finalize_construction (parent, name); }

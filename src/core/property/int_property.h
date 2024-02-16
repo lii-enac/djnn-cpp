@@ -21,8 +21,7 @@
 #if 1
 
 namespace djnn {
-class AbstractIntProperty : public AbstractSimpleProperty
-{
+class AbstractIntProperty : public AbstractSimpleProperty {
   public:
     AbstractIntProperty (CoreProcess* parent, const string& name, int notify_mask = notify_none)
         : AbstractSimpleProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
@@ -56,8 +55,7 @@ class AbstractIntProperty : public AbstractSimpleProperty
 #endif
 };
 
-class IntProperty : public AbstractIntProperty
-{
+class IntProperty : public AbstractIntProperty {
   public:
     IntProperty (CoreProcess* parent, const string& name, int v)
         : AbstractIntProperty (parent, name), value (v) {}
@@ -71,8 +69,7 @@ class IntProperty : public AbstractIntProperty
     int value;
 };
 
-class IntPropertyProxy : public AbstractIntProperty
-{
+class IntPropertyProxy : public AbstractIntProperty {
   public:
     IntPropertyProxy (CoreProcess* parent, const string& name, int& v, int notify_mask = notify_none)
         : AbstractIntProperty (parent, name, notify_mask), value (v) {}
@@ -96,8 +93,7 @@ void setInt (CoreProcess* parent, int v);
 namespace djnn {
 
 template <>
-struct TemplatePropertyType<int>
-{
+struct TemplatePropertyType<int> {
     static const property_type_e type = Integer;
 };
 

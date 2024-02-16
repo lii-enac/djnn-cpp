@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class DashOffset : public AbstractStyle
-{
+class DashOffset : public AbstractStyle {
   public:
     DashOffset (CoreProcess* parent, const string& name, double offset);
     virtual ~DashOffset ();
@@ -36,8 +35,7 @@ class DashOffset : public AbstractStyle
     AbstractDoubleProperty*                 offset () { return (AbstractDoubleProperty*)find_child_impl ("offset"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double offset;
     };
     raw_props_t raw_props;

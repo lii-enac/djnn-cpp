@@ -22,11 +22,9 @@
 
 namespace djnn {
 
-class Regex : public FatProcess
-{
+class Regex : public FatProcess {
   private:
-    class RegexAction : public Action
-    {
+    class RegexAction : public Action {
       public:
         RegexAction (CoreProcess* parent, const string& name, Regex& reg)
             : Action (parent, name), _reg (reg) {}

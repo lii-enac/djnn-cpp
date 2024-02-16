@@ -19,8 +19,7 @@
 
 namespace djnn {
 
-class AbstractRemoteProperty : public AbstractSimpleProperty
-{
+class AbstractRemoteProperty : public AbstractSimpleProperty {
   public:
     AbstractRemoteProperty (CoreProcess* parent, const string& name, int notify_mask = notify_none)
         : AbstractSimpleProperty (parent, name, notify_mask), _send (false) { finalize_construction (parent, name); };
@@ -55,8 +54,7 @@ class AbstractRemoteProperty : public AbstractSimpleProperty
 #endif
 };
 
-class RemoteProperty : public AbstractRemoteProperty
-{
+class RemoteProperty : public AbstractRemoteProperty {
   public:
     RemoteProperty (CoreProcess* parent, const string& name, const string& v)
         : AbstractRemoteProperty (parent, name), _value (v) {}
@@ -68,8 +66,7 @@ class RemoteProperty : public AbstractRemoteProperty
      * that is read by the GRAPH_EXEC. But, in these case it has no effect because the properties are removed from
      * the execution graph. Consequently, we have to implement a specific behavior.
      */
-    void set_activation_flag (activation_flag_e VALUE) override
-    {
+    void set_activation_flag (activation_flag_e VALUE) override {
         switch (VALUE) {
         case ACTIVATION:
             set_value ("ACTIVATION", true);

@@ -25,8 +25,7 @@
 
 namespace djnn {
 
-class QtPickingView : public ColorPickingView
-{
+class QtPickingView : public ColorPickingView {
   public:
     QtPickingView (Window* win);
     virtual ~QtPickingView ();

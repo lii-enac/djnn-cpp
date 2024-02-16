@@ -18,8 +18,7 @@
 
 namespace djnn {
 
-class Container : public FatProcess
-{
+class Container : public FatProcess {
 
     typedef map<string, CoreProcess*> context_t;
 

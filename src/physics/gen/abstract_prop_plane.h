@@ -22,8 +22,7 @@
 #include "core/ontology/process.h"
 
 namespace djnn {
-class AbstractPropPlane : public PhyObj
-{
+class AbstractPropPlane : public PhyObj {
   public:
     AbstractPropPlane (CoreProcess* parent, const string& name, double a, double b, double c, double d);
     virtual ~AbstractPropPlane ();
@@ -37,8 +36,7 @@ class AbstractPropPlane : public PhyObj
     AbstractDoubleProperty* d () { return (AbstractDoubleProperty*)find_child_impl ("d"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double a;
         double b;
         double c;

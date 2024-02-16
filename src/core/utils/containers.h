@@ -54,8 +54,7 @@ template <typename T>
 class string_impl_t;
 
 // template <typename T>
-class string
-{
+class string {
   public:
     string (const char*);
     using T              = char;
@@ -145,8 +144,7 @@ template <typename T>
 class vector_impl_t;
 
 template <typename T>
-class vector
-{
+class vector {
   public:
     using value_type     = T;
     using iterator       = T*;
@@ -190,8 +188,7 @@ template <typename T>
 class list_impl_t;
 
 template <typename T>
-class list
-{
+class list {
   public:
     using value_type     = T;
     using iterator       = T*;
@@ -220,8 +217,7 @@ template <typename Key, typename T>
 class map_impl_t;
 
 template <typename T1, typename T2>
-class pair
-{
+class pair {
   public:
     pair ();
     pair (const T1& t1, const T2& t2)
@@ -234,13 +230,11 @@ template <typename T1, typename T2>
 pair<T1, T2> make_pair (const T1&, const T2&);
 
 template <typename Key, typename T>
-class map
-{
+class map {
   public:
     using key_type   = T;
     using value_type = pair<Key, T>;
-    struct iterator
-    {
+    struct iterator {
         value_type     operator* ();
         value_type*    operator->();
         bool           operator!= (const iterator&);
@@ -249,8 +243,7 @@ class map
         bool           operator== (const iterator&);
     };
     // using const_iterator = const iterator;
-    struct const_iterator
-    {
+    struct const_iterator {
         const value_type&    operator* ();
         const value_type*    operator->();
         bool                 operator!= (const const_iterator&);

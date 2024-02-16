@@ -3,8 +3,7 @@
 #include "core/tree/component.h"
 
 namespace djnn {
-class StyleSheet : public Container
-{
+class StyleSheet : public Container {
   public:
     StyleSheet (CoreProcess* parent, const string& name);
     virtual ~StyleSheet () override {}

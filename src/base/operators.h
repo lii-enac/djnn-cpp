@@ -33,19 +33,16 @@ template <typename Left, typename Right, typename Result, typename BinaryFunctio
 class BinaryOperator;
 
 template <typename Left, typename Right, typename Result, typename BinaryFunction, typename Left_init, typename Right_init>
-class BinaryOperatorAction : public Action
-{
+class BinaryOperatorAction : public Action {
   public:
     typedef BinaryOperator<Left, Right, Result, BinaryFunction, Left_init, Right_init> BinOperator;
 
     BinaryOperatorAction (CoreProcess* parent, const string& name, BinOperator& binop)
-        : Action (parent, name), _binop (binop)
-    {
+        : Action (parent, name), _binop (binop) {
         finalize_construction (parent, name);
     }
     virtual ~BinaryOperatorAction (){};
-    void impl_activate () override
-    {
+    void impl_activate () override {
         _binop._result.set_value (BinaryFunction () (_binop._left.get_value (), _binop._right.get_value ()), true);
     }
 
@@ -54,13 +51,11 @@ class BinaryOperatorAction : public Action
 };
 
 template <typename Function>
-struct name_info
-{
+struct name_info {
     static const char left[], right[], serialize[];
 };
 
-class BinaryOperatorCommon : public FatProcess
-{
+class BinaryOperatorCommon : public FatProcess {
   public:
     BinaryOperatorCommon (const string& name)
         : FatProcess (name) {}
@@ -80,31 +75,26 @@ class BinaryOperator : public BinaryOperatorCommon // Process
           _result (this, "result", BinaryFunction () (l_val, r_val)),
           _action (this, name + "action", *this),
           _c_left (&_left, ACTIVATION, &_action, ACTIVATION),
-          _c_right (&_right, ACTIVATION, &_action, ACTIVATION)
-    {
+          _c_right (&_right, ACTIVATION, &_action, ACTIVATION) {
         init_binary_couplings (_left, _right, _result, _action, _c_left, _c_right);
         finalize_construction (parent, name);
     }
-    virtual ~BinaryOperator ()
-    {
+    virtual ~BinaryOperator () {
         uninit_binary_couplings (this, _left, _right, _result, _action, _c_left, _c_right);
     }
-    void impl_activate () override
-    {
+    void impl_activate () override {
         _c_left.enable ();
         _c_right.enable ();
         _action.activate ();
     }
-    void impl_deactivate () override
-    {
+    void impl_deactivate () override {
         _c_left.disable ();
         _c_right.disable ();
         _action.deactivate ();
     }
 
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const string& type) override
-    {
+    void serialize (const string& type) override {
         AbstractSerializer::pre_serialize (this, type);
         AbstractSerializer::serializer->start ("base:" + string (name_info<BinaryFunction>::serialize));
         AbstractSerializer::serializer->text_attribute ("id", get_name ());
@@ -115,8 +105,7 @@ class BinaryOperator : public BinaryOperatorCommon // Process
     }
 #endif
   protected:
-    void set_parent (CoreProcess* parent) override
-    {
+    void set_parent (CoreProcess* parent) override {
         // in case of re-parenting remove edge dependency in graph
         if (get_parent ()) {
             remove_state_dependency (get_parent (), &_action);
@@ -140,21 +129,18 @@ template <typename Input, typename Output, typename UnaryFunction, typename Inpu
 class UnaryOperator;
 
 template <typename Input, typename Output, typename UnaryFunction, typename Input_init>
-class UnaryOperatorAction : public Action
-{
+class UnaryOperatorAction : public Action {
   public:
     typedef UnaryOperator<Input, Output, UnaryFunction, Input_init> UnOperator;
 
     UnaryOperatorAction (UnOperator& unop)
         : _unop (unop) {}
     UnaryOperatorAction (CoreProcess* parent, const string& name, UnOperator& unop)
-        : Action (parent, name), _unop (unop)
-    {
+        : Action (parent, name), _unop (unop) {
         finalize_construction (parent, name);
     }
     virtual ~UnaryOperatorAction (){};
-    void impl_activate () override
-    {
+    void impl_activate () override {
         _unop._output.set_value (UnaryFunction () (_unop._input.get_value ()), true);
         // UnaryFunction()(_unop.input, _unop.output);
     }
@@ -163,8 +149,7 @@ class UnaryOperatorAction : public Action
     UnOperator& _unop;
 };
 
-class UnaryOperatorCommon : public FatProcess
-{
+class UnaryOperatorCommon : public FatProcess {
   public:
     UnaryOperatorCommon (const string& name)
         : FatProcess (name) {}
@@ -182,29 +167,24 @@ class UnaryOperator : public UnaryOperatorCommon // Process
           _input (this, "input", i_val),
           _output (this, "output", UnaryFunction () (i_val)),
           _action (this, "action", *this),
-          _coupling (&_input, ACTIVATION, &_action, ACTIVATION)
-    {
+          _coupling (&_input, ACTIVATION, &_action, ACTIVATION) {
         init_unary_couplings (_input, _output, _action, _coupling);
         finalize_construction (parent, name);
     }
-    virtual ~UnaryOperator ()
-    {
+    virtual ~UnaryOperator () {
         uninit_unary_couplings (this, _input, _output, _action, _coupling);
     }
-    void impl_activate () override
-    {
+    void impl_activate () override {
         _coupling.enable ();
         _action.activate ();
     }
-    void impl_deactivate () override
-    {
+    void impl_deactivate () override {
         _coupling.disable ();
         _action.deactivate ();
     }
 
 #ifndef DJNN_NO_SERIALIZE
-    void serialize (const string& type) override
-    {
+    void serialize (const string& type) override {
         AbstractSerializer::pre_serialize (this, type);
         AbstractSerializer::serializer->start ("base:" + string (name_info<UnaryFunction>::serialize));
         AbstractSerializer::serializer->text_attribute ("id", get_name ());
@@ -215,8 +195,7 @@ class UnaryOperator : public UnaryOperatorCommon // Process
 #endif
 
   protected:
-    void set_parent (CoreProcess* parent) override
-    {
+    void set_parent (CoreProcess* parent) override {
         // in case of re-parenting remove edge dependency in graph
         if (get_parent ()) {
             remove_state_dependency (get_parent (), &_action);

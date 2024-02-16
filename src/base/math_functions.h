@@ -39,8 +39,7 @@ extern "C" {
 namespace djnn {
 
 template <typename T>
-struct my_exp
-{
+struct my_exp {
     T operator() (T t1) { return ::exp (t1); }
 };
 template <>
@@ -53,8 +52,7 @@ typedef UnaryOperatorAction<DoubleProperty, DoubleProperty, my_exp<double>, doub
 typedef UnaryOperator<DoubleProperty, DoubleProperty, my_exp<double>, double>       Exp;
 
 template <typename T>
-struct my_log
-{
+struct my_log {
     T operator() (T t1) { return ::log (t1); }
 };
 template <>
@@ -67,8 +65,7 @@ typedef UnaryOperatorAction<DoubleProperty, DoubleProperty, my_log<double>, doub
 typedef UnaryOperator<DoubleProperty, DoubleProperty, my_log<double>, double>       Log;
 
 template <typename T>
-struct my_log10
-{
+struct my_log10 {
     T operator() (T t1) { return ::log10 (t1); }
 };
 template <>
@@ -81,8 +78,7 @@ typedef UnaryOperatorAction<DoubleProperty, DoubleProperty, my_log<double>, doub
 typedef UnaryOperator<DoubleProperty, DoubleProperty, my_log<double>, double>       Log10;
 
 template <typename T>
-struct my_sqrt
-{
+struct my_sqrt {
     T operator() (T t1) { return ::sqrt (t1); }
 };
 template <>
@@ -95,8 +91,7 @@ typedef UnaryOperatorAction<DoubleProperty, DoubleProperty, my_sqrt<double>, dou
 typedef UnaryOperator<DoubleProperty, DoubleProperty, my_sqrt<double>, double>       Sqrt;
 
 template <typename T>
-struct my_abs
-{
+struct my_abs {
     T operator() (T t1) { return ::fabs (t1); }
 };
 template <>
@@ -109,8 +104,7 @@ typedef UnaryOperatorAction<DoubleProperty, DoubleProperty, my_abs<double>, doub
 typedef UnaryOperator<DoubleProperty, DoubleProperty, my_abs<double>, double>       Abs;
 
 template <typename T>
-struct my_pow
-{
+struct my_pow {
     T operator() (T t1, T t2) { return ::pow (t1, t2); }
 };
 template <>
@@ -124,8 +118,7 @@ typedef BinaryOperator<DoubleProperty, DoubleProperty, DoubleProperty, my_pow<do
 
 #define DJNN_MIN___(x, y) ((x) < (y) ? (x) : (y))
 template <typename T>
-struct my_min
-{
+struct my_min {
     T operator() (T t1, T t2) { return DJNN_MIN___ (t1, t2); }
 };
 template <>
@@ -140,8 +133,7 @@ typedef BinaryOperator<DoubleProperty, DoubleProperty, DoubleProperty, my_min<do
 
 #define DJNN_MAX___(x, y) ((x) > (y) ? (x) : (y))
 template <typename T>
-struct my_max
-{
+struct my_max {
     T operator() (T t1, T t2) { return DJNN_MAX___ (t1, t2); }
 };
 template <>
@@ -155,8 +147,7 @@ typedef BinaryOperator<DoubleProperty, DoubleProperty, DoubleProperty, my_max<do
 #undef DJNN_MAX___
 
 template <typename T>
-struct my_clamp_min
-{
+struct my_clamp_min {
     T operator() (T t1, T t2) { return t2 < t1 ? t1 : t2; }
 };
 template <>
@@ -169,8 +160,7 @@ typedef BinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_
 typedef BinaryOperator<DoubleProperty, DoubleProperty, DoubleProperty, my_clamp_min<double>, double, double>       ClampMin;
 
 template <typename T>
-struct my_clamp_max
-{
+struct my_clamp_max {
     T operator() (T t1, T t2) { return t2 > t1 ? t1 : t2; }
 };
 template <>
@@ -182,17 +172,14 @@ const char                                                                      
 typedef BinaryOperatorAction<DoubleProperty, DoubleProperty, DoubleProperty, my_clamp_max<double>, double, double> ClampMaxAction;
 typedef BinaryOperator<DoubleProperty, DoubleProperty, DoubleProperty, my_clamp_max<double>, double, double>       ClampMax;
 
-class BoundedValue : public FatProcess
-{
+class BoundedValue : public FatProcess {
   private:
-    class BoundedValueAction : public Action
-    {
+    class BoundedValueAction : public Action {
       public:
         BoundedValueAction (CoreProcess* parent, const string& name, BoundedValue& bv)
             : Action (parent, name), _bv (bv) {}
         virtual ~BoundedValueAction () {}
-        void impl_activate () override
-        {
+        void impl_activate () override {
             double max   = _bv._max.get_value ();
             double min   = _bv._min.get_value ();
             double input = _bv._input.get_value ();
@@ -206,15 +193,13 @@ class BoundedValue : public FatProcess
 
   public:
     BoundedValue (CoreProcess* parent, const string& name, double min, double max, double init_val);
-    void impl_activate () override
-    {
+    void impl_activate () override {
         _c_min.enable ();
         _c_max.enable ();
         _c_input.enable ();
         _action.activate ();
     };
-    void impl_deactivate () override
-    {
+    void impl_deactivate () override {
         _c_min.disable ();
         _c_max.disable ();
         _c_input.disable ();

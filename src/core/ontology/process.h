@@ -31,8 +31,7 @@ class PickAnalyticalContext;
 
 class Visitor;
 
-class CoreProcess
-{
+class CoreProcess {
   public:
     using string = djnnstl::string;
     template <typename T>
@@ -173,16 +172,14 @@ class CoreProcess
 
     // bitfield for various state info: model, activation flag, activation state, binding
   public:
-    enum bit_shift
-    {
+    enum bit_shift {
         MODEL_SHIFT            = 0,
         ACTIVATION_FLAG_SHIFT  = 1,
         ACTIVATION_STATE_SHIFT = 3,
         BINDING_ACTION_SHIFT   = 5
     };
 
-    enum bit_mask
-    {
+    enum bit_mask {
         MODEL_MASK            = 0b1 << MODEL_SHIFT, // FIXME ?! shouldn't it be 0?
         ACTIVATION_FLAG_MASK  = 0b11 << ACTIVATION_FLAG_SHIFT,
         ACTIVATION_STATE_MASK = 0b11 << ACTIVATION_STATE_SHIFT,
@@ -199,8 +196,7 @@ class CoreProcess
     activation_state_e get_activation_state () const { return static_cast<activation_state_e> (get_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT)); }
     void               set_activation_state (activation_state_e VALUE) { set_bitset (ACTIVATION_STATE_MASK, ACTIVATION_STATE_SHIFT, static_cast<unsigned int> (VALUE)); }
 
-    void trigger_activation_flag ()
-    {
+    void trigger_activation_flag () {
         switch (get_activation_flag ()) {
         case NONE_ACTIVATION:
             break;
@@ -241,8 +237,7 @@ class CoreProcess
     const string&                 get_name (CoreProcess* parent) const; // WARNING : low efficiency function cause by linear search. use with care !
     static vector<string>         default_properties_name;
     virtual const vector<string>& get_properties_name () const; // { vector<string> res; return res; }
-    struct DebugInfo
-    {
+    struct DebugInfo {
         string filepath;
         int    lineno;
     };
@@ -264,8 +259,7 @@ class CoreProcess
 #endif
 };
 
-class VoidProcess : public CoreProcess
-{
+class VoidProcess : public CoreProcess {
   public:
     VoidProcess ()
         : CoreProcess () {}
@@ -274,8 +268,7 @@ class VoidProcess : public CoreProcess
     void impl_deactivate () override {}
 };
 
-class CouplingProcess : public CoreProcess
-{
+class CouplingProcess : public CoreProcess {
   public:
     CouplingProcess (bool model = false)
         : CoreProcess (model) {}
@@ -296,8 +289,7 @@ class CouplingProcess : public CoreProcess
     couplings_t _deactivation_couplings;
 };
 
-class ChildProcess : public CouplingProcess
-{
+class ChildProcess : public CouplingProcess {
   public:
     ChildProcess (bool model = false)
         : CouplingProcess (model), _parent (nullptr), _state_dependency (nullptr) {}
@@ -314,8 +306,7 @@ class ChildProcess : public CouplingProcess
     CoreProcess* _state_dependency;
 };
 
-class FatProcess : public ChildProcess
-{
+class FatProcess : public ChildProcess {
   public:
     FatProcess (const string& name, bool model = false);
 
@@ -380,27 +371,22 @@ using ParentProcess   = CoreProcess;
 
 // --- public c-like API
 
-inline void activate (CoreProcess* p)
-{
+inline void activate (CoreProcess* p) {
     p->activate ();
 }
-inline void deactivate (CoreProcess* p)
-{
+inline void deactivate (CoreProcess* p) {
     p->deactivate ();
 }
 
-inline CoreProcess* find (CoreProcess* parent, const CoreProcess::string& path)
-{
+inline CoreProcess* find (CoreProcess* parent, const CoreProcess::string& path) {
     return parent->find_child (path);
 }
-inline CoreProcess* find_optional (CoreProcess* parent, const CoreProcess::string& path)
-{
+inline CoreProcess* find_optional (CoreProcess* parent, const CoreProcess::string& path) {
     return parent->find_optional_child (path);
 }
 
 template <typename P>
-P* clone (P* p)
-{
+P* clone (P* p) {
     return dynamic_cast<P*> (p->clone ());
 } // FIXME will make code size grow :-/...
 // inline CoreProcess* clone (CoreProcess *p) { return p->clone (); }
@@ -410,12 +396,10 @@ void alias (CoreProcess* parent, const CoreProcess::string& name, CoreProcess* f
 void merge_children (CoreProcess* parent1, const CoreProcess::string& sy1, CoreProcess* parent2, const CoreProcess::string& sy2);
 
 // internal c-like API
-inline FatProcess* find (FatProcess* p)
-{
+inline FatProcess* find (FatProcess* p) {
     return p;
 } // helper for smalac
-inline FatProcess* find (CoreProcess* p)
-{
+inline FatProcess* find (CoreProcess* p) {
     return dynamic_cast<FatProcess*> (p);
 } // helper for smalac
 void remove_from_parentless_name (CoreProcess* child);

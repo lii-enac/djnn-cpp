@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class OutlineCapStyle : public AbstractStyle
-{
+class OutlineCapStyle : public AbstractStyle {
   public:
     OutlineCapStyle (CoreProcess* parent, const string& name, int cap);
     virtual ~OutlineCapStyle ();
@@ -36,8 +35,7 @@ class OutlineCapStyle : public AbstractStyle
     AbstractIntProperty*                    cap () { return (AbstractIntProperty*)find_child_impl ("cap"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int cap;
     };
     raw_props_t raw_props;

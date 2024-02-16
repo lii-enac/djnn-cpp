@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class AbstractPropFontStyle : public AbstractStyle
-{
+class AbstractPropFontStyle : public AbstractStyle {
   public:
     AbstractPropFontStyle (CoreProcess* parent, const string& name, int style);
     virtual ~AbstractPropFontStyle ();
@@ -35,8 +34,7 @@ class AbstractPropFontStyle : public AbstractStyle
     AbstractIntProperty*                    style () { return (AbstractIntProperty*)find_child_impl ("style"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int style;
     };
     raw_props_t raw_props;

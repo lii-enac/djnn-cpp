@@ -24,8 +24,7 @@ namespace djnn {
 
 class SDLWindow;
 
-class SDLMainloop : public ExternalSource
-{
+class SDLMainloop : public ExternalSource {
   public:
     static SDLMainloop& instance ();
     ~SDLMainloop ();

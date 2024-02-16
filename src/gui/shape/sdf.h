@@ -19,8 +19,7 @@
 
 namespace djnn {
 
-struct vec2
-{
+struct vec2 {
     double x, y;
     vec2 (double x_, double y_)
         : x (x_), y (y_) {}
@@ -29,8 +28,7 @@ struct vec2
 };
 
 inline const vec2
-operator- (const vec2& v1, const vec2& v2)
-{
+operator- (const vec2& v1, const vec2& v2) {
     vec2 res = v1;
     res.x -= v2.x;
     res.y -= v2.y;
@@ -38,60 +36,50 @@ operator- (const vec2& v1, const vec2& v2)
 }
 
 inline const vec2
-operator/ (const vec2& v1, double d)
-{
+operator/ (const vec2& v1, double d) {
     vec2 res = v1;
     res.x /= d;
     res.y /= d;
     return res;
 }
 
-inline const vec2 abs (vec2& v)
-{
+inline const vec2 abs (vec2& v) {
     vec2 res = {::fabs (v.x), ::fabs (v.y)};
     return res;
 }
 
-inline double abs (double d)
-{
+inline double abs (double d) {
     return std::abs (d);
 }
 
-inline double min (double d1, double d2)
-{
+inline double min (double d1, double d2) {
     return d1 < d2 ? d1 : d2;
 }
 
-inline const vec2 min (const vec2& v, double m)
-{
+inline const vec2 min (const vec2& v, double m) {
     vec2 res = {min (v.x, m), min (v.y, m)};
     return res;
 }
 
-inline double max (double d1, double d2)
-{
+inline double max (double d1, double d2) {
     return d1 > d2 ? d1 : d2;
 }
 
-inline const vec2 max (const vec2& v, double m)
-{
+inline const vec2 max (const vec2& v, double m) {
     vec2 res = {max (v.x, m), max (v.y, m)};
     return res;
 }
 
-inline double length (const vec2& v)
-{
+inline double length (const vec2& v) {
     return ::hypot (v.x, v.y);
 }
 
-inline const vec2 floor (const vec2& v)
-{
+inline const vec2 floor (const vec2& v) {
     vec2 res = {::floor (v.x), ::floor (v.y)};
     return res;
 }
 
-inline double sign (double v)
-{
+inline double sign (double v) {
     if (v > 0)
         return 1.0;
     else if (v < 0)
@@ -100,38 +88,32 @@ inline double sign (double v)
         return 0.0;
 }
 
-inline const vec2 normalize (const vec2& v)
-{
+inline const vec2 normalize (const vec2& v) {
     auto h = length (v);
     return vec2 (v.x / h, v.y / h);
 }
 
-inline int dot (const vec2& v1, const vec2& v2)
-{
+inline int dot (const vec2& v1, const vec2& v2) {
     return v1.x * v2.x + v1.y * v2.y;
 }
 
-inline float SDF_plane (vec2 p, vec2 p0, vec2 p1)
-{
+inline float SDF_plane (vec2 p, vec2 p0, vec2 p1) {
     vec2 T = p1 - p0;
     vec2 O = normalize (vec2 (T.y, -T.x));
     return dot (O, p0 - p);
 }
 
-inline float SDF_circle (vec2 p, float radius)
-{
+inline float SDF_circle (vec2 p, float radius) {
     return length (p) - radius;
 }
 
-inline float SDF_box (vec2 p, vec2 size)
-{
+inline float SDF_box (vec2 p, vec2 size) {
     vec2 d = abs (p) - size;
     return min (max (d.x, d.y), 0.0) + length (max (d, 0.0));
 }
 
 // Code by Nicolas Rougier & Inigo Quilez - MIT License
-inline float SDF_round_box (vec2 p, vec2 size, float radius)
-{
+inline float SDF_round_box (vec2 p, vec2 size, float radius) {
     // return SDF_box(p, size) - radius;
     return SDF_box (p, size) - radius;
     // return SDF_fake_box(p, size) - radius;
@@ -139,8 +121,7 @@ inline float SDF_round_box (vec2 p, vec2 size, float radius)
 
 // Code by Inigo Quilez
 // See https://www.shadertoy.com/view/4sS3zz
-inline float SDF_ellipse (vec2 p, vec2 ab)
-{
+inline float SDF_ellipse (vec2 p, vec2 ab) {
     // The function does not like circles
     // if (ab.x == ab.y) ab.x = ab.x*0.9999;
     if (ab.x == ab.y)

@@ -33,8 +33,7 @@
 
 namespace djnn {
 
-class GradientStop : public AbstractPropGradientStop
-{
+class GradientStop : public AbstractPropGradientStop {
   public:
     GradientStop (CoreProcess* parent, const string& name, double r, double g, double b, double a, double offset);
     virtual ~GradientStop ();
@@ -42,8 +41,7 @@ class GradientStop : public AbstractPropGradientStop
     GradientStop* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class LinearGradient : public AbstractPropLinearGradient
-{
+class LinearGradient : public AbstractPropLinearGradient {
   public:
     LinearGradient (CoreProcess* parent, const string& name, double x1, double y1, double x2, double y2,
                     djnFillSpread s, djnFillCoords fc);
@@ -55,8 +53,7 @@ class LinearGradient : public AbstractPropLinearGradient
     LinearGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class RefLinearGradient : public AbstractStyle
-{
+class RefLinearGradient : public AbstractStyle {
   public:
     RefLinearGradient (CoreProcess* parent, const string& name, LinearGradient* lg);
     virtual ~RefLinearGradient (){};
@@ -70,8 +67,7 @@ class RefLinearGradient : public AbstractStyle
     LinearGradient* _lg;
 };
 
-class RadialGradient : public AbstractPropRadialGradient
-{
+class RadialGradient : public AbstractPropRadialGradient {
   public:
     RadialGradient (CoreProcess* parent, const string& name, double cx, double cy, double r, double fx, double fy,
                     djnFillSpread s, djnFillCoords fc);
@@ -83,8 +79,7 @@ class RadialGradient : public AbstractPropRadialGradient
     RadialGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class RefRadialGradient : public AbstractStyle
-{
+class RefRadialGradient : public AbstractStyle {
   public:
     RefRadialGradient (CoreProcess* parent, const string& name, RadialGradient* rg);
     virtual ~RefRadialGradient (){};

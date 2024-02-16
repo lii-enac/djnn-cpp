@@ -4,8 +4,7 @@
 #include "gen/abstract_scaling.h"
 
 namespace djnn {
-class Scaling : public AbstractScaling
-{
+class Scaling : public AbstractScaling {
   public:
     Scaling (CoreProcess* parent, const string& name, double sx, double sy, double cx, double cy);
     Scaling (double sx, double sy, double cx, double cy);

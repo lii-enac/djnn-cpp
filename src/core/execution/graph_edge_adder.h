@@ -18,8 +18,7 @@
 
 namespace djnn {
 
-class GraphEdgeAdder : public FatProcess
-{
+class GraphEdgeAdder : public FatProcess {
   public:
     GraphEdgeAdder (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst);
     virtual ~GraphEdgeAdder ();

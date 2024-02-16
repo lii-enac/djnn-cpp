@@ -7,11 +7,9 @@
 #include "core/property/double_property.h"
 
 namespace djnn {
-class Incr : public FatProcess
-{
+class Incr : public FatProcess {
   private:
-    class StepAction : public Action
-    {
+    class StepAction : public Action {
       public:
         StepAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); }
@@ -42,11 +40,9 @@ class Incr : public FatProcess
 #endif
 };
 
-class AdderAccumulator : public FatProcess
-{
+class AdderAccumulator : public FatProcess {
   private:
-    class AdderAccumulatorAction : public Action
-    {
+    class AdderAccumulatorAction : public Action {
       public:
         AdderAccumulatorAction (CoreProcess* parent, const string& name, AdderAccumulator& aa);
         void impl_activate () override;

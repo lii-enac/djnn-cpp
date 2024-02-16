@@ -21,8 +21,7 @@
 
 namespace djnn {
 
-class CairoSDLWindow : public SDLWindow
-{
+class CairoSDLWindow : public SDLWindow {
   public:
     CairoSDLWindow (Window* win, const string& title, double x, double y, double w, double h);
     virtual ~CairoSDLWindow ();

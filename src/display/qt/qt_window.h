@@ -23,8 +23,7 @@ namespace djnn {
 
 class MyQWidget;
 
-class QtWindow : public WinImpl
-{
+class QtWindow : public WinImpl {
   public:
     QtWindow (Window* win, const djnnstl::string& title, double x, double y, double w, double h);
     virtual ~QtWindow ();

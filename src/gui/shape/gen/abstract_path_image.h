@@ -24,8 +24,7 @@
 #include "gui/shape/gen/abstract_image.h"
 
 namespace djnn {
-class AbstractPathImage : public AbstractImage
-{
+class AbstractPathImage : public AbstractImage {
   public:
     AbstractPathImage (CoreProcess* parent, const string& name, const string& path, double x, double y, double width, double height);
     virtual ~AbstractPathImage ();
@@ -36,8 +35,7 @@ class AbstractPathImage : public AbstractImage
     AbstractTextProperty*                   path () { return (AbstractTextProperty*)find_child_impl ("path"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         string path;
     };
     raw_props_t raw_props;

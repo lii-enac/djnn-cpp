@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class OutlineJoinStyle : public AbstractStyle
-{
+class OutlineJoinStyle : public AbstractStyle {
   public:
     OutlineJoinStyle (CoreProcess* parent, const string& name, int join);
     virtual ~OutlineJoinStyle ();
@@ -36,8 +35,7 @@ class OutlineJoinStyle : public AbstractStyle
     AbstractIntProperty*                    join () { return (AbstractIntProperty*)find_child_impl ("join"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int join;
     };
     raw_props_t raw_props;

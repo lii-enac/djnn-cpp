@@ -23,8 +23,7 @@
 #include "core/ontology/process.h"
 
 namespace djnn {
-class AbstractVolume : public AbstractAudioStyle
-{
+class AbstractVolume : public AbstractAudioStyle {
   public:
     AbstractVolume (CoreProcess* parent, const string& name, double volume);
     virtual ~AbstractVolume ();
@@ -35,8 +34,7 @@ class AbstractVolume : public AbstractAudioStyle
     AbstractDoubleProperty*                 volume () { return (AbstractDoubleProperty*)find_child_impl ("volume"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double volume;
     };
     raw_props_t raw_props;

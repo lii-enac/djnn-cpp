@@ -23,11 +23,9 @@
 
 namespace djnn {
 
-class Finder : public FatProcess
-{
+class Finder : public FatProcess {
   private:
-    class FinderAction : public Action
-    {
+    class FinderAction : public Action {
       public:
         FinderAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}

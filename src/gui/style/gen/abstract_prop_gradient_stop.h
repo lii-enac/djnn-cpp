@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class AbstractPropGradientStop : public AbstractStyle
-{
+class AbstractPropGradientStop : public AbstractStyle {
   public:
     AbstractPropGradientStop (CoreProcess* parent, const string& name, double r, double g, double b, double a, double offset);
     virtual ~AbstractPropGradientStop ();
@@ -39,8 +38,7 @@ class AbstractPropGradientStop : public AbstractStyle
     AbstractDoubleProperty*                 offset () { return (AbstractDoubleProperty*)find_child_impl ("offset"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double r;
         double g;
         double b;

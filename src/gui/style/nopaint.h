@@ -3,8 +3,7 @@
 #include "abstract_style.h"
 
 namespace djnn {
-class NoOutline : public AbstractStyle
-{
+class NoOutline : public AbstractStyle {
   public:
     NoOutline (CoreProcess* parent, const string& name)
         : AbstractStyle (parent, name) { finalize_construction (parent, name); }
@@ -15,8 +14,7 @@ class NoOutline : public AbstractStyle
     NoOutline* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
 
-class NoFill : public AbstractStyle
-{
+class NoFill : public AbstractStyle {
   public:
     NoFill (CoreProcess* parent, const string& name)
         : AbstractStyle (parent, name) { finalize_construction (parent, name); }

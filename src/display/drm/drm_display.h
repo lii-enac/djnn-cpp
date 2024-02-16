@@ -30,8 +30,7 @@
 // #include "utils/debug.h"
 
 namespace djnn {
-typedef struct buff
-{
+typedef struct buff {
     uint32_t width;
     uint32_t height;
     uint32_t stride;
@@ -41,11 +40,9 @@ typedef struct buff
     uint32_t fb;
 } buff;
 
-class DRMConnector : public FatProcess
-{
+class DRMConnector : public FatProcess {
   private:
-    class UpdatePosAction : public Action
-    {
+    class UpdatePosAction : public Action {
       public:
         UpdatePosAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); }
@@ -97,10 +94,8 @@ class DRMConnector : public FatProcess
 
 extern vector<DRMConnector*> conn_list;
 
-class DRMDevice : public FatProcess
-{
-    class VBlankAction : public Action
-    {
+class DRMDevice : public FatProcess {
+    class VBlankAction : public Action {
       public:
         VBlankAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); }
@@ -123,17 +118,14 @@ class DRMDevice : public FatProcess
     Coupling     _c_read_vblank;
 };
 
-class DRMUdev
-{
+class DRMUdev {
   private:
-    class DRMUdevAction : public Action
-    {
+    class DRMUdevAction : public Action {
       public:
         DRMUdevAction (DRMUdev* udev)
             : Action (nullptr, "DRMUdevAction"), _udev (udev) {}
         virtual ~DRMUdevAction () {}
-        void impl_activate ()
-        {
+        void impl_activate () {
             _udev->handle_udev_msg ();
         }
 

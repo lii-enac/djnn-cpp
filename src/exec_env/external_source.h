@@ -21,8 +21,7 @@
 namespace djnn {
 // using namespace djnnstl;
 
-class ExternalSource
-{
+class ExternalSource {
   public:
     using string = djnnstl::string;
     ExternalSource (const string& name);

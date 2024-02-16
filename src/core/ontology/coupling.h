@@ -19,8 +19,7 @@
 
 namespace djnn {
 
-class Coupling
-{
+class Coupling {
   public:
     // construction / destruction
     Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
@@ -55,8 +54,7 @@ class Coupling
     CoreProcess *_src, *_dst;
     unsigned int _bitset;
 
-    enum bit_shift
-    {
+    enum bit_shift {
         ENABLED_SHIFT             = 0,
         IMMEDIATE_SHIFT           = 1,
         SRC_ACTIVATION_FLAG_SHIFT = 2, // FIXME: NONE is never used? if so, 1 bit is enough
@@ -64,8 +62,7 @@ class Coupling
         HAS_GRAPH_EDGE_SHIFT      = 6
     };
 
-    enum bit_mask
-    {
+    enum bit_mask {
         ENABLED_MASK             = 0b1 << ENABLED_SHIFT, // FIXME, shouldn't it be 0b0?!
         IMMEDIATE_MASK           = 0b1 << IMMEDIATE_SHIFT,
         SRC_ACTIVATION_FLAG_MASK = 0b11 << SRC_ACTIVATION_FLAG_SHIFT,

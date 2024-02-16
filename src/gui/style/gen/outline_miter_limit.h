@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class OutlineMiterLimit : public AbstractStyle
-{
+class OutlineMiterLimit : public AbstractStyle {
   public:
     OutlineMiterLimit (CoreProcess* parent, const string& name, int limit);
     virtual ~OutlineMiterLimit ();
@@ -36,8 +35,7 @@ class OutlineMiterLimit : public AbstractStyle
     AbstractIntProperty*                    limit () { return (AbstractIntProperty*)find_child_impl ("limit"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int limit;
     };
     raw_props_t raw_props;

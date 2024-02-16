@@ -14,14 +14,12 @@ namespace djnnstl {
 
 }
 
-extern "C"
-{
-    char* strdup (const char* s1);
-    void  free (void* ptr);
+extern "C" {
+char* strdup (const char* s1);
+void  free (void* ptr);
 }
 
-struct mystring
-{
+struct mystring {
     char* s;
     mystring ()
         : s (0) {}
@@ -59,8 +57,7 @@ using Process = CoreProcess;
 using ProcessForNative = CoreProcess;
 typedef void (NativeCode) (ProcessForNative*);
 
-class NativeExpressionActionProxy
-{
+class NativeExpressionActionProxy {
   public:
     NativeExpressionActionProxy (CoreProcess* parent, const char* name, bool string_setter, bool is_model = false);
     ~NativeExpressionActionProxy ();
@@ -133,9 +130,8 @@ void djnn_clear_files ();
 int  djnn__error (const djnn::CoreProcess* p, const char* msg, const char* ctxinfo = nullptr);
 void djnn__warning (const djnn::CoreProcess* p, const char* msg, const char* ctxinfo = nullptr);
 int  djnn__exit (int ret);
-extern "C"
-{
-    int puts (const char* s);
+extern "C" {
+int puts (const char* s);
 } // for print()
 
 void                      djnn_activate (djnn::CoreProcess* p);
@@ -145,12 +141,10 @@ djnn::CoreProcess*        djnn_find (djnn::CoreProcess* parent, const char* path
 djnn::CoreProcess*        djnn_find (djnn::CoreProcess* parent, int pos);
 djnn::CoreProcess*        djnn_find_optional (djnn::CoreProcess* parent, const char* path);
 djnn::CoreProcess*        djnn_get_parent (djnn::CoreProcess* p);
-inline djnn::CoreProcess* find (djnn::CoreProcess* parent, const char* path)
-{
+inline djnn::CoreProcess* find (djnn::CoreProcess* parent, const char* path) {
     return djnn_find (parent, path);
 }
-inline djnn::CoreProcess* find_optional (djnn::CoreProcess* parent, const char* path)
-{
+inline djnn::CoreProcess* find_optional (djnn::CoreProcess* parent, const char* path) {
     return djnn_find_optional (parent, path);
 }
 // inline djnn::CoreProcess*  find (djnn::CoreProcess* p) { return p; } // helper for smalac
@@ -175,8 +169,7 @@ void merge_children (djnn::CoreProcess* parent1, const char* sy1, djnn::CoreProc
 void djnn_move_child (djnn::CoreProcess* parent, djnn::CoreProcess* child_to_move, djnn::child_position_e spec, djnn::CoreProcess* child = nullptr);
 
 // internal c-like API
-inline djnn::FatProcess* djnn_find (djnn::FatProcess* p)
-{
+inline djnn::FatProcess* djnn_find (djnn::FatProcess* p) {
     return p;
 } // helper for smalac
 djnn::FatProcess* djnn_find (djnn::CoreProcess* p);
@@ -392,10 +385,9 @@ djnn::CoreProcess* djnn_new_LocalToScreen (djnn::CoreProcess* parent, const char
 
 #ifndef FAST_COMP_DECL
 #define FAST_COMP_DECL(Proc) djnn::CoreProcess* djnn_new_##Proc (djnn::CoreProcess* parent, const char* name);
-#define FAST_COMP_IMPL(Proc)                                                         \
-    djnn::CoreProcess* djnn_new_##Proc (djnn::CoreProcess* parent, const char* name) \
-    {                                                                                \
-        return new djnn::Proc (parent, name);                                        \
+#define FAST_COMP_IMPL(Proc)                                                           \
+    djnn::CoreProcess* djnn_new_##Proc (djnn::CoreProcess* parent, const char* name) { \
+        return new djnn::Proc (parent, name);                                          \
     }
 #endif
 

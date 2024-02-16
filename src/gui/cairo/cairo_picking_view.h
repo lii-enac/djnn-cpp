@@ -21,8 +21,7 @@
 
 namespace djnn {
 
-class CairoPickingView : public ColorPickingView
-{
+class CairoPickingView : public ColorPickingView {
   public:
     CairoPickingView (Window* win);
     virtual ~CairoPickingView ();
@@ -32,8 +31,7 @@ class CairoPickingView : public ColorPickingView
     // ColorPickingView
     virtual int get_pixel (unsigned int x, unsigned int y) override;
 
-    void set_data (unsigned char* data, int w, int h, int stride)
-    {
+    void set_data (unsigned char* data, int w, int h, int stride) {
         _cur_data = data;
         _w        = w;
         _h        = h;

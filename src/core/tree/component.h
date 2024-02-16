@@ -18,8 +18,7 @@
 
 namespace djnn {
 
-class Component : public Container
-{
+class Component : public Container {
   public:
     Component (CoreProcess* parent, const string& name, bool is_model = false)
         : Container (parent, name, is_model) { finalize_construction (parent, name); }

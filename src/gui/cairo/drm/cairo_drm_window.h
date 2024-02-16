@@ -20,11 +20,9 @@
 
 namespace djnn {
 
-class CairoDRMWindow : public DRMWindow
-{
+class CairoDRMWindow : public DRMWindow {
   private:
-    class RefreshAction : public Action
-    {
+    class RefreshAction : public Action {
       public:
         RefreshAction (CairoDRMWindow* win, const string& name)
             : Action (nullptr, name), _win (win) { finalize_construction (nullptr, name); }
@@ -34,14 +32,12 @@ class CairoDRMWindow : public DRMWindow
       private:
         CairoDRMWindow* _win;
     };
-    class ChangeDpyAction : public Action
-    {
+    class ChangeDpyAction : public Action {
       public:
         ChangeDpyAction (CairoDRMWindow* win, const string& name)
             : Action (nullptr, name), _win (win) { finalize_construction (nullptr, name); }
         virtual ~ChangeDpyAction () {}
-        void impl_activate ()
-        {
+        void impl_activate () {
             _win->update_dpy_connection ();
             _win->ask_refresh ();
         }

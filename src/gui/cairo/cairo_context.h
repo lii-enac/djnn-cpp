@@ -23,20 +23,17 @@
 #include "gui/style/style_types.h"
 
 namespace djnn {
-enum cairo_source_t
-{
+enum cairo_source_t {
     NO_SOURCE,
     COLOR,
     PATTERN
 };
 
-struct cairo_color_t
-{
+struct cairo_color_t {
     double r, g, b, a;
 };
 
-class CairoContext
-{
+class CairoContext {
   public:
     CairoContext ();
     CairoContext (CairoContext* parent);
@@ -70,12 +67,10 @@ class CairoContext
     bool _font_builder, _fill_builder, _stroke_builder;
 };
 
-class CairoContextManager : public ContextManager
-{
+class CairoContextManager : public ContextManager {
   public:
     CairoContextManager ()
-        : ContextManager ()
-    {
+        : ContextManager () {
         ComponentObserver::instance ().add_draw_context_manager (this);
     };
     virtual ~CairoContextManager () {}

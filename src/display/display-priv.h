@@ -21,8 +21,7 @@ namespace djnn {
 void p_init_display ();
 void p_clear_display ();
 
-class GUIKeyboard : public FatProcess
-{
+class GUIKeyboard : public FatProcess {
   public:
     GUIKeyboard (CoreProcess* parent, const string& name);
     ~GUIKeyboard ();

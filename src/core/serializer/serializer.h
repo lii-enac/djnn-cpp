@@ -18,8 +18,7 @@
 
 namespace djnn {
 
-class AbstractSerializer
-{
+class AbstractSerializer {
   public:
     virtual ~AbstractSerializer () {}
     using string = djnnstl::string;
@@ -40,8 +39,7 @@ class AbstractSerializer
     static AbstractSerializer* serializer;
 };
 
-class XMLSerializer : public AbstractSerializer
-{
+class XMLSerializer : public AbstractSerializer {
   public:
     void start (const string& classname) override;
     void text_attribute (const string& name, const string& value) override;
@@ -50,8 +48,7 @@ class XMLSerializer : public AbstractSerializer
     void end () override;
 };
 
-class JSONSerializer : public AbstractSerializer
-{
+class JSONSerializer : public AbstractSerializer {
   public:
     void start (const string& classname) override;
     void text_attribute (const string& name, const string& value) override;

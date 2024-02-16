@@ -20,8 +20,7 @@
 
 namespace djnn {
 
-class SuperAbstractProperty : public FatProcess
-{
+class SuperAbstractProperty : public FatProcess {
   public:
     SuperAbstractProperty (CoreProcess* parent, const string& name, unsigned int nm = notify_none)
         : FatProcess (name),
@@ -29,12 +28,10 @@ class SuperAbstractProperty : public FatProcess
     // virtual ~SuperAbstractProperty () override {}
     virtual process_type_e  get_process_type () const override { return PROPERTY_T; }
     virtual property_type_e get_property_type () const = 0;
-    bool                    is_activable () const
-    {
+    bool                    is_activable () const {
         return get_parent () == nullptr || get_parent ()->somehow_activating ();
     }
-    void notify_parent ()
-    {
+    void notify_parent () {
         if (_notify_mask != notify_none && get_parent ())
             get_parent ()->notify_change (_notify_mask);
     }
@@ -48,8 +45,7 @@ class SuperAbstractProperty : public FatProcess
 };
 
 // for simple property such as int, double, string, ref...
-class AbstractSimpleProperty : public SuperAbstractProperty
-{
+class AbstractSimpleProperty : public SuperAbstractProperty {
   public:
     AbstractSimpleProperty (CoreProcess* parent, const string& name, unsigned int nm = notify_none)
         : SuperAbstractProperty (parent, name, nm) {}
@@ -67,8 +63,7 @@ class AbstractSimpleProperty : public SuperAbstractProperty
 };
 
 inline double
-get_property_value (const AbstractSimpleProperty* ap)
-{
+get_property_value (const AbstractSimpleProperty* ap) {
     return ap->get_double_value ();
 }
 

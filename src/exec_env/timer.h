@@ -25,10 +25,8 @@
 #include "exec_env/time_internal.h"
 
 namespace djnn {
-class Timer : public FatProcess, public djnn_internal::Time::Timer
-{
-    class TimerAction : public Action
-    {
+class Timer : public FatProcess, public djnn_internal::Time::Timer {
+    class TimerAction : public Action {
       public:
         TimerAction (CoreProcess* parent, const string& name)
             : Action (parent, name){};
@@ -36,8 +34,7 @@ class Timer : public FatProcess, public djnn_internal::Time::Timer
         void impl_activate () override { ((Timer*)get_parent ())->update_period (); }
     };
 
-    class ResetAction : public Action
-    {
+    class ResetAction : public Action {
       public:
         ResetAction (CoreProcess* parent, const string& name)
             : Action (parent, name){};

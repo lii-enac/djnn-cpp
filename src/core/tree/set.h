@@ -23,8 +23,7 @@ namespace djnn {
 
 class Set;
 
-class SetIterator : public FatProcess
-{
+class SetIterator : public FatProcess {
   public:
     SetIterator (CoreProcess* parent, const string& name, CoreProcess* set, CoreProcess* action, bool model = true);
     virtual ~SetIterator () {}
@@ -38,8 +37,7 @@ class SetIterator : public FatProcess
     CoreProcess* _action;
 };
 
-class Set : public FatProcess
-{
+class Set : public FatProcess {
   public:
     Set (CoreProcess* parent, const string& name);
     void         add_child (CoreProcess* c, const string& name) override;

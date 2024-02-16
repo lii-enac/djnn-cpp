@@ -3,8 +3,7 @@
 #include "gui/abstract_gobj.h"
 
 namespace djnn {
-class AbstractTransformation : public AbstractGObj
-{
+class AbstractTransformation : public AbstractGObj {
   public:
     AbstractTransformation (CoreProcess* parent, const string& name);
     AbstractTransformation ();

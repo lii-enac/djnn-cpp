@@ -23,8 +23,7 @@
 #include "gui/transformation/abstract_transformation.h"
 
 namespace djnn {
-class AbstractRotation : public AbstractTransformation
-{
+class AbstractRotation : public AbstractTransformation {
   public:
     AbstractRotation (CoreProcess* parent, const string& name, double a, double cx, double cy);
     virtual ~AbstractRotation ();
@@ -37,8 +36,7 @@ class AbstractRotation : public AbstractTransformation
     AbstractDoubleProperty*                 cy () { return (AbstractDoubleProperty*)find_child_impl ("cy"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double a;
         double cx;
         double cy;

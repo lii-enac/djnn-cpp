@@ -29,18 +29,15 @@ namespace djnn {
 
 /*** Receiver Class ***/
 
-class Receiver : public FatProcess, public ExternalSource
-{
-    class SendAction : public Action
-    {
+class Receiver : public FatProcess, public ExternalSource {
+    class SendAction : public Action {
       public:
         SendAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { finalize_construction (parent, name); }
         virtual ~SendAction () {}
         void impl_activate () override;
     };
-    class BuildSendAction : public Action
-    {
+    class BuildSendAction : public Action {
       public:
         BuildSendAction (CoreProcess* parent, const string& name)
             : Action (parent, name), _src (nullptr) { finalize_construction (parent, name); }
@@ -84,8 +81,7 @@ class Receiver : public FatProcess, public ExternalSource
     vector<CoreProcess*> _buff_senders;
 };
 
-class ProcExporter : public FatProcess, public ExternalSource
-{
+class ProcExporter : public FatProcess, public ExternalSource {
 
     /*** ProcExporter Class ***/
 

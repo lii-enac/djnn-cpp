@@ -7,8 +7,7 @@ class CoreProcess;
 class IntProperty;
 class Binding;
 
-class XMLLoader : public Visitor
-{
+class XMLLoader : public Visitor {
   public:
     void         load (const djnnstl::string& path);
     virtual void visit (CoreProcess*) {}

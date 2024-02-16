@@ -22,8 +22,7 @@
 
 namespace djnn {
 
-class ColorPickingView : public Picking
-{
+class ColorPickingView : public Picking {
   public:
     ColorPickingView (Window* win);
     virtual ~ColorPickingView ();

@@ -7,11 +7,9 @@
 
 namespace djnn {
 
-class AudioListener : public FatProcess
-{
+class AudioListener : public FatProcess {
   public:
-    class GainAction : public Action
-    {
+    class GainAction : public Action {
       public:
         GainAction (CoreProcess* parent, const string& name)
             : Action (parent, name){};

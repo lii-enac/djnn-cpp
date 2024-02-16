@@ -25,8 +25,7 @@ extern int mouse_tracking;
 extern int full_screen;
 extern int hide_pointer;
 
-typedef enum mouse_button
-{
+typedef enum mouse_button {
     BUTTON_LEFT,
     BUTTON_MIDDLE,
     BUTTON_RIGHT
@@ -40,8 +39,7 @@ extern CoreProcess* GenericKeyboard;
 extern CoreProcess* DrawingRefreshManager;
 
 class AbstractDisplay;
-class DisplayBackend
-{
+class DisplayBackend {
   public:
     static AbstractDisplay* instance ();
     static void             init ();
@@ -49,8 +47,7 @@ class DisplayBackend
 
   private:
     // class Impl;
-    class Impl
-    {
+    class Impl {
       public:
         // SDLDisplayBackend* backend;
         AbstractDisplay* backend;

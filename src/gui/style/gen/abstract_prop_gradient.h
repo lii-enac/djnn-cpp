@@ -23,8 +23,7 @@
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class AbstractPropGradient : public AbstractStyle
-{
+class AbstractPropGradient : public AbstractStyle {
   public:
     AbstractPropGradient (CoreProcess* parent, const string& name, int spread, int coords);
     virtual ~AbstractPropGradient ();
@@ -36,8 +35,7 @@ class AbstractPropGradient : public AbstractStyle
     AbstractIntProperty*                    coords () { return (AbstractIntProperty*)find_child_impl ("coords"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         int spread;
         int coords;
     };

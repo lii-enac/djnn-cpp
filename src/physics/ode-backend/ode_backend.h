@@ -21,8 +21,7 @@
 
 namespace djnn {
 
-class ODEBackend : public AbstractPhysicsBackend
-{
+class ODEBackend : public AbstractPhysicsBackend {
   public:
     static ODEBackend* instance ();
     virtual ~ODEBackend ();
@@ -44,8 +43,7 @@ class ODEBackend : public AbstractPhysicsBackend
     ODEBackend ();
 };
 
-class ODEWorld : public WorldImpl
-{
+class ODEWorld : public WorldImpl {
   public:
     ODEWorld (double dx, double dy, double dz);
     virtual ~ODEWorld ();
@@ -60,8 +58,7 @@ class ODEWorld : public WorldImpl
     dJointGroupID _joint_group_id;
 };
 
-class ODEPhyObj : public PhyObjImpl
-{
+class ODEPhyObj : public PhyObjImpl {
   public:
     ODEPhyObj (dBodyID body, dGeomID geom)
         : _body (body), _geom (geom) {}

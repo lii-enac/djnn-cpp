@@ -23,8 +23,7 @@
 #include "gui/style/abstract_gradient.h"
 
 namespace djnn {
-class AbstractPropLinearGradient : public AbstractGradient
-{
+class AbstractPropLinearGradient : public AbstractGradient {
   public:
     AbstractPropLinearGradient (CoreProcess* parent, const string& name, double x1, double y1, double x2, double y2, int spread, int coords);
     virtual ~AbstractPropLinearGradient ();
@@ -38,8 +37,7 @@ class AbstractPropLinearGradient : public AbstractGradient
     AbstractDoubleProperty*                 y2 () { return (AbstractDoubleProperty*)find_child_impl ("y2"); }
 
   protected:
-    struct raw_props_t
-    {
+    struct raw_props_t {
         double x1;
         double y1;
         double x2;

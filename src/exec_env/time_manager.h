@@ -47,22 +47,18 @@ namespace Time {
 
 template <typename xxx>
 time_point
-time_point_cast (const xxx& tp)
-{
+time_point_cast (const xxx& tp) {
     return std::chrono::time_point_cast<std::chrono::microseconds> (tp);
 }
 
-struct lesser
-{
+struct lesser {
     bool
-    operator() (const djnn_internal::Time::Timer* t1, const djnn_internal::Time::Timer* t2) const
-    {
+    operator() (const djnn_internal::Time::Timer* t1, const djnn_internal::Time::Timer* t2) const {
         return t1->get_end_time () < t2->get_end_time () || (t1->get_end_time () == t2->get_end_time () ? t1 < t2 : false); // need to distinguish between Timer*'s
     }
 };
 
-class Manager
-{
+class Manager {
   public:
     Manager (duration precision = std::chrono::microseconds (100));
     virtual ~Manager () {}

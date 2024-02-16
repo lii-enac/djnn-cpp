@@ -28,8 +28,7 @@
 #include "gui/style/style_types.h"
 
 namespace djnn {
-class QtContext
-{
+class QtContext {
     friend class QtBackend;
 
   public:
@@ -66,26 +65,22 @@ class QtContext
     void set_pick_outline_undefined (bool VALUE) { set_pick_bitset (PICK_OUTLINE_UNDEFINED_MASK, PICK_OUTLINE_UNDEFINED_SHIFT, VALUE); }
 
     bool pick_fill () const { return get_pick_bitset (PICK_FILL_MASK, PICK_FILL_SHIFT); }
-    void set_pick_fill (bool VALUE)
-    {
+    void set_pick_fill (bool VALUE) {
         set_pick_bitset (PICK_FILL_MASK, PICK_FILL_SHIFT, VALUE);
         set_pick_fill_undefined (false);
     }
 
     bool pick_outline () const { return get_pick_bitset (PICK_OUTLINE_MASK, PICK_OUTLINE_SHIFT); }
-    void set_pick_outline (bool VALUE)
-    {
+    void set_pick_outline (bool VALUE) {
         set_pick_bitset (PICK_OUTLINE_MASK, PICK_OUTLINE_SHIFT, VALUE);
         set_pick_outline_undefined (false);
     }
 };
 
-class QtContextManager : public ContextManager
-{
+class QtContextManager : public ContextManager {
   public:
     QtContextManager ()
-        : ContextManager ()
-    {
+        : ContextManager () {
         ComponentObserver::instance ().add_draw_context_manager (this);
     };
     virtual ~QtContextManager (){};
@@ -97,8 +92,7 @@ class QtContextManager : public ContextManager
     djnnstl::vector<QtContext*> _context_list;
 };
 
-class QtVectorShapeToDraw
-{
+class QtVectorShapeToDraw {
   public:
     QtVectorShapeToDraw (int z_order)
         : _z_order (z_order) {}

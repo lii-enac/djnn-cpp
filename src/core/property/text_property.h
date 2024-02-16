@@ -19,8 +19,7 @@
 
 namespace djnn {
 
-class AbstractTextProperty : public AbstractSimpleProperty
-{
+class AbstractTextProperty : public AbstractSimpleProperty {
   public:
     AbstractTextProperty (CoreProcess* parent, const string& name, int notify_mask = notify_none)
         : AbstractSimpleProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
@@ -54,8 +53,7 @@ class AbstractTextProperty : public AbstractSimpleProperty
 #endif
 };
 
-class TextProperty : public AbstractTextProperty
-{
+class TextProperty : public AbstractTextProperty {
   public:
     TextProperty (CoreProcess* parent, const string& name, const string& v)
         : AbstractTextProperty (parent, name), value (v) {}
@@ -69,8 +67,7 @@ class TextProperty : public AbstractTextProperty
     string value;
 };
 
-class TextPropertyProxy : public AbstractTextProperty
-{
+class TextPropertyProxy : public AbstractTextProperty {
   public:
     TextPropertyProxy (CoreProcess* parent, const string& name, string& v, int notify_mask = notify_none)
         : AbstractTextProperty (parent, name, notify_mask), value (v) {}

@@ -26,8 +26,7 @@
 namespace djnn {
 // temporyary hack
 template <typename T>
-struct djnn_atomic
-{
+struct djnn_atomic {
 #if DJNN_USE_FREERTOS
     using atomic = T;
 #else
@@ -35,46 +34,38 @@ struct djnn_atomic
 #endif
 };
 
-class MainLoop : public FatProcess, ExternalSource
-{
+class MainLoop : public FatProcess, ExternalSource {
 
   public:
     ~MainLoop ();
     static MainLoop& instance ();
 
-    void set_run_for_ever ()
-    {
+    void set_run_for_ever () {
         _duration = chrono::milliseconds (-1);
     }
 
-    bool is_run_forever () const
-    {
+    bool is_run_forever () const {
         return chrono::milliseconds (_duration) == chrono::milliseconds (-1);
     }
 
-    void set_run_for (int milliseconds)
-    {
+    void set_run_for (int milliseconds) {
         _duration = chrono::milliseconds (milliseconds);
     }
 
-    void set_run_for (std::chrono::milliseconds d)
-    {
+    void set_run_for (std::chrono::milliseconds d) {
         _duration = chrono::milliseconds (d.count ());
     }
 
-    void set_run_for (std::chrono::seconds d)
-    {
+    void set_run_for (std::chrono::seconds d) {
         _duration = chrono::seconds (d.count ());
     }
 
 #if DJNN_USE_BOOST_CHRONO
-    void set_run_for (boost::chrono::milliseconds d)
-    {
+    void set_run_for (boost::chrono::milliseconds d) {
         _duration = d;
     }
 
-    void set_run_for (boost::chrono::seconds d)
-    {
+    void set_run_for (boost::chrono::seconds d) {
         _duration = boost::chrono::duration_cast<boost::chrono::milliseconds> (d);
     }
 #endif

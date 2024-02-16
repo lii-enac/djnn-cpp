@@ -36,15 +36,13 @@ class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
 
   public:
     MyQQWidget (Window* w, QtWindow* qtw)
-        : MyQWidget (w, qtw)
-    {
+        : MyQWidget (w, qtw) {
         setAttribute (Qt::WA_AcceptTouchEvents, true);
         _picking_view = new QtPickingView (w);
         //_picking_view = new AnalyticalPicking (w);
     }
     virtual Picking* get_picking_view () override { return _picking_view; }
-    virtual ~MyQQWidget ()
-    {
+    virtual ~MyQQWidget () {
         delete _picking_view;
     }
 

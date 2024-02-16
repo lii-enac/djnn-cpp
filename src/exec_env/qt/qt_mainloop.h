@@ -25,8 +25,7 @@
 
 namespace djnn {
 
-class QtMainloopListener
-{
+class QtMainloopListener {
   public:
     virtual ~QtMainloopListener () {}
     virtual void slot_for_about_to_block ();
@@ -34,8 +33,7 @@ class QtMainloopListener
 
 class MainLoop;
 
-class QtMainloop : public ExternalSource
-{
+class QtMainloop : public ExternalSource {
 
   public:
     static void        build_instance (MainLoop*);

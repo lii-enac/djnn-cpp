@@ -8,8 +8,7 @@ namespace djnn {
 
 class List;
 
-class AbstractGradient : public AbstractPropGradient
-{
+class AbstractGradient : public AbstractPropGradient {
   public:
     AbstractGradient (CoreProcess* parent, const string& name, int spread, int coords);
     AbstractGradient (CoreProcess* parent, const string& name);

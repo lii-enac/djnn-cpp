@@ -28,8 +28,7 @@ class QPainter;
 namespace djnn {
 
 class QtContextManager;
-class QtBackend : public AbstractBackend
-{
+class QtBackend : public AbstractBackend {
   public:
     static QtBackend* instance ();
     virtual ~QtBackend ();

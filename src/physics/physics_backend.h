@@ -17,8 +17,7 @@
 namespace djnn {
 class AbstractPhysicsBackend;
 
-class PhysicsBackend
-{
+class PhysicsBackend {
   public:
     static AbstractPhysicsBackend* instance ();
     static void                    init ();

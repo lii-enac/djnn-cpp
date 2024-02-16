@@ -21,13 +21,11 @@
 
 namespace djnn {
 
-class Action : public FatProcess
-{
+class Action : public FatProcess {
   public:
     Action (CoreProcess* parent, const string& n, bool model = false)
         : // ChildProcess (model)
-          FatProcess (n, model)
-    {
+          FatProcess (n, model) {
         /* note:
          * finalize_constructor for action
          * they add a symbol process but do not appear in the _children of its parent
@@ -43,15 +41,13 @@ class Action : public FatProcess
     void                   impl_deactivate () override {} // save from providing it in inherited actions
 
   protected:
-    virtual bool pre_activate () override
-    {
+    virtual bool pre_activate () override {
         if (get_parent () != nullptr && !get_parent ()->somehow_activating ())
             return false;
         set_activation_state (ACTIVATING);
         return true;
     }
-    void post_activate () override
-    {
+    void post_activate () override {
         post_activate_auto_deactivate ();
     }
 };
