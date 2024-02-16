@@ -10,6 +10,7 @@ PointerAlignment: Left
 ReferenceAlignment: Left
 SpaceBeforeParens: Always
 AlignConsecutiveAssignments: true
+AllowShortFunctionsOnASingleLine: Inline
 AlignConsecutiveBitFields: true
 AlignConsecutiveDeclarations: true
 AlignConsecutiveMacros: true

@@ -50,4 +50,4 @@ class SimpleGradientTransform : public AbstractHomography
     void        draw () override;
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 };
-}
+} // namespace djnn

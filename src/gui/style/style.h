@@ -16,18 +16,15 @@
 
 #pragma once
 
-#include "style_types.h"
-
-#include "nopaint.h"
-#include "picking_paint.h"
 #include "color.h"
-#include "gradient.h"
-#include "texture.h"
-#include "opacity.h"
-
-#include "text.h"
-#include "outline.h"
 #include "dash.h"
 #include "fill_rule.h"
-
+#include "gradient.h"
+#include "nopaint.h"
+#include "opacity.h"
+#include "outline.h"
+#include "picking_paint.h"
 #include "style_sheet.h"
+#include "style_types.h"
+#include "text.h"
+#include "texture.h"

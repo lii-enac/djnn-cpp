@@ -12,7 +12,8 @@ class AbstractHomography : public AbstractPropHomography
     class RightTranslateByAction : public Action
     {
       public:
-        RightTranslateByAction (CoreProcess* parent, const string& name, AbstractHomography* h) : Action (parent, name), _h (h) {}
+        RightTranslateByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
+            : Action (parent, name), _h (h) {}
         virtual ~RightTranslateByAction () {}
         void impl_activate () override;
 
@@ -25,7 +26,8 @@ class AbstractHomography : public AbstractPropHomography
     class LeftTranslateByAction : public Action
     {
       public:
-        LeftTranslateByAction (CoreProcess* parent, const string& name, AbstractHomography* h) : Action (parent, name), _h (h) {}
+        LeftTranslateByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
+            : Action (parent, name), _h (h) {}
         virtual ~LeftTranslateByAction () {}
         void impl_activate () override;
 
@@ -38,7 +40,8 @@ class AbstractHomography : public AbstractPropHomography
     class RightScaleByAction : public Action
     {
       public:
-        RightScaleByAction (CoreProcess* parent, const string& name, AbstractHomography* h) : Action (parent, name), _h (h) {}
+        RightScaleByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
+            : Action (parent, name), _h (h) {}
         virtual ~RightScaleByAction () {}
         void impl_activate () override;
 
@@ -51,7 +54,8 @@ class AbstractHomography : public AbstractPropHomography
     class LeftScaleByAction : public Action
     {
       public:
-        LeftScaleByAction (CoreProcess* parent, const string& name, AbstractHomography* h) : Action (parent, name), _h (h) {}
+        LeftScaleByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
+            : Action (parent, name), _h (h) {}
         virtual ~LeftScaleByAction () {}
         void impl_activate () override;
 
@@ -64,7 +68,8 @@ class AbstractHomography : public AbstractPropHomography
     class RightRotateByAction : public Action
     {
       public:
-        RightRotateByAction (CoreProcess* parent, const string& name, AbstractHomography* h) : Action (parent, name), _h (h) {}
+        RightRotateByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
+            : Action (parent, name), _h (h) {}
         virtual ~RightRotateByAction () {}
         void impl_activate () override;
 
@@ -77,7 +82,8 @@ class AbstractHomography : public AbstractPropHomography
     class LeftRotateByAction : public Action
     {
       public:
-        LeftRotateByAction (CoreProcess* parent, const string& name, AbstractHomography* h) : Action (parent, name), _h (h) {}
+        LeftRotateByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
+            : Action (parent, name), _h (h) {}
         virtual ~LeftRotateByAction () {}
         void impl_activate () override;
 
@@ -90,7 +96,8 @@ class AbstractHomography : public AbstractPropHomography
     class Right_Skew_X_ByAction : public Action
     {
       public:
-        Right_Skew_X_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h) : Action (parent, name), _h (h) {}
+        Right_Skew_X_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
+            : Action (parent, name), _h (h) {}
         virtual ~Right_Skew_X_ByAction () {}
         void impl_activate () override;
 
@@ -103,7 +110,8 @@ class AbstractHomography : public AbstractPropHomography
     class Left_Skew_X_ByAction : public Action
     {
       public:
-        Left_Skew_X_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h) : Action (parent, name), _h (h) {}
+        Left_Skew_X_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
+            : Action (parent, name), _h (h) {}
         virtual ~Left_Skew_X_ByAction () {}
         void impl_activate () override;
 
@@ -116,7 +124,8 @@ class AbstractHomography : public AbstractPropHomography
     class Right_Skew_Y_ByAction : public Action
     {
       public:
-        Right_Skew_Y_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h) : Action (parent, name), _h (h) {}
+        Right_Skew_Y_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
+            : Action (parent, name), _h (h) {}
         virtual ~Right_Skew_Y_ByAction () {}
         void impl_activate () override;
 
@@ -129,7 +138,8 @@ class AbstractHomography : public AbstractPropHomography
     class Left_Skew_Y_ByAction : public Action
     {
       public:
-        Left_Skew_Y_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h) : Action (parent, name), _h (h) {}
+        Left_Skew_Y_ByAction (CoreProcess* parent, const string& name, AbstractHomography* h)
+            : Action (parent, name), _h (h) {}
         virtual ~Left_Skew_Y_ByAction () {}
         void impl_activate () override;
 

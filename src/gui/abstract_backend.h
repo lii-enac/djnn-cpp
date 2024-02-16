@@ -17,51 +17,46 @@
 
 #include <utility> // pair
 
+#include "core/utils/containers.h"
 #include "shape/shapes_fwd.h"
 #include "style/style_fwd.h"
 #include "style/style_types.h"
 #include "transformation/transformations_fwd.h"
-#include "core/utils/containers.h"
 
-namespace djnn
+namespace djnn {
+using djnnstl::pair;
+using djnnstl::string;
+
+typedef void* FontMetricsImpl;
+class AbstractGObj;
+class AbstractGShape;
+class Layer;
+class SimpleText;
+class MultilineEditor;
+class TextField;
+class FileDialog;
+class AbstractBackend
 {
-  using djnnstl::string;
-  using djnnstl::pair;
-
-  typedef void* FontMetricsImpl;
-  class AbstractGObj;
-  class AbstractGShape;
-  class Layer;
-  class SimpleText;
-  class MultilineEditor;
-  class TextField;
-  class FileDialog;
-  class AbstractBackend
-  {
   public:
-    AbstractBackend () {
-    }
+    AbstractBackend () {}
 
-    virtual
-    ~AbstractBackend ()
-    {
-    }
+    virtual ~AbstractBackend () {}
 
     /* shapes */
     virtual void
-    draw_rectangle (Rectangle *s)
+    draw_rectangle (Rectangle* s)
     {
     }
     virtual void
-    draw_circle (Circle *s)
+    draw_circle (Circle* s)
     {
     }
     virtual void
-    draw_ellipse (Ellipse *s)
+    draw_ellipse (Ellipse* s)
     {
     }
     virtual void
-    draw_line (Line *s)
+    draw_line (Line* s)
     {
     }
     virtual void
@@ -77,7 +72,7 @@ namespace djnn
     {
     }
     virtual void
-    draw_path (Path *p)
+    draw_path (Path* p)
     {
     }
     virtual void
@@ -105,40 +100,42 @@ namespace djnn
     {
     }
     virtual void
-    draw_rectangle_clip (RectangleClip *s)
+    draw_rectangle_clip (RectangleClip* s)
     {
     }
     virtual void
-    draw_path_clip (Path *p)
+    draw_path_clip (Path* p)
     {
     }
     virtual void
-    draw_image (Image *i)
+    draw_image (Image* i)
     {
     }
     virtual bool
     pre_draw_layer (Layer* l)
     {
-      return false;
+        return false;
     }
     virtual void
     post_draw_layer (Layer* l)
     {
     }
     virtual int
-    get_pixel (Image *i, double x, double y)
+    get_pixel (Image* i, double x, double y)
     {
-      return 0;
+        return 0;
     }
     virtual void
-    draw_data_image (DataImage *i)
+    draw_data_image (DataImage* i)
     {
     }
     /*widgets*/
-    virtual void open_dialog (FileDialog*)
+    virtual void
+    open_dialog (FileDialog*)
     {
     }
-    virtual void save_dialog (FileDialog*)
+    virtual void
+    save_dialog (FileDialog*)
     {
     }
     virtual void
@@ -152,52 +149,53 @@ namespace djnn
     virtual size_t
     compute_index (FontMetricsImpl fm, SimpleText* t, int x)
     {
-      return 0;
+        return 0;
     }
     virtual int
     compute_x (FontMetricsImpl fm, SimpleText* t, size_t index)
     {
-      return 0;
+        return 0;
     }
     virtual int
-    compute_text_width (FontMetricsImpl fm, SimpleText *t)
+    compute_text_width (FontMetricsImpl fm, SimpleText* t)
     {
-      return 0;
+        return 0;
     }
     virtual int
-    get_average_char_width (FontMetricsImpl fm) {
-      return 0;
+    get_average_char_width (FontMetricsImpl fm)
+    {
+        return 0;
     }
     virtual double
     get_cursor_from_index (Text*, int)
     {
-      return 0;
+        return 0;
     }
-    virtual pair<double,int>
+    virtual pair<double, int>
     get_cursor_from_local_x (Text*, double)
     {
-      return pair<double,int>(0,0);
+        return pair<double, int> (0, 0);
     }
     virtual void
-    pick_gshape (AbstractGShape *s)
+    pick_gshape (AbstractGShape* s)
     {
     }
     virtual void
-    draw_z_ordered_group (ZOrderedGroup *g)
+    draw_z_ordered_group (ZOrderedGroup* g)
     {
     }
 
     /* style */
     virtual void
-    load_fill_color (AbstractColor *c)
+    load_fill_color (AbstractColor* c)
     {
     }
     virtual void
-    load_outline_color (AbstractColor *c)
+    load_outline_color (AbstractColor* c)
     {
     }
     virtual void
-    load_fill_rule (FillRule *fr)
+    load_fill_rule (FillRule* fr)
     {
     }
     virtual void
@@ -225,35 +223,35 @@ namespace djnn
     {
     }
     virtual void
-    load_texture (Texture *t)
+    load_texture (Texture* t)
     {
     }
     virtual void
-    load_outline_opacity (OutlineOpacity *oo)
+    load_outline_opacity (OutlineOpacity* oo)
     {
     }
     virtual void
-    load_fill_opacity (FillOpacity *fo)
+    load_fill_opacity (FillOpacity* fo)
     {
     }
     virtual void
-    load_outline_width (OutlineWidth *ow)
+    load_outline_width (OutlineWidth* ow)
     {
     }
     virtual void
-    load_outline_cap_style (OutlineCapStyle *ocs)
+    load_outline_cap_style (OutlineCapStyle* ocs)
     {
     }
     virtual void
-    load_outline_join_style (OutlineJoinStyle *ojs)
+    load_outline_join_style (OutlineJoinStyle* ojs)
     {
     }
     virtual void
-    load_outline_miter_limit (OutlineMiterLimit *oml)
+    load_outline_miter_limit (OutlineMiterLimit* oml)
     {
     }
     virtual void
-    load_dash_array (DashArray *da)
+    load_dash_array (DashArray* da)
     {
     }
     virtual void
@@ -261,39 +259,39 @@ namespace djnn
     {
     }
     virtual void
-    load_dash_offset (DashOffset *od)
+    load_dash_offset (DashOffset* od)
     {
     }
     virtual void
-    load_gradient_stop (GradientStop *gs)
+    load_gradient_stop (GradientStop* gs)
     {
     }
     virtual void
-    load_linear_gradient (LinearGradient *g)
+    load_linear_gradient (LinearGradient* g)
     {
     }
     virtual void
-    load_radial_gradient (RadialGradient *g)
+    load_radial_gradient (RadialGradient* g)
     {
     }
     virtual void
-    load_font_size (FontSize *fs)
+    load_font_size (FontSize* fs)
     {
     }
     virtual void
-    load_font_weight (FontWeight *fw)
+    load_font_weight (FontWeight* fw)
     {
     }
     virtual void
-    load_font_style (FontStyle *fs)
+    load_font_style (FontStyle* fs)
     {
     }
     virtual void
-    load_font_family (FontFamily *ff)
+    load_font_family (FontFamily* ff)
     {
     }
     virtual void
-    load_text_anchor (TextAnchor *a)
+    load_text_anchor (TextAnchor* a)
     {
     }
 
@@ -355,11 +353,11 @@ namespace djnn
     {
     }
     virtual void
-    load_zorder(int z)
+    load_zorder (int z)
     {
     }
     virtual void
-    update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight *fw)
+    update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight* fw)
     {
     }
 
@@ -375,12 +373,12 @@ namespace djnn
 
     virtual void
     activate_gobj (AbstractGObj*)
-    {   
+    {
     }
 
     virtual void
     deactivate_gobj (AbstractGObj*)
-    {   
+    {
     }
-  };
-}
+};
+} // namespace djnn

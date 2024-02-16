@@ -16,34 +16,32 @@
  *
  */
 
-
 #pragma once
 
-#include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
-
+#include "core/ontology/process.h"
 #include "gui/style/abstract_style.h"
 
-
-namespace djnn
+namespace djnn {
+class AbstractOpacity : public AbstractStyle
 {
-  class AbstractOpacity : public AbstractStyle
-  {
   public:
     AbstractOpacity (CoreProcess* parent, const string& name, double a);
     virtual ~AbstractOpacity ();
-    
-    
-    void get_properties_values (double& a);
+
+    void                                    get_properties_values (double& a);
     const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child_impl ("a"); }
+    virtual CoreProcess*                    find_child_impl (const string&) override;
+    AbstractDoubleProperty*                 a () { return (AbstractDoubleProperty*)find_child_impl ("a"); }
 
   protected:
-    struct raw_props_t { double a; };
+    struct raw_props_t
+    {
+        double a;
+    };
     raw_props_t raw_props;
-    Coupling *_ca;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling*   _ca;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

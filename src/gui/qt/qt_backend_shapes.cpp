@@ -13,37 +13,28 @@
  *
  */
 
-#include <cmath>
-
 #include <QPicture>
-#include <QtWidgets/QWidget>
-#include <QtGui/QPainter>
-#include <QtCore/QtMath>
 #include <QtCore/QFileInfo>
+#include <QtCore/QtMath>
+#include <QtGui/QPainter>
+#include <QtWidgets/QWidget>
+#include <cmath>
 
 #include "core/tree/list.h"
 #include "core/utils/algorithm.h"
-
+#include "core/utils/error.h"
+#include "core/utils/iostream.h"
 #include "core/utils/remotery.h"
-
-#include "gui/gui-dev.h"
-#include "gui/backend.h"
-
-#include "qt_context.h"
-#include "qt_backend.h"
+#include "display/abstract_display.h"
 #include "display/qt/qt_window.h"
 #include "display/qt/qt_window_moc.h"
-#include "display/abstract_display.h"
-#include "gui/shape/shapes.h"
-#include "gui/layer.h"
-
-
-
 #include "exec_env/exec_env-dev.h"
-
-#include "core/utils/iostream.h"
-#include "core/utils/error.h"
-
+#include "gui/backend.h"
+#include "gui/gui-dev.h"
+#include "gui/layer.h"
+#include "gui/shape/shapes.h"
+#include "qt_backend.h"
+#include "qt_context.h"
 #include "utils/debug.h"
 
 #if _DEBUG_SEE_GUI_INFO_PREF
@@ -52,98 +43,98 @@ extern int __nb_Drawing_object;
 extern int __nb_Drawing_object_picking;
 #endif
 
+namespace djnn {
 
+using djnnstl::cerr;
+using djnnstl::cout;
+using djnnstl::endl;
 
-namespace djnn
+bool
+compare_z_order (QtVectorShapeToDraw* i, QtVectorShapeToDraw* j)
 {
+    return (i->z_order () < j->z_order ());
+}
 
-  using djnnstl::cout;
-  using djnnstl::cerr;
-  using djnnstl::endl;
-
-  bool compare_z_order (QtVectorShapeToDraw* i,QtVectorShapeToDraw* j) { return (i->z_order()<j->z_order()); }
-
-  void
-  QtBackend::draw_rectangle (Rectangle *s)
-  {
-    rmt_BeginCPUSample(draw_rectangle, RMTSF_Aggregate);
+void
+QtBackend::draw_rectangle (Rectangle* s)
+{
+    rmt_BeginCPUSample (draw_rectangle, RMTSF_Aggregate);
     if (_painter == nullptr)
-      return;
+        return;
     double x, y, w, h, rx, ry;
 
-    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
     if (z_processing_step == 1) {
         add_shape (s, _context);
         return;
     }
 
-    s->get_properties_values(x,y,w,h,rx,ry);
+    s->get_properties_values (x, y, w, h, rx, ry);
     load_drawing_context (s, _context, x, y, w, h);
-    _painter->drawRoundedRect (QRectF(x, y, w, h), rx, ry, Qt::AbsoluteSize);
+    _painter->drawRoundedRect (QRectF (x, y, w, h), rx, ry, Qt::AbsoluteSize);
 
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
     if (is_in_picking_view (s)) {
-      rmt_BeginCPUSample(draw_rectangle_picking, RMTSF_Aggregate);
-      load_pick_context (s, _context);
-      _picking_view->painter ()->drawRoundedRect (QRectF(x, y, w, h), rx, ry, Qt::AbsoluteSize);
+        rmt_BeginCPUSample (draw_rectangle_picking, RMTSF_Aggregate);
+        load_pick_context (s, _context);
+        _picking_view->painter ()->drawRoundedRect (QRectF (x, y, w, h), rx, ry, Qt::AbsoluteSize);
 
 #if _DEBUG_SEE_GUI_INFO_PREF
-    __nb_Drawing_object_picking++;
+        __nb_Drawing_object_picking++;
 #endif
-      rmt_EndCPUSample ();
+        rmt_EndCPUSample ();
     }
 
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_z_ordered_group (ZOrderedGroup *g)
-  {
-    rmt_BeginCPUSample(draw_z_ordered_group, RMTSF_Aggregate);
+void
+QtBackend::draw_z_ordered_group (ZOrderedGroup* g)
+{
+    rmt_BeginCPUSample (draw_z_ordered_group, RMTSF_Aggregate);
     if (_painter == nullptr)
-      return;
-    cur_context = nullptr;
-    z_processing_step = 1;
-    GUIStructureHolder *h = gui_structure_observer->find_holder (g);
+        return;
+    cur_context           = nullptr;
+    z_processing_step     = 1;
+    GUIStructureHolder* h = gui_structure_observer->find_holder (g);
     if (h == nullptr) {
-      return;
+        return;
     }
     for (auto c : h->children ()) {
-      c.first->draw ();
+        c.first->draw ();
     }
     djnnstl::sort (shapes_vectors.begin (), shapes_vectors.end (), compare_z_order);
     z_processing_step = 2;
     for (auto v : shapes_vectors) {
-      for (auto item : v->shapes ()) {
-        cur_context = &item.second;
-        item.first->draw ();
-      }
-      delete v;
+        for (auto item : v->shapes ()) {
+            cur_context = &item.second;
+            item.first->draw ();
+        }
+        delete v;
     }
     shapes_vectors.clear ();
     z_processing_step = 0;
-    cur_context = nullptr;
+    cur_context       = nullptr;
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_circle (Circle *s)
-  {
-    rmt_BeginCPUSample(draw_circle, RMTSF_Aggregate);
+void
+QtBackend::draw_circle (Circle* s)
+{
+    rmt_BeginCPUSample (draw_circle, RMTSF_Aggregate);
 
     if (_painter == nullptr)
-      return;
+        return;
     double cx, cy, r;
 
-    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
-
+    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
 
     if (z_processing_step == 1) {
-      add_shape (s, _context);
-      return;
+        add_shape (s, _context);
+        return;
     }
     s->get_properties_values (cx, cy, r);
     QRectF rect (cx - r, cy - r, 2 * r, 2 * r);
@@ -154,33 +145,32 @@ namespace djnn
     __nb_Drawing_object++;
 #endif
 
-
     if (is_in_picking_view (s)) {
-      rmt_BeginCPUSample(draw_circle_picking, RMTSF_Aggregate);
-      load_pick_context (s, _context);
-      _picking_view->painter ()->drawEllipse (rect);
+        rmt_BeginCPUSample (draw_circle_picking, RMTSF_Aggregate);
+        load_pick_context (s, _context);
+        _picking_view->painter ()->drawEllipse (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
-    __nb_Drawing_object_picking++;
+        __nb_Drawing_object_picking++;
 #endif
-      rmt_EndCPUSample ();
+        rmt_EndCPUSample ();
     }
 
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_ellipse (Ellipse *s)
-  {
-    rmt_BeginCPUSample(draw_ellipse, RMTSF_Aggregate);
+void
+QtBackend::draw_ellipse (Ellipse* s)
+{
+    rmt_BeginCPUSample (draw_ellipse, RMTSF_Aggregate);
 
     if (_painter == nullptr)
-      return;
-    double cx, cy, rx, ry;
-    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+        return;
+    double     cx, cy, rx, ry;
+    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
 
     if (z_processing_step == 1) {
-      add_shape (s, _context);
-      return;
+        add_shape (s, _context);
+        return;
     }
 
     s->get_properties_values (cx, cy, rx, ry);
@@ -192,33 +182,32 @@ namespace djnn
     __nb_Drawing_object++;
 #endif
 
-
     if (is_in_picking_view (s)) {
-      rmt_BeginCPUSample(draw_ellipse_picking, RMTSF_Aggregate);
-      load_pick_context (s, _context);
-      _picking_view->painter ()->drawEllipse (rect);
+        rmt_BeginCPUSample (draw_ellipse_picking, RMTSF_Aggregate);
+        load_pick_context (s, _context);
+        _picking_view->painter ()->drawEllipse (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
-    __nb_Drawing_object_picking++;
+        __nb_Drawing_object_picking++;
 #endif
-      rmt_EndCPUSample ();
+        rmt_EndCPUSample ();
     }
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_line (Line *s)
-  {
-    rmt_BeginCPUSample(draw_line, RMTSF_Aggregate);
+void
+QtBackend::draw_line (Line* s)
+{
+    rmt_BeginCPUSample (draw_line, RMTSF_Aggregate);
 
     if (_painter == nullptr)
-      return;
-    double x1, y1, x2, y2;
-    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+        return;
+    double     x1, y1, x2, y2;
+    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
     s->get_properties_values (x1, y1, x2, y2);
 
     if (z_processing_step == 1) {
-      add_shape (s, _context);
-      return;
+        add_shape (s, _context);
+        return;
     }
 
     load_drawing_context (s, _context, x1, y1, sqrt ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)), 1);
@@ -229,42 +218,40 @@ namespace djnn
 #endif
 
     if (is_in_picking_view (s)) {
-      rmt_BeginCPUSample(draw_line_picking, RMTSF_Aggregate);
-      load_pick_context (s, _context);
-      _picking_view->painter ()->drawLine (line);
+        rmt_BeginCPUSample (draw_line_picking, RMTSF_Aggregate);
+        load_pick_context (s, _context);
+        _picking_view->painter ()->drawLine (line);
 #if _DEBUG_SEE_GUI_INFO_PREF
-    __nb_Drawing_object_picking++;
+        __nb_Drawing_object_picking++;
 #endif
-      rmt_EndCPUSample ();
+        rmt_EndCPUSample ();
     }
 
-
     rmt_EndCPUSample ();
-  }
+}
 
-
-  void
-  QtBackend::draw_poly (Poly* p)
-  {
-    rmt_BeginCPUSample(draw_poly, RMTSF_Aggregate);
-    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+void
+QtBackend::draw_poly (Poly* p)
+{
+    rmt_BeginCPUSample (draw_poly, RMTSF_Aggregate);
+    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
     if (z_processing_step == 1) {
-      add_shape (p, _context);
-      return;
+        add_shape (p, _context);
+        return;
     }
     QPainterPath path;
     cur_poly = QPolygonF ();
 
     // HACK use GUIStructureHolder::draw instead of container/list::draw
-    //p->points ()->draw ();
+    // p->points ()->draw ();
     p->points_GH ()->draw ();
 
     path.addPolygon (cur_poly);
     if (p->closed ())
-      path.closeSubpath ();
+        path.closeSubpath ();
     path.setFillRule (_context->fillRule);
     p->set_bounding_box (path.boundingRect ().x (), path.boundingRect ().y (), path.boundingRect ().width (),
-                          path.boundingRect ().height ());
+                         path.boundingRect ().height ());
     load_drawing_context (p, _context, path.boundingRect ().x (), path.boundingRect ().y (), path.boundingRect ().width (),
                           path.boundingRect ().height ());
     _painter->drawPath (path);
@@ -274,38 +261,38 @@ namespace djnn
 #endif
 
     if (is_in_picking_view (p)) {
-      rmt_BeginCPUSample(draw_poly_picking, RMTSF_Aggregate);
-      load_pick_context (p, _context);
-      _picking_view->painter ()->drawPath (path);
+        rmt_BeginCPUSample (draw_poly_picking, RMTSF_Aggregate);
+        load_pick_context (p, _context);
+        _picking_view->painter ()->drawPath (path);
 #if _DEBUG_SEE_GUI_INFO_PREF
-    __nb_Drawing_object_picking++;
+        __nb_Drawing_object_picking++;
 #endif
-      rmt_EndCPUSample ();
+        rmt_EndCPUSample ();
     }
 
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_poly_point (double x, double y)
-  {
+void
+QtBackend::draw_poly_point (double x, double y)
+{
     cur_poly << QPointF (x, y);
-  }
-  void
-  QtBackend::draw_path (Path *p)
-  {
-    rmt_BeginCPUSample(draw_path, RMTSF_Aggregate);
-    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+}
+void
+QtBackend::draw_path (Path* p)
+{
+    rmt_BeginCPUSample (draw_path, RMTSF_Aggregate);
+    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
     if (z_processing_step == 1) {
-      add_shape (p, _context);
-      return;
+        add_shape (p, _context);
+        return;
     }
     cur_path = QPainterPath ();
 
     // HACK use GUIStructureHolder::draw instead of container/list::draw
-    //p->items ()->draw ();
+    // p->items ()->draw ();
     p->items_GH ()->draw ();
-    
+
     cur_path.setFillRule (_context->fillRule);
     p->set_bounding_box (cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
                          cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
@@ -318,66 +305,66 @@ namespace djnn
 #endif
 
     if (is_in_picking_view (p)) {
-      load_pick_context (p, _context);
-      rmt_BeginCPUSample(draw_path_picking, RMTSF_Aggregate);
-      _picking_view->painter ()->drawPath (cur_path);
+        load_pick_context (p, _context);
+        rmt_BeginCPUSample (draw_path_picking, RMTSF_Aggregate);
+        _picking_view->painter ()->drawPath (cur_path);
 
 #if _DEBUG_SEE_GUI_INFO_PREF
-    __nb_Drawing_object_picking++;
+        __nb_Drawing_object_picking++;
 #endif
-      rmt_EndCPUSample ();
+        rmt_EndCPUSample ();
     }
 
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_path_move (double x, double y)
-  {
+void
+QtBackend::draw_path_move (double x, double y)
+{
     rmt_BeginCPUSample (draw_path_add_move, RMTSF_Aggregate);
     cur_path.moveTo (x, y);
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_path_line (double x, double y)
-  {
+void
+QtBackend::draw_path_line (double x, double y)
+{
     rmt_BeginCPUSample (draw_path_add_line, RMTSF_Aggregate);
     cur_path.lineTo (x, y);
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_path_quadratic (double x1, double y1, double x, double y)
-  {
+void
+QtBackend::draw_path_quadratic (double x1, double y1, double x, double y)
+{
     rmt_BeginCPUSample (draw_path_add_quadratic, RMTSF_Aggregate);
     QPointF c (x1, y1);
     QPointF end (x, y);
     cur_path.quadTo (c, end);
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_path_cubic (double x1, double y1, double x2, double y2, double x, double y)
-  {
+void
+QtBackend::draw_path_cubic (double x1, double y1, double x2, double y2, double x, double y)
+{
     rmt_BeginCPUSample (draw_path_add_cubic, RMTSF_Aggregate);
     QPointF c1 (x1, y1);
     QPointF c2 (x2, y2);
     QPointF end (x, y);
     cur_path.cubicTo (c1, c2, end);
     rmt_EndCPUSample ();
-  }
+}
 
-  /*
-   * the arc handling code underneath is from XSVG,
-   * reused under the terms reproduced in xsvg.license.terms
-   */
+/*
+ * the arc handling code underneath is from XSVG,
+ * reused under the terms reproduced in xsvg.license.terms
+ */
 #define PI 3.14159265359
-  void
-  QtBackend::draw_path_arc (double rx, double ry, double x_axis_rotation, double large_arc_flag, double sweep_flag,
-                            double x, double y)
-  {
-    rmt_BeginCPUSample(draw_path_add_arc, RMTSF_Aggregate);
+void
+QtBackend::draw_path_arc (double rx, double ry, double x_axis_rotation, double large_arc_flag, double sweep_flag,
+                          double x, double y)
+{
+    rmt_BeginCPUSample (draw_path_add_arc, RMTSF_Aggregate);
 
     double curx = cur_path.currentPosition ().x ();
     double cury = cur_path.currentPosition ().y ();
@@ -386,7 +373,7 @@ namespace djnn
     double x0, y0, x1, y1, xc, yc;
     double d, sfactor, sfactor_sq;
     double th0, th1, th_arc;
-    int i, n_segs;
+    int    i, n_segs;
     double dx, dy, dx1, dy1, Pr1, Pr2, Px, Py, check;
     rx = qAbs (rx);
     ry = qAbs (ry);
@@ -394,40 +381,40 @@ namespace djnn
     sin_th = qSin (x_axis_rotation * (PI / 180.0));
     cos_th = qCos (x_axis_rotation * (PI / 180.0));
 
-    dx = (curx - x) / 2.0;
-    dy = (cury - y) / 2.0;
+    dx  = (curx - x) / 2.0;
+    dy  = (cury - y) / 2.0;
     dx1 = cos_th * dx + sin_th * dy;
     dy1 = -sin_th * dx + cos_th * dy;
     Pr1 = rx * rx;
     Pr2 = ry * ry;
-    Px = dx1 * dx1;
-    Py = dy1 * dy1;
+    Px  = dx1 * dx1;
+    Py  = dy1 * dy1;
     /* Spec : check if radii are large enough */
     check = Px / Pr1 + Py / Pr2;
     if (check > 1) {
-      rx = rx * qSqrt (check);
-      ry = ry * qSqrt (check);
+        rx = rx * qSqrt (check);
+        ry = ry * qSqrt (check);
     }
 
     a00 = cos_th / rx;
     a01 = sin_th / rx;
     a10 = -sin_th / ry;
     a11 = cos_th / ry;
-    x0 = a00 * curx + a01 * cury;
-    y0 = a10 * curx + a11 * cury;
-    x1 = a00 * x + a01 * y;
-    y1 = a10 * x + a11 * y;
+    x0  = a00 * curx + a01 * cury;
+    y0  = a10 * curx + a11 * cury;
+    x1  = a00 * x + a01 * y;
+    y1  = a10 * x + a11 * y;
     /* (x0, y0) is current point in transformed coordinate space.
      (x1, y1) is new point in transformed coordinate space.
      The arc fits a unit-radius circle in this space.
      */
-    d = (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);
+    d          = (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);
     sfactor_sq = 1.0 / d - 0.25;
     if (sfactor_sq < 0)
-      sfactor_sq = 0;
+        sfactor_sq = 0;
     sfactor = qSqrt (sfactor_sq);
     if (sweep_flag == large_arc_flag)
-      sfactor = -sfactor;
+        sfactor = -sfactor;
     xc = 0.5 * (x0 + x1) - sfactor * (y1 - y0);
     yc = 0.5 * (y0 + y1) + sfactor * (x1 - x0);
     /* (xc, yc) is center of the circle. */
@@ -437,24 +424,24 @@ namespace djnn
 
     th_arc = th1 - th0;
     if (th_arc < 0 && sweep_flag)
-      th_arc += 2 * PI;
+        th_arc += 2 * PI;
     else if (th_arc > 0 && !sweep_flag)
-      th_arc -= 2 * PI;
+        th_arc -= 2 * PI;
 
     n_segs = qCeil (qAbs (th_arc / (PI * 0.5 + 0.001)));
 
     for (i = 0; i < n_segs; i++) {
-      draw_path_segment (xc, yc, th0 + i * th_arc / n_segs, th0 + (i + 1) * th_arc / n_segs, rx, ry, x_axis_rotation);
+        draw_path_segment (xc, yc, th0 + i * th_arc / n_segs, th0 + (i + 1) * th_arc / n_segs, rx, ry, x_axis_rotation);
     }
 
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_path_segment (double xc, double yc, double th0, double th1, double rx, double ry,
-                                double xAxisRotation)
-  {
-    rmt_BeginCPUSample(draw_path_add_segment, RMTSF_Aggregate);
+void
+QtBackend::draw_path_segment (double xc, double yc, double th0, double th1, double rx, double ry,
+                              double xAxisRotation)
+{
+    rmt_BeginCPUSample (draw_path_add_segment, RMTSF_Aggregate);
 
     double sinTh, cosTh;
     double a00, a01, a10, a11;
@@ -471,46 +458,46 @@ namespace djnn
     a11 = cosTh * ry;
 
     thHalf = 0.5 * (th1 - th0);
-    t = (8.0 / 3.0) * qSin (thHalf * 0.5) * qSin (thHalf * 0.5) / qSin (thHalf);
-    x1 = xc + qCos (th0) - t * qSin (th0);
-    y1 = yc + qSin (th0) + t * qCos (th0);
-    x3 = xc + qCos (th1);
-    y3 = yc + qSin (th1);
-    x2 = x3 + t * qSin (th1);
-    y2 = y3 - t * qCos (th1);
+    t      = (8.0 / 3.0) * qSin (thHalf * 0.5) * qSin (thHalf * 0.5) / qSin (thHalf);
+    x1     = xc + qCos (th0) - t * qSin (th0);
+    y1     = yc + qSin (th0) + t * qCos (th0);
+    x3     = xc + qCos (th1);
+    y3     = yc + qSin (th1);
+    x2     = x3 + t * qSin (th1);
+    y2     = y3 - t * qCos (th1);
 
     cur_path.cubicTo (a00 * x1 + a01 * y1, a10 * x1 + a11 * y1, a00 * x2 + a01 * y2, a10 * x2 + a11 * y2,
                       a00 * x3 + a01 * y3, a10 * x3 + a11 * y3);
 
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_path_closure ()
-  {
+void
+QtBackend::draw_path_closure ()
+{
     rmt_BeginCPUSample (draw_path_add_closure, RMTSF_Aggregate);
     cur_path.closeSubpath ();
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_rectangle_clip (RectangleClip *s)
-  {
-    rmt_BeginCPUSample(draw_rectangle_clip, RMTSF_Aggregate);
+void
+QtBackend::draw_rectangle_clip (RectangleClip* s)
+{
+    rmt_BeginCPUSample (draw_rectangle_clip, RMTSF_Aggregate);
 
     double x, y, w, h;
-    s->get_properties_values(x,y,w,h);
-    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+    s->get_properties_values (x, y, w, h);
+    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
     if (z_processing_step == 1) {
-      add_shape (s, _context);
-      QPainterPath clip;
-      clip.addRect (x, y, w, h);
-      _context->clipTransform = QTransform(_context->matrix.toTransform ());
-      _context->clip = clip;
-      return;
+        add_shape (s, _context);
+        QPainterPath clip;
+        clip.addRect (x, y, w, h);
+        _context->clipTransform = QTransform (_context->matrix.toTransform ());
+        _context->clip          = clip;
+        return;
     }
     if (z_processing_step == 2) {
-     return;
+        return;
     }
     load_drawing_context (s, _context, x, y, w, h);
     QPainterPath clip;
@@ -521,36 +508,35 @@ namespace djnn
     __nb_Drawing_object++;
 #endif
 
-      rmt_BeginCPUSample(draw_rectangle_clip_picking, RMTSF_Aggregate);
-      load_pick_context (s, _context_manager->get_current ());
-      _picking_view->painter ()->setClipPath (clip, Qt::IntersectClip);
+    rmt_BeginCPUSample (draw_rectangle_clip_picking, RMTSF_Aggregate);
+    load_pick_context (s, _context_manager->get_current ());
+    _picking_view->painter ()->setClipPath (clip, Qt::IntersectClip);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
-      rmt_EndCPUSample ();
+    rmt_EndCPUSample ();
 
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_path_clip (Path *p)
-  {
-    rmt_BeginCPUSample(draw_path_clip, RMTSF_Aggregate);
-    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
-    cur_path = QPainterPath ();
+void
+QtBackend::draw_path_clip (Path* p)
+{
+    rmt_BeginCPUSample (draw_path_clip, RMTSF_Aggregate);
+    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+    cur_path            = QPainterPath ();
     p->items_GH ()->draw ();
     if (z_processing_step == 1) {
-      add_shape (p, _context);
-      QPainterPath clip (cur_path);
-      _context->clipTransform = QTransform(_context->matrix.toTransform ());
-      _context->clip = clip;
-      return;
+        add_shape (p, _context);
+        QPainterPath clip (cur_path);
+        _context->clipTransform = QTransform (_context->matrix.toTransform ());
+        _context->clip          = clip;
+        return;
     }
     if (z_processing_step == 2) {
-     return;
+        return;
     }
     cur_path.setFillRule (_context->fillRule);
-
 
     p->set_bounding_box (cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
                          cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
@@ -563,49 +549,50 @@ namespace djnn
     __nb_Drawing_object++;
 #endif
 
-      rmt_BeginCPUSample(draw_path_clip_picking, RMTSF_Aggregate);
-      load_pick_context (p, _context);
-      _picking_view->painter ()->setClipPath (cur_path, Qt::IntersectClip);
+    rmt_BeginCPUSample (draw_path_clip_picking, RMTSF_Aggregate);
+    load_pick_context (p, _context);
+    _picking_view->painter ()->setClipPath (cur_path, Qt::IntersectClip);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
 #endif
-      rmt_EndCPUSample ();
+    rmt_EndCPUSample ();
 
     rmt_EndCPUSample ();
-  }
+}
 
-  void
-  QtBackend::draw_image (Image *i)
-  {
-    rmt_BeginCPUSample(draw_image, RMTSF_Aggregate);
+void
+QtBackend::draw_image (Image* i)
+{
+    rmt_BeginCPUSample (draw_image, RMTSF_Aggregate);
 
-    double x,y,w,h;
-    string path;
-    QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+    double     x, y, w, h;
+    string     path;
+    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
     if (z_processing_step == 1) {
-      add_shape (i, _context);
-      return;
+        add_shape (i, _context);
+        return;
     }
-    i->get_properties_values(path, x,y,w,h);
+    i->get_properties_values (path, x, y, w, h);
     load_drawing_context (i, _context, x, y, w, h);
-    QRect rect (x, y, w, h);
-    QPixmap *pm;
+    QRect    rect (x, y, w, h);
+    QPixmap* pm;
     if (i->invalid_cache ()) {
-      if (i->cache () != nullptr) {
-        pm = (QPixmap*) (i->cache ());
-        delete (pm); pm = nullptr;
-      }
-      QFileInfo fi (path.c_str ());
+        if (i->cache () != nullptr) {
+            pm = (QPixmap*)(i->cache ());
+            delete (pm);
+            pm = nullptr;
+        }
+        QFileInfo fi (path.c_str ());
 
-      if (!fi.exists ())
-        warning (nullptr, " Image Loading - file NOT found - path used: " + path);
+        if (!fi.exists ())
+            warning (nullptr, " Image Loading - file NOT found - path used: " + path);
 
-      pm = new QPixmap (fi.absoluteFilePath ());
+        pm = new QPixmap (fi.absoluteFilePath ());
 
-      i->set_cache (pm);
-      i->set_invalid_cache (false);
+        i->set_cache (pm);
+        i->set_invalid_cache (false);
     } else {
-      pm = (QPixmap*) (i->cache ());
+        pm = (QPixmap*)(i->cache ());
     }
 
     /* manage opacity on image */
@@ -624,295 +611,297 @@ namespace djnn
     _painter->setOpacity (old_opacity);
 
     if (is_in_picking_view (i)) {
-      rmt_BeginCPUSample(draw_image_picking, RMTSF_Aggregate);
-      load_pick_context (i, _context);
-      _picking_view->painter ()->drawRect (rect);
+        rmt_BeginCPUSample (draw_image_picking, RMTSF_Aggregate);
+        load_pick_context (i, _context);
+        _picking_view->painter ()->drawRect (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
-    __nb_Drawing_object_picking++;
+        __nb_Drawing_object_picking++;
 #endif
-      rmt_EndCPUSample ();
+        rmt_EndCPUSample ();
     }
-    
-    rmt_EndCPUSample ();
-  }
 
-  int
-  QtBackend::get_pixel (Image *i, double x, double y)
-  {
-    QPixmap *pm = (QPixmap*) (i->cache ());
+    rmt_EndCPUSample ();
+}
+
+int
+QtBackend::get_pixel (Image* i, double x, double y)
+{
+    QPixmap* pm = (QPixmap*)(i->cache ());
     if (pm) {
-      QImage img = pm->toImage();
-      if (!img.isNull ())
-        return img.pixel (x, y);
+        QImage img = pm->toImage ();
+        if (!img.isNull ())
+            return img.pixel (x, y);
     }
     return 0;
-  }
+}
 
-  void
-  QtBackend::draw_data_image (DataImage *i)
-    {
-      rmt_BeginCPUSample(draw_data_image, RMTSF_Aggregate);
-      double x,y,w,h;
-      string* data;
-      int format;
-      QtContext *_context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
-      if (z_processing_step == 1) {
+void
+QtBackend::draw_data_image (DataImage* i)
+{
+    rmt_BeginCPUSample (draw_data_image, RMTSF_Aggregate);
+    double     x, y, w, h;
+    string*    data;
+    int        format;
+    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+    if (z_processing_step == 1) {
         add_shape (i, _context);
         return;
-      }
+    }
 
-      i->get_properties_values (data,format, x,y,w,h);
-      //cerr << data << " " << w << " " << h << __FL__;
-      load_drawing_context (i, _context, x, y, w, h);
-      QRect rect (x, y, w, h);
-      //QPixmap *pm = reinterpret_cast<QPixmap*>(i->cache());
-      auto *pm = reinterpret_cast<QImage*>(i->cache());
-      // if(pm == nullptr) {
-      //   //pm = new QPixmap (w,h);
-      //   pm = new QImage ();
-      //   i->set_cache (pm);
-      //   i->set_invalid_cache (true);
-      // }
-      if (i->invalid_cache ()) {
+    i->get_properties_values (data, format, x, y, w, h);
+    // cerr << data << " " << w << " " << h << __FL__;
+    load_drawing_context (i, _context, x, y, w, h);
+    QRect rect (x, y, w, h);
+    // QPixmap *pm = reinterpret_cast<QPixmap*>(i->cache());
+    auto* pm = reinterpret_cast<QImage*> (i->cache ());
+    // if(pm == nullptr) {
+    //   //pm = new QPixmap (w,h);
+    //   pm = new QImage ();
+    //   i->set_cache (pm);
+    //   i->set_invalid_cache (true);
+    // }
+    if (i->invalid_cache ()) {
         if (data) {
-          delete pm;
-          if (format<0)
-            pm->loadFromData (reinterpret_cast<const uchar*>(data->c_str ()), data->length());
-          else
-            pm = new QImage (reinterpret_cast<const uchar*>(data->c_str ()), w,h, (QImage::Format)format); //QImage::Format_BGR888);
-          i->set_cache (pm);
+            delete pm;
+            if (format < 0)
+                pm->loadFromData (reinterpret_cast<const uchar*> (data->c_str ()), data->length ());
+            else
+                pm = new QImage (reinterpret_cast<const uchar*> (data->c_str ()), w, h, (QImage::Format)format); // QImage::Format_BGR888);
+            i->set_cache (pm);
         }
-        //else
+        // else
         i->set_invalid_cache (false);
-      }
+    }
 
-      if (pm) {
+    if (pm) {
 
         /* manage opacity on image */
-        qreal old_opacity = _painter->opacity ();
-        QColor c = _context->pen.color ();
+        qreal  old_opacity = _painter->opacity ();
+        QColor c           = _context->pen.color ();
         _painter->setOpacity (c.alphaF ());
 
         //_painter->setRenderHint (QPainter::SmoothPixmapTransform); // do not need anymore if djnn::Layer is used correctly
         //_painter->drawPixmap (rect, *pm);
         _painter->drawImage (rect, *pm);
-  #if _DEBUG_SEE_GUI_INFO_PREF
-      __nb_Drawing_object++;
-  #endif
+#if _DEBUG_SEE_GUI_INFO_PREF
+        __nb_Drawing_object++;
+#endif
 
         /* reset opacity */
         _painter->setOpacity (old_opacity);
 
         if (is_in_picking_view (i)) {
-          rmt_BeginCPUSample(draw_data_image_picking, RMTSF_Aggregate);
-          load_pick_context (i, _context);
-          _picking_view->painter ()->drawRect (rect);
-  #if _DEBUG_SEE_GUI_INFO_PREF
-      __nb_Drawing_object_picking++;
-  #endif
-          rmt_EndCPUSample ();
+            rmt_BeginCPUSample (draw_data_image_picking, RMTSF_Aggregate);
+            load_pick_context (i, _context);
+            _picking_view->painter ()->drawRect (rect);
+#if _DEBUG_SEE_GUI_INFO_PREF
+            __nb_Drawing_object_picking++;
+#endif
+            rmt_EndCPUSample ();
         }
-      }
-
-      rmt_EndCPUSample ();
     }
 
-  static QPainter *buff_painter;
-  static QPainter *buff_pick_painter;
+    rmt_EndCPUSample ();
+}
 
-  struct LayerStuff : LayerCache {
-    //QImage *pm;
-    QPixmap *pm;
-    double tx, ty;
-    double s;
+static QPainter* buff_painter;
+static QPainter* buff_pick_painter;
+
+struct LayerStuff : LayerCache
+{
+    // QImage *pm;
+    QPixmap*   pm;
+    double     tx, ty;
+    double     s;
     QMatrix4x4 m;
-    LayerStuff () : s(1) {}
-    ~LayerStuff () {
-      delete pm;
+    LayerStuff ()
+        : s (1) {}
+    ~LayerStuff ()
+    {
+        delete pm;
     }
-  };
+};
 
-  struct PickLayerStuff : LayerCache {
-    QImage *pm;
-    PickLayerStuff () : pm(nullptr) {}
-    ~PickLayerStuff () {
-      delete pm;
+struct PickLayerStuff : LayerCache
+{
+    QImage* pm;
+    PickLayerStuff ()
+        : pm (nullptr) {}
+    ~PickLayerStuff ()
+    {
+        delete pm;
     }
-  };
+};
 
-
-  bool
-  QtBackend::pre_draw_layer (Layer *l)
-  {
-    rmt_BeginCPUSample (pre_draw_layer, RMTSF_Aggregate)
-    if (z_processing_step == 1)
-      z_processing_step = 3;
+bool
+QtBackend::pre_draw_layer (Layer* l)
+{
+    rmt_BeginCPUSample (pre_draw_layer, RMTSF_Aggregate) if (z_processing_step == 1)
+        z_processing_step = 3;
     int x, y, w, h, pad;
     l->get_xywhp (x, y, w, h, pad);
-    LayerStuff * ls = (LayerStuff*) (l->cache ());
-    //auto * pick_pm = (QPixmap*) (l->pick_cache ());
-    auto * pick_pm = (PickLayerStuff*) (l->pick_cache ());
-    auto fw = l->get_frame()->width ()->get_value();
-    auto fh = l->get_frame()->height ()->get_value();
-    if (w<0) { 
-      w = fw;
-      h = fh;
+    LayerStuff* ls = (LayerStuff*)(l->cache ());
+    // auto * pick_pm = (QPixmap*) (l->pick_cache ());
+    auto* pick_pm = (PickLayerStuff*)(l->pick_cache ());
+    auto  fw      = l->get_frame ()->width ()->get_value ();
+    auto  fh      = l->get_frame ()->height ()->get_value ();
+    if (w < 0) {
+        w = fw;
+        h = fh;
     }
 
     bool recompute_pixmap =
-      l->invalid_cache ()
-      || (ls && (ls->pm->width() != (w+pad*2) || ls->pm->height() != (h+pad*2)))
-    ;
+        l->invalid_cache () || (ls && (ls->pm->width () != (w + pad * 2) || ls->pm->height () != (h + pad * 2)));
 
     if (recompute_pixmap) {
-      #ifndef DJNN_NO_DEBUG
-      if (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT || _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY)
-        cerr << "\n RECOMPUTE PIXMAP " << l->get_debug_name () << " : "  << (w+pad*2) << " - " << (h+pad*2) << endl;
-      #endif
-      delete ls;
-      delete pick_pm;
-      ls = new LayerStuff;
-      w += pad*2;
-      h += pad*2;
+#ifndef DJNN_NO_DEBUG
+        if (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT || _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY)
+            cerr << "\n RECOMPUTE PIXMAP " << l->get_debug_name () << " : " << (w + pad * 2) << " - " << (h + pad * 2) << endl;
+#endif
+        delete ls;
+        delete pick_pm;
+        ls = new LayerStuff;
+        w += pad * 2;
+        h += pad * 2;
 
-      double hidpi_scale = 1; //DisplayBackend::instance()->window()->hidpi_scale()->get_value(); // FIXME, what about multi-window?!
-      ls->pm = new QPixmap (w * hidpi_scale, h * hidpi_scale);
-      ls->pm->setDevicePixelRatio (hidpi_scale);
-      ls->pm->fill (Qt::transparent);
-      pick_pm = new PickLayerStuff;
-      pick_pm->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
-      //pick_pm->pm->setDevicePixelRatio (1);
-      //pick_pm = new QPixmap (w, h);
-      pick_pm->pm->fill (Qt::transparent);
-      l->set_cache (ls);
-      l->set_pick_cache (pick_pm);
-      l->set_invalid_cache (false);
-      buff_painter = _painter;
-      _painter = new QPainter (ls->pm);
-      buff_pick_painter = _picking_view->painter ();
-      _picking_view->set_painter (new QPainter (pick_pm->pm));
-      _in_cache = true;
+        double hidpi_scale = 1; // DisplayBackend::instance()->window()->hidpi_scale()->get_value(); // FIXME, what about multi-window?!
+        ls->pm             = new QPixmap (w * hidpi_scale, h * hidpi_scale);
+        ls->pm->setDevicePixelRatio (hidpi_scale);
+        ls->pm->fill (Qt::transparent);
+        pick_pm     = new PickLayerStuff;
+        pick_pm->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
+        // pick_pm->pm->setDevicePixelRatio (1);
+        // pick_pm = new QPixmap (w, h);
+        pick_pm->pm->fill (Qt::transparent);
+        l->set_cache (ls);
+        l->set_pick_cache (pick_pm);
+        l->set_invalid_cache (false);
+        buff_painter      = _painter;
+        _painter          = new QPainter (ls->pm);
+        buff_pick_painter = _picking_view->painter ();
+        _picking_view->set_painter (new QPainter (pick_pm->pm));
+        _in_cache = true;
 
-      QtContext *cur_context = _context_manager->get_current ();
+        QtContext* cur_context = _context_manager->get_current ();
 
-      // find current translation
-      QMatrix4x4& origin = cur_context->matrix;
-      ls->m = origin;
-      auto s = origin(0,0);
-      auto tx = origin(0,3);
-      auto ty = origin(1,3);
+        // find current translation
+        QMatrix4x4& origin = cur_context->matrix;
+        ls->m              = origin;
+        auto s             = origin (0, 0);
+        auto tx            = origin (0, 3);
+        auto ty            = origin (1, 3);
 
-      //cerr << tx << " " << ty << " " << s << __FL__;
+        // cerr << tx << " " << ty << " " << s << __FL__;
 
-      // if translation is positive, apply -translation to avoid pixmap emptiness at the top left // FIXME resize image!
-      // if translation is negative, do not try to adjust translation so that the bottom-right part of the rendering is not clipped
-      QMatrix4x4 newm;
-      if (tx>0) {
-        newm.translate(-tx, 0); // apply -translation
-      } 
-      if (ty>0) {
-        auto inv_tvy = (h-ls->pm->height()) + ty; // take into account reverse y
-        newm.translate(0, -inv_tvy); // apply translation
-      }
-      newm.translate(-x, -y);
-      newm.translate(pad, pad); // apply padding to get the surrounding
-      origin = newm * origin;
+        // if translation is positive, apply -translation to avoid pixmap emptiness at the top left // FIXME resize image!
+        // if translation is negative, do not try to adjust translation so that the bottom-right part of the rendering is not clipped
+        QMatrix4x4 newm;
+        if (tx > 0) {
+            newm.translate (-tx, 0); // apply -translation
+        }
+        if (ty > 0) {
+            auto inv_tvy = (h - ls->pm->height ()) + ty; // take into account reverse y
+            newm.translate (0, -inv_tvy);                // apply translation
+        }
+        newm.translate (-x, -y);
+        newm.translate (pad, pad); // apply padding to get the surrounding
+        origin = newm * origin;
 
-      ls->tx = tx;
-      ls->ty = ty;
-      ls->s = s;
+        ls->tx = tx;
+        ls->ty = ty;
+        ls->s  = s;
 
     } else {
-      buff_painter = nullptr;
-      buff_pick_painter = nullptr;
+        buff_painter      = nullptr;
+        buff_pick_painter = nullptr;
     }
 
     rmt_EndCPUSample ();
 
     return recompute_pixmap;
-  }
+}
 
-  void
-  QtBackend::post_draw_layer (Layer *l)
-  {
+void
+QtBackend::post_draw_layer (Layer* l)
+{
     rmt_BeginCPUSample (post_draw_layer, RMTSF_Aggregate);
 
-    LayerStuff* ls = (LayerStuff*) (l->cache ());
-    auto *pick_pm =  (PickLayerStuff*) (l->pick_cache());
-    //auto *pick_pm =  (QPixmap*) (l->pick_cache());
+    LayerStuff* ls      = (LayerStuff*)(l->cache ());
+    auto*       pick_pm = (PickLayerStuff*)(l->pick_cache ());
+    // auto *pick_pm =  (QPixmap*) (l->pick_cache());
 
-    QtContext *cur_context = _context_manager->get_current ();
-    QMatrix4x4& origin = cur_context->matrix;
-    QMatrix4x4 m = origin;
+    QtContext*  cur_context = _context_manager->get_current ();
+    QMatrix4x4& origin      = cur_context->matrix;
+    QMatrix4x4  m           = origin;
 
     bool damaged = true;
     if (buff_painter != nullptr) {
-      delete _painter;
-      delete _picking_view->painter ();
-      _picking_view->set_painter (buff_pick_painter);
-      _painter = buff_painter;
-      buff_painter = nullptr;
-      buff_pick_painter = nullptr;
-      _in_cache = false;
-      //damaged = true;
-      m = ls->m;
+        delete _painter;
+        delete _picking_view->painter ();
+        _picking_view->set_painter (buff_pick_painter);
+        _painter          = buff_painter;
+        buff_painter      = nullptr;
+        buff_pick_painter = nullptr;
+        _in_cache         = false;
+        // damaged = true;
+        m = ls->m;
     }
 
-    auto curs = m(0,0);
-    auto tx = m(0,3);
-    auto ty = m(1,3);
-    auto s = curs/ls->s;
+    auto curs = m (0, 0);
+    auto tx   = m (0, 3);
+    auto ty   = m (1, 3);
+    auto s    = curs / ls->s;
 
-    //cerr << tx << " " << ty << " " << s << __FL__;
+    // cerr << tx << " " << ty << " " << s << __FL__;
 
     int x, y, w, h, pad;
     l->get_xywhp (x, y, w, h, pad);
-  
+
     QMatrix4x4 newm;
-    newm.translate(tx+x, ty+y);
-    
-    if (ls->tx<0) {
-        newm.translate((-ls->tx)*s, 0); // apply no-emptiness translation
+    newm.translate (tx + x, ty + y);
+
+    if (ls->tx < 0) {
+        newm.translate ((-ls->tx) * s, 0); // apply no-emptiness translation
     }
-    if (ls->ty<0) {
-        newm.translate(0,(-ls->ty)*s); // apply no-emptiness translation
+    if (ls->ty < 0) {
+        newm.translate (0, (-ls->ty) * s); // apply no-emptiness translation
     }
-    //newm = glm::translate(newm, gl2d::xxx_vertex_t{x, y});
-    newm.translate(-pad*s, -pad*s);
+    // newm = glm::translate(newm, gl2d::xxx_vertex_t{x, y});
+    newm.translate (-pad * s, -pad * s);
     if (damaged) {
-      newm.scale(s, s);
+        newm.scale (s, s);
     }
-    
+
     origin = newm;
-    //newm = glm::translate(newm, gl2d::xxx_vertex_t{-t.x, -t.y});
-    //m = newm * m;
-    
+    // newm = glm::translate(newm, gl2d::xxx_vertex_t{-t.x, -t.y});
+    // m = newm * m;
+
     // align translation to the grid
-    m(2,0) = round(m(2,0));
-    m(2,1) = round(m(2,1));
+    m (2, 0) = round (m (2, 0));
+    m (2, 1) = round (m (2, 1));
 
     const QTransform transform = origin.toTransform ();
     _painter->setTransform (transform);
-    _picking_view->painter()->setTransform (transform);
-    
+    _picking_view->painter ()->setTransform (transform);
+
     QRect rect (0, 0, ls->pm->width (), ls->pm->height ());
 
-    auto rh = _painter->renderHints();
-    _painter->setRenderHints({});
+    auto rh = _painter->renderHints ();
+    _painter->setRenderHints ({});
     rmt_BeginCPUSample (post_draw_layer_pixmap, RMTSF_Aggregate);
     //_painter->drawImage (rect, *(ls->pm));
-    _painter->drawPixmap (0,0, *(ls->pm));
+    _painter->drawPixmap (0, 0, *(ls->pm));
     rmt_EndCPUSample ();
-    _painter->setRenderHints(rh);
-  
-    _picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_SourceOver);
+    _painter->setRenderHints (rh);
+
+    _picking_view->painter ()->setCompositionMode (QPainter::CompositionMode_SourceOver);
     rmt_BeginCPUSample (post_draw_layer_pixmap_pick, RMTSF_Aggregate);
-    _picking_view->painter()->drawImage (rect, *pick_pm->pm);
+    _picking_view->painter ()->drawImage (rect, *pick_pm->pm);
     //_picking_view->painter()->drawPixmap (0, 0, *pick_pm);
     rmt_EndCPUSample ();
-    _picking_view->painter ()->setCompositionMode(QPainter::CompositionMode_Source);
+    _picking_view->painter ()->setCompositionMode (QPainter::CompositionMode_Source);
     if (z_processing_step == 3)
-      z_processing_step = 1;
+        z_processing_step = 1;
     rmt_EndCPUSample ();
-  }
+}
 } /* namespace djnn */

@@ -14,13 +14,12 @@
  *
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 #include "gui/gui-dev.h"
 #include "gui/gui-xml.h"
-
 #include "gui/shape/path.h"
 #include "gui/shape/path_clip.h"
 
@@ -33,30 +32,31 @@ typedef void (djn_PathCoordProc) (FatProcess*, double);
 
 static int ParseData (FatProcess**, const char*);
 
-static map <string, djn_XMLAttrHandler> handlers = {
-    {"d",{&ParseData}}
-};
+static map<string, djn_XMLAttrHandler> handlers = {
+    {"d", {&ParseData}}};
 
 djn_XMLAttrHandler*
-XMLPathAttrs_Hash::djn_XMLPathAttrsLookup (const char *str, unsigned int len)
+XMLPathAttrs_Hash::djn_XMLPathAttrsLookup (const char* str, unsigned int len)
 {
-  map<string, djn_XMLAttrHandler>::iterator it;
-  it = handlers.find(string(str));
-  if (it != handlers.end())
-    return &it->second;
-  return 0;
+    map<string, djn_XMLAttrHandler>::iterator it;
+    it = handlers.find (string (str));
+    if (it != handlers.end ())
+        return &it->second;
+    return 0;
 }
 
 struct djn_PathArgs djn_PathArgs = {0};
 
-static int ParseData(FatProcess** e, const char* v) {
+static int
+ParseData (FatProcess** e, const char* v)
+{
 
-	if (djn__GrphIsInClip)
-		djn_PathArgs.e = new PathClip(nullptr, "");
-	else
-		djn_PathArgs.e = new Path(nullptr, "");
+    if (djn__GrphIsInClip)
+        djn_PathArgs.e = new PathClip (nullptr, "");
+    else
+        djn_PathArgs.e = new Path (nullptr, "");
 
-	return parse_path ((Path*)djn_PathArgs.e, v);
+    return parse_path ((Path*)djn_PathArgs.e, v);
 }
 
-}
+} // namespace djnn

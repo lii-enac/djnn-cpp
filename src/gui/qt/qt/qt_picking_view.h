@@ -18,34 +18,32 @@
 #include <QtGui/QPainter>
 #include <QtWidgets/QLabel>
 
-#include "gui/picking/color_picking.h"
 #include "core/core-dev.h"
 #include "display/window.h"
+#include "gui/picking/color_picking.h"
 #include "gui/shape/abstract_gshape.h"
 
+namespace djnn {
 
-
-namespace djnn
+class QtPickingView : public ColorPickingView
 {
-
-  class QtPickingView : public ColorPickingView
-  {
   public:
-    QtPickingView (Window *win);
+    QtPickingView (Window* win);
     virtual ~QtPickingView ();
 
     // Picking
     virtual void init () override;
     // ColorPickingView
-    virtual int get_pixel(unsigned int x, unsigned int y) override;
+    virtual int get_pixel (unsigned int x, unsigned int y) override;
 
     // QtPickingView
     QPainter* painter () { return _painter; }
-    void set_painter (QPainter *p) { _painter = p; }
-    void display ();
+    void      set_painter (QPainter* p) { _painter = p; }
+    void      display ();
+
   private:
-    QLabel *_pick_debug_win;
-    QImage *_image;
-    QPainter *_painter;
-  };
+    QLabel*   _pick_debug_win;
+    QImage*   _image;
+    QPainter* _painter;
+};
 } /* namespace djnn */

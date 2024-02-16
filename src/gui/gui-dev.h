@@ -14,36 +14,35 @@
 
 #pragma once
 
-#include "style/style_types.h"
 #include "core/utils/containers.h"
-
+#include "style/style_types.h"
 
 namespace djnn {
 
-  //using namespace djnnstl;
+// using namespace djnnstl;
 
-  class CoreProcess;
+class CoreProcess;
 
-  extern djnnstl::vector<djnnstl::string> loadedModules;
-  // extern int mouse_tracking;
-  // extern int full_screen;
-  // extern int hide_pointer;
-  // extern FatProcess* DrawingRefreshManager;
-  extern CoreProcess* GenericMouse;
-  extern int z_order_enabled;
+extern djnnstl::vector<djnnstl::string> loadedModules;
+// extern int mouse_tracking;
+// extern int full_screen;
+// extern int hide_pointer;
+// extern FatProcess* DrawingRefreshManager;
+extern CoreProcess* GenericMouse;
+extern int          z_order_enabled;
 
-  void init_gui ();
-  void clear_gui ();
+void init_gui ();
+void clear_gui ();
 
-  typedef unsigned int named_color_t;
+typedef unsigned int named_color_t;
 
+extern int djn__GrphIsInClip;
 
-  extern int djn__GrphIsInClip;
+typedef enum
+{
+    djnStrokeUndef,
+    djnStrokeNone,
+    djnStrokeColor
+} djnStrokeType;
 
-  typedef enum
-  {
-    djnStrokeUndef, djnStrokeNone, djnStrokeColor
-  } djnStrokeType;
-
-
-}
+} // namespace djnn
