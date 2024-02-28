@@ -320,13 +320,13 @@ IvyAccess::~IvyAccess ()
 
     /* cleaning symtable */
 
-    /* note :
-     * - 4 children (plain object) should stay in the symtable: out, out_action, arriving, leaving
+    /* becareful :
+     * - 5 children (plain object) should stay in the symtable: out, out_action, arriving, leaving, arriving_info
      * - IvyAccess is not a Container so we have to take care of the symtable
      */
     auto it_s = symtable ().begin ();
-    while (symtable ().size () != 4) {
-        if (it_s->first.compare ("out") == 0 || it_s->first.compare ("out_action") == 0 || it_s->first.compare ("arriving") == 0 || it_s->first.compare ("arriving_info") == 0 || it_s->first.compare ("leaving") == 0) {
+    while (symtable ().size () != 5) {
+        if (it_s->first.compare ("out") == 0 || it_s->first.compare ("out_action") == 0 || it_s->first.compare ("arriving_info") == 0 || it_s->first.compare ("arriving") == 0 || it_s->first.compare ("arriving_info") == 0 || it_s->first.compare ("leaving") == 0) {
             it_s++;
         } else {
             delete it_s->second;
