@@ -81,7 +81,7 @@ t_perform_action (AbstractTextProperty* src, AbstractTextProperty* dst, double p
 // specific case when assigning a CoreProcess to a RefProperty
 template <>
 void
-t_perform_action (CoreProcess* src, RefProperty* dst, double propagate, double lazy)
+t_perform_action (CoreProcess* src, AbstractRefProperty* dst, double propagate, double lazy)
 {
     const auto& sv = src;
     const auto& dv = dst;
@@ -256,14 +256,14 @@ build_ttassignment (CoreProcess* src, CoreProcess* dst)
             break;
         }
         case Reference: {
-            auto* srp = djnn_dynamic_cast<RefProperty*> (src_p);
+            auto* srp = djnn_dynamic_cast<AbstractRefProperty*> (src_p);
             assert (srp);
-            auto* drp = djnn_dynamic_cast<RefProperty*> (dst_p);
+            auto* drp = djnn_dynamic_cast<AbstractRefProperty*> (dst_p);
             if (!drp) {
                 warning (dst_p, "is not a Reference in assignment");
                 return nullptr;
             }
-            _ttassignment = new TAssignment<RefProperty, RefProperty> (srp, drp);
+            _ttassignment = new TAssignment<AbstractRefProperty, AbstractRefProperty> (srp, drp);
             break;
         }
         case Remote: // FIXME name
@@ -283,9 +283,9 @@ build_ttassignment (CoreProcess* src, CoreProcess* dst)
             return nullptr;
         }
     } else if (dst_p->get_property_type () == Reference) {
-        auto* drp = djnn_dynamic_cast<RefProperty*> (dst_p);
+        auto* drp = djnn_dynamic_cast<AbstractRefProperty*> (dst_p);
         assert (drp);
-        _ttassignment = new TAssignment<CoreProcess, RefProperty> (src, drp);
+        _ttassignment = new TAssignment<CoreProcess, AbstractRefProperty> (src, drp);
 
     } else {
 
@@ -333,7 +333,7 @@ build_ttassignment (CoreProcess* src, CoreProcess* dst)
         }
         case Reference:
         {
-          RefProperty* rp = djnn_dynamic_cast<RefProperty*> (src_p);
+          RefProperty* rp = djnn_dynamic_cast<AbstractRefProperty*> (src_p);
           if (rp) dst_p->set_value (rp->get_value (), propagate);
           break;
         }

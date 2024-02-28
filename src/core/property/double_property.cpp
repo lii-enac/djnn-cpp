@@ -26,7 +26,7 @@ namespace djnn {
 double
 getDouble (CoreProcess* p)
 {
-    DoubleProperty* dp = djnn_dynamic_cast<DoubleProperty*> (p);
+    AbstractDoubleProperty* dp = djnn_dynamic_cast<AbstractDoubleProperty*> (p);
     if (dp != nullptr)
         return dp->get_value ();
     else
@@ -37,7 +37,7 @@ getDouble (CoreProcess* p)
 void
 setDouble (CoreProcess* p, double v)
 {
-    DoubleProperty* dp = djnn_dynamic_cast<DoubleProperty*> (p);
+    AbstractDoubleProperty* dp = djnn_dynamic_cast<AbstractDoubleProperty*> (p);
     if (dp != nullptr)
         dp->set_value (v, true);
     else

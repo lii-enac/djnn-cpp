@@ -532,7 +532,7 @@ IvyAccess::find_child_impl (const string& key)
         cout << "regexp : \"" << regexp << "\" - full : \"" << full_exp << "\"" << endl;
 #endif
 
-        TextProperty* tmp = dynamic_cast<TextProperty*> (FatProcess::find_child_impl (regexp));
+        AbstractTextProperty* tmp = dynamic_cast<AbstractTextProperty*> (FatProcess::find_child_impl (regexp));
         if (tmp) {
 
             string reg_str = tmp->get_value ();

@@ -26,7 +26,7 @@ namespace djnn {
 int
 getInt (CoreProcess* p)
 {
-    IntProperty* ip = djnn_dynamic_cast<IntProperty*> (p);
+    AbstractIntProperty* ip = djnn_dynamic_cast<AbstractIntProperty*> (p);
     if (ip != nullptr)
         return ip->get_value ();
     else
@@ -37,7 +37,7 @@ getInt (CoreProcess* p)
 void
 setInt (CoreProcess* p, int v)
 {
-    IntProperty* ip = djnn_dynamic_cast<IntProperty*> (p);
+    AbstractIntProperty* ip = djnn_dynamic_cast<AbstractIntProperty*> (p);
     if (ip != nullptr)
         ip->set_value (v, true);
     else

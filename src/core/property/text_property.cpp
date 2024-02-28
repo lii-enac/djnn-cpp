@@ -47,7 +47,7 @@ toString (CoreProcess* p)
 string&
 getString (CoreProcess* p)
 {
-    TextProperty* tp = djnn_dynamic_cast<TextProperty*> (p);
+    AbstractTextProperty* tp = djnn_dynamic_cast<AbstractTextProperty*> (p);
     if (tp != nullptr)
         return tp->get_value ();
     else
@@ -58,7 +58,7 @@ getString (CoreProcess* p)
 void
 setString (CoreProcess* p, string& v)
 {
-    TextProperty* tp = djnn_dynamic_cast<TextProperty*> (p);
+    AbstractTextProperty* tp = djnn_dynamic_cast<AbstractTextProperty*> (p);
     if (tp != nullptr)
         tp->set_value (v, true);
     else

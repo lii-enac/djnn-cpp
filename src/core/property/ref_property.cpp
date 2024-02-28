@@ -35,7 +35,7 @@ using namespace djnnstl;
 CoreProcess*
 getRef (CoreProcess* p)
 {
-    RefProperty* rp = djnn_dynamic_cast<RefProperty*> (p);
+    AbstractRefProperty* rp = djnn_dynamic_cast<AbstractRefProperty*> (p);
     if (rp != nullptr)
         return rp->get_value ();
     else
@@ -46,7 +46,7 @@ getRef (CoreProcess* p)
 void
 setRef (CoreProcess* p, CoreProcess* v)
 {
-    RefProperty* rp = djnn_dynamic_cast<RefProperty*> (p);
+    AbstractRefProperty* rp = djnn_dynamic_cast<AbstractRefProperty*> (p);
     if (rp != nullptr)
         rp->set_value (v, true);
     else

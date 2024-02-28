@@ -248,8 +248,8 @@ Regex::RegexAction::impl_activate ()
         // activate all entries before the general match [0]
         for (size_t i = 1; i < match.size (); i++) {
             if (!match.str (i).empty ()) {
-                TextProperty* p   = dynamic_cast<TextProperty*> (_parent->find_child_impl (std::to_string (i)));
-                const string  res = match.str (i).c_str (); // FIXME copy of string even if no EASTL (or not, if optimized?)
+                AbstractTextProperty* p   = dynamic_cast<AbstractTextProperty*> (_parent->find_child_impl (std::to_string (i)));
+                const string          res = match.str (i).c_str (); // FIXME copy of string even if no EASTL (or not, if optimized?)
                 p->set_value (res, true);
             }
         }

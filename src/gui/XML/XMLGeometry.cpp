@@ -85,7 +85,7 @@ XML_Utils::djn_XMLParseLengthProperty (FatProcess* s, const char* v)
 {
     double value;
     if (s && djn_XMLParseLength (&value, v)) {
-        DoubleProperty* s_dp = dynamic_cast<DoubleProperty*> (s);
+        AbstractDoubleProperty* s_dp = dynamic_cast<AbstractDoubleProperty*> (s);
         s_dp->set_value (value, true);
         return 1;
     } else
