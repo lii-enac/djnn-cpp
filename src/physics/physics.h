@@ -164,7 +164,7 @@ class Plane : public AbstractPropPlane {
     void impl_activate () override;
     void impl_deactivate () override;
     // FatProcess* find_child (const string& n) override;
-    void update () override{};
+    void update () override {};
 
   protected:
     // struct plane_raw_props_t { double a, b, c, d ;};

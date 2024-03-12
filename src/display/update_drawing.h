@@ -51,7 +51,7 @@ class UpdateDrawing : public FatProcess {
         virtual ~UndelayedSpike () {}
         void post_activate () override { post_activate_auto_deactivate (); }
         void impl_activate () override;
-        void impl_deactivate () override{};
+        void impl_deactivate () override {};
 
       private:
         UpdateDrawing* _ud;

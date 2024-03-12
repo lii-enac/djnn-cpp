@@ -28,8 +28,8 @@ class Spike : public FatProcess {
   protected:
     bool pre_activate () override;
     void post_activate () override;
-    void impl_activate () override{};
-    void impl_deactivate () override{};
+    void impl_activate () override {};
+    void impl_deactivate () override {};
 
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;

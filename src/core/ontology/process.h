@@ -111,7 +111,7 @@ class CoreProcess {
     virtual void            draw () {}
     virtual void            pick () {}
     virtual AbstractGShape* pick_analytical (PickAnalyticalContext&) { return nullptr; }
-    virtual void            visit (Visitor*){};
+    virtual void            visit (Visitor*) {};
 
     // helpers
     bool                   is_model () const { return get_bitset (MODEL_MASK, MODEL_SHIFT); }

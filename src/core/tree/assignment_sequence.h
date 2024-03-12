@@ -26,7 +26,7 @@ class AssignmentSequence : public Container {
     void                draw () override {}
     void                impl_activate () override;
     void                post_activate () override;
-    void                impl_deactivate () override{};
+    void                impl_deactivate () override {};
     AssignmentSequence* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
 #ifndef DJNN_NO_SERIALIZE

@@ -71,7 +71,7 @@ class ListIterator : public FatProcess {
     ListIterator (CoreProcess* parent, const string& name, CoreProcess* list, CoreProcess* action, bool model = true);
     virtual ~ListIterator () {}
     void impl_activate () override;
-    void impl_deactivate () override{};
+    void impl_deactivate () override {};
     void post_activate () override;
 
   private:

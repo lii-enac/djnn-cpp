@@ -68,8 +68,8 @@ inline bool is_pickable (AbstractGShape* s) {
 class Touch : public FatProcess {
   public:
     Touch (CoreProcess* parent, const string& name, int id, double init_x, double init_y, double init_pressure);
-    void        impl_activate () override{};
-    void        impl_deactivate () override{};
+    void        impl_activate () override {};
+    void        impl_deactivate () override {};
     void        set_init_x (double v) { _init_x->set_value (v, true); }
     void        set_init_y (double v) { _init_y->set_value (v, true); }
     void        set_move_x (double v) { _move_x->set_value (v, true); }

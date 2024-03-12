@@ -28,7 +28,7 @@ class BackgroundRect : public Component, public PickUI {
     ~BackgroundRect ();
 
     CoreProcess* find_child_impl (const string&) override;
-    void         set_mouse_local_coords (double x, double y, bool is_move) override{};
+    void         set_mouse_local_coords (double x, double y, bool is_move) override {};
 
   protected:
     Window* get_frame () { return (Window*)get_parent (); }

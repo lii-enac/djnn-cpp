@@ -29,7 +29,7 @@ class SetIterator : public FatProcess {
     virtual ~SetIterator () {}
     virtual process_type_e get_process_type () const override { return CONTAINER_T; }
     void                   impl_activate () override;
-    void                   impl_deactivate () override{};
+    void                   impl_deactivate () override {};
     void                   post_activate () override;
 
   private:

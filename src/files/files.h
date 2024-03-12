@@ -108,7 +108,7 @@ class File : public FatProcess {
         : FatProcess (name), _path (this, "full_path", path), _filename (this, "filename", filename),
           _is_dir (this, "is_dir", is_dir) { finalize_construction (parent, name); }
     virtual ~File () {}
-    void          impl_activate () override{};
+    void          impl_activate () override {};
     void          impl_deactivate () override {}
     const string& get_filename () { return _filename.get_value (); }
     const string& get_path () { return _path.get_value (); }
