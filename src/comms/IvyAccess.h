@@ -15,6 +15,7 @@
 #pragma once
 
 #include "core/control/action.h"
+#include "core/control/spike.h"
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/ontology/coupling.h"
 #include "core/ontology/process.h"
@@ -35,11 +36,22 @@ class IvyAccess : public FatProcess, public ExternalSource {
         IvyOutAction (CoreProcess* parent, const string& name, TextProperty* out)
             : Action (parent, name), _out (out) { finalize_construction (parent, name); }
         virtual ~IvyOutAction () {}
-        // void coupling_activation_hook () override;
         void impl_activate () override;
 
       private:
         TextProperty* _out;
+    };
+
+    /*** private Class Ivy Out Actions ***/
+    class IvySendDieAction : public Action {
+      public:
+        IvySendDieAction (CoreProcess* parent, const string& name, TextProperty* send_die)
+            : Action (parent, name), _send_die (send_die) { finalize_construction (parent, name); }
+        virtual ~IvySendDieAction () {}
+        void impl_activate () override;
+
+      private:
+        TextProperty* _send_die;
     };
 
     /*** Ivy Access Class ***/
@@ -58,9 +70,11 @@ class IvyAccess : public FatProcess, public ExternalSource {
                const string& bus = "224.1.2.3:2010", const string& appname = "NO_NAME", const string& ready = "READY", bool isModel = false);
 
     virtual ~IvyAccess ();
-    void set_arriving (const string& v);
-    void set_arriving_info (const string& v);
-    void set_leaving (const string& v);
+    void set_arriving (const string& v) { _arriving.set_value (v, true); };
+    void set_arriving_info (const string& v) { _arriving_info.set_value (v, true); };
+    void set_leaving (const string& v) { _leaving.set_value (v, true); }
+
+    Spike& get_die () { return _die; }
 
     // make it public
     bool get_please_stop () const override { return ExternalSource::get_please_stop (); }
@@ -80,12 +94,16 @@ class IvyAccess : public FatProcess, public ExternalSource {
     in_map_t                                         _in_map;
     vector<djnn::IvyAccess::msg_callback_user_data*> _cb_regex_vector;
 
-    TextProperty _out;
-    IvyOutAction _out_a;
-    Coupling     _out_c;
-    TextProperty _arriving;
-    TextProperty _arriving_info;
-    TextProperty _leaving;
+    TextProperty     _out;
+    IvyOutAction     _out_a;
+    Coupling         _out_c;
+    TextProperty     _arriving;
+    TextProperty     _arriving_info;
+    TextProperty     _leaving;
+    TextProperty     _send_die;
+    IvySendDieAction _send_die_a;
+    Coupling         _send_die_c;
+    Spike            _die;
 
     // thread source
     void run () override;

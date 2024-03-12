@@ -35,6 +35,8 @@ using namespace djnnstl;
 
 // #define __IVY_DEBUG__
 
+static std::map<IvyClientPtr, string> __app_map;
+
 /** regexp function **/
 
 static int
@@ -211,22 +213,72 @@ _on_ivy_message (IvyClientPtr app, void* user_data, int argc, char** argv)
 }
 
 static void
+_on_ivy_die (IvyClientPtr app, void* user_data, int event)
+{
+    djnn::IvyAccess* access = reinterpret_cast<djnn::IvyAccess*> (user_data);
+
+    djnn::get_exclusive_access (DBG_GET);
+
+    if (STOP_IVY) {
+        djnn::release_exclusive_access (DBG_GET);
+        return;
+    }
+
+    access->get_die ().activate (); // notify _die has been receiveds
+    GRAPH_EXEC;
+
+    djnn::release_exclusive_access (DBG_GET);
+}
+
+static void
 _on_ivy_arriving_leaving_agent (IvyClientPtr app, void* user_data, IvyApplicationEvent event)
 {
     djnn::IvyAccess* access = reinterpret_cast<djnn::IvyAccess*> (user_data);
-    if (STOP_IVY)
+
+    djnn::get_exclusive_access (DBG_GET);
+
+    if (STOP_IVY) {
+        djnn::release_exclusive_access (DBG_GET);
         return;
+    }
+
+    string appName = IvyGetApplicationName (app);
 
     if (event == IvyApplicationConnected) {
-        string appName = IvyGetApplicationName (app);
+
+        // managing _app_map
+        auto it = __app_map.find (app);
+        if (it == __app_map.end ())
+            __app_map[app] = appName;
+        else
+            djnn_warning (nullptr, "this ivy application IvyClienPtr already exist : " + appName + "\n");
+
         string appHost = IvyGetApplicationHost (app);
         access->set_arriving (appName);
         access->set_arriving_info ("appName: " + appName + " - FQDN: " + appHost);
-        // std::cerr << "TEST IVY: " << IvyGetApplicationName(app) << " - FQDN: " << IvyGetApplicationHost (app) << std::endl ; // << " - Id: " << app->app_port << std::endl;
     }
 
-    else if (event == IvyApplicationDisconnected)
-        access->set_leaving (IvyGetApplicationName (app));
+    else if (event == IvyApplicationDisconnected) {
+
+        // managing _app_map
+        auto it = __app_map.find (app);
+        if (it != __app_map.end ()) {
+            __app_map.erase (it);
+        } else
+            djnn_warning (nullptr, "this ivy application IvyClienPtr name does not exist : " + appName + "\n");
+
+        access->set_leaving (appName);
+    }
+
+    // debug
+    // auto& app_map = access->get_app_map ();
+    // std::cerr << "list of app:" << std::endl;
+    // for (const auto& pair : app_map) {
+    //     std::cout << pair.first << std::endl;
+    // }
+
+    GRAPH_EXEC;
+    djnn::release_exclusive_access (DBG_GET);
 }
 
 namespace djnn {
@@ -237,6 +289,26 @@ void
 IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 {
     IvySendMsg ("%s", _out->get_value ().c_str ());
+}
+
+/****  IVY SEND DIE ACTIONS ****/
+
+void
+IvyAccess::IvySendDieAction::impl_activate () // coupling_activation_hook ()
+{
+    const string appName_to_found = _send_die->get_value ();
+
+    /* send "Die" to all ivy application that have these name : _send_die->get_value () */
+    bool found = false;
+    for (const auto& it : __app_map) {
+        if (it.second == appName_to_found) {
+            IvySendDieMsg (it.first);
+            found = true;
+        }
+    }
+
+    if (!found)
+        djnn__warning (this, "this ivy application \"" + appName_to_found + "\" is unknown \n");
 }
 
 /**** IVY ACCESS ****/
@@ -250,13 +322,19 @@ IvyAccess::IvyAccess (CoreProcess* parent, const string& name,
       _out_c (&_out, ACTIVATION, &_out_a, ACTIVATION, true),
       _arriving (this, "arriving", ""),
       _arriving_info (this, "arriving_info", ""),
-      _leaving (this, "leaving", "")
+      _leaving (this, "leaving", ""),
+      _send_die (this, "send_die", ""),
+      _send_die_a (this, "send_die_action", &_send_die),
+      _send_die_c (&_send_die, ACTIVATION, &_send_die_a, ACTIVATION, true),
+      _die (this, "die", true)
+
 {
     _bus           = bus;
     _appname       = appname;
     _ready_message = ready;
 
     _out_c.disable ();
+    _send_die_c.disable ();
 
     /* note:
      * c_out in now immediat : 07.2020 - to react each time is activated
@@ -284,6 +362,7 @@ IvyAccess::~IvyAccess ()
 
     if (get_parent ()) {
         remove_state_dependency (get_parent (), &_out_a);
+        remove_state_dependency (get_parent (), &_send_die_a);
     }
 
     /* erase _cb_regex_vector */
@@ -321,21 +400,23 @@ IvyAccess::~IvyAccess ()
     /* cleaning symtable */
 
     /* becareful :
-     * - 5 children (plain object) should stay in the symtable: out, out_action, arriving, leaving, arriving_info
+     * - 8 children (plain object) should stay in the symtable: out, out_action, arriving, leaving, arriving_info
      * - IvyAccess is not a Container so we have to take care of the symtable
      */
     auto it_s = symtable ().begin ();
-    while (symtable ().size () != 5) {
-        if (it_s->first.compare ("out") == 0 || it_s->first.compare ("out_action") == 0 || it_s->first.compare ("arriving_info") == 0 || it_s->first.compare ("arriving") == 0 || it_s->first.compare ("arriving_info") == 0 || it_s->first.compare ("leaving") == 0) {
+    while (symtable ().size () != 8) {
+        if (it_s->first.compare ("out") == 0 || it_s->first.compare ("out_action") == 0 || it_s->first.compare ("arriving_info") == 0 || it_s->first.compare ("arriving") == 0 || it_s->first.compare ("arriving_info") == 0 || it_s->first.compare ("leaving") == 0 || it_s->first.compare ("die") == 0 || it_s->first.compare ("send_die") == 0 || it_s->first.compare ("send_die_action") == 0) {
             it_s++;
         } else {
             delete it_s->second;
-            this->remove_symbol (it_s->first);
-            it_s = symtable ().begin ();
+            std::string key_to_remove = it_s->first;
+            it_s++; // to keep iterator valid
+            this->remove_symbol (key_to_remove);
         }
     }
 
     // DEBUG
+    // std::cerr << std::endl << std::endl << std::endl;
     // cerr << "remaining children after symtable cleaning :" << children_size () << endl ;
     // for (auto s : this->symtable ()) {
     //   cerr << s.first << endl;
@@ -357,48 +438,6 @@ IvyAccess::~IvyAccess ()
 // }
 
 void
-IvyAccess::set_arriving (const string& v)
-{
-    djnn::IvyAccess* access = this;
-    djnn::get_exclusive_access (DBG_GET);
-    if (STOP_IVY) {
-        djnn::release_exclusive_access (DBG_REL);
-        return;
-    }
-    _arriving.set_value (v, true);
-    GRAPH_EXEC;
-    djnn::release_exclusive_access (DBG_REL);
-}
-
-void
-IvyAccess::set_arriving_info (const string& v)
-{
-    djnn::IvyAccess* access = this;
-    djnn::get_exclusive_access (DBG_GET);
-    if (STOP_IVY) {
-        djnn::release_exclusive_access (DBG_REL);
-        return;
-    }
-    _arriving_info.set_value (v, true);
-    GRAPH_EXEC;
-    djnn::release_exclusive_access (DBG_REL);
-}
-
-void
-IvyAccess::set_leaving (const string& v)
-{
-    djnn::IvyAccess* access = this;
-    djnn::get_exclusive_access (DBG_GET);
-    if (STOP_IVY) {
-        djnn::release_exclusive_access (DBG_REL);
-        return;
-    }
-    _leaving.set_value (v, true);
-    GRAPH_EXEC;
-    djnn::release_exclusive_access (DBG_REL);
-}
-
-void
 IvyAccess::impl_activate ()
 {
     // if ( somehow_activating() )
@@ -414,17 +453,11 @@ IvyAccess::impl_activate ()
 void
 IvyAccess::impl_deactivate ()
 {
-    please_stop ();
-    // MainLoop::instance().remove_external_source(this); // FIXME TODO
+    // Ivy stop Mainloop
+    IvyStop ();
 
-    /* requeste Ivy to stop */
-    /* note:
-     *  IvyStop has never been implemented :
-     *  so Ivy won't stop if you insert into your main root and delete it
-     */
-    warning (nullptr, " IvyAcess::impl_deactivate is not working correctly yet because IvyStop has never been implemented ! \n");
-    // IvyStop();
-    IvySendMsg ("%s", ""); // should eventually call _after_select and raise 1;
+    // ask to stop this ExternalSource
+    please_stop ();
 }
 
 static void
@@ -455,7 +488,7 @@ IvyAccess::run ()
 {
     set_please_stop (false);
     try {
-        IvyInit (_appname.c_str (), _ready_message.c_str (), _on_ivy_arriving_leaving_agent, this, 0, 0);
+        IvyInit (_appname.c_str (), _ready_message.c_str (), _on_ivy_arriving_leaving_agent, this, _on_ivy_die, this);
 
         /* get exclusive_access - before select */
         IvySetBeforeSelectHook (_before_select, this);
@@ -467,6 +500,7 @@ IvyAccess::run ()
         /* enable coupling */
         djnn::get_exclusive_access (DBG_GET);
         _out_c.enable ();
+        _send_die_c.enable ();
         djnn::release_exclusive_access (DBG_REL);
 
         /* note :
@@ -487,6 +521,7 @@ IvyAccess::run ()
         /* disable coupling */
         djnn::get_exclusive_access (DBG_GET);
         _out_c.disable ();
+        _send_die_c.disable ();
         djnn::release_exclusive_access (DBG_REL);
 
     } catch (std::exception& e) {
@@ -619,6 +654,12 @@ IvyAccess::find_child_impl (const string& key)
 
     else if (key.compare ("leaving") == 0)
         return &_leaving;
+
+    else if (key.compare ("send_die") == 0)
+        return &_send_die;
+
+    else if (key.compare ("die") == 0)
+        return &_die;
 
     else
         return 0;
