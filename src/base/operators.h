@@ -63,8 +63,7 @@ class BinaryOperatorCommon : public FatProcess {
 };
 
 template <typename Left, typename Right, typename Result, typename BinaryFunction, typename Left_init, typename Right_init>
-class BinaryOperator : public BinaryOperatorCommon // Process
-{
+class BinaryOperator : public BinaryOperatorCommon {
   public:
     typedef BinaryOperatorAction<Left, Right, Result, BinaryFunction, Left_init, Right_init> Action;
 
