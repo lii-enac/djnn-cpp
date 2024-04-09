@@ -27,7 +27,7 @@ namespace djnn {
 // abstract class for various combinations of assignment operand types
 struct TTAssignment {
     virtual ~TTAssignment () {}
-    virtual void               perform_action (double propagate = true, double lazy = false) = 0;
+    virtual void               perform_action (bool propagate = true, bool lazy = false) = 0;
     virtual CoreProcess*       get_src ()                                                    = 0;
     virtual CoreProcess*       get_dst ()                                                    = 0;
     virtual const CoreProcess* get_src () const                                              = 0;

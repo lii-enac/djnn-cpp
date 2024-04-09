@@ -23,7 +23,7 @@ namespace djnn {
 // implicit conversion int, double, bool
 template <typename src_t, typename dst_t>
 void
-t_perform_action (src_t* src, dst_t* dst, double propagate, double lazy)
+t_perform_action (src_t* src, dst_t* dst, bool propagate, bool lazy)
 {
     const auto& sv = src->get_value ();
     const auto& dv = dst->get_value ();
@@ -35,7 +35,7 @@ t_perform_action (src_t* src, dst_t* dst, double propagate, double lazy)
 // conversion from string to int, double, bool
 template <typename dst_t>
 void
-t_perform_action (AbstractTextProperty* src, dst_t* dst, double propagate, double lazy)
+t_perform_action (AbstractTextProperty* src, dst_t* dst, bool propagate, bool lazy)
 {
     const auto& sv = src->get_value ();
     const auto& dv = dst->get_value ();
@@ -56,7 +56,7 @@ t_perform_action (AbstractTextProperty* src, dst_t* dst, double propagate, doubl
 // conversion from int, double, bool to string
 template <typename src_t>
 void
-t_perform_action (src_t* src, AbstractTextProperty* dst, double propagate, double lazy)
+t_perform_action (src_t* src, AbstractTextProperty* dst, bool propagate, bool lazy)
 {
     const auto& sv  = src->get_value ();
     const auto& dv  = dst->get_value ();
@@ -69,7 +69,7 @@ t_perform_action (src_t* src, AbstractTextProperty* dst, double propagate, doubl
 // string to string is ambiguous because of the above partial specialization, so provide one with overloading (and not template)
 // template <>
 void
-t_perform_action (AbstractTextProperty* src, AbstractTextProperty* dst, double propagate, double lazy)
+t_perform_action (AbstractTextProperty* src, AbstractTextProperty* dst, bool propagate, bool lazy)
 {
     const auto& sv = src->get_value ();
     const auto& dv = dst->get_value ();
@@ -81,7 +81,7 @@ t_perform_action (AbstractTextProperty* src, AbstractTextProperty* dst, double p
 // specific case when assigning a CoreProcess to a RefProperty
 template <>
 void
-t_perform_action (CoreProcess* src, AbstractRefProperty* dst, double propagate, double lazy)
+t_perform_action (CoreProcess* src, AbstractRefProperty* dst, bool propagate, bool lazy)
 {
     const auto& sv = src;
     const auto& dv = dst;
@@ -93,7 +93,7 @@ t_perform_action (CoreProcess* src, AbstractRefProperty* dst, double propagate, 
 // specific case when assigning a RemoteProcess to a Property
 template <typename dst_t>
 void
-t_perform_action (AbstractRemoteProperty* src, dst_t* dst, double propagate, double lazy)
+t_perform_action (AbstractRemoteProperty* src, dst_t* dst, bool propagate, bool lazy)
 {
     const auto& sv = src->get_value ();
     const auto& dv = dst->get_string_value ();
@@ -110,7 +110,7 @@ t_perform_action (AbstractRemoteProperty* src, dst_t* dst, double propagate, dou
 // specific case when assigning a Property to a RemoteProcess
 template <typename src_t>
 void
-t_perform_action (src_t* src, AbstractRemoteProperty* dst, double propagate, double lazy)
+t_perform_action (src_t* src, AbstractRemoteProperty* dst, bool propagate, bool lazy)
 {
     const auto& sv = src->get_string_value ();
     const auto& dv = dst->get_value ();
@@ -123,7 +123,7 @@ t_perform_action (src_t* src, AbstractRemoteProperty* dst, double propagate, dou
 // string to remote is ambiguous because of the above text partial specialization, so provide one with overloading (and not template)
 // template <>
 void
-t_perform_action (AbstractTextProperty* src, AbstractRemoteProperty* dst, double propagate, double lazy)
+t_perform_action (AbstractTextProperty* src, AbstractRemoteProperty* dst, bool propagate, bool lazy)
 {
     const auto& sv = src->get_value ();
     const auto& dv = dst->get_value ();
@@ -142,7 +142,7 @@ struct TAssignment : public TTAssignment
     }
 
     virtual void
-    perform_action (double propagate = true, double lazy = false) override
+    perform_action (bool propagate = true, bool lazy = false) override
     {
         t_perform_action (_src, _dst, propagate, lazy);
     }
