@@ -15,9 +15,9 @@
 MAKEFLAGS += --no-builtin-rules
 .SUFFIXES:
 
-$(info	CXXFLAGS is $(CXXFLAGS))
+#$(info	CXXFLAGS is $(CXXFLAGS))
 DJNN_CXXFLAGS := $(CXXFLAGS)
-$(info DJNN_CXXFLAGS is $(DJNN_CXXFLAGS))
+#$(info DJNN_CXXFLAGS is $(DJNN_CXXFLAGS))
 
 # ---------------------------------------
 # default
