@@ -19,6 +19,12 @@
 #include "core/serializer/serializer.h"
 #include "incr.h"
 
+// #include "utils/debug.h"
+// #include "core/utils/utils-dev.h"
+// #include "core/utils/iostream.h"
+// #include "core/utils/error.h"
+
+
 namespace djnn {
 
 template <>
@@ -180,6 +186,103 @@ Incr::serialize (const string& type)
     AbstractSerializer::post_serialize (this);
 }
 #endif
+
+
+
+OperationConnector::OperationConnector (CoreProcess* parent, const string& name, CoreProcess* dst, bool copy_on_activation)
+    : FatProcess (name),
+      _dst (dynamic_cast<AbstractSimpleProperty*>(dst)),
+      _delta (this, "delta", 0),
+      _action (this, "action"),
+      _c_delta (&_delta, ACTIVATION, &_action, ACTIVATION)
+      , _copy_on_activation (copy_on_activation)
+{
+    graph_add_edge (&_delta, _dst);
+    graph_add_edge (this, _dst);
+    if (parent)
+        add_state_dependency (parent, &_action);
+    finalize_construction (parent, name);
+}
+
+OperationConnector::~OperationConnector ()
+{
+    if (get_parent ()) {
+        remove_state_dependency (get_parent (), &_action);
+    }
+    graph_remove_edge (this, _dst);
+    graph_remove_edge (&_delta, _dst);
+}
+
+void
+OperationConnector::set_parent (CoreProcess* parent)
+{
+    /* in case of re-parenting remove edge dependency in graph */
+    if (get_parent ()) {
+        remove_state_dependency (get_parent (), &_action);
+    }
+
+    add_state_dependency (parent, &_action);
+    FatProcess::set_parent (parent);
+}
+
+// bool
+// OperationConnector::pre_activate ()
+// {
+//     /* no activation if :
+//      * 1 - the parent exists and is stopped
+//      *
+//      * WARNING - In order to keep the old behavior (step on activation) we relieve
+//      * the usual condition that the process cannot be activated if it is already
+//      * active.
+//      */
+//     if (get_parent () != nullptr && !get_parent ()->somehow_activating ()) {
+//         return false;
+//     }
+//     if (!is_activated ())
+//         set_activation_state (ACTIVATING);
+//     return true;
+// }
+
+void
+OperationConnector::impl_activate ()
+{ //DBG;
+    _c_delta.enable ();
+    if (_copy_on_activation)// || is_activated ())
+        perform_action ();
+}
+
+void
+OperationConnector::perform_action ()
+{
+    //std::cerr << get_hierarchy_name(this) << _delta.get_value () << " " << _dst->get_double_value () << " ";
+    _dst->set_value (_dst->get_double_value () + _delta.get_value (), true);
+    //std::cerr << _dst->get_double_value () << __FL__;   
+}
+
+void
+OperationConnector::impl_deactivate ()
+{ //DBG;
+    _c_delta.disable ();
+}
+
+
+#ifndef DJNN_NO_SERIALIZE
+void
+OperationConnector::serialize (const string& type)
+{
+
+    AbstractSerializer::pre_serialize (this, type);
+
+    AbstractSerializer::serializer->start ("base:operation_assignment");
+    AbstractSerializer::serializer->text_attribute ("id", get_name ());
+    AbstractSerializer::serializer->text_attribute ("model", is_model () ? "true" : "false");
+    AbstractSerializer::serializer->end ();
+
+    AbstractSerializer::post_serialize (this);
+}
+#endif
+
+
 
 AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (CoreProcess* parent, const string& name,
                                                                   AdderAccumulator& aa)
