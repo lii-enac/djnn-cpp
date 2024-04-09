@@ -40,10 +40,12 @@ class CoreConnector : public CoreProcess {
   protected:
     void impl_activate () override {
         if (_copy_on_activation)
-            _assignment.perform_action () /* better - instead of calling activate*/;
+          //_assignment.activate ();
+          _assignment.perform_action ();
         _binding.activate ();
     }
-    void impl_deactivate () override { /*_assignment.deactivate (); - does nothing so removed */
+    void impl_deactivate () override {
+        //_assignment.deactivate ();
         _binding.deactivate ();
     }
 
@@ -72,10 +74,12 @@ class CorePausedConnector : public CoreProcess {
 
   protected:
     void impl_activate () override {
-        _paused_assignment.perform_action () /* better - instead of calling activate*/;
+        //_paused_assignment.activate ();
+        _paused_assignment.perform_action ();
         _binding.activate ();
     }
-    void impl_deactivate () override { /*_paused_assignment.deactivate ();- does nothing so removed */
+    void impl_deactivate () override {
+        //_paused_assignment.deactivate ();
         _binding.deactivate ();
     }
 
@@ -103,10 +107,12 @@ class CoreLazyConnector : public CoreProcess {
 
   protected:
     void impl_activate () override {
-        _lazy_assignment.perform_action () /* better - instead of calling activate*/;
+        //_lazy_assignment.activate ();
+        _lazy_assignment.perform_action ();
         _binding.activate ();
     }
-    void impl_deactivate () override { /*_paused_assignment.deactivate ();- does nothing so removed */
+    void impl_deactivate () override {
+        //_lazy_assignment.deactivate ();
         _binding.deactivate ();
     }
 
@@ -141,10 +147,12 @@ class Connector : public FatProcess {
   protected:
     void impl_activate () override {
         if (_copy_on_activation)
-            _assignment.perform_action () /* better - instead of calling activate*/;
+            //_assignment.activate ();
+            _assignment.perform_action ();
         _binding.activate ();
     }
-    void impl_deactivate () override { /* _assignment.deactivate (); - does nothing so removed */
+    void impl_deactivate () override {
+        //_assignment.deactivate ();
         _binding.deactivate ();
     }
 
@@ -178,10 +186,12 @@ class PausedConnector : public FatProcess {
   protected:
     void impl_activate () override {
         if (_copy_on_activation)
-            _paused_assignment.activate () /* better - instead of calling activate*/;
+            _paused_assignment.activate ();
+            //_paused_assignment.perform_action (); //??
         _binding.activate ();
     }
-    void impl_deactivate () override { /* _paused_assignment.deactivate () - does nothing so removed */
+    void impl_deactivate () override {
+        //_paused_assignment.deactivate ();
         _binding.deactivate ();
     }
 
@@ -214,10 +224,12 @@ class LazyConnector : public FatProcess {
   protected:
     void impl_activate () override {
         if (_copy_on_activation)
-            _lazy_assignment.activate () /* better - instead of calling activate*/;
+            _lazy_assignment.activate ();
+            //_lazy_assignment.perform_activation (); //??
         _binding.activate ();
     }
-    void impl_deactivate () override { /* _paused_assignment.deactivate () - does nothing so removed */
+    void impl_deactivate () override {
+        //_paused_assignment.deactivate ();
         _binding.deactivate ();
     }
 
