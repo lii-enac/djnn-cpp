@@ -199,8 +199,6 @@ OperationConnector::OperationConnector (CoreProcess* parent, const string& name,
 {
     graph_add_edge (&_delta, _dst);
     graph_add_edge (this, _dst);
-    if (parent)
-        add_state_dependency (parent, &_action);
     finalize_construction (parent, name);
 }
 
