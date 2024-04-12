@@ -114,6 +114,7 @@ lib_srcs += $(call rwildcard,src/exec_env/qt/,*.cpp)
 $(build_dir)/$(local_dir)/main_loop.o \
 $(build_dir)/$(local_dir)/qt/qt_mainloop.o: \
 DJNN_CXXFLAGS += -DDJNN_USE_QT_MAINLOOP=1 $(shell env PKG_CONFIG_PATH=$(exec_env_lib_pkgpath) pkg-config --cflags Qt5OpenGL Qt5Gui)
+# DJNN_CXXFLAGS += -DDJNN_USE_QT_MAINLOOP=1 $(shell env PKG_CONFIG_PATH=$(exec_env_lib_pkgpath) pkg-config --cflags Qt6OpenGL Qt6Gui)
 endif
 
 ifeq ($(display),SDL)
