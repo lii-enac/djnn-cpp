@@ -23,15 +23,30 @@
 #include "display/background_rect.h"
 #include "utils/debug.h"
 
+#include "gui/qt/qt/qqt_window_moc.h"
+
 using namespace djnnstl;
 
 namespace djnn {
 
-QtPickingView::QtPickingView (Window* win)
-    : ColorPickingView (win), _pick_debug_win (nullptr), _image (nullptr), _painter (nullptr)
+struct MyQLabel : QLabel {
+    MyQLabel (QtPickingView* qpv) : _qtpickingview(qpv) {}
+    
+    virtual void mousePressEvent (QMouseEvent* event) override { _qtpickingview->qtwindow()->mousePressEvent(event); return QLabel::mousePressEvent(event); }
+    virtual void mouseReleaseEvent (QMouseEvent* event) override { _qtpickingview->qtwindow()->mouseReleaseEvent(event); return QLabel::mouseReleaseEvent(event); }
+    virtual void mouseMoveEvent (QMouseEvent* event) override{ _qtpickingview->qtwindow()->mouseMoveEvent(event); return QLabel::mouseMoveEvent(event); }
+    //virtual void wheelEvent (QWheelEvent* event) override;
+    QtPickingView* _qtpickingview;
+};
+
+QtPickingView::QtPickingView (Window* win, MyQQWidget* qtwindow)
+    : ColorPickingView (win), _image (nullptr), _painter (nullptr), _pick_debug_win (nullptr), _qtwindow(qtwindow)
 {
-    if (_DEBUG_SEE_COLOR_PICKING_VIEW)
-        _pick_debug_win = new QLabel ();
+    if (_DEBUG_SEE_COLOR_PICKING_VIEW) {
+        _pick_debug_win = new MyQLabel (this);
+        if (mouse_tracking)
+            _pick_debug_win->setMouseTracking (true);
+    }
 }
 
 QtPickingView::~QtPickingView ()
@@ -57,6 +72,7 @@ QtPickingView::init ()
     rmt_BeginCPUSample (ColorPickingView_init, RMTSF_None);
     ColorPickingView::init ();
     rmt_EndCPUSample ();
+
     rmt_BeginCPUSample (ColorPickingView_setting, RMTSF_None);
     double w = _win->width ()->get_value ();
     double h = _win->height ()->get_value ();
@@ -67,6 +83,7 @@ QtPickingView::init ()
         _image = nullptr;
     }
     rmt_EndCPUSample ();
+
     rmt_BeginCPUSample (ColorPickingView_new, RMTSF_None);
     if (_image == nullptr)
         _image = new QImage (w, h, QImage::Format_RGB32);

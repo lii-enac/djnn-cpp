@@ -38,7 +38,7 @@ class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
     MyQQWidget (Window* w, QtWindow* qtw)
         : MyQWidget (w, qtw) {
         setAttribute (Qt::WA_AcceptTouchEvents, true);
-        _picking_view = new QtPickingView (w);
+        _picking_view = new QtPickingView (w, this);
         //_picking_view = new AnalyticalPicking (w);
     }
     virtual Picking* get_picking_view () override { return _picking_view; }
@@ -46,12 +46,13 @@ class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
         delete _picking_view;
     }
 
-  protected:
     virtual bool event (QEvent* event) override;
     virtual void mouseReleaseEvent (QMouseEvent* event) override;
     virtual void mousePressEvent (QMouseEvent* event) override;
     virtual void mouseMoveEvent (QMouseEvent* event) override;
     virtual void wheelEvent (QWheelEvent* event) override;
+
+    protected:
     virtual void paintEvent (QPaintEvent* event) override;
     // virtual void tabletEvent (QTabletEvent *event) override;
     // virtual void paintGL () override;
