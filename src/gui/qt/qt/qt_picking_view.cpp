@@ -21,26 +21,42 @@
 #include "core/utils/remotery.h"
 #include "core/utils/utils-dev.h"
 #include "display/background_rect.h"
-#include "utils/debug.h"
-
 #include "gui/qt/qt/qqt_window_moc.h"
+#include "utils/debug.h"
 
 using namespace djnnstl;
 
 namespace djnn {
 
-struct MyQLabel : QLabel {
-    MyQLabel (QtPickingView* qpv) : _qtpickingview(qpv) {}
-    
-    virtual void mousePressEvent (QMouseEvent* event) override { _qtpickingview->qtwindow()->mousePressEvent(event); return QLabel::mousePressEvent(event); }
-    virtual void mouseReleaseEvent (QMouseEvent* event) override { _qtpickingview->qtwindow()->mouseReleaseEvent(event); return QLabel::mouseReleaseEvent(event); }
-    virtual void mouseMoveEvent (QMouseEvent* event) override{ _qtpickingview->qtwindow()->mouseMoveEvent(event); return QLabel::mouseMoveEvent(event); }
-    //virtual void wheelEvent (QWheelEvent* event) override;
+struct MyQLabel : QLabel
+{
+    MyQLabel (QtPickingView* qpv)
+        : _qtpickingview (qpv) {}
+
+    virtual void
+    mousePressEvent (QMouseEvent* event) override
+    {
+        _qtpickingview->qtwindow ()->mousePressEvent (event);
+        return QLabel::mousePressEvent (event);
+    }
+    virtual void
+    mouseReleaseEvent (QMouseEvent* event) override
+    {
+        _qtpickingview->qtwindow ()->mouseReleaseEvent (event);
+        return QLabel::mouseReleaseEvent (event);
+    }
+    virtual void
+    mouseMoveEvent (QMouseEvent* event) override
+    {
+        _qtpickingview->qtwindow ()->mouseMoveEvent (event);
+        return QLabel::mouseMoveEvent (event);
+    }
+    // virtual void wheelEvent (QWheelEvent* event) override;
     QtPickingView* _qtpickingview;
 };
 
 QtPickingView::QtPickingView (Window* win, MyQQWidget* qtwindow)
-    : ColorPickingView (win), _image (nullptr), _painter (nullptr), _pick_debug_win (nullptr), _qtwindow(qtwindow)
+    : ColorPickingView (win), _image (nullptr), _painter (nullptr), _pick_debug_win (nullptr), _qtwindow (qtwindow)
 {
     if (_DEBUG_SEE_COLOR_PICKING_VIEW) {
         _pick_debug_win = new MyQLabel (this);

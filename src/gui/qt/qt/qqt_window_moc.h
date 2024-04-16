@@ -52,7 +52,7 @@ class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
     virtual void mouseMoveEvent (QMouseEvent* event) override;
     virtual void wheelEvent (QWheelEvent* event) override;
 
-    protected:
+  protected:
     virtual void paintEvent (QPaintEvent* event) override;
     // virtual void tabletEvent (QTabletEvent *event) override;
     // virtual void paintGL () override;

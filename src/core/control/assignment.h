@@ -28,10 +28,10 @@ namespace djnn {
 struct TTAssignment {
     virtual ~TTAssignment () {}
     virtual void               perform_action (bool propagate = true, bool lazy = false) = 0;
-    virtual CoreProcess*       get_src ()                                                    = 0;
-    virtual CoreProcess*       get_dst ()                                                    = 0;
-    virtual const CoreProcess* get_src () const                                              = 0;
-    virtual const CoreProcess* get_dst () const                                              = 0;
+    virtual CoreProcess*       get_src ()                                                = 0;
+    virtual CoreProcess*       get_dst ()                                                = 0;
+    virtual const CoreProcess* get_src () const                                          = 0;
+    virtual const CoreProcess* get_dst () const                                          = 0;
 };
 
 TTAssignment* build_ttassignment (CoreProcess* src, CoreProcess* dst);

@@ -69,19 +69,18 @@ class AdderAccumulator : public FatProcess {
     Coupling               _c_input;
 };
 
-
-
 class OperationConnector : public FatProcess {
   private:
     class OperationAssignmentAction : public Action {
       public:
         OperationAssignmentAction (CoreProcess* parent, const string& name)
             : Action (parent, name) { /*finalize_construction (parent, name);*/ }
-        void impl_activate () override { dynamic_cast<OperationConnector*>(get_parent ())->perform_action (); }
+        void impl_activate () override { dynamic_cast<OperationConnector*> (get_parent ())->perform_action (); }
     };
+
   public:
     OperationConnector (CoreProcess* parent, const string& name, CoreProcess* dst, bool copy_on_activation);
-    //bool pre_activate () override;
+    // bool pre_activate () override;
     void impl_activate () override;
     void impl_deactivate () override;
     virtual ~OperationConnector ();
@@ -89,12 +88,12 @@ class OperationConnector : public FatProcess {
     void perform_action ();
 
   private:
-    //int            init (bool isModel);
-    AbstractSimpleProperty *_dst;
-    DoubleProperty _delta;
+    // int            init (bool isModel);
+    AbstractSimpleProperty*   _dst;
+    DoubleProperty            _delta;
     OperationAssignmentAction _action;
-    Coupling       _c_delta;
-    bool           _copy_on_activation;
+    Coupling                  _c_delta;
+    bool                      _copy_on_activation;
 
   protected:
     void set_parent (CoreProcess* parent) override;

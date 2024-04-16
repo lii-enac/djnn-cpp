@@ -42,12 +42,12 @@ class QtPickingView : public ColorPickingView {
     void      set_painter (QPainter* p) { _painter = p; }
     void      display ();
 
-  MyQQWidget* qtwindow () { return _qtwindow; }
+    MyQQWidget* qtwindow () { return _qtwindow; }
 
   private:
-    QImage*   _image;
-    QPainter* _painter;
-    QLabel*   _pick_debug_win;
+    QImage*     _image;
+    QPainter*   _painter;
+    QLabel*     _pick_debug_win;
     MyQQWidget* _qtwindow;
 };
 } /* namespace djnn */

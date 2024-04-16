@@ -247,11 +247,11 @@ MyQQWidget::wheelEvent (QWheelEvent* event)
 
     bool exec_ = false;
     if (!numPixels.isNull ()) {
-// cerr << "WHEEL Pixel " << numPixels.x () << " - " << numPixels.y () << endl;
+        // cerr << "WHEEL Pixel " << numPixels.x () << " - " << numPixels.y () << endl;
         exec_ = _picking_view->genericMouseWheel (numPixels.x (), numPixels.y (), mouse_pos_x, mouse_pos_y);
     } else if (!numDegrees.isNull ()) {
         QPoint numSteps = numDegrees / 15;
-// cerr << "WHEEL Degree " << numSteps.x () << " - " << numSteps.y () << endl;
+        // cerr << "WHEEL Degree " << numSteps.x () << " - " << numSteps.y () << endl;
         exec_ = _picking_view->genericMouseWheel (numSteps.x (), numSteps.y (), mouse_pos_x, mouse_pos_y);
     }
 

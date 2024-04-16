@@ -40,8 +40,8 @@ class CoreConnector : public CoreProcess {
   protected:
     void impl_activate () override {
         if (_copy_on_activation)
-          //_assignment.activate ();
-          _assignment.perform_action ();
+            //_assignment.activate ();
+            _assignment.perform_action ();
         _binding.activate ();
     }
     void impl_deactivate () override {
@@ -187,7 +187,7 @@ class PausedConnector : public FatProcess {
     void impl_activate () override {
         if (_copy_on_activation)
             _paused_assignment.activate ();
-            //_paused_assignment.perform_action (); //??
+        //_paused_assignment.perform_action (); //??
         _binding.activate ();
     }
     void impl_deactivate () override {
@@ -225,7 +225,7 @@ class LazyConnector : public FatProcess {
     void impl_activate () override {
         if (_copy_on_activation)
             _lazy_assignment.activate ();
-            //_lazy_assignment.perform_activation (); //??
+        //_lazy_assignment.perform_activation (); //??
         _binding.activate ();
     }
     void impl_deactivate () override {

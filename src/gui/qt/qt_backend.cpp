@@ -223,9 +223,9 @@ QtBackend::load_pick_context (AbstractGShape* s, QtContext* cur_context)
     }
     pickPen.setColor (_picking_view->pick_color ());
     pickPen.setWidth (cur_context->pen.width ());
-    pickPen.setCapStyle (cur_context->pen.capStyle());
-    pickPen.setJoinStyle (cur_context->pen.joinStyle());
-    pickPen.setMiterLimit (cur_context->pen.miterLimit());
+    pickPen.setCapStyle (cur_context->pen.capStyle ());
+    pickPen.setJoinStyle (cur_context->pen.joinStyle ());
+    pickPen.setMiterLimit (cur_context->pen.miterLimit ());
     if ((cur_context->brush.style () == Qt::NoBrush && cur_context->pick_fill_undefined () == true) || (cur_context->pick_fill_undefined () == false && cur_context->pick_fill () == false)) {
         pickBrush.setStyle (Qt::NoBrush);
     }

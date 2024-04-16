@@ -24,7 +24,6 @@
 // #include "core/utils/iostream.h"
 // #include "core/utils/error.h"
 
-
 namespace djnn {
 
 template <>
@@ -187,15 +186,12 @@ Incr::serialize (const string& type)
 }
 #endif
 
-
-
 OperationConnector::OperationConnector (CoreProcess* parent, const string& name, CoreProcess* dst, bool copy_on_activation)
     : FatProcess (name),
-      _dst (dynamic_cast<AbstractSimpleProperty*>(dst)),
+      _dst (dynamic_cast<AbstractSimpleProperty*> (dst)),
       _delta (this, "delta", 0),
       _action (this, "action"),
-      _c_delta (&_delta, ACTIVATION, &_action, ACTIVATION)
-      , _copy_on_activation (copy_on_activation)
+      _c_delta (&_delta, ACTIVATION, &_action, ACTIVATION), _copy_on_activation (copy_on_activation)
 {
     graph_add_edge (&_delta, _dst);
     graph_add_edge (this, _dst);
@@ -243,26 +239,25 @@ OperationConnector::set_parent (CoreProcess* parent)
 
 void
 OperationConnector::impl_activate ()
-{ //DBG;
+{ // DBG;
     _c_delta.enable ();
-    if (_copy_on_activation)// || is_activated ())
+    if (_copy_on_activation) // || is_activated ())
         perform_action ();
 }
 
 void
 OperationConnector::perform_action ()
 {
-    //std::cerr << get_hierarchy_name(this) << _delta.get_value () << " " << _dst->get_double_value () << " ";
+    // std::cerr << get_hierarchy_name(this) << _delta.get_value () << " " << _dst->get_double_value () << " ";
     _dst->set_value (_dst->get_double_value () + _delta.get_value (), true);
-    //std::cerr << _dst->get_double_value () << __FL__;   
+    // std::cerr << _dst->get_double_value () << __FL__;
 }
 
 void
 OperationConnector::impl_deactivate ()
-{ //DBG;
+{ // DBG;
     _c_delta.disable ();
 }
-
 
 #ifndef DJNN_NO_SERIALIZE
 void
@@ -279,8 +274,6 @@ OperationConnector::serialize (const string& type)
     AbstractSerializer::post_serialize (this);
 }
 #endif
-
-
 
 AdderAccumulator::AdderAccumulatorAction::AdderAccumulatorAction (CoreProcess* parent, const string& name,
                                                                   AdderAccumulator& aa)
