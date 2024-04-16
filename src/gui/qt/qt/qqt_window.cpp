@@ -212,7 +212,7 @@ MyQQWidget::mouseMoveEvent (QMouseEvent* event)
     mouse_pos_y = event->y ();
     mouse_pos_y -= 3; // QT bug??
 
-    bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y-3);
+    bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y);
     if (exec_) {
         GRAPH_EXEC;
     }
