@@ -254,11 +254,7 @@ MyQQWidget::wheelEvent (QWheelEvent* event)
     } else if (!numDegrees.isNull ()) {
         QPoint numSteps = numDegrees / 15;
 // cerr << "WHEEL Degree " << numSteps.x () << " - " << numSteps.y () << endl;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-        exec_ = _picking_view->genericMouseWheel (numSteps.x (), numSteps.y (), event->position ().x (), event->position ().y ());
-#else
-        exec_ = _picking_view->genericMouseWheel (numSteps.x (), numSteps.y (), event->pos ().x (), event->pos ().y ());
-#endif
+        exec_ = _picking_view->genericMouseWheel (numSteps.x (), numSteps.y (), mouse_pos_x, mouse_pos_y);
     }
 
     if (exec_) {
