@@ -197,6 +197,7 @@ MyQQWidget::mousePressEvent (QMouseEvent* event)
 {
     mouse_pos_x = event->x ();
     mouse_pos_y = event->y ();
+    mouse_pos_y -= 3; // QT bug??
 
     bool exec_ = _picking_view->genericMousePress (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
     if (exec_) {
@@ -209,8 +210,11 @@ MyQQWidget::mouseMoveEvent (QMouseEvent* event)
 {
     mouse_pos_x = event->x ();
     mouse_pos_y = event->y ();
+    mouse_pos_y -= 3; // QT bug??
 
-    bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y);
+    std::cerr << mouse_pos_x << " " << mouse_pos_y << " " << mouse_pos_y-3 << " " << pos().y() << __FL__;
+
+    bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y-3);
     if (exec_) {
         GRAPH_EXEC;
     }
@@ -221,6 +225,7 @@ MyQQWidget::mouseReleaseEvent (QMouseEvent* event)
 {
     mouse_pos_x = event->x ();
     mouse_pos_y = event->y ();
+    mouse_pos_y -= 3; // QT bug??
 
     bool exec_ = _picking_view->genericMouseRelease (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
     if (exec_) {
@@ -233,16 +238,19 @@ MyQQWidget::wheelEvent (QWheelEvent* event)
 {
     QPoint numPixels  = event->pixelDelta ();
     QPoint numDegrees = event->angleDelta () / 8; // the angle is in eights of a degree
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    auto mouse_pos_x = event->position ().x ();
+    auto mouse_pos_y = event->position ().y ();
+#else
+    auto mouse_pos_x = event->pos ().x ();
+    auto mouse_pos_y = event->pos ().y ();
+#endif
+    mouse_pos_y -= 3; // QT bug??
 
     bool exec_ = false;
     if (!numPixels.isNull ()) {
 // cerr << "WHEEL Pixel " << numPixels.x () << " - " << numPixels.y () << endl;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-        exec_ = _picking_view->genericMouseWheel (numPixels.x (), numPixels.y (), event->position ().x (), event->position ().y ());
-#else
-        exec_ = _picking_view->genericMouseWheel (numPixels.x (), numPixels.y (), event->pos ().x (), event->pos ().y ());
-
-#endif
+        exec_ = _picking_view->genericMouseWheel (numPixels.x (), numPixels.y (), mouse_pos_x, mouse_pos_y);
     } else if (!numDegrees.isNull ()) {
         QPoint numSteps = numDegrees / 15;
 // cerr << "WHEEL Degree " << numSteps.x () << " - " << numSteps.y () << endl;
