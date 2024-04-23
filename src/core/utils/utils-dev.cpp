@@ -43,6 +43,9 @@ __to_string (long x)
     tab[i] = 0;
     --i;
     tab[i]   = '0';
+    if (!x) {
+        --i;
+    } else {
     bool neg = x < 0;
     if (neg)
         x = -x;
@@ -54,6 +57,7 @@ __to_string (long x)
     if (neg) {
         tab[i] = '-';
         --i;
+    }
     }
     return string (&tab[i + 1]);
 }
