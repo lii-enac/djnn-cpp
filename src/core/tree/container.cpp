@@ -62,7 +62,7 @@ Container::clean_up_content ()
         for (int space = 0; space < nb_space; space++)
             std::cerr << "\t";
         ++nb_space;
-        std::cerr << "--- " << get_name ().c_str () << " :" << std::endl;
+        std::cerr << "--- " << get_debug_name ().c_str () << " :" << std::endl;
     }
 #endif
 
