@@ -733,7 +733,8 @@ struct PickLayerStuff : LayerCache
     }
 };
 
-int sign(double x) { return (x > 0) - (x < 0); }
+// https://stackoverflow.com/a/1903975/2036022
+static int sign(double x) { return (x > 0) - (x < 0); }
 
 bool
 QtBackend::pre_draw_layer (Layer* l)
@@ -790,6 +791,7 @@ QtBackend::pre_draw_layer (Layer* l)
         
         QMatrix4x4& origin = cur_context->matrix;
         ls->m              = origin;
+        // https://math.stackexchange.com/a/13165
         // find current scaling
         auto a             = origin (0, 0);
         auto b             = origin (0, 1);
@@ -854,6 +856,7 @@ QtBackend::post_draw_layer (Layer* l)
         m = ls->m;
     }
 
+    // https://math.stackexchange.com/a/13165
     auto a = m (0, 0);
     auto b = m (0, 1);
     auto curs = sign(a) * sqrt(a*a + b*b);
