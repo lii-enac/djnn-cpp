@@ -733,10 +733,13 @@ struct PickLayerStuff : LayerCache
     }
 };
 
+int sign(double x) { return (x > 0) - (x < 0); }
+
 bool
 QtBackend::pre_draw_layer (Layer* l)
 {
-    rmt_BeginCPUSample (pre_draw_layer, RMTSF_Aggregate) if (z_processing_step == 1)
+    rmt_BeginCPUSample (pre_draw_layer, RMTSF_Aggregate);
+    if (z_processing_step == 1)
         z_processing_step = 3;
     int x, y, w, h, pad;
     l->get_xywhp (x, y, w, h, pad);
@@ -784,10 +787,14 @@ QtBackend::pre_draw_layer (Layer* l)
 
         QtContext* cur_context = _context_manager->get_current ();
 
-        // find current translation
+        
         QMatrix4x4& origin = cur_context->matrix;
         ls->m              = origin;
-        auto s             = origin (0, 0);
+        // find current scaling
+        auto a             = origin (0, 0);
+        auto b             = origin (0, 1);
+        auto s             = sign(a) * sqrt(a*a + b*b);
+        // find current translation
         auto tx            = origin (0, 3);
         auto ty            = origin (1, 3);
 
@@ -847,7 +854,10 @@ QtBackend::post_draw_layer (Layer* l)
         m = ls->m;
     }
 
-    auto curs = m (0, 0);
+    auto a = m (0, 0);
+    auto b = m (0, 1);
+    auto curs = sign(a) * sqrt(a*a + b*b);
+    //auto curs = m (0, 0);
     auto tx   = m (0, 3);
     auto ty   = m (1, 3);
     auto s    = curs / ls->s;
