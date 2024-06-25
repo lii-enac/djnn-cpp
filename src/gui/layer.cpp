@@ -40,9 +40,9 @@ Layer::Layer (CoreProcess* parent, const string& n, double x, double y, double w
 
     _c_x   = new Coupling (_x, ACTIVATION, &_damaged_action, ACTIVATION);
     _c_y   = new Coupling (_y, ACTIVATION, &_damaged_action, ACTIVATION);
-    _c_pad = new Coupling (_h, ACTIVATION, &_damaged_action, ACTIVATION);
     _c_w   = new Coupling (_width, ACTIVATION, &_damaged_action, ACTIVATION);
     _c_h   = new Coupling (_height, ACTIVATION, &_damaged_action, ACTIVATION);
+    _c_pad = new Coupling (_pad, ACTIVATION, &_damaged_action, ACTIVATION);
 }
 
 Layer::Layer (CoreProcess* parent, const string& n, double pad)
