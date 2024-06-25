@@ -62,8 +62,8 @@ class Layer : public Container {
     void get_xywhp (int& x, int& y, int& w, int& h, int& pad) {
         x   = _x->get_value ();
         y   = _y->get_value ();
-        w   = _w->get_value ();
-        h   = _h->get_value ();
+        w   = _width->get_value ();
+        h   = _height->get_value ();
         pad = _pad->get_value ();
     }
     void set_xy (int x, int y) {
@@ -78,7 +78,7 @@ class Layer : public Container {
     bool               _invalid_cache;
     LayerCache *       _cache, *_pick_cache;
     LayerDamagedAction _damaged_action;
-    IntProperty *      _x, *_y, *_w, *_h, *_pad;
+    IntProperty *      _x, *_y, *_width, *_height, *_pad;
     Coupling           _c_damaged, *_c_x, *_c_y, *_c_w, *_c_h, *_c_pad;
 };
 } // namespace djnn

@@ -34,15 +34,15 @@ Layer::Layer (CoreProcess* parent, const string& n, double x, double y, double w
 
     _x   = new IntProperty (this, "x", x);
     _y   = new IntProperty (this, "y", y);
-    _w   = new IntProperty (this, "w", w);
-    _h   = new IntProperty (this, "h", h);
+    _width   = new IntProperty (this, "width", w);
+    _height   = new IntProperty (this, "height", h);
     _pad = new IntProperty (this, "pad", pad);
 
     _c_x   = new Coupling (_x, ACTIVATION, &_damaged_action, ACTIVATION);
     _c_y   = new Coupling (_y, ACTIVATION, &_damaged_action, ACTIVATION);
-    _c_w   = new Coupling (_w, ACTIVATION, &_damaged_action, ACTIVATION);
-    _c_h   = new Coupling (_h, ACTIVATION, &_damaged_action, ACTIVATION);
     _c_pad = new Coupling (_h, ACTIVATION, &_damaged_action, ACTIVATION);
+    _c_w   = new Coupling (_width, ACTIVATION, &_damaged_action, ACTIVATION);
+    _c_h   = new Coupling (_height, ACTIVATION, &_damaged_action, ACTIVATION);
 }
 
 Layer::Layer (CoreProcess* parent, const string& n, double pad)
