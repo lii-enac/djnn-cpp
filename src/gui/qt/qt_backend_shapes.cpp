@@ -741,6 +741,35 @@ sign (double x)
     return (x > 0) - (x < 0);
 }
 
+
+// Layers are components that store the rendering of a complex scene into a pixmap to improve rendering perfomances and make user interactions fluid.
+// scenarios:
+// panning:
+//    just move around the pixmap instead of rendering the entire scene at each pan
+// zooming:
+//    zoom on the pixmap. This will lead to big pixels when zooming in, so we should update the rendering when the interaction is done.
+//    This implies that rendering _inside_ the layer should be done at the current scale level (say 2.0)
+//    but rendering of the pixmap itself should be done at scale 1.0 to prevent artefacts, even though rendering of the pixmap will occur with a 2.0 scale level
+//    so we need to render the pixmap at a 1.0 scale level, i.e. apply a 1.0/2.0 on the current scale
+//    and this should take into account panning of course
+// rotating:
+//    TODO
+//
+// Note: this should also work with picking, so we must also strore a picking view with its own color palette, and use this pixmap in the picking algorithm!
+//
+// The following algorithm is split into two parts:
+// pre_draw_layer: at the time of the Layer rendering (as part of the outer scene), pre_draw_layer computes the current scale, translation, and stores them.
+// If the scene is damaged, pre_draw_layer also renders the scene into an offscreen pixmap at the current_scale, possibly adjusting the scene to minimize the pixmap size
+// post_draw_layer: at the time of the Pixmap rendering (post_draw_layer), post_draw_layer applies the inverse of the stored scale and translation, and draws the pixmap 
+//
+// The recomputation of the pixmap occurs with the following conditions:
+//   - the inner scene has changed (e.g. a shape, a transformation or a style has changed), this is automatically handled
+//   - the geometry of the layer has changed (e.g. to adapt to window resize), this is automatically handled
+//   - the user has activated the layer's damaged spike: this enables the user to finely tune the redraw algorithm (e.g. after 200ms of dwell after a zoom) 
+
+
+// TODO: adapt to rotation
+
 bool
 QtBackend::pre_draw_layer (Layer* l)
 {
