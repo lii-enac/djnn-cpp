@@ -740,8 +740,13 @@ bool
 QtBackend::pre_draw_layer (Layer* l)
 {
     rmt_BeginCPUSample (pre_draw_layer, RMTSF_Aggregate);
+
+    // handle z value. FIXME: intention?
     if (z_processing_step == 1)
         z_processing_step = 3;
+    
+    // -------------
+    // get layer geometry to compute pixmap geometry
     int x, y, w, h, pad;
     l->get_xywhp (x, y, w, h, pad);
     LayerStuff* ls = (LayerStuff*)(l->cache ());
@@ -749,11 +754,15 @@ QtBackend::pre_draw_layer (Layer* l)
     auto* pick_pm = (PickLayerStuff*)(l->pick_cache ());
     auto  fw      = l->get_frame ()->width ()->get_value ();
     auto  fh      = l->get_frame ()->height ()->get_value ();
+    // if the user did not provide width and height, take those of the frame
     if (w < 0) {
         w = fw;
         h = fh;
     }
 
+    // -------------
+    // should we recompute the pixmap?
+    // yes if the cache is invalid (e.g. because inner shapes have been damaged) or if geometry has changed
     bool recompute_pixmap =
         l->invalid_cache () || (ls && (ls->pm->width () != (w + pad * 2) || ls->pm->height () != (h + pad * 2)));
 
@@ -762,8 +771,11 @@ QtBackend::pre_draw_layer (Layer* l)
         if (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT || _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY)
             cerr << "\n RECOMPUTE PIXMAP " << l->get_debug_name () << " : " << (w + pad * 2) << " - " << (h + pad * 2) << endl;
 #endif
+        // -- drop former offscreen pixmaps
         delete ls;
         delete pick_pm;
+
+        // -- prepare new offscreen pixmaps
         ls = new LayerStuff;
         w += pad * 2;
         h += pad * 2;
@@ -780,28 +792,32 @@ QtBackend::pre_draw_layer (Layer* l)
         l->set_cache (ls);
         l->set_pick_cache (pick_pm);
         l->set_invalid_cache (false);
+
+        // save current painters (FIXME: in static global values :-/)
         buff_painter      = _painter;
-        _painter          = new QPainter (ls->pm);
         buff_pick_painter = _picking_view->painter ();
+
+        // create new painters
+        _painter          = new QPainter (ls->pm);
         _picking_view->set_painter (new QPainter (pick_pm->pm));
+
         _in_cache = true;
 
+        // -- find out the current scale, rotation and translation
         QtContext* cur_context = _context_manager->get_current ();
-
-        
         QMatrix4x4& origin = cur_context->matrix;
         ls->m              = origin;
         // https://math.stackexchange.com/a/13165
-        // find current scaling
+        // ---- find current scaling
         auto a             = origin (0, 0);
         auto b             = origin (0, 1);
         auto s             = sign(a) * sqrt(a*a + b*b);
-        // find current translation
+        // ---- find current translation
         auto tx            = origin (0, 3);
         auto ty            = origin (1, 3);
-
         // cerr << tx << " " << ty << " " << s << __FL__;
 
+        // -- adjust the pixmap
         // if translation is positive, apply -translation to avoid pixmap emptiness at the top left // FIXME resize image!
         // if translation is negative, do not try to adjust translation so that the bottom-right part of the rendering is not clipped
         QMatrix4x4 newm;
@@ -812,15 +828,23 @@ QtBackend::pre_draw_layer (Layer* l)
             auto inv_tvy = (h - ls->pm->height ()) + ty; // take into account reverse y
             newm.translate (0, -inv_tvy);                // apply translation
         }
+
+        // -- apply layer x and y
         newm.translate (-x, -y);
-        newm.translate (pad, pad); // apply padding to get the surrounding
+
+        // -- apply padding to get the surrounding
+        newm.translate (pad, pad);
+
+        // -- update the cur_context->matrix (origin is a &ref on it)
         origin = newm * origin;
 
+        // -- store computed scale, rotation (?), and scale
         ls->tx = tx;
         ls->ty = ty;
         ls->s  = s;
 
     } else {
+        // FIXME: this seems to be both a save of painters and a trick to inform post_draw_layer that the layer has not been recomputed
         buff_painter      = nullptr;
         buff_pick_painter = nullptr;
     }
@@ -843,18 +867,23 @@ QtBackend::post_draw_layer (Layer* l)
     QMatrix4x4& origin      = cur_context->matrix;
     QMatrix4x4  m           = origin;
 
+    // if layer has been recomputed, restore the painters(?)
     bool damaged = true;
     if (buff_painter != nullptr) {
         delete _painter;
-        delete _picking_view->painter ();
-        _picking_view->set_painter (buff_pick_painter);
         _painter          = buff_painter;
         buff_painter      = nullptr;
+
+        delete _picking_view->painter ();
+        _picking_view->set_painter (buff_pick_painter);
         buff_pick_painter = nullptr;
+
         _in_cache         = false;
         // damaged = true;
         m = ls->m;
     }
+
+    // find out the current scale, rotation and translation
 
     // https://math.stackexchange.com/a/13165
     auto a = m (0, 0);
@@ -864,12 +893,13 @@ QtBackend::post_draw_layer (Layer* l)
     auto tx   = m (0, 3);
     auto ty   = m (1, 3);
     auto s    = curs / ls->s;
-
     // cerr << tx << " " << ty << " " << s << __FL__;
 
+    // get layer geometry
     int x, y, w, h, pad;
     l->get_xywhp (x, y, w, h, pad);
 
+    // compute the layer transform
     QMatrix4x4 newm;
     newm.translate (tx + x, ty + y);
 
@@ -885,18 +915,21 @@ QtBackend::post_draw_layer (Layer* l)
         newm.scale (s, s);
     }
 
+    // update current transform in context
     origin = newm;
     // newm = glm::translate(newm, gl2d::xxx_vertex_t{-t.x, -t.y});
     // m = newm * m;
 
-    // align translation to the grid
+    // align translation to the grid FIXME useless??? we do not use m anymore...
     m (2, 0) = round (m (2, 0));
     m (2, 1) = round (m (2, 1));
 
+    // update painter transform
     const QTransform transform = origin.toTransform ();
     _painter->setTransform (transform);
     _picking_view->painter ()->setTransform (transform);
 
+    // draw pixmaps
     QRect rect (0, 0, ls->pm->width (), ls->pm->height ());
 
     auto rh = _painter->renderHints ();
