@@ -793,11 +793,11 @@ QtBackend::pre_draw_layer (Layer* l)
         l->set_pick_cache (pick_pm);
         l->set_invalid_cache (false);
 
-        // save current painters (FIXME: in static global values :-/)
+        // -- save current painters (FIXME: in static global values :-/)
         buff_painter      = _painter;
         buff_pick_painter = _picking_view->painter ();
 
-        // create new painters
+        // -- create new painters
         _painter          = new QPainter (ls->pm);
         _picking_view->set_painter (new QPainter (pick_pm->pm));
 
