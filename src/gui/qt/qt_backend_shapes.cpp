@@ -815,7 +815,9 @@ QtBackend::pre_draw_layer (Layer* l)
         // ---- find current translation
         auto tx            = origin (0, 3);
         auto ty            = origin (1, 3);
-        // cerr << tx << " " << ty << " " << s << __FL__;
+        // // ---- find current rotation
+        // auto r             = atan2 (-b, a);
+        // cerr << tx << " " << ty << " " << s <<  " "  << r << __FL__;
 
         // -- adjust the pixmap
         // if translation is positive, apply -translation to avoid pixmap emptiness at the top left // FIXME resize image!
@@ -859,16 +861,15 @@ QtBackend::post_draw_layer (Layer* l)
 {
     rmt_BeginCPUSample (post_draw_layer, RMTSF_Aggregate);
 
+   
     LayerStuff* ls      = (LayerStuff*)(l->cache ());
     auto*       pick_pm = (PickLayerStuff*)(l->pick_cache ());
-    // auto *pick_pm =  (QPixmap*) (l->pick_cache());
 
     QtContext*  cur_context = _context_manager->get_current ();
     QMatrix4x4& origin      = cur_context->matrix;
     QMatrix4x4  m           = origin;
 
     // if layer has been recomputed, restore the painters(?)
-    bool damaged = true;
     if (buff_painter != nullptr) {
         delete _painter;
         _painter          = buff_painter;
@@ -879,21 +880,51 @@ QtBackend::post_draw_layer (Layer* l)
         buff_pick_painter = nullptr;
 
         _in_cache         = false;
-        // damaged = true;
+        //damaged = true; // never used
         m = ls->m;
     }
 
     // find out the current scale, rotation and translation
-
     // https://math.stackexchange.com/a/13165
-    auto a = m (0, 0);
-    auto b = m (0, 1);
-    auto curs = sign(a) * sqrt(a*a + b*b);
-    //auto curs = m (0, 0);
+    // note : old method use before introducing rotation
+    // {
+    //     auto a = m (0, 0);
+    //     auto b = m (0, 1);
+    //     auto curs = sign(a) * sqrt(a*a + b*b);
+    //     //auto curs = m (0, 0);
+    //     auto tx   = m (0, 3);
+    //     auto ty   = m (1, 3);
+    //     auto s    = curs / ls->s;
+    //     // find current rotation
+    //     auto r    = atan2 (-b, a)
+    //     cerr << endl << "1 - " << tx << " " << ty << " " << s << "    " << r << "    prvious " << qRadiansToDegrees(r) <<endl; //__FL__;
+    // }
+    
+    // https://math.stackexchange.com/a/43140
     auto tx   = m (0, 3);
     auto ty   = m (1, 3);
-    auto s    = curs / ls->s;
-    // cerr << tx << " " << ty << " " << s << __FL__;
+    auto a = m (0, 0);
+    // auto b = m (1, 0);
+    auto c = m (0, 1);
+    // auto d = m (1, 1);
+
+    auto scaleX = sqrt((a * a) + (c * c));
+    // auto scaleY = sqrt((b * b) + (d * d));
+    auto s = scaleX;
+
+    auto sign = atan(-c / a);
+    auto rad  = acos(a / scaleX);
+    auto deg  = qRadiansToDegrees(rad);
+
+    auto r = 0.;
+
+    // Calculation of the correct angle to avoid sign inversions with cos and sin
+    if (deg > 90 && sign > 0) r = (360 - deg);
+    else if (deg < 90 && sign < 0) r = (360 - deg);
+    else r = deg;
+
+    //debug
+    //cerr << "2 - " << tx << " " << ty << " " << s << "    " << rad << "    prvious " << r <<endl; //__FL__;
 
     // get layer geometry
     int x, y, w, h, pad;
@@ -901,7 +932,17 @@ QtBackend::post_draw_layer (Layer* l)
 
     // compute the layer transform
     QMatrix4x4 newm;
-    newm.translate (tx + x, ty + y);
+    newm.translate(tx , ty ); // Reverse the translation to origin
+    newm.rotate(r, 0, 0, 1); // r in degree
+    
+    //debug
+    // cerr << "newm: AFTER ROT" << endl;
+    // cerr << newm (0, 0) << "  " << newm (0, 1) << "  " << newm (0, 2) << "  " << newm (0, 3) << endl;
+    // cerr << newm (1, 0) << "  " << newm (1, 1) << "  " << newm (1, 2) << "  " << newm (1, 3) << endl;
+    // cerr << newm (2, 0) << "  " << newm (2, 1) << "  " << newm (2, 2) << "  " << newm (2, 3) << endl;
+    // cerr << newm (3, 0) << "  " << newm (3, 1) << "  " << newm (3, 2) << "  " << newm (3, 3) << endl;
+   
+   newm.translate (x, y);
 
     if (ls->tx < 0) {
         newm.translate ((-ls->tx) * s, 0); // apply no-emptiness translation
@@ -909,16 +950,23 @@ QtBackend::post_draw_layer (Layer* l)
     if (ls->ty < 0) {
         newm.translate (0, (-ls->ty) * s); // apply no-emptiness translation
     }
-    // newm = glm::translate(newm, gl2d::xxx_vertex_t{x, y});
+    // // newm = glm::translate(newm, gl2d::xxx_vertex_t{x, y});
+    
     newm.translate (-pad * s, -pad * s);
-    if (damaged) {
-        newm.scale (s, s);
-    }
+
+    newm.scale (s, s);
 
     // update current transform in context
     origin = newm;
     // newm = glm::translate(newm, gl2d::xxx_vertex_t{-t.x, -t.y});
     // m = newm * m;
+
+    // debug
+    // cerr << "origin: " << endl;
+    // cerr << origin (0, 0) << "  " << origin (0, 1) << "  " << origin (0, 2) << "  " << origin (0, 3) << endl;
+    // cerr << origin (1, 0) << "  " << origin (1, 1) << "  " << origin (1, 2) << "  " << origin (1, 3) << endl;
+    // cerr << origin (2, 0) << "  " << origin (2, 1) << "  " << origin (2, 2) << "  " << origin (2, 3) << endl;
+    // cerr << origin (3, 0) << "  " << origin (3, 1) << "  " << origin (3, 2) << "  " << origin (3, 3) << endl;
 
     // align translation to the grid FIXME useless??? we do not use m anymore...
     m (2, 0) = round (m (2, 0));
