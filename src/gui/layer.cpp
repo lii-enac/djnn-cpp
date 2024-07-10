@@ -32,11 +32,11 @@ Layer::Layer (CoreProcess* parent, const string& n, double x, double y, double w
 {
     finalize_construction (parent, n);
 
-    _x   = new IntProperty (this, "x", x);
-    _y   = new IntProperty (this, "y", y);
-    _width   = new IntProperty (this, "width", w);
-    _height   = new IntProperty (this, "height", h);
-    _pad = new IntProperty (this, "pad", pad);
+    _x      = new IntProperty (this, "x", x);
+    _y      = new IntProperty (this, "y", y);
+    _width  = new IntProperty (this, "width", w);
+    _height = new IntProperty (this, "height", h);
+    _pad    = new IntProperty (this, "pad", pad);
 
     _c_x   = new Coupling (_x, ACTIVATION, &_damaged_action, ACTIVATION);
     _c_y   = new Coupling (_y, ACTIVATION, &_damaged_action, ACTIVATION);

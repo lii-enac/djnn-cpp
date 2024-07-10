@@ -734,7 +734,11 @@ struct PickLayerStuff : LayerCache
 };
 
 // https://stackoverflow.com/a/1903975/2036022
-static int sign(double x) { return (x > 0) - (x < 0); }
+static int
+sign (double x)
+{
+    return (x > 0) - (x < 0);
+}
 
 bool
 QtBackend::pre_draw_layer (Layer* l)
@@ -744,7 +748,7 @@ QtBackend::pre_draw_layer (Layer* l)
     // handle z value. FIXME: intention?
     if (z_processing_step == 1)
         z_processing_step = 3;
-    
+
     // -------------
     // get layer geometry to compute pixmap geometry
     int x, y, w, h, pad;
@@ -798,23 +802,23 @@ QtBackend::pre_draw_layer (Layer* l)
         buff_pick_painter = _picking_view->painter ();
 
         // -- create new painters
-        _painter          = new QPainter (ls->pm);
+        _painter = new QPainter (ls->pm);
         _picking_view->set_painter (new QPainter (pick_pm->pm));
 
         _in_cache = true;
 
         // -- find out the current scale, rotation and translation
-        QtContext* cur_context = _context_manager->get_current ();
-        QMatrix4x4& origin = cur_context->matrix;
-        ls->m              = origin;
+        QtContext*  cur_context = _context_manager->get_current ();
+        QMatrix4x4& origin      = cur_context->matrix;
+        ls->m                   = origin;
         // https://math.stackexchange.com/a/13165
         // ---- find current scaling
-        auto a             = origin (0, 0);
-        auto b             = origin (0, 1);
-        auto s             = sign(a) * sqrt(a*a + b*b);
+        auto a = origin (0, 0);
+        auto b = origin (0, 1);
+        auto s = sign (a) * sqrt (a * a + b * b);
         // ---- find current translation
-        auto tx            = origin (0, 3);
-        auto ty            = origin (1, 3);
+        auto tx = origin (0, 3);
+        auto ty = origin (1, 3);
         // // ---- find current rotation
         // auto r             = atan2 (-b, a);
         // cerr << tx << " " << ty << " " << s <<  " "  << r << __FL__;
@@ -861,7 +865,6 @@ QtBackend::post_draw_layer (Layer* l)
 {
     rmt_BeginCPUSample (post_draw_layer, RMTSF_Aggregate);
 
-   
     LayerStuff* ls      = (LayerStuff*)(l->cache ());
     auto*       pick_pm = (PickLayerStuff*)(l->pick_cache ());
 
@@ -872,15 +875,15 @@ QtBackend::post_draw_layer (Layer* l)
     // if layer has been recomputed, restore the painters(?)
     if (buff_painter != nullptr) {
         delete _painter;
-        _painter          = buff_painter;
-        buff_painter      = nullptr;
+        _painter     = buff_painter;
+        buff_painter = nullptr;
 
         delete _picking_view->painter ();
         _picking_view->set_painter (buff_pick_painter);
         buff_pick_painter = nullptr;
 
-        _in_cache         = false;
-        //damaged = true; // never used
+        _in_cache = false;
+        // damaged = true; // never used
         m = ls->m;
     }
 
@@ -899,32 +902,35 @@ QtBackend::post_draw_layer (Layer* l)
     //     auto r    = atan2 (-b, a)
     //     cerr << endl << "1 - " << tx << " " << ty << " " << s << "    " << r << "    prvious " << qRadiansToDegrees(r) <<endl; //__FL__;
     // }
-    
+
     // https://math.stackexchange.com/a/43140
-    auto tx   = m (0, 3);
-    auto ty   = m (1, 3);
-    auto a = m (0, 0);
+    auto tx = m (0, 3);
+    auto ty = m (1, 3);
+    auto a  = m (0, 0);
     // auto b = m (1, 0);
     auto c = m (0, 1);
     // auto d = m (1, 1);
 
-    auto scaleX = sqrt((a * a) + (c * c));
+    auto scaleX = sqrt ((a * a) + (c * c));
     // auto scaleY = sqrt((b * b) + (d * d));
     auto s = scaleX;
 
-    auto sign = atan(-c / a);
-    auto rad  = acos(a / scaleX);
-    auto deg  = qRadiansToDegrees(rad);
+    auto sign = atan (-c / a);
+    auto rad  = acos (a / scaleX);
+    auto deg  = qRadiansToDegrees (rad);
 
     auto r = 0.;
 
     // Calculation of the correct angle to avoid sign inversions with cos and sin
-    if (deg > 90 && sign > 0) r = (360 - deg);
-    else if (deg < 90 && sign < 0) r = (360 - deg);
-    else r = deg;
+    if (deg > 90 && sign > 0)
+        r = (360 - deg);
+    else if (deg < 90 && sign < 0)
+        r = (360 - deg);
+    else
+        r = deg;
 
-    //debug
-    //cerr << "2 - " << tx << " " << ty << " " << s << "    " << rad << "    prvious " << r <<endl; //__FL__;
+    // debug
+    // cerr << "2 - " << tx << " " << ty << " " << s << "    " << rad << "    prvious " << r <<endl; //__FL__;
 
     // get layer geometry
     int x, y, w, h, pad;
@@ -932,17 +938,17 @@ QtBackend::post_draw_layer (Layer* l)
 
     // compute the layer transform
     QMatrix4x4 newm;
-    newm.translate(tx , ty ); // Reverse the translation to origin
-    newm.rotate(r, 0, 0, 1); // r in degree
-    
-    //debug
-    // cerr << "newm: AFTER ROT" << endl;
-    // cerr << newm (0, 0) << "  " << newm (0, 1) << "  " << newm (0, 2) << "  " << newm (0, 3) << endl;
-    // cerr << newm (1, 0) << "  " << newm (1, 1) << "  " << newm (1, 2) << "  " << newm (1, 3) << endl;
-    // cerr << newm (2, 0) << "  " << newm (2, 1) << "  " << newm (2, 2) << "  " << newm (2, 3) << endl;
-    // cerr << newm (3, 0) << "  " << newm (3, 1) << "  " << newm (3, 2) << "  " << newm (3, 3) << endl;
-   
-   newm.translate (x, y);
+    newm.translate (tx, ty);  // Reverse the translation to origin
+    newm.rotate (r, 0, 0, 1); // r in degree
+
+    // debug
+    //  cerr << "newm: AFTER ROT" << endl;
+    //  cerr << newm (0, 0) << "  " << newm (0, 1) << "  " << newm (0, 2) << "  " << newm (0, 3) << endl;
+    //  cerr << newm (1, 0) << "  " << newm (1, 1) << "  " << newm (1, 2) << "  " << newm (1, 3) << endl;
+    //  cerr << newm (2, 0) << "  " << newm (2, 1) << "  " << newm (2, 2) << "  " << newm (2, 3) << endl;
+    //  cerr << newm (3, 0) << "  " << newm (3, 1) << "  " << newm (3, 2) << "  " << newm (3, 3) << endl;
+
+    newm.translate (x, y);
 
     if (ls->tx < 0) {
         newm.translate ((-ls->tx) * s, 0); // apply no-emptiness translation
@@ -951,7 +957,7 @@ QtBackend::post_draw_layer (Layer* l)
         newm.translate (0, (-ls->ty) * s); // apply no-emptiness translation
     }
     // // newm = glm::translate(newm, gl2d::xxx_vertex_t{x, y});
-    
+
     newm.translate (-pad * s, -pad * s);
 
     newm.scale (s, s);

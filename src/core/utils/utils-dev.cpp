@@ -42,22 +42,22 @@ __to_string (long x)
     int  i = 255;
     tab[i] = 0;
     --i;
-    tab[i]   = '0';
+    tab[i] = '0';
     if (!x) {
         --i;
     } else {
-    bool neg = x < 0;
-    if (neg)
-        x = -x;
-    while (x && i > 1) {
-        tab[i] = '0' + (x % 10);
-        x /= 10;
-        --i;
-    }
-    if (neg) {
-        tab[i] = '-';
-        --i;
-    }
+        bool neg = x < 0;
+        if (neg)
+            x = -x;
+        while (x && i > 1) {
+            tab[i] = '0' + (x % 10);
+            x /= 10;
+            --i;
+        }
+        if (neg) {
+            tab[i] = '-';
+            --i;
+        }
     }
     return string (&tab[i + 1]);
 }
