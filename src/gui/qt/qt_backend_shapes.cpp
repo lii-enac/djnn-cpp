@@ -784,7 +784,7 @@ QtBackend::pre_draw_layer (Layer* l)
         w += pad * 2;
         h += pad * 2;
 
-        double hidpi_scale = 1; // DisplayBackend::instance()->window()->hidpi_scale()->get_value(); // FIXME, what about multi-window?!
+        double hidpi_scale = DisplayBackend::instance()->window()->hidpi_scale()->get_value(); // FIXME, what about multi-window?!
         ls->pm             = new QPixmap (w * hidpi_scale, h * hidpi_scale);
         ls->pm->setDevicePixelRatio (hidpi_scale);
         ls->pm->fill (Qt::transparent);
@@ -913,7 +913,7 @@ QtBackend::post_draw_layer (Layer* l)
 
     auto scaleX = sqrt ((a * a) + (c * c));
     // auto scaleY = sqrt((b * b) + (d * d));
-    auto s = scaleX;
+    auto s = scaleX / ls->s;
 
     auto sign = atan (-c / a);
     auto rad  = acos (a / scaleX);
