@@ -764,8 +764,8 @@ QtBackend::pre_draw_layer (Layer* l)
         h = fh;
     }
     // re-compute w and h
-    w = ( w * hidpi_scale) + pad * 2;
-    h = ( h * hidpi_scale) + pad * 2;
+    w = (w + pad * 2 ) * hidpi_scale; // should also do pad * hidpi_scale but .. perf !
+    h = (h + pad * 2 ) * hidpi_scale;
 
     // -------------
     // should we recompute the pixmap?
@@ -784,7 +784,7 @@ QtBackend::pre_draw_layer (Layer* l)
 
         // -- prepare new offscreen pixmaps
         ls = new LayerStuff;       
-        ls->pm  = new QPixmap (w, h);
+        ls->pm  = new QPixmap (w, h);   
         ls->pm->setDevicePixelRatio (hidpi_scale);
         ls->pm->fill (Qt::transparent);
         pick_pm     = new PickLayerStuff;
@@ -981,22 +981,18 @@ QtBackend::post_draw_layer (Layer* l)
     _painter->setTransform (transform);
     _picking_view->painter ()->setTransform (transform);
 
-    // draw pixmaps
-    QRect rect (0, 0, ls->pm->width (), ls->pm->height ());
-
+    // draw pixmaps    
     auto rh = _painter->renderHints ();
     _painter->setRenderHints ({});
 
     rmt_BeginCPUSample (post_draw_layer_pixmap, RMTSF_Aggregate);
-    //_painter->drawImage (rect, *(ls->pm));
     _painter->drawPixmap (0, 0, *(ls->pm));
     rmt_EndCPUSample ();
     _painter->setRenderHints (rh);
 
     _picking_view->painter ()->setCompositionMode (QPainter::CompositionMode_SourceOver);
     rmt_BeginCPUSample (post_draw_layer_pixmap_pick, RMTSF_Aggregate);
-    _picking_view->painter ()->drawImage (rect, *pick_pm->pm);
-    //_picking_view->painter()->drawPixmap (0, 0, *(pick_pm->pm));
+    _picking_view->painter ()->drawImage (QPoint( 0, 0), *pick_pm->pm);
     rmt_EndCPUSample ();
 
     _picking_view->painter ()->setCompositionMode (QPainter::CompositionMode_Source);
