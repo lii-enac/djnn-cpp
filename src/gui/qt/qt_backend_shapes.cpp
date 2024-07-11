@@ -753,8 +753,8 @@ QtBackend::pre_draw_layer (Layer* l)
     // get layer geometry to compute pixmap geometry
     int x, y, w, h, pad;
     l->get_xywhp (x, y, w, h, pad);
+    double hidpi_scale = DisplayBackend::instance()->window()->hidpi_scale()->get_value(); // FIXME, what about multi-window?!
     LayerStuff* ls = (LayerStuff*)(l->cache ());
-    // auto * pick_pm = (QPixmap*) (l->pick_cache ());
     auto* pick_pm = (PickLayerStuff*)(l->pick_cache ());
     auto  fw      = l->get_frame ()->width ()->get_value ();
     auto  fh      = l->get_frame ()->height ()->get_value ();
@@ -763,35 +763,33 @@ QtBackend::pre_draw_layer (Layer* l)
         w = fw;
         h = fh;
     }
+    // re-compute w and h
+    w = ( w * hidpi_scale) + pad * 2;
+    h = ( h * hidpi_scale) + pad * 2;
 
     // -------------
     // should we recompute the pixmap?
     // yes if the cache is invalid (e.g. because inner shapes have been damaged) or if geometry has changed
     bool recompute_pixmap =
-        l->invalid_cache () || (ls && (ls->pm->width () != (w + pad * 2) || ls->pm->height () != (h + pad * 2)));
+        l->invalid_cache () || (ls && (ls->pm->width () != w || ls->pm->height () != h));
 
     if (recompute_pixmap) {
 #ifndef DJNN_NO_DEBUG
-        if (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT || _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY)
-            cerr << "\n RECOMPUTE PIXMAP " << l->get_debug_name () << " : " << (w + pad * 2) << " - " << (h + pad * 2) << endl;
+        if (ls && (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT || _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY))
+            cerr << "\n2 -  RECOMPUTE PIXMAP " << l->get_debug_name () << " : ls->pm : " << ls->pm->width () << " - " << ls->pm->height () << " --- computed "<< w << " - " << h << endl;
 #endif
         // -- drop former offscreen pixmaps
         delete ls;
         delete pick_pm;
 
         // -- prepare new offscreen pixmaps
-        ls = new LayerStuff;
-        w += pad * 2;
-        h += pad * 2;
-
-        double hidpi_scale = DisplayBackend::instance()->window()->hidpi_scale()->get_value(); // FIXME, what about multi-window?!
-        ls->pm             = new QPixmap (w * hidpi_scale, h * hidpi_scale);
+        ls = new LayerStuff;       
+        ls->pm  = new QPixmap (w, h);
         ls->pm->setDevicePixelRatio (hidpi_scale);
         ls->pm->fill (Qt::transparent);
         pick_pm     = new PickLayerStuff;
         pick_pm->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
-        // pick_pm->pm->setDevicePixelRatio (1);
-        // pick_pm = new QPixmap (w, h);
+        pick_pm->pm->setDevicePixelRatio (hidpi_scale);
         pick_pm->pm->fill (Qt::transparent);
         l->set_cache (ls);
         l->set_pick_cache (pick_pm);
@@ -866,7 +864,7 @@ QtBackend::post_draw_layer (Layer* l)
     rmt_BeginCPUSample (post_draw_layer, RMTSF_Aggregate);
 
     LayerStuff* ls      = (LayerStuff*)(l->cache ());
-    auto*       pick_pm = (PickLayerStuff*)(l->pick_cache ());
+    PickLayerStuff*      pick_pm = (PickLayerStuff*)(l->pick_cache ());
 
     QtContext*  cur_context = _context_manager->get_current ();
     QMatrix4x4& origin      = cur_context->matrix;
@@ -988,6 +986,7 @@ QtBackend::post_draw_layer (Layer* l)
 
     auto rh = _painter->renderHints ();
     _painter->setRenderHints ({});
+
     rmt_BeginCPUSample (post_draw_layer_pixmap, RMTSF_Aggregate);
     //_painter->drawImage (rect, *(ls->pm));
     _painter->drawPixmap (0, 0, *(ls->pm));
@@ -997,8 +996,9 @@ QtBackend::post_draw_layer (Layer* l)
     _picking_view->painter ()->setCompositionMode (QPainter::CompositionMode_SourceOver);
     rmt_BeginCPUSample (post_draw_layer_pixmap_pick, RMTSF_Aggregate);
     _picking_view->painter ()->drawImage (rect, *pick_pm->pm);
-    //_picking_view->painter()->drawPixmap (0, 0, *pick_pm);
+    //_picking_view->painter()->drawPixmap (0, 0, *(pick_pm->pm));
     rmt_EndCPUSample ();
+
     _picking_view->painter ()->setCompositionMode (QPainter::CompositionMode_Source);
     if (z_processing_step == 3)
         z_processing_step = 1;
