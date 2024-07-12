@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Update the Docs !
     - test on Native Windows 10 compilation
 
-## [1.21.0] - 2024-07-10
+## [1.21.0] - 2024-07-15
 
 ### NEW
 
