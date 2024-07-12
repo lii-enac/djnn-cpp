@@ -11,6 +11,52 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Update the Docs !
     - test on Native Windows 10 compilation
 
+## [1.21.0] - 2024-07-10
+
+### NEW
+
+    - Added rotation support on Layer in GUI/Qt.
+    - Added a script to remove preprocessing in files (tools).
+    - Added new component : TextContainer
+
+### Added
+
+    - Added comments to improve documentation in Layer.
+    - Added missing options to pen for picking (CapStyle, JoinStyle, MiterLimit) in Qt backend.
+    - Added OperationConnector in base/arithm.
+    - Added two new mechanisms in IvyAccess: one to react to "die" Ivy messages and another to send a "send_die" message to an Ivy application by name.
+    - Added a script to format C++ files using clang-format.
+
+### Changed
+
+    - Renamed w and h to width and height in Layer.
+    - Changed z-order management in GUI.
+    - Reformatted and improved code structure across multiple modules (FORMAT commits).
+    - Changed propagate and lazy to be bool instead of double in core/assignment.
+    - Changed regex initialization to use TextProperty.
+    - Changed BinaryOperator accessibility in smala.
+    - Improved format-clang script and automatic formatting with VSCode.
+    - Removed info on CXXFLAGS from Makefile.
+    - Reformatted various modules (base, display, comms, exec_env, gui, input, animation, utils, physics, and more).
+
+### Fixed
+
+    - Fixed coupling issue on pad in Layer.
+    - Fixed opacity issue in images.
+    - Fixed sign multiply defined issue in Layer.
+    - Fixed current scale computation in Layer.
+    - Fixed debug information in the core module.
+    - Fixed __to_string for zero in utils-dev.
+    - Fixed incorrect Qt y offset in mouse events and mouse wheel events in Qt backend.
+    - Fixed OperationConnector delete memory issue in base/arithm.
+    - Fixed issues in IvyAccess destructor related to symbol table cleanup.
+    - Fixed getInt, GetDouble, GetString, getBool, and getRef to use AbstractXXXProperty.
+    - Fixed includes in audio and gui modules.
+    - Fixed methods in DRM window implementation in display.
+    - Fixed function call responsible for an infinite loop in display.
+    - Fixed regex group processing order in base/regex.
+    - Fixed custom cursor images using QPixmap instead of QBitmap.
+
 ## [1.20.0] - 2023-10-10
 
 ### NEW
