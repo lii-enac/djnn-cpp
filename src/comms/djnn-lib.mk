@@ -43,6 +43,7 @@ endif
 
 ifeq ($(os),Linux)
 	ifeq ($(use_ivy),yes)
+	pkgdeps += libpcre3-dev
 	# TODO: add support for pkg-config
 	# TODO: remove once .pkg made 
 	lib_cppflags += -I/usr/local/include/Ivy
