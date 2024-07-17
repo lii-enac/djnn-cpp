@@ -18,6 +18,7 @@
 #include <QtCore/QtMath>
 #include <QtGui/QPainter>
 #include <QtWidgets/QWidget>
+#include <algorithm>
 #include <cmath>
 
 #include "core/tree/list.h"
