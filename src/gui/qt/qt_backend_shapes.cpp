@@ -18,7 +18,7 @@
 #include <QtCore/QtMath>
 #include <QtGui/QPainter>
 #include <QtWidgets/QWidget>
-#include <algorithm>
+#include <Qtmath>
 #include <cmath>
 
 #include "core/tree/list.h"
@@ -917,8 +917,9 @@ QtBackend::post_draw_layer (Layer* l)
     //cerr << "\n\n0 - a: " << a << " - c: " << c << " - scaleX: " << scaleX << " - s :  " << s <<endl; //__FL__;
 
     auto sign = atan (-c / a);
-    auto clamped_a = std::min(std::max(a / scaleX, -1.0), 1.0);
-    auto rad  = acos (clamped_a);
+    // Clamp the value passed to acos to the range [-1, 1]
+    auto clamped_a = qBound(-1.0, a / scaleX, 1.0);
+    auto rad  = acos(clamped_a);
     auto deg  = qRadiansToDegrees (rad);
 
     // debug
