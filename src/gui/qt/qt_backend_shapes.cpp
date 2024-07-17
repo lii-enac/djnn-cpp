@@ -913,9 +913,15 @@ QtBackend::post_draw_layer (Layer* l)
     // auto scaleY = sqrt((b * b) + (d * d));
     auto s = scaleX / ls->s;
 
+    //cerr << "\n\n0 - a: " << a << " - c: " << c << " - scaleX: " << scaleX << " - s :  " << s <<endl; //__FL__;
+
     auto sign = atan (-c / a);
-    auto rad  = acos (a / scaleX);
+    auto clamped_a = std::min(std::max(a / scaleX, -1.0), 1.0);
+    auto rad  = acos (clamped_a);
     auto deg  = qRadiansToDegrees (rad);
+
+    // debug
+    //cerr << "1 - " << tx << " " << ty << " " << s << " - rad :  " << rad << " - deg :  " << deg << " - sign :  " << sign  <<endl; //__FL__;
 
     auto r = 0.;
 
@@ -928,7 +934,7 @@ QtBackend::post_draw_layer (Layer* l)
         r = deg;
 
     // debug
-    // cerr << "2 - " << tx << " " << ty << " " << s << "    " << rad << "    prvious " << r <<endl; //__FL__;
+    //cerr << "2 - " << tx << " " << ty << " " << s << " - rad :  " << rad << " - deg :  " << deg << " - r :  " << r  <<endl; //__FL__;
 
     // get layer geometry
     int x, y, w, h, pad;
@@ -936,15 +942,22 @@ QtBackend::post_draw_layer (Layer* l)
 
     // compute the layer transform
     QMatrix4x4 newm;
-    newm.translate (tx, ty);  // Reverse the translation to origin
-    newm.rotate (r, 0, 0, 1); // r in degree
-
     // debug
-    //  cerr << "newm: AFTER ROT" << endl;
+    //  cerr << "newm: BEFORE ROT" << endl;
     //  cerr << newm (0, 0) << "  " << newm (0, 1) << "  " << newm (0, 2) << "  " << newm (0, 3) << endl;
     //  cerr << newm (1, 0) << "  " << newm (1, 1) << "  " << newm (1, 2) << "  " << newm (1, 3) << endl;
     //  cerr << newm (2, 0) << "  " << newm (2, 1) << "  " << newm (2, 2) << "  " << newm (2, 3) << endl;
     //  cerr << newm (3, 0) << "  " << newm (3, 1) << "  " << newm (3, 2) << "  " << newm (3, 3) << endl;
+
+    newm.translate (tx, ty);  // Reverse the translation to origin
+    newm.rotate (r, 0, 0, 1); // r in degree
+
+    // debug
+    // cerr << "newm: AFTER ROT" << endl;
+    // cerr << newm (0, 0) << "  " << newm (0, 1) << "  " << newm (0, 2) << "  " << newm (0, 3) << endl;
+    // cerr << newm (1, 0) << "  " << newm (1, 1) << "  " << newm (1, 2) << "  " << newm (1, 3) << endl;
+    // cerr << newm (2, 0) << "  " << newm (2, 1) << "  " << newm (2, 2) << "  " << newm (2, 3) << endl;
+    // cerr << newm (3, 0) << "  " << newm (3, 1) << "  " << newm (3, 2) << "  " << newm (3, 3) << endl;
 
     newm.translate (x, y);
 
