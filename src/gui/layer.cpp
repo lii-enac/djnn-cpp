@@ -92,19 +92,6 @@ void
 Layer::draw ()
 {
     warning (this, string ("DEPRECATED - Layer::draw - Should not be using - use GUIStructureHolder::draw instead\n Is Layer only composed of GUI Component ?"));
-    // if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-    //   //rmt_BeginCPUSample(Layer_draw, RMTSF_Recursive);
-    //   ComponentObserver::instance ().start_draw ();
-    //   if (Backend::instance ()->pre_draw_layer (this)) {
-    //     //Container::draw ();
-    //     for (auto c : _children) {
-    //       c->draw ();
-    //     }
-    //   }
-    //   Backend::instance ()->post_draw_layer (this);
-    //   ComponentObserver::instance ().end_draw ();
-    //   //rmt_EndCPUSample();
-    //}
 }
 
 Layer*
@@ -140,5 +127,15 @@ Layer::set_invalid_cache (bool v)
         UpdateDrawing::instance ()->add_window_for_refresh (_frame);
         UpdateDrawing::instance ()->get_redraw ()->activate ();
     }
+}
+
+void
+Layer::set_hdpi (bool v)
+{
+    // dpi has change we have to recompute layer
+    if (_hdpi != v)
+        set_invalid_cache (true);
+
+    _hdpi = v;
 }
 } // namespace djnn

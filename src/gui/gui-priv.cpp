@@ -97,12 +97,7 @@ GUIStructureHolder::draw ()
         Layer* l = dynamic_cast<Layer*> (content_process);
         if (DisplayBackend::instance ()->window () == l->get_frame ()) {
             ComponentObserver::instance ().start_draw ();
-            if (Backend::instance ()->pre_draw_layer (l)) {
-                for (auto p : _children) {
-                    p.first->draw ();
-                }
-            }
-            Backend::instance ()->post_draw_layer (l);
+            Backend::instance ()->draw_layer (l, _children);
             ComponentObserver::instance ().end_draw ();
         }
     } else if (content_process->get_process_type () == Z_ORDERED_GROUP_T) {

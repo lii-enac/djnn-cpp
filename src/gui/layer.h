@@ -48,7 +48,9 @@ class Layer : public Container {
     void           set_cache (LayerCache* cache) { _cache = cache; }
     void           set_pick_cache (LayerCache* cache) { _pick_cache = cache; }
     bool           invalid_cache () { return _invalid_cache; }
+    bool           hdpi () {return _hdpi; }
     void           set_invalid_cache (bool v);
+    void           set_hdpi (bool v);
     Layer*         impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
     process_type_e get_process_type () const override { return LAYER_T; }
 
@@ -75,7 +77,7 @@ class Layer : public Container {
     Window*            _frame;
     Spike              _damaged;
     BoolProperty       _auto_redisplay;
-    bool               _invalid_cache;
+    bool               _invalid_cache, _hdpi;
     LayerCache *       _cache, *_pick_cache;
     LayerDamagedAction _damaged_action;
     IntProperty *      _x, *_y, *_width, *_height, *_pad;

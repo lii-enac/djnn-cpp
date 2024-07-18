@@ -17,8 +17,8 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QtMath>
 #include <QtGui/QPainter>
-#include <QtWidgets/QWidget>
 #include <QtMath>
+#include <QtWidgets/QWidget>
 #include <cmath>
 
 #include "core/tree/list.h"
@@ -705,32 +705,38 @@ QtBackend::draw_data_image (DataImage* i)
     rmt_EndCPUSample ();
 }
 
-static QPainter* buff_painter;
-static QPainter* buff_pick_painter;
-
 struct LayerStuff : LayerCache
 {
-    // QImage *pm;
     QPixmap*   pm;
+    QPixmap*   lpm;
+    QPixmap*   hpm;
     double     tx, ty;
     double     s;
     QMatrix4x4 m;
     LayerStuff ()
-        : s (1) {}
+        : pm (nullptr), lpm (nullptr), hpm (nullptr), s (1) {}
     ~LayerStuff ()
     {
-        delete pm;
+        if (lpm)
+            delete lpm;
+        if (hpm)
+            delete hpm;
     }
 };
 
 struct PickLayerStuff : LayerCache
 {
     QImage* pm;
+    QImage* lpm;
+    QImage* hpm;
     PickLayerStuff ()
-        : pm (nullptr) {}
+        : pm (nullptr), lpm (nullptr), hpm (nullptr) {}
     ~PickLayerStuff ()
     {
-        delete pm;
+        if (lpm)
+            delete lpm;
+        if (hpm)
+            delete hpm;
     }
 };
 
@@ -741,302 +747,292 @@ sign (double x)
     return (x > 0) - (x < 0);
 }
 
-
-// Layers are components that store the rendering of a complex, inner scene into a pixmap to improve rendering perfomances and make user interactions fluid.
-// scenarios:
-// panning:
-//    just move around the pixmap instead of rendering the entire scene at each pan
-// zooming:
-//    zoom on the pixmap. This will lead to big pixels when zooming in, so we should update the rendering when the interaction is done.
-//    This implies that rendering _inside_ the layer should be done at the current scale level (say 2.0)
-//    but rendering of the pixmap itself should be done at scale 1.0/2.0 to display the inner scene at the correct scale lecel, even though rendering of the pixmap will occur with a 2.0 scale level
-//    so we need to render the pixmap at a 1.0 scale level, i.e. apply a 1.0/2.0 on the current scale
-//    and this should take into account panning of course
-// rotating:
-//    TODO
-//
-// Note: this should also work with picking, so we must also store a picking view with its own color palette, and use this pixmap in the picking algorithm!
-//
-// The following algorithm is split into two parts:
-// pre_draw_layer: at the time of the Layer rendering (as part of the outer scene), pre_draw_layer computes the current scale, translation, and stores them.
-// If the scene is damaged, pre_draw_layer renders the scene into an offscreen pixmap at the current_scale, possibly adjusting the scene to minimize the pixmap size
-// post_draw_layer: at the time of the Pixmap rendering (post_draw_layer), post_draw_layer applies the inverse of the stored scale and translation, and draws the pixmap 
-//
-// The recomputation of the pixmap occurs with the following conditions:
-//   - the inner scene has changed (e.g. a shape, a transformation or a style has changed), this is automatically handled
-//   - the geometry of the layer has changed (e.g. to adapt to window resize), this is automatically handled
-//   - the user has activated the layer's damaged spike: this enables the user to finely tune the redraw algorithm (e.g. after 200ms of dwell after a zoom) 
-
-
-// TODO: adapt to rotation
-
-bool
-QtBackend::pre_draw_layer (Layer* l)
+static bool
+areAlmostEqual (double a, double b, double epsilon = 1e-4)
 {
-    rmt_BeginCPUSample (pre_draw_layer, RMTSF_Aggregate);
+    return std::fabs (a - b) < epsilon;
+}
 
-    // handle z value. FIXME: intention?
+// Layers are components that store the rendering of a complex, inner scene into a pixmap to improve rendering performance and make user interactions fluid.
+// Scenarios:
+// Panning:
+//    Just move around the pixmap instead of rendering the entire scene at each pan.
+// Zooming:
+//    Zoom on the pixmap. This will lead to big pixels when zooming in, so we should update the rendering when the interaction is done.
+//    This implies that rendering inside the layer should be done at the current scale level (say 2.0),
+//    but rendering of the pixmap itself should be done at scale 1.0/2.0 to display the inner scene at the correct scale level, even though rendering of the pixmap will occur with a 2.0 scale level.
+//    So we need to render the pixmap at a 1.0 scale level, i.e., apply a 1.0/2.0 on the current scale,
+//    and this should take into account panning, of course.
+// Rotating:
+//    Rotate the pixmap. This will lead to aliasing, so we should update the rendering when the interaction is done.
+//
+// Note: This should also work with picking, so we must also store a picking view with its own color palette, and use this pixmap in the picking algorithm!
+//
+// The following algorithm is split into two parts in one function draw_layer:
+// First, at the time of the Layer rendering (as part of the outer scene), draw_layer computes the current scale, translation, rotation, and DPI and stores them.
+// If the scene is damaged (recompute_pixmap?), draw_layer renders the scene into one or two offscreen pixmaps (two for hi-DPI) at the current scale, possibly adjusting the scene to minimize the pixmap size.
+// If the user uses a hi-DPI screen, draw_layer will render two versions of the pixmap: low and high. It will use the low version during scale, translation, rotation, and high resolution when the interaction is done.
+// Then, at the time of the Pixmap rendering, draw_layer, the second part, applies the inverse of the stored scale and translation and draws the pixmap into the current widget (e.g., window).
+//
+// The recomputation of the pixmap occurs under the following conditions:
+//   - The inner scene has changed (e.g., a shape, a transformation, or a style has changed), this is automatically handled.
+//   - The geometry of the layer has changed (e.g., to adapt to window resize), this is automatically handled.
+//   - The DPI of the screen has changed, this is automatically handled.
+//   - The user has activated the layer's damaged spike: this enables the user to finely tune the redraw algorithm (e.g., after 200ms of dwell after a zoom).
+void
+QtBackend::draw_layer (Layer* l, children_t _children)
+{
+    rmt_BeginCPUSample (recompute_pixmap_layer, RMTSF_Aggregate);
+
+    // Handle z value. FIXME: What is the intention here?
     if (z_processing_step == 1)
         z_processing_step = 3;
 
+    // Get the DPI scale for the active window. FIXME: What about multiple windows?
+    int  dpi_scale = DisplayBackend::instance ()->window ()->hidpi_scale ()->get_value ();
+    bool is_hdpi   = dpi_scale > 1;
+    l->set_hdpi (is_hdpi); // Automatically invalidates cache if necessary
+
     // -------------
-    // get layer geometry to compute pixmap geometry
+    // Get the layer geometry to compute the pixmap geometry
     int x, y, w, h, pad;
     l->get_xywhp (x, y, w, h, pad);
-    double hidpi_scale = DisplayBackend::instance()->window()->hidpi_scale()->get_value(); // FIXME, what about multi-window?!
-    LayerStuff* ls = (LayerStuff*)(l->cache ());
-    auto* pick_pm = (PickLayerStuff*)(l->pick_cache ());
+
+    // -- Determine the current scale, rotation, and translation
+    QtContext*  cur_context = _context_manager->get_current ();
+    QMatrix4x4& _cur_origin = cur_context->matrix;
+    auto        a           = _cur_origin (0, 0);
+    auto        b           = _cur_origin (0, 1);
+    auto        c           = _cur_origin (1, 0);
+    auto        d           = _cur_origin (1, 1);
+    auto        tx          = _cur_origin (0, 3);
+    auto        ty          = _cur_origin (1, 3);
+    auto        s           = sign (a) * sqrt (a * a + b * b);
+
+    // Check if the layer is in motion (panning, zooming, rotating) in hdpi mode
+    // If yes: draw low DPI pixmap
+    // If no: draw high DPI pixmap
+    bool is_in_interaction = is_hdpi && (!areAlmostEqual (tx, 0.0) ||
+                                         !areAlmostEqual (ty, 0.0) ||
+                                         !areAlmostEqual (a, 1.0) ||
+                                         !areAlmostEqual (b, 0.0) ||
+                                         !areAlmostEqual (c, 0.0) ||
+                                         !areAlmostEqual (d, 1.0));
+
+    // Obtain current layer caches
+    auto* ls      = dynamic_cast<LayerStuff*> (l->cache ());
+    auto* pick_pm = dynamic_cast<PickLayerStuff*> (l->pick_cache ());
     auto  fw      = l->get_frame ()->width ()->get_value ();
     auto  fh      = l->get_frame ()->height ()->get_value ();
-    // if the user did not provide width and height, take those of the frame
+    // If the user has not provided width and height, use the frame's dimensions
     if (w < 0) {
         w = fw;
         h = fh;
     }
-    // re-compute w and h
-    w = (w + pad * 2 ) * hidpi_scale; // should also do pad * hidpi_scale but .. perf !
-    h = (h + pad * 2 ) * hidpi_scale;
+    // Recalculate width and height with padding
+    w += pad * 2;
+    h += pad * 2;
 
     // -------------
-    // should we recompute the pixmap?
-    // yes if the cache is invalid (e.g. because inner shapes have been damaged) or if geometry has changed
-    bool recompute_pixmap =
-        l->invalid_cache () || (ls && (ls->pm->width () != w || ls->pm->height () != h));
+    // Determine if the pixmap needs to be recomputed ?
+    bool recompute_pixmap = l->invalid_cache (); // Simplified to check cache invalidation. beaware than is depending of hdpi
 
     if (recompute_pixmap) {
 #ifndef DJNN_NO_DEBUG
         if (ls && (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT || _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY))
-            cerr << "\n2 -  RECOMPUTE PIXMAP " << l->get_debug_name () << " : ls->pm : " << ls->pm->width () << " - " << ls->pm->height () << " --- computed "<< w << " - " << h << endl;
+            cerr << "\n---  RECOMPUTE PIXMAP " << l->get_debug_name () << endl;
 #endif
-        // -- drop former offscreen pixmaps
+        QPainter* buff_painter;
+        QPainter* buff_pick_painter;
+
+        // -- Delete former offscreen pixmaps
         delete ls;
         delete pick_pm;
 
-        // -- prepare new offscreen pixmaps
-        ls = new LayerStuff;       
-        ls->pm  = new QPixmap (w, h);   
-        ls->pm->setDevicePixelRatio (hidpi_scale);
-        ls->pm->fill (Qt::transparent);
-        pick_pm     = new PickLayerStuff;
-        pick_pm->pm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
-        pick_pm->pm->setDevicePixelRatio (hidpi_scale);
-        pick_pm->pm->fill (Qt::transparent);
+        // -- Prepare new offscreen pixmaps
+        ls      = new LayerStuff;
+        ls->lpm = new QPixmap (w, h);
+        ls->lpm->setDevicePixelRatio (1);
+        ls->lpm->fill (Qt::transparent);
+        // ls->lpm->fill (Qt::darkYellow); // debug version
+        if (is_hdpi) {
+            ls->hpm = new QPixmap (w * dpi_scale, h * dpi_scale);
+            ls->hpm->setDevicePixelRatio (dpi_scale);
+            ls->hpm->fill (Qt::transparent);
+            // ls->hpm->fill (Qt::darkRed); // debug version
+        }
+
+        pick_pm      = new PickLayerStuff;
+        pick_pm->lpm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
+        pick_pm->lpm->setDevicePixelRatio (1);
+        pick_pm->lpm->fill (Qt::transparent);
+        if (is_hdpi) {
+            pick_pm->hpm = new QImage (w * dpi_scale, h * dpi_scale, QImage::Format_ARGB32_Premultiplied);
+            pick_pm->hpm->setDevicePixelRatio (dpi_scale);
+            pick_pm->hpm->fill (Qt::transparent);
+        }
+
         l->set_cache (ls);
         l->set_pick_cache (pick_pm);
         l->set_invalid_cache (false);
 
-        // -- save current painters (FIXME: in static global values :-/)
+        // -- save current painters - eg. windows painter (FIXME: in static global values :-/)
         buff_painter      = _painter;
         buff_pick_painter = _picking_view->painter ();
 
-        // -- create new painters
-        _painter = new QPainter (ls->pm);
-        _picking_view->set_painter (new QPainter (pick_pm->pm));
+        // -- make sure to add it to picking_view, otherwise it won't be pickable
+        _in_cache = true; 
 
-        _in_cache = true;
+        // -- Save the current matrix
+        ls->m = _cur_origin;
 
-        // -- find out the current scale, rotation and translation
-        QtContext*  cur_context = _context_manager->get_current ();
-        QMatrix4x4& origin      = cur_context->matrix;
-        ls->m                   = origin;
-        // https://math.stackexchange.com/a/13165
-        // ---- find current scaling
-        auto a = origin (0, 0);
-        auto b = origin (0, 1);
-        auto s = sign (a) * sqrt (a * a + b * b);
-        // ---- find current translation
-        auto tx = origin (0, 3);
-        auto ty = origin (1, 3);
-        // // ---- find current rotation
-        // auto r             = atan2 (-b, a);
-        // cerr << tx << " " << ty << " " << s <<  " "  << r << __FL__;
-
-        // -- adjust the pixmap
-        // if translation is positive, apply -translation to avoid pixmap emptiness at the top left // FIXME resize image!
-        // if translation is negative, do not try to adjust translation so that the bottom-right part of the rendering is not clipped
+        // -- Apply inverse translation for tx and ty
         QMatrix4x4 newm;
-        if (tx > 0) {
-            newm.translate (-tx, 0); // apply -translation
-        }
-        if (ty > 0) {
-            auto inv_tvy = (h - ls->pm->height ()) + ty; // take into account reverse y
-            newm.translate (0, -inv_tvy);                // apply translation
-        }
+        if (tx > 0)
+            newm.translate (-tx, 0);
+        if (ty > 0)
+            newm.translate (0, -ty);
 
-        // -- apply layer x and y
+        // -- Apply layer translation
         newm.translate (-x, -y);
 
-        // -- apply padding to get the surrounding
+        // -- Apply padding translation
         newm.translate (pad, pad);
 
-        // -- update the cur_context->matrix (origin is a &ref on it)
-        origin = newm * origin;
+        // -- Update the current context matrix
+        newm = newm * _cur_origin;
 
-        // -- store computed scale, rotation (?), and scale
+        // -- Store transformation details
         ls->tx = tx;
         ls->ty = ty;
         ls->s  = s;
 
+        // -- Create new painters for the pixmaps/QImages
+        // Set current painter for low DPI pixmap
+        _painter = new QPainter (ls->lpm);
+        _picking_view->set_painter (new QPainter (pick_pm->lpm));
+
+        // Set _cur_origin to newm for low DPI pixmap painting
+        _cur_origin = newm;
+
+        // Draw offscreen low DPI pixmap (use current _painter)
+        for (auto& p : _children) {
+            p.first->draw ();
+        }
+
+        if (is_hdpi) {
+            // Delete low DPI pixmap painter to create high DPI painter
+            delete _painter;
+            delete _picking_view->painter ();
+
+            // Set current painter for high DPI pixmap
+            _painter = new QPainter (ls->hpm);
+            _picking_view->set_painter (new QPainter (pick_pm->hpm));
+
+            // Reset _cur_origin to newm for high DPI pixmap painting
+            _cur_origin = newm;
+
+            // Draw offscreen high DPI pixmap (use current _painter)
+            for (auto& p : _children) {
+                p.first->draw ();
+            }
+        }
+
+        // --- delete pixmap _painter and restore current _painter and _cur_origin
+        delete _painter;
+        delete _picking_view->painter ();
+        _painter = buff_painter;
+        _picking_view->set_painter (buff_pick_painter);
+        _in_cache = false;
+        _cur_origin = ls->m;
+
+#ifndef DJNN_NO_DEBUG
+        if (ls && (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT || _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY)) {
+            cerr << "\tls->lpm : " << ls->lpm->width () << " - " << ls->lpm->height () << " --- w x h : " << w << " - " << h << endl;
+            if (is_hdpi && ls->hpm)
+                cerr << "\tls->hpm : " << ls->hpm->width () << " - " << ls->hpm->height () << " --- w x h : " << w * dpi_scale << " - " << h * dpi_scale << endl;
+            cerr << "--- END --- RECOMPUTE PIXMAP " << l->get_debug_name () << endl;
+        }
+#endif
+    }
+
+    // Select the appropriate pixmap based on resolution and interaction state
+    if (is_hdpi && !is_in_interaction) {
+        // High DPI but not in interaction: use high DPI pixmap
+        ls->pm      = ls->hpm;
+        pick_pm->pm = pick_pm->hpm;
     } else {
-        // FIXME: this seems to be both a save of painters and a trick to inform post_draw_layer that the layer has not been recomputed
-        buff_painter      = nullptr;
-        buff_pick_painter = nullptr;
+        // Low DPI or high DPI in interaction: use low DPI pixmap
+        ls->pm      = ls->lpm;
+        pick_pm->pm = pick_pm->lpm;
     }
 
     rmt_EndCPUSample ();
 
-    return recompute_pixmap;
-}
-
-void
-QtBackend::post_draw_layer (Layer* l)
-{
-    rmt_BeginCPUSample (post_draw_layer, RMTSF_Aggregate);
-
-    LayerStuff* ls      = (LayerStuff*)(l->cache ());
-    PickLayerStuff*      pick_pm = (PickLayerStuff*)(l->pick_cache ());
-
-    QtContext*  cur_context = _context_manager->get_current ();
-    QMatrix4x4& origin      = cur_context->matrix;
-    QMatrix4x4  m           = origin;
-
-    // if layer has been recomputed, restore the painters(?)
-    if (buff_painter != nullptr) {
-        delete _painter;
-        _painter     = buff_painter;
-        buff_painter = nullptr;
-
-        delete _picking_view->painter ();
-        _picking_view->set_painter (buff_pick_painter);
-        buff_pick_painter = nullptr;
-
-        _in_cache = false;
-        // damaged = true; // never used
-        m = ls->m;
-    }
-
-    // find out the current scale, rotation and translation
-    // https://math.stackexchange.com/a/13165
-    // note : old method use before introducing rotation
-    // {
-    //     auto a = m (0, 0);
-    //     auto b = m (0, 1);
-    //     auto curs = sign(a) * sqrt(a*a + b*b);
-    //     //auto curs = m (0, 0);
-    //     auto tx   = m (0, 3);
-    //     auto ty   = m (1, 3);
-    //     auto s    = curs / ls->s;
-    //     // find current rotation
-    //     auto r    = atan2 (-b, a)
-    //     cerr << endl << "1 - " << tx << " " << ty << " " << s << "    " << r << "    prvious " << qRadiansToDegrees(r) <<endl; //__FL__;
-    // }
+    rmt_BeginCPUSample (draw_pixmap_layer_in_window, RMTSF_Aggregate);
 
     // https://math.stackexchange.com/a/43140
-    auto tx = m (0, 3);
-    auto ty = m (1, 3);
-    auto a  = m (0, 0);
-    // auto b = m (1, 0);
-    auto c = m (0, 1);
-    // auto d = m (1, 1);
+    tx          = _cur_origin (0, 3);
+    ty          = _cur_origin (1, 3);
+    a           = _cur_origin (0, 0);
+    b           = _cur_origin (0, 1);
+    auto scaleX = sqrt ((a * a) + (b * b));
+    s           = scaleX / ls->s;
 
-    auto scaleX = sqrt ((a * a) + (c * c));
-    // auto scaleY = sqrt((b * b) + (d * d));
-    auto s = scaleX / ls->s;
-
-    //cerr << "\n\n0 - a: " << a << " - c: " << c << " - scaleX: " << scaleX << " - s :  " << s <<endl; //__FL__;
-
-    auto sign = atan (-c / a);
+    auto sign = atan (-b / a);
     // Clamp the value passed to acos to the range [-1, 1]
-    auto clamped_a = qBound(-1.0, static_cast<double>(a / scaleX), 1.0);
-    auto rad  = acos(clamped_a);
-    auto deg  = qRadiansToDegrees (rad);
-
-    // debug
-    //cerr << "1 - " << tx << " " << ty << " " << s << " - rad :  " << rad << " - deg :  " << deg << " - sign :  " << sign  <<endl; //__FL__;
-
-    auto r = 0.;
+    auto clamped_a = qBound (-1.0, static_cast<double> (a / scaleX), 1.0);
+    auto rad       = acos (clamped_a);
+    auto deg       = qRadiansToDegrees (rad);
 
     // Calculation of the correct angle to avoid sign inversions with cos and sin
-    if (deg > 90 && sign > 0)
-        r = (360 - deg);
-    else if (deg < 90 && sign < 0)
-        r = (360 - deg);
-    else
-        r = deg;
-
-    // debug
-    //cerr << "2 - " << tx << " " << ty << " " << s << " - rad :  " << rad << " - deg :  " << deg << " - r :  " << r  <<endl; //__FL__;
-
-    // get layer geometry
-    int x, y, w, h, pad;
-    l->get_xywhp (x, y, w, h, pad);
+    auto r = ((deg > 90 && sign > 0) || (deg < 90 && sign < 0)) ? (360 - deg) : deg;
 
     // compute the layer transform
     QMatrix4x4 newm;
-    // debug
-    //  cerr << "newm: BEFORE ROT" << endl;
-    //  cerr << newm (0, 0) << "  " << newm (0, 1) << "  " << newm (0, 2) << "  " << newm (0, 3) << endl;
-    //  cerr << newm (1, 0) << "  " << newm (1, 1) << "  " << newm (1, 2) << "  " << newm (1, 3) << endl;
-    //  cerr << newm (2, 0) << "  " << newm (2, 1) << "  " << newm (2, 2) << "  " << newm (2, 3) << endl;
-    //  cerr << newm (3, 0) << "  " << newm (3, 1) << "  " << newm (3, 2) << "  " << newm (3, 3) << endl;
-
     newm.translate (tx, ty);  // Reverse the translation to origin
     newm.rotate (r, 0, 0, 1); // r in degree
-
-    // debug
-    // cerr << "newm: AFTER ROT" << endl;
-    // cerr << newm (0, 0) << "  " << newm (0, 1) << "  " << newm (0, 2) << "  " << newm (0, 3) << endl;
-    // cerr << newm (1, 0) << "  " << newm (1, 1) << "  " << newm (1, 2) << "  " << newm (1, 3) << endl;
-    // cerr << newm (2, 0) << "  " << newm (2, 1) << "  " << newm (2, 2) << "  " << newm (2, 3) << endl;
-    // cerr << newm (3, 0) << "  " << newm (3, 1) << "  " << newm (3, 2) << "  " << newm (3, 3) << endl;
-
     newm.translate (x, y);
-
     if (ls->tx < 0) {
         newm.translate ((-ls->tx) * s, 0); // apply no-emptiness translation
     }
     if (ls->ty < 0) {
         newm.translate (0, (-ls->ty) * s); // apply no-emptiness translation
     }
-    // // newm = glm::translate(newm, gl2d::xxx_vertex_t{x, y});
-
     newm.translate (-pad * s, -pad * s);
-
     newm.scale (s, s);
 
     // update current transform in context
-    origin = newm;
-    // newm = glm::translate(newm, gl2d::xxx_vertex_t{-t.x, -t.y});
-    // m = newm * m;
+    _cur_origin = newm;
 
     // debug
-    // cerr << "origin: " << endl;
+    // cerr << "origin post: " << endl;
     // cerr << origin (0, 0) << "  " << origin (0, 1) << "  " << origin (0, 2) << "  " << origin (0, 3) << endl;
     // cerr << origin (1, 0) << "  " << origin (1, 1) << "  " << origin (1, 2) << "  " << origin (1, 3) << endl;
     // cerr << origin (2, 0) << "  " << origin (2, 1) << "  " << origin (2, 2) << "  " << origin (2, 3) << endl;
     // cerr << origin (3, 0) << "  " << origin (3, 1) << "  " << origin (3, 2) << "  " << origin (3, 3) << endl;
 
     // align translation to the grid FIXME useless??? we do not use m anymore...
-    m (2, 0) = round (m (2, 0));
-    m (2, 1) = round (m (2, 1));
+    _cur_origin (2, 0) = round (_cur_origin (2, 0));
+    _cur_origin (2, 1) = round (_cur_origin (2, 1));
 
     // update painter transform
-    const QTransform transform = origin.toTransform ();
+    const QTransform transform = _cur_origin.toTransform ();
     _painter->setTransform (transform);
     _picking_view->painter ()->setTransform (transform);
 
-    // draw pixmaps    
+    // draw pixmaps
     auto rh = _painter->renderHints ();
     _painter->setRenderHints ({});
 
-    rmt_BeginCPUSample (post_draw_layer_pixmap, RMTSF_Aggregate);
+    rmt_BeginCPUSample (draw_layer_pixmap, RMTSF_Aggregate);
     _painter->drawPixmap (0, 0, *(ls->pm));
     rmt_EndCPUSample ();
     _painter->setRenderHints (rh);
 
     _picking_view->painter ()->setCompositionMode (QPainter::CompositionMode_SourceOver);
-    rmt_BeginCPUSample (post_draw_layer_pixmap_pick, RMTSF_Aggregate);
-    _picking_view->painter ()->drawImage (QPoint( 0, 0), *pick_pm->pm);
+    rmt_BeginCPUSample (draw_layer_pixmap_pick, RMTSF_Aggregate);
+    _picking_view->painter ()->drawImage (QPoint (0, 0), *pick_pm->pm);
     rmt_EndCPUSample ();
 
     _picking_view->painter ()->setCompositionMode (QPainter::CompositionMode_Source);

@@ -108,8 +108,7 @@ class QtBackend : public AbstractBackend {
     get_pixel (Image* i, double x, double y) override;
     void
          draw_data_image (DataImage* i) override;
-    bool pre_draw_layer (Layer* l) override;
-    void post_draw_layer (Layer* l) override;
+    void draw_layer (Layer* l, children_t _children) override;
     void draw_z_ordered_group (ZOrderedGroup* g) override;
     // style
     void

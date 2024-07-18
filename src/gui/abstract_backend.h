@@ -23,6 +23,8 @@
 #include "style/style_types.h"
 #include "transformation/transformations_fwd.h"
 
+#include "gui/gui-priv.h"
+
 namespace djnn {
 using djnnstl::pair;
 using djnnstl::string;
@@ -93,12 +95,8 @@ class AbstractBackend {
     virtual void
     draw_image (Image* i) {
     }
-    virtual bool
-    pre_draw_layer (Layer* l) {
-        return false;
-    }
     virtual void
-    post_draw_layer (Layer* l) {
+    draw_layer (Layer* l, children_t _children) {
     }
     virtual int
     get_pixel (Image* i, double x, double y) {
