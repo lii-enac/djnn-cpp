@@ -135,7 +135,7 @@ Switch::set_parent (CoreProcess* parent)
 void
 Switch::change_branch ()
 {
-    string               key = _branch_name.get_value ();
+    const string&        key = _branch_name.get_value ();
     symtable_t::iterator it  = find_child_iterator (key);
     if (it != children_end ()) {
         if (_cur_branch == it->second) {
@@ -146,7 +146,7 @@ Switch::change_branch ()
             if (_cur_branch != nullptr && _cur_branch->get_activation_state () == ACTIVATED)
                 _cur_branch->deactivate ();
             _cur_branch = it->second;
-            (it->second)->activate ();
+            _cur_branch->activate ();
         }
     } else {
         /* note:
