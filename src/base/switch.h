@@ -22,7 +22,7 @@
 
 namespace djnn {
 
-class Switch : public Container {
+class Switch : public Container, public DelegatingProcess {
   private:
     class SwitchAction : public Action {
       public:
@@ -42,6 +42,8 @@ class Switch : public Container {
     void            draw () override;
     void            pick () override;
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
+    CoreProcess*       get_delegate () override { return _cur_branch; }
+    const CoreProcess* get_delegate () const override { return _cur_branch; }
     virtual ~Switch ();
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;

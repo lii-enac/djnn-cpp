@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include <cstdint> // uint32_t
+
 #include "core/utils/containers.h"
 #include "enums.h"
 
@@ -359,6 +361,12 @@ class FatProcess : public ChildProcess {
     CoreProcess* _data;
     symtable_t   _symtable;
     // <<instance fields end here
+};
+
+class DelegatingProcess {
+  public:
+    virtual CoreProcess*       get_delegate ()       = 0;
+    virtual const CoreProcess* get_delegate () const = 0;
 };
 
 #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER

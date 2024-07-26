@@ -95,7 +95,7 @@ class FSMTransition : public FatProcess {
     Coupling            _c_src, _c_trigger_to_action;
 };
 
-class FSM : public FatProcess {
+class FSM : public FatProcess, public DelegatingProcess {
     class FSMPostTriggerAction : public Action {
       public:
         FSMPostTriggerAction (CoreProcess* parent, const string& name)
@@ -135,6 +135,8 @@ class FSM : public FatProcess {
             _post_trigger.set_activation_flag (ACTIVATION);
     }
     int is_already_triggered () { return _already_triggered; }
+    FSMState*       get_delegate () override { return _cur_state; }
+    const FSMState* get_delegate () const override { return _cur_state; }
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif
