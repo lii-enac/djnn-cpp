@@ -16,132 +16,145 @@
  *
  */
 
-#include "outline_join_style.h"
+
+#include "gui/shape/abstract_gshape.h"
+#include "display/window.h"
+#include "gui/style/abstract_style.h"
+
+#include "gui/backend.h"
+#include "gui/abstract_backend.h"
+#include "display/display-dev.h" // DisplayBackend::instance
+#include "display/abstract_display.h"
 
 #include "audio/style/audio_style.h"
-#include "display/abstract_display.h"
-#include "display/display-dev.h" // DisplayBackend::instance
-#include "display/window.h"
-#include "gui/abstract_backend.h"
-#include "gui/backend.h"
-#include "gui/shape/abstract_gshape.h"
-#include "gui/style/abstract_style.h"
 #include "physics/abstract_pobj.h"
 #include "physics/physics.h"
 
-namespace djnn {
-OutlineJoinStyle::OutlineJoinStyle (CoreProcess* parent, const string& name, int join)
-    : AbstractStyle (parent, name),
-      raw_props{.join = join},
-      _cjoin (nullptr)
-{
+#include "gui/style/abstract_style.h"
 
+#include "outline_join_style.h"
+
+namespace djnn
+{
+  OutlineJoinStyle::OutlineJoinStyle (CoreProcess* parent, const string& name, int join) :
+    AbstractStyle (parent, name),
+    raw_props{.join=join},
+    _cjoin (nullptr)
+  {
+    
     finalize_construction (parent, name);
-}
+  }
 
-OutlineJoinStyle::~OutlineJoinStyle ()
-{
+  OutlineJoinStyle::~OutlineJoinStyle ()
+  {
     remove_edge (_cjoin);
     delete _cjoin;
 
-    /* origin_x and origin_y are always in _symtable for AbstractGShape */
+    /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
     if (children_size () > 0) {
-        symtable_t::iterator it;
+      symtable_t::iterator it;
 
-        it = find_child_iterator ("join");
-        if (it != children_end ())
-            delete it->second;
+      it = find_child_iterator ("join");
+			if (it != children_end ())
+				delete it->second;
     }
-}
+  }
+ 
+  CoreProcess*
+  OutlineJoinStyle::find_child_impl (const string& name)
+  {
+    auto * res = AbstractStyle::find_child_impl(name);
+    if (res) return res;
 
-CoreProcess*
-OutlineJoinStyle::find_child_impl (const string& name)
-{
-    auto* res = AbstractStyle::find_child_impl (name);
-    if (res)
-        return res;
-
-    bool            prop_Double = false, prop_Int = false, prop_Text = false, prop_Textp = false;
-    Coupling**      coupling    = nullptr;
-    double*         rawp_Double = nullptr;
-    int*            rawp_Int    = nullptr;
-    typedef string  text;
-    text*           rawp_Text = nullptr;
+    bool prop_Double=false, prop_Int=false, prop_Text=false, prop_Textp=false;
+    Coupling ** coupling = nullptr;
+    double* rawp_Double = nullptr;
+    int* rawp_Int = nullptr;
+    typedef string text;
+    text* rawp_Text = nullptr;
     typedef string* textp;
-    textp*          rawp_Textp  = nullptr;
-    int             notify_mask = notify_none;
-
-    if (name == "join") {
-        coupling    = &_cjoin;
-        rawp_Int    = &raw_props.join;
-        notify_mask = notify_damaged_geometry;
-        prop_Int    = true;
+    textp* rawp_Textp = nullptr;
+    int notify_mask = notify_none;
+    
+    if(name=="join") {
+      coupling=&_cjoin;
+      rawp_Int=&raw_props.join;
+      notify_mask = notify_damaged_geometry;
+      prop_Int=true;
     } else
-        return nullptr;
+    return nullptr;
 
-    if (prop_Double) {
-        DoublePropertyProxy* prop = nullptr; // do not cache
-        res                       = create_GObj_prop (&prop, coupling, rawp_Double, name, notify_mask);
-    } else if (prop_Int) {
-        IntPropertyProxy* prop = nullptr; // do not cache
-        res                    = create_GObj_prop (&prop, coupling, rawp_Int, name, notify_mask);
-    } else if (prop_Text) {
-        TextPropertyProxy* prop = nullptr; // do not cache
-        res                     = create_GObj_prop (&prop, coupling, rawp_Text, name, notify_mask);
-    } else if (prop_Textp) {
-        TextPropertyProxy* prop = nullptr; // do not cache
-        res                     = create_GObj_prop (&prop, coupling, rawp_Textp, name, notify_mask);
+    if(prop_Double) {
+      DoublePropertyProxy* prop = nullptr; // do not cache
+      res = create_GObj_prop(&prop, coupling, rawp_Double, name, notify_mask);
+    }
+    else if(prop_Int) {
+      IntPropertyProxy* prop = nullptr; // do not cache
+      res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
+    }
+    else if(prop_Text) {
+      TextPropertyProxy* prop = nullptr; // do not cache
+      res = create_GObj_prop(&prop, coupling, rawp_Text, name, notify_mask);
+    }
+    else if(prop_Textp) {
+      TextPropertyProxy* prop = nullptr; // do not cache
+      res = create_GObj_prop(&prop, coupling, rawp_Textp, name, notify_mask);
     }
 
     return res;
-}
+  }
 
-const djnnstl::vector<djnnstl::string>&
-OutlineJoinStyle::get_properties_name () const
-{
+  const vector<string>&
+  OutlineJoinStyle::get_properties_name () const
+  {
     static const vector<string> res = {
-        "join",
+    "join",
     };
     return res;
-}
+  }
 
-void
-OutlineJoinStyle::get_properties_values (int& join)
-{
+  void
+  OutlineJoinStyle::get_properties_values (int& join)
+  {
     join = raw_props.join;
-}
+    
+  }
 
-void
-OutlineJoinStyle::impl_activate ()
-{
+  void
+  OutlineJoinStyle::impl_activate ()
+  {
     AbstractStyle::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cjoin, _frame->damaged ());
-}
+    enable(_cjoin, _frame->damaged ());
+  }
 
-void
-OutlineJoinStyle::impl_deactivate ()
-{
-    disable (_cjoin);
+  void
+  OutlineJoinStyle::impl_deactivate ()
+  {
+    disable(_cjoin);
     AbstractStyle::impl_deactivate ();
-}
+  }
 
-void
-OutlineJoinStyle::draw ()
-{
+  
+  void
+  OutlineJoinStyle::draw ()
+  {
     auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-        Backend::instance ()->load_outline_join_style (this);
+      Backend::instance ()->load_outline_join_style (this);
     }
-}
+  }
 
-OutlineJoinStyle*
-OutlineJoinStyle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
-{
-    auto res           = new OutlineJoinStyle (nullptr, get_name (), raw_props.join);
+
+  
+  OutlineJoinStyle*
+  OutlineJoinStyle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+  {
+    auto res = new OutlineJoinStyle (nullptr, get_name (), raw_props.join);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
-}
+  }
+
 
 } /* namespace djnn */

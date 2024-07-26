@@ -16,32 +16,38 @@
  *
  */
 
+
 #pragma once
 
-#include "core/ontology/coupling.h"
 #include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+
+#include "core/utils/containers/vector.h"
+using djnnstl::vector;
+
 #include "gui/style/abstract_style.h"
 
-namespace djnn {
-class AbstractPropFontSize : public AbstractStyle {
+
+namespace djnn
+{
+  class AbstractPropFontSize : public AbstractStyle
+  {
   public:
     AbstractPropFontSize (CoreProcess* parent, const string& name, int unit, double size);
     virtual ~AbstractPropFontSize ();
-
-    void                                    get_properties_values (int& unit, double& size);
-    const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
-    virtual CoreProcess*                    find_child_impl (const string&) override;
-    AbstractIntProperty*                    unit () { return (AbstractIntProperty*)find_child_impl ("unit"); }
-    AbstractDoubleProperty*                 size () { return (AbstractDoubleProperty*)find_child_impl ("size"); }
+    
+    
+    void get_properties_values (int& unit, double& size);
+    const vector<string>& get_properties_name () const override;
+    virtual CoreProcess* find_child_impl (const string&) override;
+		AbstractIntProperty* unit () { return (AbstractIntProperty*) find_child_impl ("unit"); }
+		AbstractDoubleProperty* size () { return (AbstractDoubleProperty*) find_child_impl ("size"); }
 
   protected:
-    struct raw_props_t {
-        int    unit;
-        double size;
-    };
+    struct raw_props_t { int unit; double size; };
     raw_props_t raw_props;
-    Coupling *  _cunit, *_csize;
-    void        impl_activate () override;
-    void        impl_deactivate () override;
-};
-} // namespace djnn
+    Coupling *_cunit, *_csize;
+    void impl_activate () override;
+    void impl_deactivate () override;
+  };
+}

@@ -16,30 +16,37 @@
  *
  */
 
+
 #pragma once
 
-#include "core/ontology/coupling.h"
 #include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+
+#include "core/utils/containers/vector.h"
+using djnnstl::vector;
+
 #include "gui/style/abstract_style.h"
 
-namespace djnn {
-class AbstractPropFontStyle : public AbstractStyle {
+
+namespace djnn
+{
+  class AbstractPropFontStyle : public AbstractStyle
+  {
   public:
     AbstractPropFontStyle (CoreProcess* parent, const string& name, int style);
     virtual ~AbstractPropFontStyle ();
-
-    void                                    get_properties_values (int& style);
-    const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
-    virtual CoreProcess*                    find_child_impl (const string&) override;
-    AbstractIntProperty*                    style () { return (AbstractIntProperty*)find_child_impl ("style"); }
+    
+    
+    void get_properties_values (int& style);
+    const vector<string>& get_properties_name () const override;
+    virtual CoreProcess* find_child_impl (const string&) override;
+		AbstractIntProperty* style () { return (AbstractIntProperty*) find_child_impl ("style"); }
 
   protected:
-    struct raw_props_t {
-        int style;
-    };
+    struct raw_props_t { int style; };
     raw_props_t raw_props;
-    Coupling*   _cstyle;
-    void        impl_activate () override;
-    void        impl_deactivate () override;
-};
-} // namespace djnn
+    Coupling *_cstyle;
+    void impl_activate () override;
+    void impl_deactivate () override;
+  };
+}

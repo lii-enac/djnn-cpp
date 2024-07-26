@@ -34,6 +34,9 @@ decl_string = """
 #include "core/ontology/process.h"
 #include "core/ontology/coupling.h"
 
+#include "core/utils/containers/vector.h"
+using djnnstl::vector;
+
 %(INCLUDES)s
 
 namespace djnn
@@ -356,11 +359,14 @@ def generate_c_api(dc):
     result = "djnn::"+name+"* djnn_new_"+name+"(djnn::ParentProcess* parent, const char* name"
     if DECL_PROPS_CALL_DECL:
       result += ", "+DECL_PROPS_CALL_DECL
-    result += ") { return new djnn::"+name+"(parent, name"
+    result += ")"
+    result_h = result + ";"
+    result += " { return new djnn::"+name+"(parent, name"
     if PROPS_CALL:
       result += ", "+PROPS_CALL
     result += "); }"
-    return result
+    result_cpp = result
+    return result_h, result_cpp
 
 def generate_js_api(dc):
     #print(dc.name)
@@ -536,12 +542,14 @@ dc.props.append(Prop('width', 'double', None, "geometry"))
 dc.props.append(Prop('height', 'double', None, "geometry"))
 dc.props.append(Prop('rx', 'double', "0", "geometry"))
 dc.props.append(Prop('ry', 'double', "0", "geometry"))
+dc.includes += '#include "gui/shape/abstract_gshape.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropCircle", "AbstractGShape", "../src/gui/shape", origin='cx,cy', finalize_construction=False)
 dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('r', 'double', None, "geometry"))
+dc.includes += '#include "gui/shape/abstract_gshape.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropEllipse", "AbstractGShape", "../src/gui/shape", origin='cx,cy', finalize_construction=False)
@@ -549,6 +557,7 @@ dc.props.append(Prop('cx', 'double', None, "transform"))
 dc.props.append(Prop('cy', 'double', None, "transform"))
 dc.props.append(Prop('rx', 'double', None, "geometry"))
 dc.props.append(Prop('ry', 'double', None, "geometry"))
+dc.includes += '#include "gui/shape/abstract_gshape.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropLine", "AbstractGShape", "../src/gui/shape", origin='x1,y1', finalize_construction=False)
@@ -556,6 +565,7 @@ dc.props.append(Prop('x1', 'double', None, "transform"))
 dc.props.append(Prop('y1', 'double', None, "transform"))
 dc.props.append(Prop('x2', 'double', None, "geometry"))
 dc.props.append(Prop('y2', 'double', None, "geometry"))
+dc.includes += '#include "gui/shape/abstract_gshape.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropRectangleClip", "AbstractGShape", "../src/gui/shape", finalize_construction=False)
@@ -563,6 +573,7 @@ dc.props.append(Prop('x', 'double', None, "transform"))
 dc.props.append(Prop('y', 'double', None, "transform"))
 dc.props.append(Prop('width', 'double', None, "geometry"))
 dc.props.append(Prop('height', 'double', None, "geometry"))
+dc.includes += '#include "gui/shape/abstract_gshape.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractImage", "AbstractGShape", "../src/gui/shape", finalize_construction=False)
@@ -571,6 +582,7 @@ dc.props.append(Prop('x', 'double', None, "transform"))
 dc.props.append(Prop('y', 'double', None, "transform"))
 dc.props.append(Prop('width', 'double', None, "geometry"))
 dc.props.append(Prop('height', 'double', None, "geometry"))
+dc.includes += '#include "gui/shape/abstract_gshape.h"\n'
 dcs.append(dc)
 apg = dc
 
@@ -672,22 +684,22 @@ dcs.append(dc)
 dc = DjnnClass("AbstractPropFontSize", "AbstractStyle", "../src/gui/style", origin=None, remove_edge=None, finalize_construction=False)
 dc.props.append(Prop('unit', 'int', None, "geometry"))
 dc.props.append(Prop('size', 'double', None, "geometry"))
-#dc.includes += '#include "gui/style/abstract_style.h"\n'
+dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropFontWeight", "AbstractStyle", "../src/gui/style", origin=None, remove_edge=None, finalize_construction=False)
 dc.props.append(Prop('weight', 'int', None, "geometry"))
-#dc.includes += '#include "gui/style/abstract_style.h"\n'
+dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropFontStyle", "AbstractStyle", "../src/gui/style", origin=None, remove_edge=None, finalize_construction=False)
 dc.props.append(Prop('style', 'int', None, "geometry"))
-#dc.includes += '#include "gui/style/abstract_style.h"\n'
+dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropFontFamily", "AbstractStyle", "../src/gui/style", origin=None, remove_edge=None, finalize_construction=False)
 dc.props.append(Prop('family', 'text', None, "geometry"))
-#dc.includes += '#include "gui/style/abstract_style.h"\n'
+dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("TextAnchor", "AbstractStyle", "../src/gui/style", origin=None)
@@ -730,6 +742,7 @@ dcs.append(dc)
 
 dc = DjnnClass("AbstractVolume", "AbstractAudioStyle", "../src/audio/style", origin=None, finalize_construction=False)
 dc.props.append(Prop('volume', 'double', None, "style"))
+dc.includes += '#include "audio/style/audio_abstract_style.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropSound", "AbstractSObj", "../src/audio/sound", origin=None, finalize_construction=False)
@@ -741,6 +754,7 @@ dc.props.append(Prop('y', 'double', None, "transform"))
 dc.props.append(Prop('z', 'double', None, "transform"))
 dc.props.append(Prop('pitch_mul', 'double', None, "transform"))
 dc.props.append(Prop('loop', 'int', None, "style"))
+dc.includes += '#include "audio/abstract_sobj.h"\n'
 dcs.append(dc)
 
 dc = DjnnClass("AbstractPropWorld", "AbstractPObj", "../src/physics", origin=None, finalize_construction=False)
@@ -979,8 +993,6 @@ dc = DjnnClass("TextComparator", "", "../src/base", origin=None, finalize_constr
 dcs.append(dc)
 dc = DjnnClass("TextCatenator", "", "../src/base", origin=None, finalize_construction=False)
 dcs.append(dc)
-dc = DjnnClass("TextContainer", "", "../src/base", origin=None, finalize_construction=False)
-dcs.append(dc)
 
 dc = DjnnClass("WallClock", "", "../src/base", origin=None, finalize_construction=False)
 dcs.append(dc)
@@ -1019,50 +1031,87 @@ dc.props.append(Prop('text', 'text', None, "geometry"))
 dcs.append(dc)
 
 c_api_content = ""
+c_api_content_h = ""
 
 for module in modules:
   c_api_content += '#include "'+module+'/'+module+'.h"\n'
 c_api_content += "\n"
 
-c_api_content += '''
+next_content = '''
 namespace djnn {
+  class Image;
+  class FillColor;
+
+  // following for js
   using PathImage = Image;
   using FillColor_rgb = FillColor;
   using FillColor_value = FillColor;
 }
 '''
+c_api_content += next_content
+c_api_content_h += next_content
 
-c_api_content += 'extern "C" {\n'
+next_content = 'extern "C" {\n'
+c_api_content += next_content
+c_api_content_h += next_content
 js_export = []
 
+
+apis=[]
 for module in modules:
   init = "init_"+module
   clear = "clear_"+module
-  c_api_content += "void djnn_"+init+"() { djnn::"+init+"(); }\n"
-  c_api_content += "void djnn_"+clear+"() { djnn::"+clear+"(); }\n"
-  c_api_content += "\n"
+  apis.append(("void djnn_"+init+"()", "{ djnn::"+init+"(); }"))
+  apis.append(("void djnn_"+clear+"()", "{ djnn::"+clear+"(); }"))
   js_export += ["djnn_"+init, "djnn_"+clear]
 
-c_api_content += "void djnn_activate(djnn::Process* p) { p->activate (); }\n"
-c_api_content += "djnn::CoreProcess* djnn_find_child(djnn::Process* p, const char* n) { return p->find_child (n); }\n"
-c_api_content += "djnn::process_type_e djnn_get_process_type(djnn::Process* p) { return p->get_process_type (); }\n"
-c_api_content += "djnn::CoreProcess* djnn_get_activation_source(djnn::Process* p) { return p->get_activation_source (); }\n"
-c_api_content += "void* djnn_get_native_user_data(djnn::CoreProcess* p) { return djnn::get_native_user_data(p); }\n"
-c_api_content += "void djnn_set_value (djnn::Process* p, double v, bool immediate) { ((djnn::AbstractProperty*)p)->set_value (v, immediate); }\n"
-c_api_content += "double djnn_get_value (djnn::Process* p) { return ((djnn::AbstractProperty*)p)->get_double_value (); }\n"
-c_api_content += "const char* djnn_get_string_value (djnn::Process* p) { return ((djnn::AbstractProperty*)p)->get_string_value ().c_str(); }\n"
-c_api_content += "void djnn_dump(djnn::Process* p) { p->dump (); }\n"
-c_api_content += "djnn::MainLoop* djnn_mainloop_instance() { return &djnn::MainLoop::instance (); }\n"
+
+
+apis.append(("void djnn_activate(djnn::CoreProcess* p)"," { p->activate (); }"))
+apis.append(("djnn::CoreProcess* djnn_find_child(djnn::CoreProcess* p, const char* n)"," { return p->find_child (n); }"))
+apis.append(("djnn::process_type_e djnn_get_process_type(djnn::CoreProcess* p)"," { return p->get_process_type (); }"))
+apis.append(("djnn::CoreProcess* djnn_get_activation_source(djnn::CoreProcess* p)"," { return p->get_activation_source (); }"))
+apis.append(("void* djnn_get_native_user_data(djnn::CoreProcess* p)"," { return djnn::get_native_user_data(p); }"))
+apis.append(("void djnn_set_value (djnn::CoreProcess* p, double v, bool immediate)"," { ((djnn::AbstractProperty*)p)->set_value (v, immediate); }"))
+apis.append(("double djnn_get_value (djnn::CoreProcess* p)"," { return ((djnn::AbstractProperty*)p)->get_double_value (); }"))
+apis.append(("const char* djnn_get_string_value (djnn::CoreProcess* p)"," { return ((djnn::AbstractProperty*)p)->get_string_value ().c_str(); }"))
+apis.append(("void djnn_dump(djnn::CoreProcess* p)"," { p->dump (); }"))
+apis.append(("djnn::MainLoop* djnn_mainloop_instance()"," { return &djnn::MainLoop::instance (); }"))
+
+for decl, def_ in apis:
+  c_api_content += decl + " " + def_ + "\n"
+  c_api_content_h += decl + ";\n"
 
 for dc in dcs:
   if dc.name not in ["AbstractImage", "AbstractOpacity", "AbstractPropGradient", "AbstractSkew",
     "AbstractPropPhyObj", "AbstractPropSound", "AbstractPropWorld", "AbstractPropBox", "AbstractPropSphere"]:
-    c_api_content += generate_c_api(dc) + "\n"
+    h, cpp = generate_c_api(dc)
+    c_api_content += cpp + "\n"
+    c_api_content_h += h + "\n"
 
 c_api_content += '}\n'
+c_api_content_h += '}\n'
+
 #print (c_api_content)
 c_api_content = "// generated with gen_prop.py\n\n" + c_api_content
-#update_if_new('../src/c_api/djnn_c_api.cpp', c_api_content)
+update_if_new('../src/c_api/djnn_c_api.cpp', c_api_content)
+
+preheader = "namespace djnn {\n"
+preheader += "class CoreProcess;\n"
+preheader += "typedef CoreProcess ParentProcess;\n"
+preheader += "class FatProcess;\n"
+preheader += "class MainLoop;\n"
+for dc in dcs:
+  name = dc.name
+  if dc.name.startswith("AbstractProp"):
+    name = name[len("AbstractProp"):]
+  elif dc.name.startswith("Abstract"):
+    name = name[len("Abstract"):]
+  preheader += "class " + name + ";\n"
+preheader += "}\n"
+c_api_content_h = preheader + c_api_content_h
+
+update_if_new('../src/c_api/djnn_c_api.h', c_api_content_h)
 
 js_api_content = ''
 
@@ -1141,9 +1190,8 @@ for dc in dcs:
 
 js_api_content = generated_mention_c_comment + "function djnn_init_js_api () {\n" + js_api_content + "}\n\n"
 #print(js_api_content)
-#update_if_new('../src/c_api/djnn_js_api.js',js_api_content)
+update_if_new('../src/c_api/djnn_js_api.js',js_api_content)
 
 exported_functions = "['"+ "','".join(['_'+name for name in js_export]) + "']"
-#update_if_new('../src/c_api/exported_functions.txt',exported_functions)
-
+update_if_new('../src/c_api/exported_functions.txt',exported_functions)
 

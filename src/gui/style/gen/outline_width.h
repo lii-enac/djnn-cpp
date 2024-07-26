@@ -16,31 +16,37 @@
  *
  */
 
+
 #pragma once
 
-#include "core/ontology/coupling.h"
 #include "core/ontology/process.h"
+#include "core/ontology/coupling.h"
+
+#include "core/utils/containers/vector.h"
+using djnnstl::vector;
+
 #include "gui/style/abstract_style.h"
 
-namespace djnn {
-class OutlineWidth : public AbstractStyle {
+
+namespace djnn
+{
+  class OutlineWidth : public AbstractStyle
+  {
   public:
     OutlineWidth (CoreProcess* parent, const string& name, double width);
     virtual ~OutlineWidth ();
-    void                                    draw () override;
-    OutlineWidth*                           impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
-    void                                    get_properties_values (double& width);
-    const djnnstl::vector<djnnstl::string>& get_properties_name () const override;
-    virtual CoreProcess*                    find_child_impl (const string&) override;
-    AbstractDoubleProperty*                 width () { return (AbstractDoubleProperty*)find_child_impl ("width"); }
+    void draw () override;
+    OutlineWidth* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    void get_properties_values (double& width);
+    const vector<string>& get_properties_name () const override;
+    virtual CoreProcess* find_child_impl (const string&) override;
+		AbstractDoubleProperty* width () { return (AbstractDoubleProperty*) find_child_impl ("width"); }
 
   protected:
-    struct raw_props_t {
-        double width;
-    };
+    struct raw_props_t { double width; };
     raw_props_t raw_props;
-    Coupling*   _cwidth;
-    void        impl_activate () override;
-    void        impl_deactivate () override;
-};
-} // namespace djnn
+    Coupling *_cwidth;
+    void impl_activate () override;
+    void impl_deactivate () override;
+  };
+}

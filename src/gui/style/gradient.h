@@ -1,32 +1,31 @@
 #pragma once
 
 #include "abstract_style.h"
+#include "gen/abstract_prop_gradient.h"
 #include "gen/abstract_prop_gradient_stop.h"
 #include "style_types.h"
-// #include "gen/abstract_prop_gradient.h"
+namespace djnn {
 
-// namespace djnn {
+class List;
 
-//   class List;
+class AbstractGradient : public AbstractPropGradient {
+  public:
+    AbstractGradient (CoreProcess* parent, const string& name, int spread, int coords);
+    AbstractGradient (CoreProcess* parent, const string& name);
+    virtual ~AbstractGradient ();
+    virtual void update ();
+    List*        transforms () { return _transforms; }
+    List*        stops () { return _stops; }
+    bool         is_linear () { return _linear; }
+    // does this gradient owned thoses children or it merged with another gradient so it should not delete them
+    bool bstops, btransforms, bspread, bcoords;
 
-//   class AbstractGradient : public AbstractPropGradient
-//   {
-//   public:
-//     AbstractGradient (CoreProcess* parent, const string& name, int spread, int coords);
-//     AbstractGradient (CoreProcess* parent, const string& name);
-//     virtual ~AbstractGradient ();
-//     virtual void update ();
-//     List* transforms () { return _transforms;}
-//     List* stops () { return _stops;}
-//     bool is_linear () { return _linear;}
-//     // does this gradient owned thoses children or it merged with another gradient so it should not delete them
-//     bool bstops, btransforms, bspread, bcoords;
-//   protected:
-//     List *_stops, *_transforms;
-//     AbstractGradient *_g;
-//     int _linear;
-//   };
-// }
+  protected:
+    List *            _stops, *_transforms;
+    AbstractGradient* _g;
+    int               _linear;
+};
+} // namespace djnn
 
 #include "gen/abstract_prop_linear_gradient.h"
 #include "gen/abstract_prop_radial_gradient.h"
@@ -56,7 +55,7 @@ class LinearGradient : public AbstractPropLinearGradient {
 class RefLinearGradient : public AbstractStyle {
   public:
     RefLinearGradient (CoreProcess* parent, const string& name, LinearGradient* lg);
-    virtual ~RefLinearGradient (){};
+    virtual ~RefLinearGradient () {};
     void               impl_activate () override;
     void               impl_deactivate () override;
     void               draw () override;
@@ -82,7 +81,7 @@ class RadialGradient : public AbstractPropRadialGradient {
 class RefRadialGradient : public AbstractStyle {
   public:
     RefRadialGradient (CoreProcess* parent, const string& name, RadialGradient* rg);
-    virtual ~RefRadialGradient (){};
+    virtual ~RefRadialGradient () {};
     void               impl_activate () override;
     void               impl_deactivate () override;
     void               draw () override;
