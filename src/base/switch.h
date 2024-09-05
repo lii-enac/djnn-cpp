@@ -27,7 +27,7 @@ class Switch : public Container, public DelegatingProcess {
     class SwitchAction : public Action {
       public:
         SwitchAction (Switch* parent, const string& name);
-        virtual ~SwitchAction (){};
+        virtual ~SwitchAction () {};
         void impl_activate () override { _sw->change_branch (); };
 
       private:
@@ -37,11 +37,11 @@ class Switch : public Container, public DelegatingProcess {
   public:
     Switch (CoreProcess* parent, const string& name, const string& initial);
     // virtual process_type_e get_process_type () const override { return SWITCH_T; }
-    void            impl_activate () override;
-    void            impl_deactivate () override;
-    void            draw () override;
-    void            pick () override;
-    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
+    void               impl_activate () override;
+    void               impl_deactivate () override;
+    void               draw () override;
+    void               pick () override;
+    AbstractGShape*    pick_analytical (PickAnalyticalContext& pac) override;
     CoreProcess*       get_delegate () override { return _cur_branch; }
     const CoreProcess* get_delegate () const override { return _cur_branch; }
     virtual ~Switch ();

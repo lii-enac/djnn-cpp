@@ -11,8 +11,8 @@ class CoreProcess;
 
 class StructureObserver {
   public:
-    StructureObserver (){};
-    virtual ~StructureObserver (){};
+    StructureObserver () {};
+    virtual ~StructureObserver () {};
     virtual void add_container (FatProcess* cont)                                                                            = 0;
     virtual void remove_container (FatProcess* cont)                                                                         = 0;
     virtual void add_child_to_container (FatProcess* cont, CoreProcess* c, int index)                                        = 0;

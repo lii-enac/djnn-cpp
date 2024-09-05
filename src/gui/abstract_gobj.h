@@ -42,7 +42,7 @@ class AbstractGObj : public FatProcess {
         : FatProcess (name), _frame (nullptr), _damaged (notify_none), _impl (nullptr) {
         // if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
-    virtual ~AbstractGObj (){};
+    virtual ~AbstractGObj () {};
     virtual process_type_e get_process_type () const override { return GOBJ_T; }
     Window*&               get_frame () { return _frame; }
     void                   set_frame (Window*& frame) { _frame = frame; }

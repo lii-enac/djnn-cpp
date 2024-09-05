@@ -41,7 +41,7 @@ class BinaryOperatorAction : public Action {
         : Action (parent, name), _binop (binop) {
         finalize_construction (parent, name);
     }
-    virtual ~BinaryOperatorAction (){};
+    virtual ~BinaryOperatorAction () {};
     void impl_activate () override {
         _binop._result.set_value (BinaryFunction () (_binop._left.get_value (), _binop._right.get_value ()), true);
     }
@@ -138,7 +138,7 @@ class UnaryOperatorAction : public Action {
         : Action (parent, name), _unop (unop) {
         finalize_construction (parent, name);
     }
-    virtual ~UnaryOperatorAction (){};
+    virtual ~UnaryOperatorAction () {};
     void impl_activate () override {
         _unop._output.set_value (UnaryFunction () (_unop._input.get_value ()), true);
         // UnaryFunction()(_unop.input, _unop.output);

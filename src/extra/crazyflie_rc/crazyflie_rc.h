@@ -14,7 +14,7 @@ class CrazyflieRC : public FatProcess {
     class TakeoffAction : public Action {
       public:
         TakeoffAction (CoreProcess* parent, const string& name)
-            : Action (parent, name){};
+            : Action (parent, name) {};
         virtual ~TakeoffAction () {}
         void impl_activate () override { ((CrazyflieRC*)get_parent ())->takeoff (); }
     };
@@ -22,7 +22,7 @@ class CrazyflieRC : public FatProcess {
     class LandAction : public Action {
       public:
         LandAction (CoreProcess* parent, const string& name)
-            : Action (parent, name){};
+            : Action (parent, name) {};
         virtual ~LandAction () {}
         void impl_activate () override { ((CrazyflieRC*)get_parent ())->land (); }
     };

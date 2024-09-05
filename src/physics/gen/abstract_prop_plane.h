@@ -16,7 +16,6 @@
  *
  */
 
-
 #pragma once
 
 #include "core/ontology/process.h"
@@ -25,30 +24,30 @@
 #include "core/utils/containers/vector.h"
 using djnnstl::vector;
 
-
-
-namespace djnn
-{
-  class AbstractPropPlane : public PhyObj
-  {
+namespace djnn {
+class AbstractPropPlane : public PhyObj {
   public:
     AbstractPropPlane (CoreProcess* parent, const string& name, double a, double b, double c, double d);
     virtual ~AbstractPropPlane ();
-    
-    
-    void get_properties_values (double& a, double& b, double& c, double& d);
-    const vector<string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child_impl ("a"); }
-		AbstractDoubleProperty* b () { return (AbstractDoubleProperty*) find_child_impl ("b"); }
-		AbstractDoubleProperty* c () { return (AbstractDoubleProperty*) find_child_impl ("c"); }
-		AbstractDoubleProperty* d () { return (AbstractDoubleProperty*) find_child_impl ("d"); }
+
+    void                    get_properties_values (double& a, double& b, double& c, double& d);
+    const vector<string>&   get_properties_name () const override;
+    virtual CoreProcess*    find_child_impl (const string&) override;
+    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*)find_child_impl ("a"); }
+    AbstractDoubleProperty* b () { return (AbstractDoubleProperty*)find_child_impl ("b"); }
+    AbstractDoubleProperty* c () { return (AbstractDoubleProperty*)find_child_impl ("c"); }
+    AbstractDoubleProperty* d () { return (AbstractDoubleProperty*)find_child_impl ("d"); }
 
   protected:
-    struct raw_props_t { double a; double b; double c; double d; };
+    struct raw_props_t {
+        double a;
+        double b;
+        double c;
+        double d;
+    };
     raw_props_t raw_props;
-    Coupling *_ca, *_cb, *_cc, *_cd;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling *  _ca, *_cb, *_cc, *_cd;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

@@ -16,7 +16,6 @@
  *
  */
 
-
 #pragma once
 
 #include "core/ontology/process.h"
@@ -25,27 +24,24 @@
 #include "core/utils/containers/vector.h"
 using djnnstl::vector;
 
-
-
-namespace djnn
-{
-  class AbstractPropSphere : public PhyObj
-  {
+namespace djnn {
+class AbstractPropSphere : public PhyObj {
   public:
     AbstractPropSphere (CoreProcess* parent, const string& name, double radius);
     virtual ~AbstractPropSphere ();
-    
-    
-    void get_properties_values (double& radius);
-    const vector<string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractDoubleProperty* radius () { return (AbstractDoubleProperty*) find_child_impl ("radius"); }
+
+    void                    get_properties_values (double& radius);
+    const vector<string>&   get_properties_name () const override;
+    virtual CoreProcess*    find_child_impl (const string&) override;
+    AbstractDoubleProperty* radius () { return (AbstractDoubleProperty*)find_child_impl ("radius"); }
 
   protected:
-    struct raw_props_t { double radius; };
+    struct raw_props_t {
+        double radius;
+    };
     raw_props_t raw_props;
-    Coupling *_cradius;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling*   _cradius;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

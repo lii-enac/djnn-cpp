@@ -24,7 +24,7 @@ class AbstractAudioStyle : public AbstractSObj {
   public:
     AbstractAudioStyle (CoreProcess* parent, const string& name)
         : AbstractSObj (parent, name) {}
-    virtual ~AbstractAudioStyle (){};
+    virtual ~AbstractAudioStyle () {};
     virtual void impl_activate () override {}
     virtual void impl_deactivate () override {}
 };

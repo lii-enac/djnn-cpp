@@ -17,6 +17,7 @@ AlignConsecutiveAssignments: true
 AlignConsecutiveBitFields: true
 AlignConsecutiveDeclarations: true
 AlignConsecutiveMacros: true
+SortIncludes: false #should be true ... but gen_prop is not that clean
 IncludeBlocks: Regroup
 IncludeCategories:
   - Regex:           '^<.*>'

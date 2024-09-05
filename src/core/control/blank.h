@@ -28,7 +28,7 @@ class Blank : public FatProcess {
   public:
     Blank (CoreProcess* parent, const string& name)
         : FatProcess (name) { finalize_construction (parent, name); }
-    virtual ~Blank (){};
+    virtual ~Blank () {};
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
 
   protected:

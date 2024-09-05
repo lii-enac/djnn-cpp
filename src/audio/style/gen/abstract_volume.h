@@ -16,7 +16,6 @@
  *
  */
 
-
 #pragma once
 
 #include "core/ontology/process.h"
@@ -27,26 +26,24 @@ using djnnstl::vector;
 
 #include "audio/style/audio_abstract_style.h"
 
-
-namespace djnn
-{
-  class AbstractVolume : public AbstractAudioStyle
-  {
+namespace djnn {
+class AbstractVolume : public AbstractAudioStyle {
   public:
     AbstractVolume (CoreProcess* parent, const string& name, double volume);
     virtual ~AbstractVolume ();
-    
-    
-    void get_properties_values (double& volume);
-    const vector<string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractDoubleProperty* volume () { return (AbstractDoubleProperty*) find_child_impl ("volume"); }
+
+    void                    get_properties_values (double& volume);
+    const vector<string>&   get_properties_name () const override;
+    virtual CoreProcess*    find_child_impl (const string&) override;
+    AbstractDoubleProperty* volume () { return (AbstractDoubleProperty*)find_child_impl ("volume"); }
 
   protected:
-    struct raw_props_t { double volume; };
+    struct raw_props_t {
+        double volume;
+    };
     raw_props_t raw_props;
-    Coupling *_cvolume;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling*   _cvolume;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

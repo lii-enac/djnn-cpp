@@ -16,7 +16,6 @@
  *
  */
 
-
 #pragma once
 
 #include "core/ontology/process.h"
@@ -25,27 +24,25 @@
 #include "core/utils/containers/vector.h"
 using djnnstl::vector;
 
-
-
-namespace djnn
-{
-  class FillRule : public AbstractStyle
-  {
+namespace djnn {
+class FillRule : public AbstractStyle {
   public:
     FillRule (CoreProcess* parent, const string& name, int rule);
     virtual ~FillRule ();
-    void draw () override;
-    FillRule* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
-    void get_properties_values (int& rule);
+    void                  draw () override;
+    FillRule*             impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    void                  get_properties_values (int& rule);
     const vector<string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractIntProperty* rule () { return (AbstractIntProperty*) find_child_impl ("rule"); }
+    virtual CoreProcess*  find_child_impl (const string&) override;
+    AbstractIntProperty*  rule () { return (AbstractIntProperty*)find_child_impl ("rule"); }
 
   protected:
-    struct raw_props_t { int rule; };
+    struct raw_props_t {
+        int rule;
+    };
     raw_props_t raw_props;
-    Coupling *_crule;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling*   _crule;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

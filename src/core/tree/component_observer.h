@@ -43,8 +43,8 @@ class ComponentObserver {
 
 class ContextManager {
   public:
-    ContextManager (){};
-    virtual ~ContextManager (){};
+    ContextManager () {};
+    virtual ~ContextManager () {};
     virtual void pop ()  = 0;
     virtual void push () = 0;
 };

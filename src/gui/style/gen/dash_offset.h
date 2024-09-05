@@ -16,7 +16,6 @@
  *
  */
 
-
 #pragma once
 
 #include "core/ontology/process.h"
@@ -27,26 +26,25 @@ using djnnstl::vector;
 
 #include "gui/style/abstract_style.h"
 
-
-namespace djnn
-{
-  class DashOffset : public AbstractStyle
-  {
+namespace djnn {
+class DashOffset : public AbstractStyle {
   public:
     DashOffset (CoreProcess* parent, const string& name, double offset);
     virtual ~DashOffset ();
-    void draw () override;
-    DashOffset* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
-    void get_properties_values (double& offset);
-    const vector<string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*) find_child_impl ("offset"); }
+    void                    draw () override;
+    DashOffset*             impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    void                    get_properties_values (double& offset);
+    const vector<string>&   get_properties_name () const override;
+    virtual CoreProcess*    find_child_impl (const string&) override;
+    AbstractDoubleProperty* offset () { return (AbstractDoubleProperty*)find_child_impl ("offset"); }
 
   protected:
-    struct raw_props_t { double offset; };
+    struct raw_props_t {
+        double offset;
+    };
     raw_props_t raw_props;
-    Coupling *_coffset;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling*   _coffset;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

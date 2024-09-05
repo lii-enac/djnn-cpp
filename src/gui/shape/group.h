@@ -24,7 +24,7 @@ class ZOrderedGroup : public Group {
     ZOrderedGroup (CoreProcess* parent, const string& name)
         : Group (parent, name) {}
     process_type_e get_process_type () const override { return Z_ORDERED_GROUP_T; }
-    virtual ~ZOrderedGroup () override{};
+    virtual ~ZOrderedGroup () override {};
     void draw () override;
 };
 } // namespace djnn

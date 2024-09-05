@@ -16,7 +16,6 @@
  *
  */
 
-
 #pragma once
 
 #include "core/ontology/process.h"
@@ -25,28 +24,26 @@
 #include "core/utils/containers/vector.h"
 using djnnstl::vector;
 
-
-
-namespace djnn
-{
-  class AbstractPropGradient : public AbstractStyle
-  {
+namespace djnn {
+class AbstractPropGradient : public AbstractStyle {
   public:
     AbstractPropGradient (CoreProcess* parent, const string& name, int spread, int coords);
     virtual ~AbstractPropGradient ();
-    
-    
-    void get_properties_values (int& spread, int& coords);
+
+    void                  get_properties_values (int& spread, int& coords);
     const vector<string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractIntProperty* spread () { return (AbstractIntProperty*) find_child_impl ("spread"); }
-		AbstractIntProperty* coords () { return (AbstractIntProperty*) find_child_impl ("coords"); }
+    virtual CoreProcess*  find_child_impl (const string&) override;
+    AbstractIntProperty*  spread () { return (AbstractIntProperty*)find_child_impl ("spread"); }
+    AbstractIntProperty*  coords () { return (AbstractIntProperty*)find_child_impl ("coords"); }
 
   protected:
-    struct raw_props_t { int spread; int coords; };
+    struct raw_props_t {
+        int spread;
+        int coords;
+    };
     raw_props_t raw_props;
-    Coupling *_cspread, *_ccoords;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling *  _cspread, *_ccoords;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

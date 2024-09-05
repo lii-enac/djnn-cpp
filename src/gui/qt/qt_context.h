@@ -83,7 +83,7 @@ class QtContextManager : public ContextManager {
         : ContextManager () {
         ComponentObserver::instance ().add_draw_context_manager (this);
     };
-    virtual ~QtContextManager (){};
+    virtual ~QtContextManager () {};
     void       pop () override;
     void       push () override;
     QtContext* get_current ();

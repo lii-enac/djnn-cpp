@@ -16,7 +16,6 @@
  *
  */
 
-
 #pragma once
 
 #include "core/ontology/process.h"
@@ -27,26 +26,25 @@ using djnnstl::vector;
 
 #include "gui/style/abstract_style.h"
 
-
-namespace djnn
-{
-  class OutlineJoinStyle : public AbstractStyle
-  {
+namespace djnn {
+class OutlineJoinStyle : public AbstractStyle {
   public:
     OutlineJoinStyle (CoreProcess* parent, const string& name, int join);
     virtual ~OutlineJoinStyle ();
-    void draw () override;
-    OutlineJoinStyle* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
-    void get_properties_values (int& join);
+    void                  draw () override;
+    OutlineJoinStyle*     impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    void                  get_properties_values (int& join);
     const vector<string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractIntProperty* join () { return (AbstractIntProperty*) find_child_impl ("join"); }
+    virtual CoreProcess*  find_child_impl (const string&) override;
+    AbstractIntProperty*  join () { return (AbstractIntProperty*)find_child_impl ("join"); }
 
   protected:
-    struct raw_props_t { int join; };
+    struct raw_props_t {
+        int join;
+    };
     raw_props_t raw_props;
-    Coupling *_cjoin;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling*   _cjoin;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

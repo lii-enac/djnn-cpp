@@ -16,7 +16,6 @@
  *
  */
 
-
 #pragma once
 
 #include "core/ontology/process.h"
@@ -27,25 +26,24 @@ using djnnstl::vector;
 
 #include "gui/shape/gen/abstract_image.h"
 
-namespace djnn
-{
-  class AbstractPathImage : public AbstractImage
-  {
+namespace djnn {
+class AbstractPathImage : public AbstractImage {
   public:
     AbstractPathImage (CoreProcess* parent, const string& name, const string& path, double x, double y, double width, double height);
     virtual ~AbstractPathImage ();
-    
-    
-    void get_properties_values (string& path, double& x, double& y, double& width, double& height);
+
+    void                  get_properties_values (string& path, double& x, double& y, double& width, double& height);
     const vector<string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractTextProperty* path () { return (AbstractTextProperty*) find_child_impl ("path"); }
+    virtual CoreProcess*  find_child_impl (const string&) override;
+    AbstractTextProperty* path () { return (AbstractTextProperty*)find_child_impl ("path"); }
 
   protected:
-    struct raw_props_t { string path; };
+    struct raw_props_t {
+        string path;
+    };
     raw_props_t raw_props;
-    Coupling *_cpath;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling*   _cpath;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

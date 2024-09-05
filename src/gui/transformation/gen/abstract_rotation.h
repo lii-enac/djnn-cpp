@@ -16,7 +16,6 @@
  *
  */
 
-
 #pragma once
 
 #include "core/ontology/process.h"
@@ -27,28 +26,28 @@ using djnnstl::vector;
 
 #include "gui/transformation/abstract_transformation.h"
 
-
-namespace djnn
-{
-  class AbstractRotation : public AbstractTransformation
-  {
+namespace djnn {
+class AbstractRotation : public AbstractTransformation {
   public:
     AbstractRotation (CoreProcess* parent, const string& name, double a, double cx, double cy);
     virtual ~AbstractRotation ();
-    
-    
-    void get_properties_values (double& a, double& cx, double& cy);
-    const vector<string>& get_properties_name () const override;
-    virtual CoreProcess* find_child_impl (const string&) override;
-		AbstractDoubleProperty* a () { return (AbstractDoubleProperty*) find_child_impl ("a"); }
-		AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*) find_child_impl ("cx"); }
-		AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*) find_child_impl ("cy"); }
+
+    void                    get_properties_values (double& a, double& cx, double& cy);
+    const vector<string>&   get_properties_name () const override;
+    virtual CoreProcess*    find_child_impl (const string&) override;
+    AbstractDoubleProperty* a () { return (AbstractDoubleProperty*)find_child_impl ("a"); }
+    AbstractDoubleProperty* cx () { return (AbstractDoubleProperty*)find_child_impl ("cx"); }
+    AbstractDoubleProperty* cy () { return (AbstractDoubleProperty*)find_child_impl ("cy"); }
 
   protected:
-    struct raw_props_t { double a; double cx; double cy; };
+    struct raw_props_t {
+        double a;
+        double cx;
+        double cy;
+    };
     raw_props_t raw_props;
-    Coupling *_ca, *_ccx, *_ccy;
-    void impl_activate () override;
-    void impl_deactivate () override;
-  };
-}
+    Coupling *  _ca, *_ccx, *_ccy;
+    void        impl_activate () override;
+    void        impl_deactivate () override;
+};
+} // namespace djnn

@@ -881,7 +881,7 @@ QtBackend::draw_layer (Layer* l, children_t _children)
         buff_pick_painter = _picking_view->painter ();
 
         // -- make sure to add it to picking_view, otherwise it won't be pickable
-        _in_cache = true; 
+        _in_cache = true;
 
         // -- Save the current matrix
         ls->m = _cur_origin;
@@ -943,7 +943,7 @@ QtBackend::draw_layer (Layer* l, children_t _children)
         delete _picking_view->painter ();
         _painter = buff_painter;
         _picking_view->set_painter (buff_pick_painter);
-        _in_cache = false;
+        _in_cache   = false;
         _cur_origin = ls->m;
 
 #ifndef DJNN_NO_DEBUG

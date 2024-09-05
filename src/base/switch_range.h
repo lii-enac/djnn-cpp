@@ -41,7 +41,7 @@ class SwitchRange : public Container, public DelegatingProcess {
     class SwitchRangeAction : public Action {
       public:
         SwitchRangeAction (SwitchRange* parent, const string& name);
-        virtual ~SwitchRangeAction (){};
+        virtual ~SwitchRangeAction () {};
         void impl_activate () override { _sw->change_branch (); };
 
       private:
@@ -51,11 +51,11 @@ class SwitchRange : public Container, public DelegatingProcess {
   public:
     SwitchRange (CoreProcess* parent, const string& name, double initial);
     // virtual process_type_e get_process_type () const override { return SWITCH_T; }
-    void            impl_activate () override;
-    void            impl_deactivate () override;
-    void            draw () override;
-    void            pick () override;
-    AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
+    void               impl_activate () override;
+    void               impl_deactivate () override;
+    void               draw () override;
+    void               pick () override;
+    AbstractGShape*    pick_analytical (PickAnalyticalContext& pac) override;
     CoreProcess*       get_delegate () override { return _cur_branch; }
     const CoreProcess* get_delegate () const override { return _cur_branch; }
     virtual ~SwitchRange ();

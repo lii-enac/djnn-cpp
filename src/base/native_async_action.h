@@ -49,7 +49,7 @@ class NativeAsyncAction : public NativeAction, public ExternalSource {
     class RestartAction : public Action {
       public:
         RestartAction (CoreProcess* parent, const string& name)
-            : Action (parent, name){};
+            : Action (parent, name) {};
         virtual ~RestartAction () {}
         void impl_activate () override { ((NativeAsyncAction*)get_parent ())->restart (); }
     };

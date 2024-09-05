@@ -37,7 +37,7 @@ class AbstractList : public Container {
     void         clean_up_content () override; /* empty _children CALLING delete on each element */
     CoreProcess* find_child_impl (const string& path) override;
     CoreProcess* find_child_impl (int index) override;
-    virtual ~AbstractList (){};
+    virtual ~AbstractList () {};
     int size () { return _size.get_value (); }
 
   protected:

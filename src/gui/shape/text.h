@@ -19,7 +19,7 @@ class Text : public AbstractGShape {
 
       public:
         TextSizeAction (CoreProcess* parent, const string& name, Text* text)
-            : Action (parent, name), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text){};
+            : Action (parent, name), _ff (nullptr), _fsz (nullptr), _fs (nullptr), _fw (nullptr), _text (text) {};
         ~TextSizeAction () {}
         void impl_activate () override;
 

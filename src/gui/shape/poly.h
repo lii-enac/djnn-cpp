@@ -65,14 +65,14 @@ class Poly : public AbstractGShape {
 class Polygon : public Poly {
   public:
     Polygon (CoreProcess* parent, const string& name)
-        : Poly (parent, name, 1){};
-    virtual ~Polygon (){};
+        : Poly (parent, name, 1) {};
+    virtual ~Polygon () {};
 };
 
 class Polyline : public Poly {
   public:
     Polyline (CoreProcess* parent, const string& name)
-        : Poly (parent, name, 0){};
-    virtual ~Polyline (){};
+        : Poly (parent, name, 0) {};
+    virtual ~Polyline () {};
 };
 } // namespace djnn

@@ -26,22 +26,22 @@ class Dictionary : public FatProcess {
     class FindAction : public Action {
       public:
         FindAction (CoreProcess* parent, const string& name)
-            : Action (parent, name){};
-        virtual ~FindAction (){};
+            : Action (parent, name) {};
+        virtual ~FindAction () {};
         void impl_activate () override;
     };
     class AddEntryAction : public Action {
       public:
         AddEntryAction (CoreProcess* parent, const string& name)
-            : Action (parent, name){};
-        virtual ~AddEntryAction (){};
+            : Action (parent, name) {};
+        virtual ~AddEntryAction () {};
         void impl_activate () override;
     };
     class DelEntryAction : public Action {
       public:
         DelEntryAction (CoreProcess* parent, const string& name)
-            : Action (parent, name){};
-        virtual ~DelEntryAction (){};
+            : Action (parent, name) {};
+        virtual ~DelEntryAction () {};
         void impl_activate () override;
     };
 

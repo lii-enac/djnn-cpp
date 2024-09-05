@@ -55,7 +55,7 @@ class FSMTransition : public FatProcess {
       public:
         FSMTransitionAction (CoreProcess* parent, const string& name, FSMState* src, FSMState* dst, CoreProcess* action)
             : Action (parent, name), _src (src), _dst (dst) { _t = dynamic_cast<FSMTransition*> (parent); }
-        virtual ~FSMTransitionAction (){};
+        virtual ~FSMTransitionAction () {};
         void impl_activate ();
 
       private:
@@ -100,7 +100,7 @@ class FSM : public FatProcess, public DelegatingProcess {
       public:
         FSMPostTriggerAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
-        virtual ~FSMPostTriggerAction (){};
+        virtual ~FSMPostTriggerAction () {};
         void impl_activate () { ((FSM*)get_parent ())->set_triggered (0); };
     };
 
@@ -134,7 +134,7 @@ class FSM : public FatProcess, public DelegatingProcess {
         if (v)
             _post_trigger.set_activation_flag (ACTIVATION);
     }
-    int is_already_triggered () { return _already_triggered; }
+    int             is_already_triggered () { return _already_triggered; }
     FSMState*       get_delegate () override { return _cur_state; }
     const FSMState* get_delegate () const override { return _cur_state; }
 #ifndef DJNN_NO_SERIALIZE

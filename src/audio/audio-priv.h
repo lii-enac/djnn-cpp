@@ -12,7 +12,7 @@ class AudioListener : public FatProcess {
     class GainAction : public Action {
       public:
         GainAction (CoreProcess* parent, const string& name)
-            : Action (parent, name){};
+            : Action (parent, name) {};
         virtual ~GainAction () {}
         void impl_activate () override { ((AudioListener*)get_parent ())->update_gain (); }
     };
