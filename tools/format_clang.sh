@@ -21,7 +21,7 @@ while IFS= read -r file; do
         excluded_files+=" $file"
         continue
     fi
-    clang-format --style=file:../src/_clang-format_header -i "$file" --verbose
+    clang-format --style=file:../src/.clang-format_header -i "$file" --verbose
     
 done < <(find "$dir" -type f -name "*.h")
 
@@ -31,7 +31,7 @@ while IFS= read -r file; do
         excluded_files+=" $file"
         continue
     fi
-    clang-format --style=file:../src/_clang-format -i "$file" --verbose
+    clang-format --style=file:../src/.clang-format -i "$file" --verbose
     
 done < <(find "$dir" -type f -name "*.cpp")
 
