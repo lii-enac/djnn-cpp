@@ -139,7 +139,8 @@ class TAssignment : public FatProcess {
         : FatProcess (name, is_model), _src (src), _dst (dst), _action (this, "action")
           //, _ttassignment(nullptr) // FIXME
           ,
-          _propagate (true), _lazy (false) {
+          _propagate (true),
+          _lazy (false) {
         graph_add_edge (src, dst);
         finalize_construction (parent, name);
     }

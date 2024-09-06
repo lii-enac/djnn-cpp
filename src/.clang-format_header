@@ -16,6 +16,8 @@ AlignConsecutiveBitFields: true
 AlignConsecutiveDeclarations: true
 AlignConsecutiveMacros: true
 # AlignAfterOpenBracket: Align
+ConstructorInitializerAllOnOneLineOrOnePerLine : true
+# BreakConstructorInitializersBeforeComma : false
 SortIncludes: false #should be true ... but gen_prop is not that clean
 IncludeBlocks: Regroup
 IncludeCategories:

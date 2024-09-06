@@ -6,7 +6,7 @@ BasedOnStyle: LLVM
 IndentWidth: 4
 UseTab: Never
 BreakBeforeBraces: Mozilla #Attach
-AlwaysBreakAfterReturnType: AllDefinitions 
+AlwaysBreakAfterReturnType: AllDefinitions
 ColumnLimit: 0
 PointerAlignment: Left
 ReferenceAlignment: Left
@@ -17,6 +17,8 @@ AlignConsecutiveAssignments: true
 AlignConsecutiveBitFields: true
 AlignConsecutiveDeclarations: true
 AlignConsecutiveMacros: true
+ConstructorInitializerAllOnOneLineOrOnePerLine : false
+BreakConstructorInitializersBeforeComma : false
 SortIncludes: false #should be true ... but gen_prop is not that clean
 IncludeBlocks: Regroup
 IncludeCategories:
