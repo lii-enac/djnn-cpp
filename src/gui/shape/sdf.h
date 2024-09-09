@@ -89,7 +89,9 @@ inline const vec2 floor (const vec2& v) {
 // }
 
 // https://stackoverflow.com/a/1903975/2036022
-inline double sign (double v) { return (v > 0) - (v < 0); }
+inline double sign (double v) {
+    return (v > 0) - (v < 0);
+}
 
 inline const vec2 normalize (const vec2& v) {
     auto h = length (v);

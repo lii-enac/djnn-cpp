@@ -75,7 +75,8 @@ template <typename T1, typename T2>
 class pair {
   public:
     pair ();
-    pair (const T1& t1, const T2& t2) : first (t1), second (t2) {}
+    pair (const T1& t1, const T2& t2)
+        : first (t1), second (t2) {}
     T1 first;
     T2 second;
 };

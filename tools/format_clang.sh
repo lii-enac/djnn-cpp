@@ -7,8 +7,8 @@ dir=${1:-.}
 excluded_files=""
 
 # Fonction pour vérifier si un chemin contient "/ext"
-contains_ext() {
-    if [[ $1 == *"/ext/"* ]]; then
+contains_excluded_pattern() {
+    if [[ $1 == *"/ext/"* || $1 == *"/gl/"* || $1 == *"/sdl/"* ]]; then
         return 0
     else
         return 1
@@ -17,7 +17,7 @@ contains_ext() {
 
 # Appliquer clang-format aux fichiers d'en-tête (.h)
 while IFS= read -r file; do
-    if contains_ext "$file"; then
+    if contains_excluded_pattern "$file"; then
         excluded_files+=" $file"
         continue
     fi
@@ -27,7 +27,7 @@ done < <(find "$dir" -type f -name "*.h")
 
 # Appliquer clang-format aux fichiers de code source (.cpp)
 while IFS= read -r file; do
-    if contains_ext "$file"; then
+    if contains_excluded_pattern "$file"; then
         excluded_files+=" $file"
         continue
     fi
