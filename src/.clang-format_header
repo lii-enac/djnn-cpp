@@ -25,3 +25,6 @@ IncludeCategories:
   - Regex:           '^".*"'
     Priority:        2
 AllowShortBlocksOnASingleLine: false
+BraceWrapping:
+  AfterControlStatement: true
+  AfterFunction: true
