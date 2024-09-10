@@ -50,6 +50,8 @@ class UI {
     DoubleProperty* move_y () { return _move_y; }
     DoubleProperty* press_x () { return _press_x; }
     DoubleProperty* press_y () { return _press_y; }
+    DoubleProperty* release_x () { return _release_x; }
+    DoubleProperty* release_y () { return _release_y; }
     DoubleProperty* wheel_x () { return _wheel_x; }
     DoubleProperty* wheel_y () { return _wheel_y; }
 
@@ -57,11 +59,15 @@ class UI {
     DoubleProperty* local_move_y () { return _local_move_y; }
     DoubleProperty* local_press_x () { return _local_press_x; }
     DoubleProperty* local_press_y () { return _local_press_y; }
+    DoubleProperty* local_release_x () { return _local_press_x; }
+    DoubleProperty* local_release_y () { return _local_press_y; }
     DoubleProperty* local_wheel_x () { return _local_wheel_x; }
     DoubleProperty* local_wheel_y () { return _local_wheel_y; }
 
     DoubleProperty* mouse_press_x () { return _mouse_press_x; }
     DoubleProperty* mouse_press_y () { return _mouse_press_y; }
+    DoubleProperty* mouse_release_x () { return _mouse_release_x; }
+    DoubleProperty* mouse_release_y () { return _mouse_release_y; }
     DoubleProperty* mouse_move_x () { return _mouse_move_x; }
     DoubleProperty* mouse_move_y () { return _mouse_move_y; }
     DoubleProperty* mouse_wheel_x () { return _mouse_wheel_x; }
@@ -69,6 +75,8 @@ class UI {
 
     DoubleProperty* mouse_local_press_x () { return _mouse_local_press_x; }
     DoubleProperty* mouse_local_press_y () { return _mouse_local_press_y; }
+    DoubleProperty* mouse_local_release_x () { return _mouse_local_release_x; }
+    DoubleProperty* mouse_local_release_y () { return _mouse_local_release_y; }
     DoubleProperty* mouse_local_move_x () { return _mouse_local_move_x; }
     DoubleProperty* mouse_local_move_y () { return _mouse_local_move_y; }
     DoubleProperty* mouse_local_wheel_x () { return _mouse_local_wheel_x; }
@@ -103,9 +111,9 @@ class UI {
   private:
     BoolProperty*     pickable;
     CouplingWithData* cpick;
-    DoubleProperty *  _move_x, *_move_y, *_press_x, *_press_y, *_wheel_x, *_wheel_y, *_local_move_x, *_local_move_y, *_local_press_x, *_local_press_y, *_local_wheel_x, *_local_wheel_y;
-    DoubleProperty *  _mouse_press_x, *_mouse_press_y, *_mouse_move_x, *_mouse_move_y, *_mouse_wheel_x, *_mouse_wheel_y;
-    DoubleProperty *  _mouse_local_press_x, *_mouse_local_press_y, *_mouse_local_move_x, *_mouse_local_move_y, *_mouse_local_wheel_x, *_mouse_local_wheel_y;
+    DoubleProperty *  _move_x, *_move_y, *_press_x, *_press_y, *_release_x, *_release_y, *_wheel_x, *_wheel_y, *_local_move_x, *_local_move_y, *_local_press_x, *_local_press_y, *_local_release_x, *_local_release_y, *_local_wheel_x, *_local_wheel_y;
+    DoubleProperty *  _mouse_press_x, *_mouse_press_y, *_mouse_release_x, *_mouse_release_y, *_mouse_move_x, *_mouse_move_y, *_mouse_wheel_x, *_mouse_wheel_y;
+    DoubleProperty *  _mouse_local_press_x, *_mouse_local_press_y, *_mouse_local_release_x, *_mouse_local_release_y, *_mouse_local_move_x, *_mouse_local_move_y, *_mouse_local_wheel_x, *_mouse_local_wheel_y;
     DoubleProperty *  _wheel_dx, *_wheel_dy;
     FatProcess *      _press, *_left, *_right, *_middle, *_move, *_release, *_enter, *_leave, *_mouse, *_mouse_press, *_mouse_release, *_mouse_move, *_mouse_enter, *_mouse_leave, *_touches, *_wheel, *_mouse_wheel;
     FatProcess *      _left_press, *_left_release, *_right_press, *_right_release, *_middle_press, *_middle_release;

@@ -73,10 +73,12 @@ UI::UI (CoreProcess* parent_, FatProcess* f)
     _middle->set_activation_state (ACTIVATED);
     _wheel->set_activation_state (ACTIVATED);
 
-    _move_x  = new DoubleProperty (nullptr, "move_x", 0);
-    _move_y  = new DoubleProperty (nullptr, "move_y", 0);
-    _press_x = new DoubleProperty (nullptr, "press_x", 0);
-    _press_y = new DoubleProperty (nullptr, "press_y", 0);
+    _move_x    = new DoubleProperty (nullptr, "move_x", 0);
+    _move_y    = new DoubleProperty (nullptr, "move_y", 0);
+    _press_x   = new DoubleProperty (nullptr, "press_x", 0);
+    _press_y   = new DoubleProperty (nullptr, "press_y", 0);
+    _release_x = new DoubleProperty (nullptr, "release_x", 0);
+    _release_y = new DoubleProperty (nullptr, "release_y", 0);
 
     _wheel_dx      = new DoubleProperty (_wheel, "dx", 0);
     _wheel_dy      = new DoubleProperty (_wheel, "dy", 0);
@@ -85,10 +87,12 @@ UI::UI (CoreProcess* parent_, FatProcess* f)
     _local_wheel_x = new DoubleProperty (_wheel, "local_wheel_x", 0);
     _local_wheel_y = new DoubleProperty (_wheel, "local_wheel_y", 0);
 
-    _local_move_x  = new DoubleProperty (nullptr, "local_move_x", 0);
-    _local_move_y  = new DoubleProperty (nullptr, "local_move_y", 0);
-    _local_press_x = new DoubleProperty (nullptr, "local_press_x", 0);
-    _local_press_y = new DoubleProperty (nullptr, "local_press_y", 0);
+    _local_move_x    = new DoubleProperty (nullptr, "local_move_x", 0);
+    _local_move_y    = new DoubleProperty (nullptr, "local_move_y", 0);
+    _local_press_x   = new DoubleProperty (nullptr, "local_press_x", 0);
+    _local_press_y   = new DoubleProperty (nullptr, "local_press_y", 0);
+    _local_release_x = new DoubleProperty (nullptr, "local_release_x", 0);
+    _local_release_y = new DoubleProperty (nullptr, "local_release_y", 0);
 
     _move->add_symbol ("x", _move_x);
     _move->add_symbol ("y", _move_y);
@@ -100,19 +104,28 @@ UI::UI (CoreProcess* parent_, FatProcess* f)
     _press->add_symbol ("local_x", _local_press_x);
     _press->add_symbol ("local_y", _local_press_y);
 
-    _mouse_press_x = new DoubleProperty (nullptr, "mouse_press_x", 0);
-    _mouse_press_y = new DoubleProperty (nullptr, "mouse_press_y", 0);
-    _mouse_move_x  = new DoubleProperty (nullptr, "mouse_move_x", 0);
-    _mouse_move_y  = new DoubleProperty (nullptr, "mouse_move_y", 0);
-    _mouse_wheel_x = new DoubleProperty (nullptr, "mouse_wheel_x", 0);
-    _mouse_wheel_y = new DoubleProperty (nullptr, "mouse_wheel_y", 0);
+    _release->add_symbol ("x", _release_x);
+    _release->add_symbol ("y", _release_y);
+    _release->add_symbol ("local_x", _local_release_x);
+    _release->add_symbol ("local_y", _local_release_y);
 
-    _mouse_local_press_x = new DoubleProperty (nullptr, "mouse_local_press_x", 0);
-    _mouse_local_press_y = new DoubleProperty (nullptr, "mouse_local_press_y", 0);
-    _mouse_local_move_x  = new DoubleProperty (nullptr, "mouse_local_move_x", 0);
-    _mouse_local_move_y  = new DoubleProperty (nullptr, "mouse_local_move_y", 0);
-    _mouse_local_wheel_x = new DoubleProperty (nullptr, "mouse_local_wheel_x", 0);
-    _mouse_local_wheel_y = new DoubleProperty (nullptr, "mouse_local_wheel_y", 0);
+    _mouse_press_x   = new DoubleProperty (nullptr, "mouse_press_x", 0);
+    _mouse_press_y   = new DoubleProperty (nullptr, "mouse_press_y", 0);
+    _mouse_release_x = new DoubleProperty (nullptr, "mouse_release_x", 0);
+    _mouse_release_y = new DoubleProperty (nullptr, "mouse_release_y", 0);
+    _mouse_move_x    = new DoubleProperty (nullptr, "mouse_move_x", 0);
+    _mouse_move_y    = new DoubleProperty (nullptr, "mouse_move_y", 0);
+    _mouse_wheel_x   = new DoubleProperty (nullptr, "mouse_wheel_x", 0);
+    _mouse_wheel_y   = new DoubleProperty (nullptr, "mouse_wheel_y", 0);
+
+    _mouse_local_press_x   = new DoubleProperty (nullptr, "mouse_local_press_x", 0);
+    _mouse_local_press_y   = new DoubleProperty (nullptr, "mouse_local_press_y", 0);
+    _mouse_local_release_x = new DoubleProperty (nullptr, "mouse_local_release_x", 0);
+    _mouse_local_release_y = new DoubleProperty (nullptr, "mouse_local_release_y", 0);
+    _mouse_local_move_x    = new DoubleProperty (nullptr, "mouse_local_move_x", 0);
+    _mouse_local_move_y    = new DoubleProperty (nullptr, "mouse_local_move_y", 0);
+    _mouse_local_wheel_x   = new DoubleProperty (nullptr, "mouse_local_wheel_x", 0);
+    _mouse_local_wheel_y   = new DoubleProperty (nullptr, "mouse_local_wheel_y", 0);
 
     _mouse_move->add_symbol ("x", _mouse_move_x);
     _mouse_move->add_symbol ("y", _mouse_move_y);
@@ -123,6 +136,11 @@ UI::UI (CoreProcess* parent_, FatProcess* f)
     _mouse_press->add_symbol ("y", _mouse_press_y);
     _mouse_press->add_symbol ("local_x", _mouse_local_press_x);
     _mouse_press->add_symbol ("local_y", _mouse_local_press_y);
+
+    _mouse_release->add_symbol ("x", _mouse_release_x);
+    _mouse_release->add_symbol ("y", _mouse_release_y);
+    _mouse_release->add_symbol ("local_x", _mouse_local_release_x);
+    _mouse_release->add_symbol ("local_y", _mouse_local_release_y);
 
     _mouse_wheel->add_symbol ("x", _mouse_wheel_x);
     _mouse_wheel->add_symbol ("y", _mouse_wheel_y);
@@ -136,6 +154,11 @@ UI::~UI ()
     _mouse_wheel->remove_symbol ("local_x");
     _mouse_wheel->remove_symbol ("y");
     _mouse_wheel->remove_symbol ("x");
+
+    _mouse_release->remove_symbol ("local_y");
+    _mouse_release->remove_symbol ("local_x");
+    _mouse_release->remove_symbol ("y");
+    _mouse_release->remove_symbol ("x");
 
     _mouse_press->remove_symbol ("local_y");
     _mouse_press->remove_symbol ("local_x");
@@ -151,6 +174,8 @@ UI::~UI ()
     delete _mouse_local_wheel_x;
     delete _mouse_local_move_y;
     delete _mouse_local_move_x;
+    delete _mouse_local_release_y;
+    delete _mouse_local_release_x;
     delete _mouse_local_press_y;
     delete _mouse_local_press_x;
 
@@ -158,8 +183,15 @@ UI::~UI ()
     delete _mouse_wheel_x;
     delete _mouse_move_y;
     delete _mouse_move_x;
+    delete _mouse_release_y;
+    delete _mouse_release_x;
     delete _mouse_press_y;
     delete _mouse_press_x;
+
+    _release->remove_symbol ("local_y");
+    _release->remove_symbol ("local_x");
+    _release->remove_symbol ("y");
+    _release->remove_symbol ("x");
 
     _press->remove_symbol ("local_y");
     _press->remove_symbol ("local_x");
@@ -171,6 +203,8 @@ UI::~UI ()
     _move->remove_symbol ("y");
     _move->remove_symbol ("x");
 
+    delete _local_release_y;
+    delete _local_release_x;
     delete _local_press_y;
     delete _local_press_x;
     delete _local_move_y;
@@ -189,6 +223,8 @@ UI::~UI ()
     delete _wheel_dy;
     delete _wheel_dx;
 
+    delete _release_y;
+    delete _release_x;
     delete _press_y;
     delete _press_x;
     delete _move_y;

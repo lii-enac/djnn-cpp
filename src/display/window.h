@@ -169,6 +169,8 @@ class Window : public FatProcess {
     DoubleProperty* press_y () { return _press_y; }
     DoubleProperty* move_x () { return _move_x; }
     DoubleProperty* move_y () { return _move_y; }
+    DoubleProperty* release_x () { return _release_x; }
+    DoubleProperty* release_y () { return _release_y; }
     DoubleProperty* wheel_dx () { return _w_dx; }
     DoubleProperty* wheel_dy () { return _w_dy; }
     DoubleProperty* wheel_x () { return _w_x; }
@@ -225,6 +227,8 @@ class Window : public FatProcess {
     DoubleProperty* _press_y;
     DoubleProperty* _move_x;
     DoubleProperty* _move_y;
+    DoubleProperty* _release_x;
+    DoubleProperty* _release_y;
     TextProperty*   _key_pressed_text;
     IntProperty*    _key_pressed;
     TextProperty*   _key_released_text;
