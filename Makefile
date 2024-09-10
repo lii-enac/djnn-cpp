@@ -15,9 +15,9 @@
 MAKEFLAGS += --no-builtin-rules
 .SUFFIXES:
 
-#$(info	CXXFLAGS is $(CXXFLAGS))
 DJNN_CXXFLAGS := $(CXXFLAGS)
-#$(info DJNN_CXXFLAGS is $(DJNN_CXXFLAGS))
+
+PKG_CONFIG ?= pkg-config
 
 # ---------------------------------------
 # default
@@ -36,6 +36,9 @@ help:
 
 config config.mk:
 	cp config.default.mk config.mk
+
+config_%:
+	cp project/config/$@.mk config.mk
 
 MAJOR = 1
 MINOR = 21
@@ -175,6 +178,8 @@ CFLAGS += -Wall -Wextra -pedantic -Wno-unused-parameter #-Wno-vla-extension
 CFLAGS += $(PRE_COV_CFLAGS)
 LDFLAGS += $(PRE_COV_LDFLAGS)
 
+ARFLAGS ?= rc
+
 # STL
 # DJNN_CXXFLAGS += -DDJNN_STL_EASTL
 # DJNN_CXXFLAGS += -I/Users/conversy/recherche/istar/code/misc/EASTL/include -I/Users/conversy/recherche/istar/code/misc/EASTL/test/packages/EABase/include/Common/
@@ -188,7 +193,7 @@ CFLAGS += -fPIC
 #DJNN_CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.so
 DYNLIB ?= -shared
-YACC = bison -d -Wno-conflicts-sr -Wno-conflicts-rr
+YACC ?= bison -d -Wno-conflicts-sr -Wno-conflicts-rr
 thread = STD
 moc := moc
 compiler ?= gnu
@@ -205,8 +210,12 @@ endif
 lib_suffix =.dylib
 DYNLIB ?= -dynamiclib
 echo ?= echo
-YACC := $(brew_prefix)/opt/bison/bin/bison -d -Wno-conflicts-sr -Wno-conflicts-rr
+ifeq ($(origin YACC), default)
+YACC := $(brew_prefix)/opt/bison/bin/bison -d -Wno-conflicts-sr
+endif
+ifeq ($(origin LEX), default)
 LEX := $(brew_prefix)/opt/flex/bin/flex
+endif
 moc :=  moc #/usr/local/opt/qt/bin/moc
 #boost name demangle
 #DJNN_CXXFLAGS += -I/usr/local/include
@@ -371,7 +380,7 @@ tidy := /usr/local/Cellar/llvm/5.0.1/bin/clang-tidy
 tidy_opts := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk 
 
 %_tidy: %
-	$(tidy) -header-filter="djnn" -checks="*" -extra-arg=-std=c++14 $^ -- $(tidy_opts)
+	$(tidy) -header-filter="djnn" -checks="*" -extra-arg=-std=c++20 $^ -- $(tidy_opts)
 
 all_tidy := $(addsuffix _tidy,$(srcs))
 tidy: $(all_tidy)
@@ -560,13 +569,15 @@ $1_cov_gcda  := $$($1_objs:.o=.gcda)
 
 ifneq ($$($1_lib_pkg),)
 $1_lib_pkgpath := $$(subst $$() $$(),:,$$(lib_pkgpath))
-#$1_lib_cflags += $$(shell env PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) pkg-config --cflags $$($1_lib_pkg))
-$1_lib_ldflags += $$(shell env PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) pkg-config --libs $$($1_lib_pkg))
+$1_lib_cflags += $$(shell PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) $(PKG_CONFIG) --cflags $$($1_lib_pkg))
+$1_lib_ldflags += $$(shell PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) $(PKG_CONFIG) --libs $$($1_lib_pkg))
+$1_lib_ldflags_static += $$(shell PKG_CONFIG_PATH=$$(PKG_CONFIG_PATH):$$($1_lib_pkgpath) $(PKG_CONFIG) --libs --static $$($1_lib_pkg))
 endif
 
 $1_lib_all_ldflags := $$($1_lib_ldflags)
+$1_lib_all_ldflags_static := $$($1_lib_ldflags_static)
 
-ifeq ($(os),$(filter $(os),Darwin MinGW))
+ifeq ($(os),$(filter $(os),Darwin Linux MinGW))
 ifdef lib_djnn_deps
 $1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix $$(build_lib_dir)/libdjnn-,$$(lib_djnn_deps)))
 $1_lib_all_ldflags += $$(addprefix -ldjnn-,$$(lib_djnn_deps))
@@ -574,21 +585,33 @@ $1_lib_all_ldflags += $$(addprefix -ldjnn-,$$(lib_djnn_deps))
 endif
 endif
 
-ifneq ($(os),em)
-$1_lib_soname := -Wl,-soname,$$($1_libname)
+ifneq ($(os), em)
+#$1_lib_soname := -Wl,-soname,$$($1_libname)
+#$1_lib_soname := -Wl,-rpath,$$(build_dir)
+
+ifeq ($(linker), gnu)
+$1_lib_soname += -Wl,-rpath-link,$$(abspath $$(build_dir))/lib
+ifeq (-DRMT_USE_OPENGL=1,$(filter -DRMT_USE_OPENGL=1,$(remotery_cflags)))
+$1_lib_soname += -Wl,-flat_namespace,-undefined,dynamic_lookup
+else
+$1_lib_soname += -Wl,--no-undefined
+endif
+
 endif
 ifeq ($(linker), llvm)
-$1_lib_soname := -Wl,-install_name,$$($1_libname)
+$1_lib_soname := -Wl,-install_name,$$(abspath $$(build_dir))/lib/$$($1_libname) -Wl,-current_version,1.0.0 -Wl,-compatibility_version,1.0.0 
+#$1_lib_soname :=
 endif
 ifeq ($(linker), mold)
 #$1_lib_soname := -Wl,-install_name,$$($1_libname)
+endif
 endif
 
 # the remaining will be put into a .mk file for further, faster, inclusion
 
 #define $1_mk_content
 $$($1_objs): $(pch_dst)$(pch_ext)
-$$($1_objs): DJNN_CXXFLAGS+=$$($1_lib_cppflags)
+$$($1_objs): DJNN_CXXFLAGS+=$$($1_lib_cppflags) $$($1_lib_cflags)
 $$($1_objs): CFLAGS+=$$($1_lib_cflags)
 $$($1_lib): LDFLAGS+=$$($1_lib_all_ldflags)
 #$$($1_lib): LDFLAGS+=$$($1_lib_ldflags)
@@ -599,10 +622,10 @@ CXXLD ?= $$(CXX)
 $$($1_lib): $$($1_objs)
 	@mkdir -p $$(dir $$@)
 ifeq ($$V,max)
-	$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
+	$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname) $(lib_soname)
 else
 	@$(call rule_message,linking,$$(stylized_target))
-	@$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname)
+	@$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname) $(lib_soname)
 endif
 
 $$($1_lib_static): $$($1_objs)
@@ -612,7 +635,7 @@ ifeq ($$V,max)
 	$$(RANLIB) $$@
 else
 	@$(call rule_message,linking,$$(stylized_target))
-	@$$(AR) $$(ARFLAGS) $$@ $$($1_objs)
+	@$$(AR) $$(ARFLAGS) $$@ $$($1_objs) >& /dev/null
 	@$$(RANLIB) $$@
 endif
 
@@ -631,10 +654,11 @@ $1_clean:
 	rm -f $$($1_objs)
 
 $1_dbg:
-	@echo $$($1)
+#	@echo $$($1)
 #	@echo $$($1_objs)
 #	@echo $$($1_djnn_deps)
 #	@echo $$($1_lib_ldflags)
+	@echo $$($1_lib_ldflags)
 
 srcs += $$($1_srcs)
 srcgens += $$($1_srcgens)
@@ -642,6 +666,7 @@ objs += $$($1_objs)
 deps += $$($1_deps)
 libs += $$($1_lib)
 libs_static += $$($1_lib_static)
+ldflags_static += $$($1_lib_all_ldflags_static) $$($1_lib_ldflags)
 cov  += $$($1_cov_gcno) $$($1_cov_gcda) $(lcov_file)
 
 #endef
@@ -702,7 +727,7 @@ $(foreach a,$(djnn_libs),$(eval $(call lib_makerule,$a)))
 # end of new scheme
 
 djnn: $(libs)
-static: dirs $(libs_static)
+static: $(libs_static)
 
 # ---------------------------------------
 
@@ -848,6 +873,8 @@ ifeq ($(PREFIX),)
 djnn_install_prefix :=  $(abspath $(build_dir))
 ifeq ($(os),Darwin)
 pkg_config_install_prefix := /usr/local
+else ifeq ($(os),vcpkg)
+pkg_config_install_prefix := /Users/conversy/recherche/istar/code/misc/vcpkg/installed/arm64-osx/lib/pkgconfig
 else
 pkg_config_install_prefix := /usr
 endif
@@ -857,6 +884,9 @@ djnn_install_prefix := $(abspath $(DESTDIR)$(PREFIX))
 pkg_config_install_prefix := $(abspath $(DESTDIR)$(PREFIX))
 endif
 
+djnn_install_headers_dir ?= $(djnn_install_prefix)/include/djnn-cpp
+djnn_install_lib_dir ?= $(djnn_install_prefix)/lib
+
 pkgconfig_targets = djnn-cpp-dev.pc djnn-cpp.pc
 pkgconfig_targets := $(addprefix $(build_dir)/, $(pkgconfig_targets))
 
@@ -864,7 +894,7 @@ pkgconf: $(pkgconfig_targets)
 
 $(build_dir)/%.pc: distrib/%.pc.in
 	@mkdir -p $(dir $@)
-	@sed -e 's,@PREFIX@,$(pkg_config_install_prefix),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $< > $@
+	@sed -e 's,@PREFIX@,$(pkg_config_install_prefix),;s:@LIBPRIVATE@:$(call uniq,$(filter-out -lssl -lcrypto,$(ldflags_static))):; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $< > $@
 
 
 #----------------------------------------
@@ -884,11 +914,11 @@ all_headers_no_src = $(patsubst src/%,%,$(all_headers))
 
 all_libs_no_build_dir = $(patsubst $(build_dir)/lib/%,%,$(libs))
 
-install_headers: $(addprefix $(djnn_install_prefix)/include/djnn-cpp/,$(all_headers_no_src))
 
-install_libs: $(addprefix $(djnn_install_prefix)/lib/,$(all_libs_no_build_dir))
+install_headers: $(addprefix $(djnn_install_headers_dir)/,$(all_headers_no_src))
+install_libs: $(addprefix $(djnn_install_lib_dir)/,$(all_libs_no_build_dir))
 
-$(djnn_install_prefix)/include/djnn-cpp/%.h: src/%.h
+$(djnn_install_headers_dir)/%.h: src/%.h
 	@mkdir -p $(dir $@)
 	install -m 644 $< $@
 
@@ -984,102 +1014,162 @@ pkg:
 # should use the following variable
 # all_pkg = $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
 
+#pkgdeps += make # obvioulsy already installed
+pkgdeps += pkgconfig
 pkgdeps += bison flex
 
+ifeq ($(pkgcmd),)
+
+ifeq ($(os),Linux)
+pkgcmd := $(shell which apt || which apk)
+endif
+ifeq ($(os),Darwin)
+pkgcmd := brew
+endif
+ifeq ($(os),MinGW)
+pkgcmd := pacman
+endif
+
+endif
+
 ifneq ($(pkgcmd),)
-ifeq ($(notdir $(pkgcmd)),apt)
-	pkgcmd := apt add
-	pkgupg := apt
-	
-	pkgdeps += make g++ #llvm ?
-	pkgdeps += pkgconfig
-	pkgdeps += expat-dev curl-dev
-	pkgdeps += openal-soft-dev
+pkgcmdtype := $(notdir $(pkgcmd))
+
+ifeq ($(pkgcmdtype),apt)
+	pkginst := apt install -y
+	pkgupg := apt upgrade -y
+endif
+
+ifeq ($(pkgcmdtype),apk)
+	pkginst := apk add
+	pkgupg := apk upgrade
+endif
+
+ifeq ($(pkgcmdtype),brew)
+	pkginst := brew install
+	pkgupg := brew upgrade
 endif
 
 #untested - source only :-/
-ifeq ($(notdir $(pkgcmd)),vcpkg)
-	pkgcmd := vcpkg install
-	pkgupg := apt
+# ifeq ($(pkgcmdtype),vcpkg)
+# 	pkginst := vcpkg install
+# 	pkgupg := apt
 	
-	pkgdeps += pkgconf
-	#pkgdeps += llvm
-	pkgdeps += expat curl
-	pkgdeps += openal-soft-dev
-	ifeq ($(display),QT)
-	pkgdeps += qt5
-	endif
+# 	pkgdeps += pkgconf
+# 	#pkgdeps += llvm
+# 	pkgdeps += expat curl
+# 	pkgdeps += openal-soft-dev
+# 	ifeq ($(display),QT)
+# 	pkgdeps += qt5
+# 	endif
 
-	#CXX = tools/cccl
-endif
+# 	#CXX = tools/cccl
+# endif
 
-#untested - binaries, but unsusaul way of managing pkg :-/
-# ifeq ($(notdir $(pkgcmd)),conan)
-# 	pkgcmd := apt add
+#untested - binaries, but unusual way of managing pkg :-/
+# ifeq ($(pkgcmdtype),conan)
+# 	pkginst := apt add
 # 	pkgupg := apt
 # endif
 
-else
+endif
+#else
 
-ifeq ($(os),Linux)
-	pkgcmd := apt install -y
-	pkgupg := apt upgrade -y
-
-	pkgdeps += g++ libexpat1-dev libcurl4-openssl-dev libudev-dev gperf libboost-thread-dev libevdev-dev libopenal-dev librtmidi-dev #libboost-fiber-dev
-	ifeq ($(display),QT)
-		pkgdeps += libqt5opengl5-dev #qt5-default #for ubuntu < 22.04
-	endif
-	ifeq ($(display),SDL)
-		pkgdeps += libfontconfig1-dev
-		ifeq ($(specialtarget),raspberry-ua-netinst)
-			# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
-			#pkgdeps += libraspberrypi-dev
-		else
-			pkgdeps += libsdl2-dev libsdl2-image-dev libgbm-dev
-		endif
-	endif
-	ifeq ($(display),DRM)
-		pkgdeps += libdrm-dev
-	endif
-	ifeq ($(graphics),CAIRO)
-		pkgdeps += libcairo-dev libpango1.0-dev #libpangocairo-1.0-0 
-	endif
-	ifeq ($(graphics),GL)
-		pkgdeps += libfreetype6-dev libglm-dev
+ifeq ($(pkgcmdtype),apt)
+pkgdeps += g++
+pkglibdeps += udev rtmidi
+pkglibdeps += expat1 curl4-openssl evdev openal
+#libboost-thread-dev 
+#libboost-fiber-dev
+ifeq ($(display),QT)
+	pkglibdeps += qt5opengl5
+	#pkgdeps += qt5-default #for ubuntu < 22.04
+endif
+ifeq ($(display),SDL)
+	ifeq ($(specialtarget),raspberry-ua-netinst)
+		# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
+		#pkgdeps += raspberrypi
+	else
+		pkglibdeps += sdl2-dev sdl2-image # gbm
 	endif
 endif
+ifeq ($(display),DRM)
+	pkglibdeps += drm
+endif
+ifeq ($(graphics),CAIRO)
+	pkglibdeps += cairo pango1.0 #libpangocairo-1.0-0 
+endif
+ifeq ($(graphics),GL)
+	pkglibdeps += freetype6 fontconfig1 glm
+endif
+pkglibdeps_full := $(addprefix lib,$(pkglibdeps))
+#pkglibdeps_full := $(addsuffix -dev,$(pkglibdeps_full))
+pkgdeps += $(pkglibdeps_full)
+endif
 
-ifeq ($(os),Darwin)
-	#https://brew.sh/
-	pkgcmd := brew install
-	pkgupg := brew upgrade
+toto:
+	@echo $(pkglibdeps_full)
 
-	#boost
-	pkgdeps += expat curl
-	#pkgdeps += libusb #crazyflie
-	pkgdeps += rtmidi
-	ifeq ($(graphics),QT)
-		pkgdeps += qt5
+ifeq ($(pkgcmdtype),apk)
+pkgdeps += g++
+pkglibdeps += eudev rtmidi
+pkglibdeps += curl libevdev expat openal-soft flex
+
+ifeq ($(display),QT)
+	pkglibdeps += qt5opengl5
+endif
+ifeq ($(display),SDL)
+	ifeq ($(specialtarget),raspberry-ua-netinst)
+		# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
+		#pkgdeps += raspberrypi
+	else
+		pkglibdeps += sdl2 sdl2_image # gbm-
 	endif
-	ifeq ($(display),SDL)
-		pkgdeps += sdl2 sdl2_image
-	endif
-	ifeq ($(graphics),CAIRO)
-		pkgdeps += cairo pango
-	endif
-	ifeq ($(graphics),GL)
-		pkgdeps += glm fontconfig freetype2
-	endif
-	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
-		pkgdeps += openal-soft
-	endif
+endif
+ifeq ($(display),DRM)
+	pkglibdeps += drm
+endif
+ifeq ($(graphics),CAIRO)
+	pkglibdeps += cairo pango1.0 #libpangocairo-1.0-0 
+endif
+ifeq ($(graphics),GL)
+	pkglibdeps += freetype fontconfig glm 
+endif
+#pkglibdeps_full := $(addsuffix -dev,$(pkglibdeps))
+pkglibdeps_full := $(pkglibdeps)
+pkgdeps += $(pkglibdeps_full)
+endif
+
+ifeq ($(pkgcmdtype),brew)
+pkgdeps += expat curl
+#pkgdeps += libusb #crazyflie
+pkgdeps += rtmidi
+ifeq ($(graphics),QT)
+	pkgdeps += qt5
+endif
+ifeq ($(display),SDL)
+	pkgdeps += sdl2 sdl2_image
+endif
+ifeq ($(graphics),CAIRO)
+	pkgdeps += cairo pango
+endif
+ifeq ($(graphics),GL)
+	pkgdeps += glm fontconfig freetype2
+endif
+ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
+	pkgdeps += openal-soft
+endif
 endif
 
 ifeq ($(os),MinGW)
 	#https://www.msys2.org/
+
+	# pkginst := pacman -S --needed
+	# pkgupg := pacman -Syu --needed
+
 	#pkgdeps := git make pkg-config
 
-	#pkgcmd := pacboy -S --needed
+	#pkginst := pacboy -S --needed
 	#pkgupg := pacboy -Syu --needed
 
 	#boost
@@ -1102,12 +1192,6 @@ ifeq ($(os),MinGW)
 		mgwpkgdeps += openal
 	endif
 
-	# pkgcmd := pacman -S --needed
-	# pkgupg := pacman -Syu --needed
-
-	pkgcmd := pacman -S --needed
-	pkgupg := pacman -Syu --needed
-
 	# mgwpkgdeps += gcc boost expat curl qt5
 	# mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
 	# ifeq ($(graphics),GL)
@@ -1116,10 +1200,41 @@ ifeq ($(os),MinGW)
 	mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
 	pkgdeps += $(mgwpkgdeps)
 endif
+
+#endif
+
+ifeq ($(os),vcpkg)
+	#https://www.msys2.org/
+
+	pkginst := /Users/conversy/recherche/istar/code/misc/vcpkg/vcpkg
+	pkgupg := /Users/conversy/recherche/istar/code/misc/vcpkg/vcpkg
+
+	mgwpkgdeps += gcc
+	mgwpkgdeps += expat curl
+	#mgwpkgdeps += rtmidi
+
+	ifeq ($(graphics),QT)
+		mgwpkgdeps += qt5
+	endif
+	ifeq ($(display),SDL)
+		mgwpkgdeps += SDL2 SDL2_image
+	endif
+	ifeq ($(graphics),CAIRO)
+		mgwpkgdeps += cairo pango
+	endif
+	ifeq ($(graphics),GL)
+		mgwpkgdeps += glm fontconfig freetype
+	endif
+	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
+		mgwpkgdeps += openal
+	endif
+
+	#mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
+	pkgdeps += $(mgwpkgdeps)
 endif
 
 install-pkgdeps:
-	$(pkgcmd) $(pkgdeps)
+	$(pkginst) $(pkgdeps)
 
 upgrade-pkgdeps:
 	$(pkgupg) $(pkgdeps)

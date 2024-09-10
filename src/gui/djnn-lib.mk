@@ -15,7 +15,7 @@ lib_srcs += src/gui/css-parser/parser.cpp src/gui/css-parser/scanner.cpp src/gui
 #define my_lib_rules
 
 #$(build_dir)/src/gui/css-parser/scanner.o: DJNN_CXXFLAGS += -Dregister=""
-$(build_dir)/src/gui/css-parser/%.o: DJNN_CXXFLAGS += -I$(build_dir)/src/gui/css-parser -Isrc/gui/css-parser
+$(build_dir)/src/gui/css-parser/%.o: DJNN_CXXFLAGS += -I$(build_dir)/src/gui/css-parser -Isrc/gui/css-parser -Wno-misleading-indentation
 
 $(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp
 $(build_dir)/src/gui/css-parser/parser.cpp: src/gui/css-parser/parser.y
@@ -29,22 +29,17 @@ $(build_dir)/src/gui/css-parser/%.o: DJNN_CXXFLAGS += -I/usr/include
 endif
 #endef
 
-#lib_rules += $(my_lib_rules)
-# ----------
-
-ifeq ($(os),Linux)
-YACC = bison -d
-endif
-
 ifeq ($(os),Darwin)
-#lib_cppflags += -I$(brew_prefix)/opt/flex/include
 $(build_dir)/src/gui/css-parser/%.o: DJNN_CXXFLAGS += -I$(brew_prefix)/opt/flex/include -Wno-unused-but-set-variable
 lib_ldflags += -L$(brew_prefix)/opt/flex/lib
 endif
 
-ifeq ($(os),MinGW)
-YACC = bison -d
+ifeq ($(os),Browser)
+brew_prefix := $(shell brew --prefix)
+$(build_dir)/src/gui/css-parser/%.o: DJNN_CXXFLAGS += -I$(brew_prefix)/opt/flex/include -Wno-unused-but-set-variable
+lib_ldflags += -L$(brew_prefix)/opt/flex/lib
 endif
+
 
 ifeq ($(picking),ANALYTICAL)
 lib_cppflags += -DDJNN_USE_ANALYTICAL_PICKING

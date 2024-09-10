@@ -31,11 +31,11 @@ ifeq ($(os),Darwin)
 	#TODO : activate after confinement and put above AND REMOVE /ivy
 
 	ifeq ($(use_ivy),yes)
-	tmp_lib_cppflags = $(shell pkg-config libivy --cflags)
+	tmp_lib_cppflags = $(shell PKG_CONFIG_PATH=$(comms_lib_pkgpath) $(PKG_CONFIG) libivy --cflags)
 	ifneq ($(tmp_lib_cppflags),)
-		lib_cppflags += $(shell pkg-config libivy --cflags)/Ivy
+		lib_cppflags += $(shell PKG_CONFIG_PATH=$(comms_lib_pkgpath) $(PKG_CONFIG) libivy --cflags)/Ivy
 	endif
-	lib_ldflags += $(shell pkg-config libivy --libs)
+	lib_ldflags += $(shell PKG_CONFIG_PATH=$(comms_lib_pkgpath) $(PKG_CONFIG) libivy --libs)
 	endif
 
 	lib_srcs += $(local_dir)/serial.cpp
@@ -46,8 +46,8 @@ ifeq ($(os),Linux)
 	pkgdeps += libpcre3-dev
 	# TODO: add support for pkg-config
 	# TODO: remove once .pkg made 
-	lib_cppflags += -I/usr/local/include/Ivy
-	lib_ldflags += -L/usr/local/lib -livy -lpcre
+	lib_cppflags += -I/usr/include/Ivy
+	lib_ldflags += -L/usr/lib -livy -lpcre
 	endif
 
 	lib_srcs += $(local_dir)/serial.cpp

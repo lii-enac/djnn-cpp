@@ -13,6 +13,5 @@ endif
 
 ifeq ($(display),SDL)
 include src/display/sdl/djnn-lib.mk
-lib_srcs += src/display/alt/alt_display.cpp
 endif
 
