@@ -26,10 +26,10 @@ class GUIStructureHolder : public FatProcess {
   public:
     GUIStructureHolder (FatProcess* content)
         : FatProcess ("GUIStructureHolder_of_" + content->get_debug_name ()), content_process (content) {}
-    void            add_gui_child (CoreProcess* c, size_t index);
-    void            add_gui_child_at (CoreProcess* c, size_t neighbour_index, child_position_e spec, size_t new_index);
-    void            remove_gui_child (CoreProcess* c);
-    void            move_child_to (CoreProcess* c, size_t neighbour_index, child_position_e spec, size_t new_index);
+    void            add_gui_child (CoreProcess* child, size_t index);
+    void            add_gui_child_at (CoreProcess* child, size_t neighbour_index, child_position_e spec, size_t new_index);
+    void            remove_gui_child (CoreProcess* child);
+    void            move_child_to (CoreProcess* child, size_t neighbour_index, child_position_e spec, size_t new_index);
     void            swap_children (size_t i, size_t j);
     void            set_child (CoreProcess* child, size_t i);
     void            draw () override;
@@ -49,15 +49,15 @@ class GUIStructureObserver : public StructureObserver {
   public:
     GUIStructureObserver () {}
     virtual ~GUIStructureObserver () override;
-    void                add_container (FatProcess* cont) override;
-    void                remove_container (FatProcess* cont) override;
-    void                add_child_to_container (FatProcess* cont, CoreProcess* c, int index) override;
-    void                add_child_at (FatProcess* cont, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index) override;
-    void                move_child_to (FatProcess* cont, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index) override;
-    void                remove_child_from_container (FatProcess* cont, CoreProcess* c) override;
-    void                swap_children (FatProcess* cont, int i, int j) override;
-    void                set_child (FatProcess* cont, CoreProcess* child, int i) override;
-    GUIStructureHolder* find_holder (CoreProcess* cont);
+    void                add_container (FatProcess* container) override;
+    void                remove_container (FatProcess* container) override;
+    void                add_child_to_container (FatProcess* container, CoreProcess* child, int index) override;
+    void                add_child_at (FatProcess* container, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index) override;
+    void                move_child_to (FatProcess* container, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index) override;
+    void                remove_child_from_container (FatProcess* container, CoreProcess* c) override;
+    void                swap_children (FatProcess* container, int i, int j) override;
+    void                set_child (FatProcess* container, CoreProcess* child, int i) override;
+    GUIStructureHolder* find_holder (CoreProcess* container);
     // void print_structure_map ();
     structures_t& structure_map () { return _structure_map; };
 

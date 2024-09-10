@@ -40,18 +40,18 @@ FatProcess*           GenericMouse;
 GUIStructureObserver* gui_structure_observer;
 
 void
-GUIStructureHolder::add_gui_child (CoreProcess* c, size_t index)
+GUIStructureHolder::add_gui_child (CoreProcess* child, size_t index)
 {
-    _children.push_back (children_t::value_type (c, index));
+    _children.push_back (children_t::value_type (child, index));
 }
 
 void
-GUIStructureHolder::remove_gui_child (CoreProcess* c)
+GUIStructureHolder::remove_gui_child (CoreProcess* child)
 {
 
     // TODO MP : becareful ... how much time does this take ?
     _children.erase (
-        djnnstl::remove_if (_children.begin (), _children.end (), [c] (children_t::value_type p) { return p.first == c; }),
+        djnnstl::remove_if (_children.begin (), _children.end (), [child] (children_t::value_type p) { return p.first == child; }),
         _children.end ());
 }
 
@@ -136,29 +136,29 @@ GUIStructureHolder::pick_analytical (PickAnalyticalContext& pac)
 }
 
 void
-GUIStructureHolder::add_gui_child_at (CoreProcess* c, size_t neighbour_index, child_position_e spec, size_t new_index)
+GUIStructureHolder::add_gui_child_at (CoreProcess* child, size_t neighbour_index, child_position_e spec, size_t new_index)
 {
     size_t sz = _children.size ();
     switch (spec) {
     case LAST:
-        _children.push_back (children_t::value_type (c, new_index));
+        _children.push_back (children_t::value_type (child, new_index));
         break;
     case FIRST:
-        _children.insert (_children.begin (), children_t::value_type (c, new_index));
+        _children.insert (_children.begin (), children_t::value_type (child, new_index));
         break;
     case AFTER:
         for (size_t i = 0; i < sz - 1; i++) {
             if (_children.at (i).second == neighbour_index) {
-                _children.insert (_children.begin () + i + 1, children_t::value_type (c, new_index));
+                _children.insert (_children.begin () + i + 1, children_t::value_type (child, new_index));
                 break;
             }
         }
-        _children.push_back (children_t::value_type (c, new_index));
+        _children.push_back (children_t::value_type (child, new_index));
         break;
     case BEFORE:
         for (size_t i = 0; i < sz; i++) {
             if (_children.at (i).second == neighbour_index) {
-                _children.insert (_children.begin () + i, children_t::value_type (c, new_index));
+                _children.insert (_children.begin () + i, children_t::value_type (child, new_index));
                 break;
             }
         }
@@ -166,12 +166,12 @@ GUIStructureHolder::add_gui_child_at (CoreProcess* c, size_t neighbour_index, ch
 }
 
 void
-GUIStructureHolder::move_child_to (CoreProcess* c, size_t neighbour_index, child_position_e spec, size_t new_index)
+GUIStructureHolder::move_child_to (CoreProcess* child, size_t neighbour_index, child_position_e spec, size_t new_index)
 {
     _children.erase (
-        djnnstl::remove_if (_children.begin (), _children.end (), [c] (children_t::value_type p) { return p.first == c; }),
+        djnnstl::remove_if (_children.begin (), _children.end (), [child] (children_t::value_type p) { return p.first == child; }),
         _children.end ());
-    add_gui_child_at (c, neighbour_index, spec, new_index);
+    add_gui_child_at (child, neighbour_index, spec, new_index);
 }
 
 GUIStructureObserver::~GUIStructureObserver ()
@@ -185,22 +185,22 @@ GUIStructureObserver::~GUIStructureObserver ()
 }
 
 void
-GUIStructureObserver::add_container (FatProcess* cont)
+GUIStructureObserver::add_container (FatProcess* container)
 {
-    structures_t::iterator it_cont = _structure_map.find (cont);
+    structures_t::iterator it_cont = _structure_map.find (container);
     if (it_cont == _structure_map.end ()) {
-        GUIStructureHolder* holder = new GUIStructureHolder (cont);
-        _structure_map.insert (pair<CoreProcess*, GUIStructureHolder*> (cont, holder));
+        GUIStructureHolder* holder = new GUIStructureHolder (container);
+        _structure_map.insert (pair<CoreProcess*, GUIStructureHolder*> (container, holder));
     }
 }
 
 void
-GUIStructureObserver::remove_container (FatProcess* cont)
+GUIStructureObserver::remove_container (FatProcess* container)
 {
-    structures_t::iterator it_cont = _structure_map.find (cont);
-    if (it_cont != _structure_map.end ()) {
-        delete it_cont->second;
-        _structure_map.erase (it_cont);
+    structures_t::iterator it_container = _structure_map.find (container);
+    if (it_container != _structure_map.end ()) {
+        delete it_container->second;
+        _structure_map.erase (it_container);
     }
 }
 
@@ -222,117 +222,117 @@ GUIStructureObserver::remove_container (FatProcess* cont)
 // }
 
 void
-GUIStructureObserver::add_child_to_container (FatProcess* cont, CoreProcess* c, int index)
+GUIStructureObserver::add_child_to_container (FatProcess* container, CoreProcess* child, int index)
 {
-    structures_t::iterator it_cont = _structure_map.find (cont);
+    structures_t::iterator it_container = _structure_map.find (container);
 
-    switch (c->get_process_type ()) {
+    switch (child->get_process_type ()) {
     case GOBJ_T:
-        if (it_cont != _structure_map.end ())
-            it_cont->second->add_gui_child (c, index);
+        if (it_container != _structure_map.end ())
+            it_container->second->add_gui_child (child, index);
         break;
     case WINDOW_T: {
-        Window* w = dynamic_cast<Window*> (c);
-        w->set_holder (it_cont->second);
+        Window* w = dynamic_cast<Window*> (child);
+        w->set_holder (it_container->second);
         break;
     }
     case CONTAINER_T:
     case FSM_T:
     case LAYER_T: {
-        GUIStructureHolder* GH = _structure_map[c];
-        if (it_cont != _structure_map.end ())
-            it_cont->second->add_gui_child (GH, index);
+        GUIStructureHolder* GH = _structure_map[child];
+        if (it_container != _structure_map.end ())
+            it_container->second->add_gui_child (GH, index);
         break;
     }
 
     default:
         break;
     }
-    cont->update_drawing ();
+    container->update_drawing ();
 }
 
 void
-GUIStructureObserver::add_child_at (FatProcess* cont, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index)
+GUIStructureObserver::add_child_at (FatProcess* container, CoreProcess* child, int neighbour_index, child_position_e spec, int new_index)
 {
-    structures_t::iterator it_cont = _structure_map.find (cont);
-    switch (c->get_process_type ()) {
+    structures_t::iterator it_container = _structure_map.find (container);
+    switch (child->get_process_type ()) {
     case GOBJ_T:
-        if (it_cont != _structure_map.end ())
-            it_cont->second->add_gui_child_at (c, neighbour_index, spec, new_index);
+        if (it_container != _structure_map.end ())
+            it_container->second->add_gui_child_at (child, neighbour_index, spec, new_index);
         break;
     case WINDOW_T: {
-        Window* w = dynamic_cast<Window*> (c);
-        w->set_holder (it_cont->second);
+        Window* w = dynamic_cast<Window*> (child);
+        w->set_holder (it_container->second);
         break;
     }
     case CONTAINER_T:
     case FSM_T:
     case LAYER_T: {
-        GUIStructureHolder* GH = _structure_map[c];
-        if (it_cont != _structure_map.end ())
-            it_cont->second->add_gui_child_at (GH, neighbour_index, spec, new_index);
+        GUIStructureHolder* GH = _structure_map[child];
+        if (it_container != _structure_map.end ())
+            it_container->second->add_gui_child_at (GH, neighbour_index, spec, new_index);
         break;
     }
 
     default:
         break;
     }
-    cont->update_drawing ();
+    container->update_drawing ();
 }
 
 void
-GUIStructureObserver::move_child_to (FatProcess* cont, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index)
+GUIStructureObserver::move_child_to (FatProcess* container, CoreProcess* child, int neighbour_index, child_position_e spec, int new_index)
 {
-    structures_t::iterator it_cont = _structure_map.find (cont);
-    switch (c->get_process_type ()) {
+    structures_t::iterator it_container = _structure_map.find (container);
+    switch (child->get_process_type ()) {
     case GOBJ_T:
-        if (it_cont != _structure_map.end ())
-            it_cont->second->move_child_to (c, neighbour_index, spec, new_index);
+        if (it_container != _structure_map.end ())
+            it_container->second->move_child_to (child, neighbour_index, spec, new_index);
         break;
     case WINDOW_T: {
-        Window* w = dynamic_cast<Window*> (c);
-        w->set_holder (it_cont->second);
+        Window* w = dynamic_cast<Window*> (child);
+        w->set_holder (it_container->second);
         break;
     }
     case CONTAINER_T:
     case FSM_T:
     case LAYER_T: {
-        GUIStructureHolder* GH = _structure_map[c];
-        if (it_cont != _structure_map.end ())
-            it_cont->second->move_child_to (GH, neighbour_index, spec, new_index);
+        GUIStructureHolder* GH = _structure_map[child];
+        if (it_container != _structure_map.end ())
+            it_container->second->move_child_to (GH, neighbour_index, spec, new_index);
         break;
     }
 
     default:
         break;
     }
-    cont->update_drawing ();
+    container->update_drawing ();
 }
 
 void
-GUIStructureObserver::remove_child_from_container (FatProcess* cont, CoreProcess* c)
+GUIStructureObserver::remove_child_from_container (FatProcess* container, CoreProcess* child)
 {
-    structures_t::iterator it_cont = _structure_map.find (cont);
-    if (it_cont != _structure_map.end ()) {
+    structures_t::iterator it_container = _structure_map.find (container);
+    if (it_container != _structure_map.end ()) {
 
-        switch (c->get_process_type ()) {
+        switch (child->get_process_type ()) {
         case GOBJ_T:
-            it_cont->second->remove_gui_child (c);
+            it_container->second->remove_gui_child (child);
             break;
         case WINDOW_T:
             break;
         case CONTAINER_T:
         case FSM_T:
         case LAYER_T: {
-            GUIStructureHolder* GH = _structure_map[c];
-            it_cont->second->remove_gui_child (GH);
+            GUIStructureHolder* GH = _structure_map[child];
+            it_container->second->remove_gui_child (GH);
             break;
         }
         default:
             break;
         }
     }
-    cont->update_drawing ();
+    container->update_drawing ();
 }
 
 void
