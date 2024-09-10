@@ -136,7 +136,7 @@ GUIStructureHolder::pick_analytical (PickAnalyticalContext& pac)
 }
 
 void
-GUIStructureHolder::add_gui_child_at (CoreProcess* c, size_t neighboor_index, child_position_e spec, size_t new_index)
+GUIStructureHolder::add_gui_child_at (CoreProcess* c, size_t neighbour_index, child_position_e spec, size_t new_index)
 {
     size_t sz = _children.size ();
     switch (spec) {
@@ -148,7 +148,7 @@ GUIStructureHolder::add_gui_child_at (CoreProcess* c, size_t neighboor_index, ch
         break;
     case AFTER:
         for (size_t i = 0; i < sz - 1; i++) {
-            if (_children.at (i).second == neighboor_index) {
+            if (_children.at (i).second == neighbour_index) {
                 _children.insert (_children.begin () + i + 1, children_t::value_type (c, new_index));
                 break;
             }
@@ -157,7 +157,7 @@ GUIStructureHolder::add_gui_child_at (CoreProcess* c, size_t neighboor_index, ch
         break;
     case BEFORE:
         for (size_t i = 0; i < sz; i++) {
-            if (_children.at (i).second == neighboor_index) {
+            if (_children.at (i).second == neighbour_index) {
                 _children.insert (_children.begin () + i, children_t::value_type (c, new_index));
                 break;
             }
@@ -166,12 +166,12 @@ GUIStructureHolder::add_gui_child_at (CoreProcess* c, size_t neighboor_index, ch
 }
 
 void
-GUIStructureHolder::move_child_to (CoreProcess* c, size_t neighboor_index, child_position_e spec, size_t new_index)
+GUIStructureHolder::move_child_to (CoreProcess* c, size_t neighbour_index, child_position_e spec, size_t new_index)
 {
     _children.erase (
         djnnstl::remove_if (_children.begin (), _children.end (), [c] (children_t::value_type p) { return p.first == c; }),
         _children.end ());
-    add_gui_child_at (c, neighboor_index, spec, new_index);
+    add_gui_child_at (c, neighbour_index, spec, new_index);
 }
 
 GUIStructureObserver::~GUIStructureObserver ()
@@ -252,13 +252,13 @@ GUIStructureObserver::add_child_to_container (FatProcess* cont, CoreProcess* c, 
 }
 
 void
-GUIStructureObserver::add_child_at (FatProcess* cont, CoreProcess* c, int neighboor_index, child_position_e spec, int new_index)
+GUIStructureObserver::add_child_at (FatProcess* cont, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index)
 {
     structures_t::iterator it_cont = _structure_map.find (cont);
     switch (c->get_process_type ()) {
     case GOBJ_T:
         if (it_cont != _structure_map.end ())
-            it_cont->second->add_gui_child_at (c, neighboor_index, spec, new_index);
+            it_cont->second->add_gui_child_at (c, neighbour_index, spec, new_index);
         break;
     case WINDOW_T: {
         Window* w = dynamic_cast<Window*> (c);
@@ -270,7 +270,7 @@ GUIStructureObserver::add_child_at (FatProcess* cont, CoreProcess* c, int neighb
     case LAYER_T: {
         GUIStructureHolder* GH = _structure_map[c];
         if (it_cont != _structure_map.end ())
-            it_cont->second->add_gui_child_at (GH, neighboor_index, spec, new_index);
+            it_cont->second->add_gui_child_at (GH, neighbour_index, spec, new_index);
         break;
     }
 
@@ -281,13 +281,13 @@ GUIStructureObserver::add_child_at (FatProcess* cont, CoreProcess* c, int neighb
 }
 
 void
-GUIStructureObserver::move_child_to (FatProcess* cont, CoreProcess* c, int neighboor_index, child_position_e spec, int new_index)
+GUIStructureObserver::move_child_to (FatProcess* cont, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index)
 {
     structures_t::iterator it_cont = _structure_map.find (cont);
     switch (c->get_process_type ()) {
     case GOBJ_T:
         if (it_cont != _structure_map.end ())
-            it_cont->second->move_child_to (c, neighboor_index, spec, new_index);
+            it_cont->second->move_child_to (c, neighbour_index, spec, new_index);
         break;
     case WINDOW_T: {
         Window* w = dynamic_cast<Window*> (c);
@@ -299,7 +299,7 @@ GUIStructureObserver::move_child_to (FatProcess* cont, CoreProcess* c, int neigh
     case LAYER_T: {
         GUIStructureHolder* GH = _structure_map[c];
         if (it_cont != _structure_map.end ())
-            it_cont->second->move_child_to (GH, neighboor_index, spec, new_index);
+            it_cont->second->move_child_to (GH, neighbour_index, spec, new_index);
         break;
     }
 

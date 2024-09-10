@@ -27,9 +27,9 @@ class GUIStructureHolder : public FatProcess {
     GUIStructureHolder (FatProcess* content)
         : FatProcess ("GUIStructureHolder_of_" + content->get_debug_name ()), content_process (content) {}
     void            add_gui_child (CoreProcess* c, size_t index);
-    void            add_gui_child_at (CoreProcess* c, size_t neighboor_index, child_position_e spec, size_t new_index);
+    void            add_gui_child_at (CoreProcess* c, size_t neighbour_index, child_position_e spec, size_t new_index);
     void            remove_gui_child (CoreProcess* c);
-    void            move_child_to (CoreProcess* c, size_t neighboor_index, child_position_e spec, size_t new_index);
+    void            move_child_to (CoreProcess* c, size_t neighbour_index, child_position_e spec, size_t new_index);
     void            swap_children (size_t i, size_t j);
     void            set_child (CoreProcess* child, size_t i);
     void            draw () override;
@@ -52,8 +52,8 @@ class GUIStructureObserver : public StructureObserver {
     void                add_container (FatProcess* cont) override;
     void                remove_container (FatProcess* cont) override;
     void                add_child_to_container (FatProcess* cont, CoreProcess* c, int index) override;
-    void                add_child_at (FatProcess* cont, CoreProcess* c, int neighboor_index, child_position_e spec, int new_index) override;
-    void                move_child_to (FatProcess* cont, CoreProcess* c, int neighboor_index, child_position_e spec, int new_index) override;
+    void                add_child_at (FatProcess* cont, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index) override;
+    void                move_child_to (FatProcess* cont, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index) override;
     void                remove_child_from_container (FatProcess* cont, CoreProcess* c) override;
     void                swap_children (FatProcess* cont, int i, int j) override;
     void                set_child (FatProcess* cont, CoreProcess* child, int i) override;
