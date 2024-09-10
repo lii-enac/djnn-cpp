@@ -67,7 +67,7 @@ ColorPickingView::init ()
         }
     }
 
-    seed = 0; // no correct anymore since Layers
+    seed = 0; // not correct anymore since Layers
 
     next_color ();
 }
@@ -130,19 +130,25 @@ ColorPickingView::remove_pick_shape (PickUI* pshape)
 }
 
 PickUI*
-ColorPickingView::pick (double x, double y)
+ColorPickingView::pick_impl (unsigned int color) // default implementation, using _color_map
 {
-    int  color = get_pixel (x, y);
-    auto it    = _color_map.find (color);
+    auto it = _color_map.find (color);
 
     // debug
     // std::cout << "pick color: " << std::hex << color << " obj: " << it->second << std::endl <<std::endl;
 
-    // We added guard on has_ui because background_windows doesn't have ui all the time event if it is always in the _color_map
+    // We added guard on has_ui because background_windows doesn't have ui all the time even if it is always in the _color_map
     if (it != _color_map.end () && it->second->has_ui ()) {
         return it->second;
     }
     return nullptr;
+}
+
+PickUI*
+ColorPickingView::pick (double x, double y)
+{
+    int color = get_pixel (x, y);
+    return pick_impl (color);
 }
 
 void

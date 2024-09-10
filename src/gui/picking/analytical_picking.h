@@ -10,7 +10,7 @@ class AnalyticalPicking : public Picking {
     virtual ~AnalyticalPicking ();
     virtual void            init ();
     virtual AbstractGShape* pick (double x, double y);
-    virtual void            add_gobj (AbstractGShape* gobj, bool cache = false);
+    virtual void            add_pick_shape (PickUI* pshape, bool cache = false);
 };
 
 } // namespace djnn

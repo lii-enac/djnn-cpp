@@ -48,7 +48,12 @@ class Picking {
     bool genericTouchRelease (double x, double y, int id, float pressure);
 
   protected:
-    bool                      genericEnterLeave (PickUI* gobj);
+    bool genericEnterLeave (PickUI* gobj);
+#ifndef DJNN_NO_DEBUG
+    bool check_for_ui (PickUI* gobj);
+#else
+    bool check_for_ui (PickUI* gobj) { return true; }
+#endif
     Window*                   _win;
     PickUI *                  _caught_shape, *_hovered_shape;
     djnnstl::map<int, Touch*> _active_touches;

@@ -42,8 +42,9 @@ class ColorPickingView : public Picking {
     unsigned int                        _pick_color;
     djnnstl::map<unsigned int, PickUI*> _color_map;
 
-    int    seed;
-    double myrandom ();
-    void   next_color ();
+    int             seed;
+    double          myrandom ();
+    void            next_color ();
+    virtual PickUI* pick_impl (unsigned int color); // default implementation uses _color_map
 };
 } // namespace djnn

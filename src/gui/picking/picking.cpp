@@ -19,9 +19,12 @@
 
 #include "color_picking.h"
 #include "core/core-dev.h"
+#include "core/utils/error.h"
+#include "core/utils/ext/remotery/Remotery.h"
 #include "core/utils/to_string.h"
 #include "display/ui.h"
 #include "gui/transformation/homography.h"
+
 namespace djnn {
 extern int         mouse_tracking; // in display
 extern FatProcess* GenericMouse;   // in gui
@@ -67,14 +70,26 @@ Picking::object_deactivated (PickUI* picked_shape)
     }
 }
 
+#ifndef DJNN_NO_DEBUG
+bool
+Picking::check_for_ui (PickUI* s)
+{
+    if (!s || !s->ui ()) {
+        // warning (nullptr, "no ui in picked gobj");
+        return false;
+    }
+    return true;
+}
+#endif
+
 bool
 Picking::genericEnterLeave (PickUI* picked)
 {
-
     auto s = picked;
-
     if (s) {
         if (s != _hovered_shape) {
+            if (!check_for_ui (s))
+                return false;
             if (_hovered_shape != nullptr) {
                 FatProcess* p1 = _hovered_shape->ui ()->leave ();
                 FatProcess* p2 = _hovered_shape->ui ()->mouse_leave ();
@@ -119,6 +134,8 @@ Picking::genericCheckShapeAfterDraw (double x, double y)
     bool    exec_ = false;
     PickUI* s     = this->pick (x, y);
     if (s) {
+        if (!check_for_ui (s))
+            return false;
         double cur_move_x = s->ui ()->move_x ()->get_value ();
         double cur_move_y = s->ui ()->move_y ()->get_value ();
 
@@ -174,7 +191,7 @@ Picking::genericMousePress (double x, double y, mouse_button button)
     /* shape */
     PickUI* s = this->pick (x, y);
     // std::cerr << s << " " << typeid(s).name() << std::endl;
-    if (s != nullptr) {
+    if (s != nullptr && check_for_ui (s)) {
 
         /* setting */
         common_press_setting (x, y, s);
@@ -197,19 +214,19 @@ Picking::genericMousePress (double x, double y, mouse_button button)
     switch (button) {
     case BUTTON_LEFT:
         ((GUIMouse*)GenericMouse)->left ()->press ()->schedule_activation ();
-        if (s != nullptr) {
+        if (s != nullptr && check_for_ui (s)) {
             s->ui ()->left_press ()->schedule_activation ();
         }
         break;
     case BUTTON_RIGHT:
         ((GUIMouse*)GenericMouse)->right ()->press ()->schedule_activation ();
-        if (s != nullptr) {
+        if (s != nullptr && check_for_ui (s)) {
             s->ui ()->right_press ()->schedule_activation ();
         }
         break;
     case BUTTON_MIDDLE:
         ((GUIMouse*)GenericMouse)->middle ()->press ()->schedule_activation ();
-        if (s != nullptr) {
+        if (s != nullptr && check_for_ui (s)) {
             s->ui ()->middle_press ()->schedule_activation ();
         }
         break;
@@ -259,6 +276,8 @@ Picking::genericTouchPress (double x, double y, int id, float pressure)
     /* picking/shape management */
     PickUI* s = this->pick (x, y);
     if (s != nullptr) {
+        if (!check_for_ui (s))
+            return false;
         common_press_setting (x, y, s);
         t->set_init_shape (s);
         t->set_current_shape (s);
@@ -274,8 +293,10 @@ Picking::genericTouchPress (double x, double y, int id, float pressure)
 bool
 Picking::genericMouseMove (double x, double y)
 {
+    rmt_BeginCPUSample (genericMouseMove, RMTSF_Aggregate);
     bool exec_ = false;
 
+    rmt_BeginCPUSample (windows_setting, RMTSF_Aggregate);
     /* windows setting */
     double old_x = _win->move_x ()->get_value ();
     double old_y = _win->move_y ()->get_value ();
@@ -283,11 +304,15 @@ Picking::genericMouseMove (double x, double y)
         _win->move_x ()->set_value (x, true);
     if (y != old_y)
         _win->move_y ()->set_value (y, true);
+    rmt_EndCPUSample ();
 
+    rmt_BeginCPUSample (shape, RMTSF_Aggregate);
     /* shape */
+    rmt_BeginCPUSample (pick, RMTSF_Aggregate);
     PickUI* s = this->pick (x, y);
+    rmt_EndCPUSample ();
     exec_ |= genericEnterLeave (s);
-    if (s) {
+    if (s && check_for_ui (s)) {
 
         /* setting */
         if (x != old_x) {
@@ -318,7 +343,9 @@ Picking::genericMouseMove (double x, double y)
 
         exec_ = true;
     }
+    rmt_EndCPUSample ();
 
+    rmt_BeginCPUSample (caught_shape, RMTSF_Aggregate);
     /* _caught_shape */
     if (_caught_shape != nullptr && _caught_shape != s) {
 
@@ -353,7 +380,9 @@ Picking::genericMouseMove (double x, double y)
 
         exec_ = true;
     }
+    rmt_EndCPUSample ();
 
+    rmt_BeginCPUSample (generic_mouse, RMTSF_Aggregate);
     /* generic mouse setting */
     ((GUIMouse*)GenericMouse)->x ()->set_value (x, true);
     ((GUIMouse*)GenericMouse)->y ()->set_value (y, true);
@@ -370,7 +399,9 @@ Picking::genericMouseMove (double x, double y)
         ((GUIMouse*)GenericMouse)->y ()->schedule_activation ();
         exec_ = true;
     }
+    rmt_EndCPUSample ();
 
+    rmt_BeginCPUSample (window_event, RMTSF_Aggregate);
     /* windows event schedule event After shape event*/
     if (_win->move ()->has_coupling ()) {
         _win->move ()->schedule_activation ();
@@ -384,7 +415,8 @@ Picking::genericMouseMove (double x, double y)
         _win->move_y ()->schedule_activation ();
         exec_ = true;
     }
-
+    rmt_EndCPUSample ();
+    rmt_EndCPUSample ();
     return exec_;
 }
 
@@ -414,6 +446,8 @@ Picking::genericTouchMove (double x, double y, int id, float pressure)
             /* touch event */
             t->leave ();
         } else if (s != nullptr && s != cur_shape) {
+            if (!check_for_ui (s))
+                return false;
             if (cur_shape != nullptr && cur_shape != init_shape)
                 cur_shape->ui ()->touches ()->remove_child (t);
             s->ui ()->touches ()->add_child (t, djnnstl::to_string (id));
@@ -446,10 +480,20 @@ Picking::genericMouseRelease (double x, double y, mouse_button button)
     _mouse_released = true;
     bool exec_      = false;
 
+    /* windows setting */
+    _win->release_x ()->set_value (x, true);
+    _win->release_y ()->set_value (y, true);
+
     /* shape */
     PickUI* s = this->pick (x, y);
-    if (s) {
-        /* event */
+    if (s && check_for_ui (s)) {
+
+        /* setting */
+        s->ui ()->release_x ()->set_value (x, true);
+        s->ui ()->release_y ()->set_value (y, true);
+        s->ui ()->mouse_release_x ()->set_value (x, true);
+        s->ui ()->mouse_release_y ()->set_value (y, true);
+        s->set_mouse_local_coords (x, y, false);
 
         s->ui ()->release ()->schedule_activation ();
         s->ui ()->mouse_release ()->schedule_activation ();
@@ -481,19 +525,19 @@ Picking::genericMouseRelease (double x, double y, mouse_button button)
     switch (button) {
     case BUTTON_LEFT:
         ((GUIMouse*)GenericMouse)->left ()->release ()->schedule_activation ();
-        if (s != nullptr) {
+        if (s != nullptr && check_for_ui (s)) {
             s->ui ()->left_release ()->schedule_activation ();
         }
         break;
     case BUTTON_RIGHT:
         ((GUIMouse*)GenericMouse)->right ()->release ()->schedule_activation ();
-        if (s != nullptr) {
+        if (s != nullptr && check_for_ui (s)) {
             s->ui ()->right_release ()->schedule_activation ();
         }
         break;
     case BUTTON_MIDDLE:
         ((GUIMouse*)GenericMouse)->middle ()->release ()->schedule_activation ();
-        if (s != nullptr) {
+        if (s != nullptr && check_for_ui (s)) {
             s->ui ()->middle_release ()->schedule_activation ();
         }
         break;
@@ -558,6 +602,8 @@ Picking::genericTouchRelease (double x, double y, int id, float pressure)
 
     /* common shape event */
     if (s) {
+        if (!check_for_ui (s))
+            return false;
         s->ui ()->release ()->schedule_activation ();
         s->ui ()->leave ()->schedule_activation ();
     }
