@@ -182,7 +182,6 @@ Manager::is_already_scheduled (Timer* timer) const
 void
 Manager::debug () const
 {
-    // needs <iostream>
     /*std::cerr << "timer queue: ";
     for (auto it = _timers.begin(); it != _timers.end(); ++it ) {
       //std::cerr << (*it)->get_end_time () << "ms (" << (*it)->get_duration() << "ms) - ";

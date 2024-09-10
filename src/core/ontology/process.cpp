@@ -823,7 +823,7 @@ CoreProcess::clone () const
 {
     map<const CoreProcess*, CoreProcess*> origs_clones;
     return impl_clone (origs_clones);
-};
+}
 
 CoreProcess*
 CoreProcess::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const

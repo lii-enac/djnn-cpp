@@ -15,11 +15,14 @@
 #include "global_mutex.h"
 
 #include "cpp-mutex-priv.h"
+#include "cpp-mutex.h"
 #include "exec_env/djnn_time_manager.h"
 
 // dbg
 // #define DBG_MUTEX 1
 // #include "core/utils/iostream.h"
+// #include "core/utils/error.h"
+// #include "utils/debug.h"
 // #include <thread> // this_thread
 
 namespace djnn {
@@ -59,9 +62,7 @@ get_exclusive_access (const char* debug)
     std::cerr << debug << " thread:" << std::this_thread::get_id () << " global mutex: " << global_mutex << std::flush;
     release (ios_mutex);
 #endif
-
     lock (global_mutex);
-
     DjnnTimeManager::instance ().update_ref_now ();
 
 #if DBG_MUTEX

@@ -36,3 +36,5 @@ MACRO (ParenRight, PARENRIGHT)
 MACRO (Equal, EQUAL)
 
 } // namespace djnn
+
+#undef MACRO

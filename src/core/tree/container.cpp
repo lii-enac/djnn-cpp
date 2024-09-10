@@ -26,7 +26,7 @@
 #include "gui/picking/analytical_picking_context.h"
 
 #if !defined(DJNN_NO_DEBUG)
-#include <iostream>
+#include "core/utils/iostream.h"
 
 // #define DEBUG_DEACTIVATE
 #endif
