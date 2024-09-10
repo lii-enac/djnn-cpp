@@ -24,6 +24,7 @@
 #include "gui/abstract_backend.h"
 #include "gui/backend.h"
 #include "gui/layer.h"
+#include "gui/picking/analytical_picking_context.h"
 
 // #include <boost/range/adaptor/reversed.hpp>
 
@@ -38,6 +39,9 @@ extern int __nb_Drawing_object_picking;
 namespace djnn {
 FatProcess*           GenericMouse;
 GUIStructureObserver* gui_structure_observer;
+
+// ------------------
+// GUIStructureHolder
 
 void
 GUIStructureHolder::add_gui_child (CoreProcess* child, size_t index)
@@ -123,15 +127,14 @@ GUIStructureHolder::draw ()
 AbstractGShape*
 GUIStructureHolder::pick_analytical (PickAnalyticalContext& pac)
 {
-    // ComponentObserver::instance ().start_draw ();
-    // for (auto p : boost::adaptors::reverse(_children)) {
     AbstractGShape* picked = nullptr;
+    auto            saved_pac = pac;
     for (auto p : _children) {
         AbstractGShape* picked_ = p.first->pick_analytical (pac);
         if (picked_)
             picked = picked_;
     }
-    // ComponentObserver::instance ().end_draw ();
+    pac = saved_pac;
     return picked;
 }
 
@@ -169,10 +172,13 @@ void
 GUIStructureHolder::move_child_to (CoreProcess* child, size_t neighbour_index, child_position_e spec, size_t new_index)
 {
     _children.erase (
-        djnnstl::remove_if (_children.begin (), _children.end (), [child] (children_t::value_type p) { return p.first == child; }),
+        djnnstl::remove_if (_children.begin (), _children.end (), [child] (const children_t::value_type& p) { return p.first == child; }),
         _children.end ());
     add_gui_child_at (child, neighbour_index, spec, new_index);
 }
+
+// --------------------
+// GUIStructureObserver
 
 GUIStructureObserver::~GUIStructureObserver ()
 {
@@ -187,10 +193,10 @@ GUIStructureObserver::~GUIStructureObserver ()
 void
 GUIStructureObserver::add_container (FatProcess* container)
 {
-    structures_t::iterator it_cont = _structure_map.find (container);
-    if (it_cont == _structure_map.end ()) {
+    structures_t::iterator it_container = _structure_map.find (container);
+    if (it_container == _structure_map.end ()) {
         GUIStructureHolder* holder = new GUIStructureHolder (container);
-        _structure_map.insert (pair<CoreProcess*, GUIStructureHolder*> (container, holder));
+        _structure_map.insert (structures_t::value_type (container, holder));
     }
 }
 
@@ -336,27 +342,27 @@ GUIStructureObserver::remove_child_from_container (FatProcess* container, CorePr
 }
 
 void
-GUIStructureObserver::swap_children (FatProcess* cont, int i, int j)
+GUIStructureObserver::swap_children (FatProcess* container, int i, int j)
 {
-    structures_t::iterator it_cont = _structure_map.find (cont);
-    if (it_cont != _structure_map.end ())
-        it_cont->second->swap_children (i, j);
-    cont->update_drawing ();
+    structures_t::iterator it_container = _structure_map.find (container);
+    if (it_container != _structure_map.end ())
+        it_container->second->swap_children (i, j);
+    container->update_drawing ();
 }
 
 void
-GUIStructureObserver::set_child (FatProcess* cont, CoreProcess* child, int i)
+GUIStructureObserver::set_child (FatProcess* container, CoreProcess* child, int i)
 {
-    structures_t::iterator it_cont = _structure_map.find (cont);
-    if (it_cont != _structure_map.end ())
-        it_cont->second->set_child (child, i);
-    cont->update_drawing ();
+    structures_t::iterator it_container = _structure_map.find (container);
+    if (it_container != _structure_map.end ())
+        it_container->second->set_child (child, i);
+    container->update_drawing ();
 }
 
 GUIStructureHolder*
-GUIStructureObserver::find_holder (CoreProcess* cont)
+GUIStructureObserver::find_holder (CoreProcess* container)
 {
-    structures_t_it it = _structure_map.find (cont);
+    structures_t_it it = _structure_map.find (container);
     if (it != _structure_map.end ())
         return it->second;
     return nullptr;
