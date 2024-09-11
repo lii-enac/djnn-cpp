@@ -14,13 +14,7 @@
  *
  */
 
-#include <curl/curl.h>
-#include <curl/easy.h>
 #include <expat.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "xml.h"
 
@@ -28,6 +22,14 @@
 #include "core/property/text_property.h"
 #include "core/utils/error.h"
 #include "xml-dev.h"
+#if DJNN_USE_CURL
+#include <curl/curl.h>
+#include <curl/easy.h>
+#endif
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #if !defined(DJNN_NO_DEBUG) || !defined(DJNN_NO_SERIALIZE)
 #include "core/utils/iostream.h"
@@ -117,6 +119,10 @@ XML::djnLoadFromXML (const string& uri)
         return res;
     }
 
+#if !DJNN_USE_CURL
+    return nullptr;
+#else
+
     auto parser = XML_ParserCreateNS ("UTF-8", '*');
     XML_SetElementHandler (parser, &djn__XMLTagStart, &djn__XMLTagEnd);
     XML_SetCharacterDataHandler (parser, &djn__XMLDataHandle);
@@ -151,6 +157,7 @@ XML::djnLoadFromXML (const string& uri)
         error (nullptr, "could not parse " + uri);
         return 0;
     };
+#endif
 }
 
 FatProcess*
