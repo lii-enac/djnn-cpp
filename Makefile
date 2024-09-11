@@ -35,7 +35,9 @@ help:
 	@echo "experiment make -j !!"
 
 config config.mk:
-	cp config.default.mk config.mk
+# 	cp config.default.mk config.mk
+	@echo "\ndefault config : QT"
+	cp project/config/config_qt.mk config.mk
 
 config_%:
 	cp project/config/$@.mk config.mk
@@ -44,7 +46,7 @@ MAJOR = 1
 MINOR = 21
 MINOR2 = 0
 
-include config.default.mk
+include project/config/config_qt.mk
 -include config.mk
 
 src_dir ?= src
