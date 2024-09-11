@@ -12,7 +12,7 @@ ifeq ($(compiler),llvm)
 lib_objs += $(pch_shared_dst)
 endif
 
-ifeq (-DRMT_ENABLED=1,$(filter -DRMT_ENABLED=1,$(remotery_cflags)))
+ifneq (-DRMT_ENABLED=0,$(filter -DRMT_ENABLED=0,$(remotery_cflags)))
 lib_srcs += $(call rwildcard,$(local_dir)/utils/ext/remotery/,*.c)
 $(build_dir)/src/core/utils/ext/remotery/Remotery.o: CFLAGS += -Wno-unused-function -Wno-strict-prototypes -Wno-unused-but-set-variable -Wno-unused-variable -Wno-pedantic
 ifeq (-DRMT_USE_OPENGL=1,$(filter -DRMT_USE_OPENGL=1,$(remotery_cflags)))
