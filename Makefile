@@ -46,8 +46,9 @@ MAJOR = 1
 MINOR = 21
 MINOR2 = 0
 
-include project/config/config_qt.mk
 -include config.mk
+include project/config/config_qt.mk
+
 
 src_dir ?= src
 build_dir ?= build
