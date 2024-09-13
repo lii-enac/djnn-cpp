@@ -46,8 +46,8 @@ ifeq ($(os),Linux)
 	pkgdeps += libpcre3-dev
 	# TODO: add support for pkg-config
 	# TODO: remove once .pkg made 
-	lib_cppflags += -I/usr/include/Ivy
-	lib_ldflags += -L/usr/lib -livy -lpcre
+	lib_cppflags += -I/usr/local/include/Ivy
+	lib_ldflags += -L/usr/local/lib -livy -lpcre
 	endif
 
 	lib_srcs += $(local_dir)/serial.cpp
