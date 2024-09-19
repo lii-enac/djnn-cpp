@@ -741,7 +741,9 @@ Graph::sort (Vertex* v_root)
     _cur_stamp = 0;
     _ordered_vertices.clear ();
 
-    // TODO: explanation here
+    // if !_activation_triggers_to_sort is not empty
+    // then this was triggered by an external source
+    // otherwise this was triggered by an internal property
     if (!_activation_triggers_to_sort.empty ()) {
         for (auto v : _activation_triggers_to_sort) {
             if (v->get_execution_round () < EXECUTION_ROUND)
@@ -765,7 +767,7 @@ Graph::sort (Vertex* v_root)
 
     _sorted = true;
 
-    // print_sorted ();
+    //print_sorted ();
 
 #if _DEBUG_ENABLE_CHECK_ORDER
     if (!_pair_to_check.empty ()) {
