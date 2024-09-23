@@ -27,6 +27,8 @@ using djnnstl::cout;
 using djnnstl::endl;
 #include <cstring>
 #include <fstream>
+#include <algorithm>
+#include <random>
 #endif
 
 #include "core/utils/error.h"
@@ -41,6 +43,7 @@ using djnnstl::endl;
 #include "core/utils/utils-dev.h"
 
 static int graph_counter_act = 0;
+static bool _display_info_once = false;
 
 #if _DEBUG_GRAPH_INSERT_TIME
 static int nb_insert_by_graph_exec       = 0;
@@ -411,6 +414,18 @@ static int EXECUTION_ROUND = 0;
 void
 Graph::exec ()
 {
+#ifndef DJNN_NO_DEBUG
+    if (_display_info_once == false) {
+        if (_DEBUG_ENABLE_STRESS_TEST == 1) {
+            std::cerr << "STRESS_TEST MODE ENABLED : shuffle" << std::endl;
+        }
+        else if (_DEBUG_ENABLE_STRESS_TEST == 2) {
+            std::cerr << "STRESS_TEST MODE ENABLED : reverse" << std::endl;
+        }
+        _display_info_once = true;
+    }
+#endif
+
     // remotery start
     rmt_BeginCPUSample (Graph_exec, RMTSF_None);
 
@@ -825,10 +840,42 @@ Graph::traverse_depth_first (Vertex* v)
     }
 
     v->set_execution_round (EXECUTION_ROUND);
-    // cerr << print_process_full_name (v->get_process ()) << endl;
-    for (auto* v2 : v->get_edges ()) {
-        if (v2->get_execution_round () < EXECUTION_ROUND) {
-            traverse_depth_first (v2);
+
+    if (_DEBUG_ENABLE_STRESS_TEST == 0) {
+        for (auto* v2 : v->get_edges ()) {
+            if (v2->get_execution_round () < EXECUTION_ROUND) {
+                traverse_depth_first (v2);
+            }
+        }
+    }
+    else if (_DEBUG_ENABLE_STRESS_TEST == 1) {
+        auto __shuffle_edges = v->get_edges ();
+        std::random_device rd;
+        std::mt19937 g(rd());
+    
+        // debug
+        // std::cerr << "shuffle " << __shuffle_edges.size () << " edges" << std::endl;
+        
+        std::shuffle(__shuffle_edges.begin(), __shuffle_edges.end(), g);
+        for (auto* v2 : __shuffle_edges) {
+            if (v2->get_execution_round () < EXECUTION_ROUND) {
+                traverse_depth_first (v2);
+            }
+        }
+    }
+    else if (_DEBUG_ENABLE_STRESS_TEST == 2) {
+        auto __reverse_edges = v->get_edges ();
+        std::random_device rd;
+        std::mt19937 g(rd());
+    
+        // debug
+        //std::cerr << "reverse " << __reverse_edges.size () << " edges" << std::endl;
+
+        std::reverse(__reverse_edges.begin(), __reverse_edges.end());
+        for (auto* v2 : __reverse_edges) {
+            if (v2->get_execution_round () < EXECUTION_ROUND) {
+                traverse_depth_first (v2);
+            }
         }
     }
 

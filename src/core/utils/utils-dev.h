@@ -97,6 +97,15 @@ extern int _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL;
 
 extern int _DEBUG_NO_TOUCH_EVENT;
 
+/*
+  Enable stress test:
+  In graph execution, the vector of edges is not used continuously.
+  - option 1: The vector is re-shuffled.
+  - option 2: The vector is reversed.
+*/
+
+extern int _DEBUG_ENABLE_STRESS_TEST;
+
 #else
 
 const int
@@ -110,6 +119,7 @@ const int
     _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY              = 0,
     _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL  = 0,
     _DEBUG_NO_TOUCH_EVENT                         = 1;
+    _DEBUG_ENABLE_STRESS_TEST                     = 0;
 
 const char *_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION = "",
 #endif
