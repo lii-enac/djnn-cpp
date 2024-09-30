@@ -28,6 +28,7 @@
 namespace djnn {
 extern int         mouse_tracking; // in display
 extern FatProcess* GenericMouse;   // in gui
+static vector<Touch*> gc_touches;   // Garbage_Colector touches
 
 Picking::Picking (Window* win)
     : _win (win), _caught_shape (nullptr), _hovered_shape (nullptr), _mouse_released (true)
@@ -257,6 +258,14 @@ Picking::genericMousePress (double x, double y, mouse_button button)
 bool
 Picking::genericTouchPress (double x, double y, int id, float pressure)
 {
+    if (!gc_touches.empty()) {
+            //std::cout << "Press detected, clearing all touches..." << std::endl;
+            for (const auto& touch : gc_touches) {
+                delete touch;
+            }
+            gc_touches.clear();
+        }
+
     /* touch management */
     djnnstl::map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch*                              t;
@@ -268,7 +277,9 @@ Picking::genericTouchPress (double x, double y, int id, float pressure)
             t->leave ();
         }
         _active_touches.erase (it);
-        t->schedule_deletion ();
+        
+        /* delay touch delete in an GC */
+        gc_touches.push_back(t);
     }
     t                   = new Touch (_win->touches (), djnnstl::to_string (id), id, x, y, pressure);
     _active_touches[id] = t;
@@ -595,9 +606,9 @@ Picking::genericTouchRelease (double x, double y, int id, float pressure)
         /* remove touch from list */
         _win->touches ()->remove_child (t);
         _active_touches.erase (it);
-
-        /* delay touch delete */
-        t->schedule_deletion ();
+     
+        /* delay touch delete in an GC */
+        gc_touches.push_back(t);
     }
 
     /* common shape event */
