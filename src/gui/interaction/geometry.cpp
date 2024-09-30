@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2019)
+ *      Ecole Nationale de l'Aviation Civile, France (2019-2024)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -10,6 +10,7 @@
  *  Contributors:
  *      Stéphane Conversy <stephane.conversy@enac.fr>
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -78,9 +79,39 @@ Matrix4x4::~Matrix4x4 ()
 }
 
 void
+Matrix4x4::left_multiply_by (const Matrix4x4& m)
+{
+    Matrix4x4 buff; // Identity
+    // Carefull: Initialize a zero matrix not identity
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            buff[i][j] = 0;
+        }
+    }
+
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++) {
+            for (int k = 0; k < 4; k++) {
+                buff[i][j] += m[i][k] * _matrix[k][j];
+            }
+        }
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++) {
+            _matrix[i][j] = buff[i][j];
+        }
+}
+
+void
 Matrix4x4::right_multiply_by (const Matrix4x4& m)
 {
-    Matrix4x4 buff;
+    Matrix4x4 buff; // Identity
+    // Carefull: Initialize a zero matrix not identity
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            buff[i][j] = 0;
+        }
+    }
+
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++) {
             for (int k = 0; k < 4; k++) {
@@ -106,9 +137,28 @@ void
 Matrix4x4::right_translate_by (double tx, double ty)
 {
     Matrix4x4 trans;
+    trans._matrix[0][0] = 1;
+    trans._matrix[1][1] = 1;
+    trans._matrix[2][2] = 1;
+    trans._matrix[3][3] = 1;
+
     trans._matrix[0][3] = tx;
     trans._matrix[1][3] = ty;
     right_multiply_by (trans);
+}
+
+void
+Matrix4x4::left_translate_by (double tx, double ty)
+{
+    Matrix4x4 trans;
+    trans._matrix[0][0] = 1;
+    trans._matrix[1][1] = 1;
+    trans._matrix[2][2] = 1;
+    trans._matrix[3][3] = 1;
+
+    trans._matrix[0][3] = tx;
+    trans._matrix[1][3] = ty;
+    left_multiply_by (trans);
 }
 
 Vector::Vector (const Point& p1, const Point& p2)
@@ -183,52 +233,6 @@ Point::middle (const Point& p1, const Point& p2)
     double x = (p1._x + p2._x) / 2;
     double y = (p1._y + p2._y) / 2;
     return Point (x, y);
-}
-
-/* This algorithm is taken from Akseli Palen, Advanced Algorithms
- * for Manipulating 2D Objects on Touch Screens, MSc Thesis, 2016
- * Javascript sources are available here: https://github.com/axelpale/nudged
- */
-bool
-estimateTSR (djnnstl::map<int, TouchAlive*>& pts, double* dx, double* dy, double* ds, double* dr)
-{
-    double a, b, c, d;
-    double a1, b1, c1, d1, a2, b2, ad, bc, ac, bd;
-    a1 = b1 = c1 = d1 = a2 = b2 = ad = bc = ac = bd = 0;
-    int sz                                          = 0;
-    for (auto it = pts.begin (); it != pts.end (); ++it) {
-        a = it->second->_last_pt.x ();
-        b = it->second->_last_pt.y ();
-        c = it->second->_new_pt.x ();
-        d = it->second->_new_pt.y ();
-        a1 += a;
-        b1 += b;
-        c1 += c;
-        d1 += d;
-        a2 += a * a;
-        b2 += b * b;
-        ad += a * d;
-        bc += b * c;
-        ac += a * c;
-        bd += b * d;
-        sz++;
-    }
-    if (sz == 0)
-        return false;
-    double den     = (sz * a2) + (sz * b2) - (a1 * a1) - (b1 * b1);
-    double epsilon = 0.00000001;
-    if (-epsilon < den && den < epsilon) {
-        *ds = 1;
-        *dr = 0;
-        *dx = (c1 / sz) - a;
-        *dy = (d1 / sz) - b;
-        return true;
-    }
-    *ds = (sz * (ac + bd) - a1 * c1 - b1 * d1) / den;
-    *dr = (sz * (ad - bc) + b1 * c1 - a1 * d1) / den;
-    *dx = (-a1 * (ac + bd) + b1 * (ad - bc) + a2 * c1 + b2 * c1) / den;
-    *dy = (-b1 * (ac + bd) - a1 * (ad - bc) + a2 * d1 + b2 * d1) / den;
-    return true;
 }
 
 } /* namespace djnn */
