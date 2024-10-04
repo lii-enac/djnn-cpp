@@ -82,7 +82,7 @@ MyQQWidget::event (QEvent* event)
             case Qt::TouchPointStationary:
                 break;
             case Qt::TouchPointPressed: {
-                if (_DEBUG_NO_TOUCH_EVENT == 0) {
+                if (_ENABLE_TOUCHES == 1) {
                     exec_ |= _picking_view->genericTouchPress (x, y, id, pressure);
                     // NO event synthesis on press, release
                     if (exec_) {
@@ -92,7 +92,7 @@ MyQQWidget::event (QEvent* event)
                 break;
             }
             case Qt::TouchPointMoved: {
-                if (_DEBUG_NO_TOUCH_EVENT == 0) {
+                if (_ENABLE_TOUCHES == 1) {
                     exec_ |= _picking_view->genericTouchMove (x, y, id, pressure);
                     // NO event synthesis on move
                     if (exec_) {
@@ -102,7 +102,7 @@ MyQQWidget::event (QEvent* event)
                 break;
             }
             case Qt::TouchPointReleased: {
-                if (_DEBUG_NO_TOUCH_EVENT == 0) {
+                if (_ENABLE_TOUCHES == 1) {
                     exec_ |= _picking_view->genericTouchRelease (x, y, id, pressure);
                     if (exec_) {
                         GRAPH_EXEC;
