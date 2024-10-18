@@ -59,8 +59,8 @@ class UI {
     DoubleProperty* local_move_y () { return _local_move_y; }
     DoubleProperty* local_press_x () { return _local_press_x; }
     DoubleProperty* local_press_y () { return _local_press_y; }
-    DoubleProperty* local_release_x () { return _local_press_x; }
-    DoubleProperty* local_release_y () { return _local_press_y; }
+    DoubleProperty* local_release_x () { return _local_release_x; }
+    DoubleProperty* local_release_y () { return _local_release_y; }
     DoubleProperty* local_wheel_x () { return _local_wheel_x; }
     DoubleProperty* local_wheel_y () { return _local_wheel_y; }
 
@@ -81,6 +81,32 @@ class UI {
     DoubleProperty* mouse_local_move_y () { return _mouse_local_move_y; }
     DoubleProperty* mouse_local_wheel_x () { return _mouse_local_wheel_x; }
     DoubleProperty* mouse_local_wheel_y () { return _mouse_local_wheel_y; }
+
+    DoubleProperty* stylus_pen_pressure () { return _stylus_pen_pressure; }
+    FatProcess* stylus_pen_press () { return _stylus_pen_press; }
+    DoubleProperty* stylus_pen_press_x () { return _stylus_pen_press_x; }
+    DoubleProperty* stylus_pen_press_y () { return _stylus_pen_press_y; }
+    FatProcess* stylus_pen_release () { return _stylus_pen_release; }
+    DoubleProperty* stylus_pen_release_x () { return _stylus_pen_release_x; }
+    DoubleProperty* stylus_pen_release_y () { return _stylus_pen_release_y; }
+    FatProcess* stylus_pen_move () { return _stylus_pen_move; }
+    DoubleProperty* stylus_pen_move_x () { return _stylus_pen_move_x; }
+    DoubleProperty* stylus_pen_move_y () { return _stylus_pen_move_y; }
+    FatProcess* stylus_pen_enter () {return _stylus_pen_enter; }
+    FatProcess* stylus_pen_leave () {return _stylus_pen_leave; }
+    
+    DoubleProperty* stylus_eraser_pressure () { return _stylus_eraser_pressure; }
+    FatProcess* stylus_eraser_press () { return _stylus_eraser_press; }
+    DoubleProperty* stylus_eraser_press_x () { return _stylus_eraser_press_x; }
+    DoubleProperty* stylus_eraser_press_y () { return _stylus_eraser_press_y; }
+    FatProcess* stylus_eraser_release () { return _stylus_eraser_release; }
+    DoubleProperty* stylus_eraser_release_x () { return _stylus_eraser_release_x; }
+    DoubleProperty* stylus_eraser_release_y () { return _stylus_eraser_release_y; }
+    FatProcess* stylus_eraser_move () { return _stylus_eraser_move; }
+    DoubleProperty* stylus_eraser_move_x () { return _stylus_eraser_move_x; }
+    DoubleProperty* stylus_eraser_move_y () { return _stylus_eraser_move_y; }
+    FatProcess* stylus_eraser_enter () {return _stylus_eraser_enter; }
+    FatProcess* stylus_eraser_leave () {return _stylus_eraser_leave; }
 
     DoubleProperty* wheel_dx () { return _wheel_dx; }
     DoubleProperty* wheel_dy () { return _wheel_dy; }
@@ -115,8 +141,18 @@ class UI {
     DoubleProperty *  _mouse_press_x, *_mouse_press_y, *_mouse_release_x, *_mouse_release_y, *_mouse_move_x, *_mouse_move_y, *_mouse_wheel_x, *_mouse_wheel_y;
     DoubleProperty *  _mouse_local_press_x, *_mouse_local_press_y, *_mouse_local_release_x, *_mouse_local_release_y, *_mouse_local_move_x, *_mouse_local_move_y, *_mouse_local_wheel_x, *_mouse_local_wheel_y;
     DoubleProperty *  _wheel_dx, *_wheel_dy;
+    DoubleProperty *  _stylus_pen_press_x, *_stylus_pen_press_y, *_stylus_eraser_press_x, *_stylus_eraser_press_y;
+    DoubleProperty *  _stylus_pen_release_x, *_stylus_pen_release_y, *_stylus_eraser_release_x, *_stylus_eraser_release_y;
+    DoubleProperty *  _stylus_pen_move_x, *_stylus_pen_move_y, *_stylus_eraser_move_x, *_stylus_eraser_move_y;
+    DoubleProperty *  _stylus_pen_pressure, *_stylus_eraser_pressure;
     FatProcess *      _press, *_left, *_right, *_middle, *_move, *_release, *_enter, *_leave, *_mouse, *_mouse_press, *_mouse_release, *_mouse_move, *_mouse_enter, *_mouse_leave, *_touches, *_wheel, *_mouse_wheel;
     FatProcess *      _left_press, *_left_release, *_right_press, *_right_release, *_middle_press, *_middle_release;
+    FatProcess *      _stylus_pen_press, *_stylus_eraser_press;
+    FatProcess *      _stylus_pen_release, *_stylus_eraser_release;
+    FatProcess *      _stylus_pen_move, *_stylus_eraser_move;
+    FatProcess *      _stylus_pen_enter, *_stylus_eraser_enter;
+    FatProcess *      _stylus_pen_leave, *_stylus_eraser_leave;
+    FatProcess *      _stylus_pen, *_stylus_eraser;
     CoreProcess*      parent;
 };
 } // namespace djnn

@@ -218,7 +218,7 @@ AbstractGShape::find_child_impl (const string& path)
             update = get_frame ()->damaged ();
         _c_z_prop = new CouplingWithData (&_z, ACTIVATION, update, ACTIVATION);
     } else {
-        /*  "press", "release", "move", "enter", "leave", "touches" */
+        /*  "press", "release", "move", "enter", "leave", "touches", "pen", "eraser" */
         for (auto& event : __ui_interface) {
             if (key == event) {
                 init_ui ();

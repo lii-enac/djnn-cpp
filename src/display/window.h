@@ -175,6 +175,26 @@ class Window : public FatProcess {
     DoubleProperty* wheel_dy () { return _w_dy; }
     DoubleProperty* wheel_x () { return _w_x; }
     DoubleProperty* wheel_y () { return _w_y; }
+    FatProcess*     stylus_pen_press () { return _stylus_pen_press;};
+    DoubleProperty* stylus_pen_press_x () { return _stylus_pen_press_x;};
+    DoubleProperty* stylus_pen_press_y () { return _stylus_pen_press_y;};
+    FatProcess*     stylus_pen_move () { return _stylus_pen_move;};
+    DoubleProperty* stylus_pen_move_x () { return _stylus_pen_move_x;};
+    DoubleProperty* stylus_pen_move_y () { return _stylus_pen_move_y;};
+    FatProcess*     stylus_pen_release () { return _stylus_pen_release;};
+    DoubleProperty* stylus_pen_release_x () { return _stylus_pen_release_x;};
+    DoubleProperty* stylus_pen_release_y () { return _stylus_pen_release_y;};
+    DoubleProperty* stylus_pen_pressure () { return _stylus_pen_pressure;};
+    FatProcess*     stylus_eraser_press () { return _stylus_eraser_press;};
+    DoubleProperty* stylus_eraser_press_x () { return _stylus_eraser_press_x;};
+    DoubleProperty* stylus_eraser_press_y () { return _stylus_eraser_press_y;};
+    FatProcess*     stylus_eraser_move () { return _stylus_eraser_move;};
+    DoubleProperty* stylus_eraser_move_x () { return _stylus_eraser_move_x;};
+    DoubleProperty* stylus_eraser_move_y () { return _stylus_eraser_move_y;};
+    FatProcess*     stylus_eraser_release () { return _stylus_eraser_release;};
+    DoubleProperty* stylus_eraser_release_x () { return _stylus_eraser_release_x;};
+    DoubleProperty* stylus_eraser_release_y () { return _stylus_eraser_release_y;};
+    DoubleProperty* stylus_eraser_pressure () { return _stylus_eraser_pressure;};
     CoreProcess*    get_display () { return _display->get_value (); }
     void            init_display (FatProcess* conn) { _display->set_value (conn, false); }
     void            set_frame ();
@@ -219,6 +239,14 @@ class Window : public FatProcess {
     FatProcess*     _move;
     FatProcess*     _release;
     FatProcess*     _wheel;
+    FatProcess*     _stylus_pen;
+    FatProcess*     _stylus_pen_press; 
+    FatProcess*     _stylus_pen_release;
+    FatProcess*     _stylus_pen_move;
+    FatProcess*     _stylus_eraser;
+    FatProcess*     _stylus_eraser_press;
+    FatProcess*     _stylus_eraser_release;
+    FatProcess*     _stylus_eraser_move;
     FatProcess*     _left_button;
     FatProcess*     _right_button;
     FatProcess*     _middle_button;
@@ -229,6 +257,20 @@ class Window : public FatProcess {
     DoubleProperty* _move_y;
     DoubleProperty* _release_x;
     DoubleProperty* _release_y;
+    DoubleProperty* _stylus_pen_press_x;
+    DoubleProperty* _stylus_pen_press_y;
+    DoubleProperty* _stylus_pen_move_x;
+    DoubleProperty* _stylus_pen_move_y;
+    DoubleProperty* _stylus_pen_release_x;
+    DoubleProperty* _stylus_pen_release_y;
+    DoubleProperty* _stylus_pen_pressure;
+    DoubleProperty* _stylus_eraser_press_x;
+    DoubleProperty* _stylus_eraser_press_y;
+    DoubleProperty* _stylus_eraser_move_x;
+    DoubleProperty* _stylus_eraser_move_y;
+    DoubleProperty* _stylus_eraser_release_x;
+    DoubleProperty* _stylus_eraser_release_y;
+    DoubleProperty* _stylus_eraser_pressure;
     TextProperty*   _key_pressed_text;
     IntProperty*    _key_pressed;
     TextProperty*   _key_released_text;

@@ -54,7 +54,7 @@ class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
 
   protected:
     virtual void paintEvent (QPaintEvent* event) override;
-    // virtual void tabletEvent (QTabletEvent *event) override;
+    virtual void tabletEvent (QTabletEvent *event) override;
     // virtual void paintGL () override;
     // virtual void initializeGL () override;
 

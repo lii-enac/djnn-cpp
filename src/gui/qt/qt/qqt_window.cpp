@@ -120,9 +120,10 @@ MyQQWidget::event (QEvent* event)
     case QEvent::TabletPress:
     case QEvent::TabletMove:
     case QEvent::TabletRelease:
-        //{
-        //  tabletEvent(static_cast<QTabletEvent*> (event));
-        //}
+        djnn::get_exclusive_access (DBG_GET); 
+        tabletEvent(static_cast<QTabletEvent*> (event));
+        event->accept (); // We have to tell Qt that we consumed the event to prevent it from generating a mouse event.
+        djnn::release_exclusive_access (DBG_REL);
         break;
 
     case QEvent::MouseButtonPress:
@@ -190,6 +191,23 @@ get_button (int n)
         button_id = BUTTON_LEFT;
     }
     return button_id;
+}
+
+static stylus_type
+get_stylus_type (int t)
+{
+    stylus_type type = STYLUS_PEN;
+    switch (t) {
+    case QTabletEvent::Eraser:
+        type = STYLUS_ERASER;
+        break;
+    case QTabletEvent::Pen:
+        type = STYLUS_PEN;
+        break;
+    default:
+        type = STYLUS_PEN;
+    }
+    return type;
 }
 
 void
@@ -260,23 +278,37 @@ MyQQWidget::wheelEvent (QWheelEvent* event)
     }
 }
 
-/*void
+void
 MyQQWidget::tabletEvent(QTabletEvent *event)
 {
-  switch (event->type()) {
-      case QEvent::TabletPress:
-          cout << "TabletPress" << endl;
-          break;
-      case QEvent::TabletMove:
-          //cout << "TabletMove" << endl;
-          break;
-      case QEvent::TabletRelease:
-          cout << "TabletRelease" << endl;
-          break;
-      default:
-          break;
-  }
-}*/
+    auto tablet_pos_x = event->x ();
+    auto tablet_pos_y = event->y ();
+    tablet_pos_y -= 3; // QT bug?? it is the same for stylus
+    auto pressure = event->pressure ();
+   
+    // dbg
+    //std::cerr << "x: " << tablet_pos_x << " - y: " << tablet_pos_y <<  " - pointer type: " << event->pointerType () << "- pressure: " << pressure << std::endl;
+
+    bool exec_ = false;
+
+    switch (event->type ()) {
+    case QEvent::TabletPress:
+        exec_ = _picking_view->genericTabletPress (tablet_pos_x, tablet_pos_y, get_stylus_type (event->pointerType ()), get_button (event->button ()), pressure);
+        break;
+    case QEvent::TabletMove:
+        exec_ = _picking_view->genericTabletMove (tablet_pos_x, tablet_pos_y, get_stylus_type (event->pointerType ()), pressure);
+        break;
+    case QEvent::TabletRelease:
+        exec_ = _picking_view->genericTabletRelease (tablet_pos_x, tablet_pos_y, get_stylus_type (event->pointerType ()), get_button (event->button ()), pressure);
+        break;
+    default:
+        break;
+    }
+
+    if (exec_) {
+        GRAPH_EXEC;
+    }
+}
 
 /*void
 MyQQWidget::initializeGL ()

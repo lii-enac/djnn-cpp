@@ -22,7 +22,7 @@
 #include "core/tree/list.h"
 
 namespace djnn {
-djnnstl::vector<djnnstl::string> __ui_interface = {"pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse", "wheel"};
+djnnstl::vector<djnnstl::string> __ui_interface = {"pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse", "wheel", "pen", "eraser"};
 
 UI::UI (CoreProcess* parent_, FatProcess* f)
     : parent (parent_)
@@ -61,6 +61,21 @@ UI::UI (CoreProcess* parent_, FatProcess* f)
     _mouse_enter    = new Spike (_mouse, "enter");
     _mouse_leave    = new Spike (_mouse, "leave");
     _mouse_wheel    = new Spike (_mouse, "wheel");
+    _stylus_pen    = new Spike (parent, "pen");
+    _stylus_eraser = new Spike (parent, "eraser");
+    _stylus_pen_press = new Spike (_stylus_pen, "press");
+    _stylus_pen_release = new Spike (_stylus_pen, "release");
+    _stylus_pen_move = new Spike (_stylus_pen, "move");
+    _stylus_pen_enter = new Spike (_stylus_pen, "enter");
+    _stylus_pen_leave = new Spike (_stylus_pen, "leave");
+    _stylus_pen_pressure = new DoubleProperty (_stylus_pen, "pressure", 1.);
+    _stylus_eraser_press = new Spike (_stylus_eraser, "press");
+    _stylus_eraser_release = new Spike (_stylus_eraser, "release");
+    _stylus_eraser_move = new Spike (_stylus_eraser, "move");
+    _stylus_eraser_enter = new Spike (_stylus_eraser, "enter");
+    _stylus_eraser_leave = new Spike (_stylus_eraser, "leave");
+    _stylus_eraser_pressure = new DoubleProperty (_stylus_eraser, "pressure", 1.);
+
 
     graph_add_edge (_enter, _leave);             // make sur enter event are process before leave event
     graph_add_edge (_mouse_enter, _mouse_leave); // make sur enter event are process before leave event
@@ -146,6 +161,33 @@ UI::UI (CoreProcess* parent_, FatProcess* f)
     _mouse_wheel->add_symbol ("y", _mouse_wheel_y);
     _mouse_wheel->add_symbol ("local_x", _mouse_local_wheel_x);
     _mouse_wheel->add_symbol ("local_y", _mouse_local_wheel_y);
+
+    _stylus_pen_press_x = new DoubleProperty (nullptr, "stylus_pen_press_x", 0);
+    _stylus_pen_press_y = new DoubleProperty (nullptr, "stylus_pen_press_y", 0);
+    _stylus_pen_release_x = new DoubleProperty (nullptr, "stylus_pen_release_x", 0);
+    _stylus_pen_release_y = new DoubleProperty (nullptr, "stylus_pen_release_y", 0);
+    _stylus_pen_move_x = new DoubleProperty (nullptr, "stylus_pen_move_x", 0);
+    _stylus_pen_move_y = new DoubleProperty (nullptr, "stylus_pen_move_y", 0);
+    _stylus_pen_press->add_symbol ("x", _stylus_pen_press_x);
+    _stylus_pen_press->add_symbol ("y", _stylus_pen_press_y);
+    _stylus_pen_release->add_symbol ("x", _stylus_pen_release_x);
+    _stylus_pen_release->add_symbol ("y", _stylus_pen_release_y);
+    _stylus_pen_move->add_symbol ("x", _stylus_pen_move_x);
+    _stylus_pen_move->add_symbol ("y", _stylus_pen_move_y);
+
+    _stylus_eraser_press_x = new DoubleProperty (nullptr, "stylus_eraser_press_x", 0);
+    _stylus_eraser_press_y = new DoubleProperty (nullptr, "stylus_eraser_press_y", 0);
+    _stylus_eraser_release_x = new DoubleProperty (nullptr, "stylus_eraser_release_x", 0);
+    _stylus_eraser_release_y = new DoubleProperty (nullptr, "stylus_eraser_release_y", 0);
+    _stylus_eraser_move_x = new DoubleProperty (nullptr, "stylus_eraser_move_x", 0);
+    _stylus_eraser_move_y = new DoubleProperty (nullptr, "stylus_eraser_move_y", 0);
+    _stylus_eraser_press->add_symbol ("x", _stylus_eraser_press_x);
+    _stylus_eraser_press->add_symbol ("y", _stylus_eraser_press_y);
+    _stylus_eraser_release->add_symbol ("x", _stylus_eraser_release_x);
+    _stylus_eraser_release->add_symbol ("y", _stylus_eraser_release_y);
+    _stylus_eraser_move->add_symbol ("x", _stylus_eraser_move_x);
+    _stylus_eraser_move->add_symbol ("y", _stylus_eraser_move_y);
+    
 }
 
 UI::~UI ()

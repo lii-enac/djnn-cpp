@@ -31,6 +31,11 @@ typedef enum mouse_button {
     BUTTON_RIGHT
 } mouse_button;
 
+typedef enum stylus_type {
+    STYLUS_PEN,
+    STYLUS_ERASER
+} stylus_type;
+
 class CoreProcess;
 
 extern CoreProcess* GPUs;
