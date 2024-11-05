@@ -1176,32 +1176,32 @@ ifeq ($(pkgcmdtype),pacman)
 #pkgupg := pacboy -Syu --needed
 
 #boost
-	mgwpkgdeps += gcc expat curl
+mgwpkgdeps += gcc expat curl
 #pkgdeps += libusb #crazyflie
-	mgwpkgdeps += rtmidi
-	ifeq ($(graphics),QT)
-		mgwpkgdeps += qt5
-	endif
-	ifeq ($(display),SDL)
-		mgwpkgdeps += SDL2 SDL2_image
-	endif
-	ifeq ($(graphics),CAIRO)
-		mgwpkgdeps += cairo pango
-	endif
-	ifeq ($(graphics),GL)
-		mgwpkgdeps += glm fontconfig freetype
-	endif
-	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
-		mgwpkgdeps += openal
-	endif
+mgwpkgdeps += rtmidi
+ifeq ($(graphics),QT)
+mgwpkgdeps += qt5
+endif
+ifeq ($(display),SDL)
+mgwpkgdeps += SDL2 SDL2_image
+endif
+ifeq ($(graphics),CAIRO)
+mgwpkgdeps += cairo pango
+endif
+ifeq ($(graphics),GL)
+mgwpkgdeps += glm fontconfig freetype
+endif
+ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
+mgwpkgdeps += openal
+endif
 
 # mgwpkgdeps += gcc boost expat curl qt5
 # mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
 # ifeq ($(graphics),GL)
 # 	mgwpkgdeps += glm
 # endif
-	mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
-	pkgdeps += $(mgwpkgdeps)
+mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
+pkgdeps += $(mgwpkgdeps)
 endif
 
 #endif
