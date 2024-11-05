@@ -1052,6 +1052,11 @@ ifeq ($(pkgcmdtype),brew)
 	pkgupg := brew upgrade
 endif
 
+ifeq ($(pkgcmdtype),pacman)
+	pkginst := pacman -S --needed
+	pkgupg := pacman -Syu --needed
+endif
+
 #untested - source only :-/
 # ifeq ($(pkgcmdtype),vcpkg)
 # 	pkginst := vcpkg install
@@ -1163,20 +1168,16 @@ ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
 endif
 endif
 
-ifeq ($(os),MinGW)
-	#https://www.msys2.org/
+ifeq ($(pkgcmdtype),pacman)
+#https://www.msys2.org/
+#pkgdeps := git make pkg-config
 
-	# pkginst := pacman -S --needed
-	# pkgupg := pacman -Syu --needed
+#pkginst := pacboy -S --needed
+#pkgupg := pacboy -Syu --needed
 
-	#pkgdeps := git make pkg-config
-
-	#pkginst := pacboy -S --needed
-	#pkgupg := pacboy -Syu --needed
-
-	#boost
+#boost
 	mgwpkgdeps += gcc expat curl
-	#pkgdeps += libusb #crazyflie
+#pkgdeps += libusb #crazyflie
 	mgwpkgdeps += rtmidi
 	ifeq ($(graphics),QT)
 		mgwpkgdeps += qt5
@@ -1194,46 +1195,46 @@ ifeq ($(os),MinGW)
 		mgwpkgdeps += openal
 	endif
 
-	# mgwpkgdeps += gcc boost expat curl qt5
-	# mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
-	# ifeq ($(graphics),GL)
-	# 	mgwpkgdeps += glm
-	# endif
+# mgwpkgdeps += gcc boost expat curl qt5
+# mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
+# ifeq ($(graphics),GL)
+# 	mgwpkgdeps += glm
+# endif
 	mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
 	pkgdeps += $(mgwpkgdeps)
 endif
 
 #endif
 
-ifeq ($(os),vcpkg)
-	#https://www.msys2.org/
+# ifeq ($(os),vcpkg)
+# 	#https://www.msys2.org/
 
-	pkginst := /Users/conversy/recherche/istar/code/misc/vcpkg/vcpkg
-	pkgupg := /Users/conversy/recherche/istar/code/misc/vcpkg/vcpkg
+# 	pkginst := /Users/conversy/recherche/istar/code/misc/vcpkg/vcpkg
+# 	pkgupg := /Users/conversy/recherche/istar/code/misc/vcpkg/vcpkg
 
-	mgwpkgdeps += gcc
-	mgwpkgdeps += expat curl
-	#mgwpkgdeps += rtmidi
+# 	mgwpkgdeps += gcc
+# 	mgwpkgdeps += expat curl
+# 	#mgwpkgdeps += rtmidi
 
-	ifeq ($(graphics),QT)
-		mgwpkgdeps += qt5
-	endif
-	ifeq ($(display),SDL)
-		mgwpkgdeps += SDL2 SDL2_image
-	endif
-	ifeq ($(graphics),CAIRO)
-		mgwpkgdeps += cairo pango
-	endif
-	ifeq ($(graphics),GL)
-		mgwpkgdeps += glm fontconfig freetype
-	endif
-	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
-		mgwpkgdeps += openal
-	endif
+# 	ifeq ($(graphics),QT)
+# 		mgwpkgdeps += qt5
+# 	endif
+# 	ifeq ($(display),SDL)
+# 		mgwpkgdeps += SDL2 SDL2_image
+# 	endif
+# 	ifeq ($(graphics),CAIRO)
+# 		mgwpkgdeps += cairo pango
+# 	endif
+# 	ifeq ($(graphics),GL)
+# 		mgwpkgdeps += glm fontconfig freetype
+# 	endif
+# 	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
+# 		mgwpkgdeps += openal
+# 	endif
 
-	#mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
-	pkgdeps += $(mgwpkgdeps)
-endif
+# 	#mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
+# 	pkgdeps += $(mgwpkgdeps)
+# endif
 
 install-pkgdeps:
 	$(pkginst) $(pkgdeps)
