@@ -85,38 +85,35 @@ Picking::check_for_ui (PickUI* s)
 bool
 Picking::tabletEnterLeave (PickUI* picked, stylus_type stylus_type)
 {
-    auto s = picked;
-    if (s) {
-        if (s != _hovered_shape) {
-            if (!check_for_ui (s))
-                return false;
-            if (_hovered_shape != nullptr) {
-                if (stylus_type == STYLUS_PEN)
-                    _hovered_shape->ui ()->stylus_pen_leave ()->schedule_activation ();
-                else if (stylus_type == STYLUS_ERASER)
-                    _hovered_shape->ui ()->stylus_eraser_leave ()->schedule_activation ();
-                // cut the event synthesis when enter/leave happened
-                GRAPH_EXEC;
-            }
-            if (stylus_type == STYLUS_PEN)
-                s->ui ()->stylus_pen_enter ()->schedule_activation ();
-            else if (stylus_type == STYLUS_ERASER)
-                s->ui ()->stylus_eraser_enter ()->schedule_activation ();
+    if (picked && picked != _hovered_shape) {
 
-            /* new _hovered_shape */
-            _hovered_shape = s;
-            // cut the event synthesis when enter/leave happened
+        if (!check_for_ui(picked)) return false;
+
+        if (_hovered_shape) {
+            if (stylus_type == STYLUS_PEN)
+                _hovered_shape->ui()->stylus_pen_leave()->schedule_activation();
+            else if (stylus_type == STYLUS_ERASER)
+                _hovered_shape->ui()->stylus_eraser_leave()->schedule_activation();
             GRAPH_EXEC;
         }
-    } else if (_hovered_shape != nullptr) {
+
         if (stylus_type == STYLUS_PEN)
-            _hovered_shape->ui ()->stylus_pen_leave ()->schedule_activation ();
+            picked->ui()->stylus_pen_enter()->schedule_activation();
         else if (stylus_type == STYLUS_ERASER)
-            _hovered_shape->ui ()->stylus_eraser_leave ()->schedule_activation ();
+            picked->ui()->stylus_eraser_enter()->schedule_activation();
 
-        /* reset */
+        _hovered_shape = picked;
+        // cut the event synthesis when enter/leave happened
+        GRAPH_EXEC;
+
+    } else if (!picked && _hovered_shape) {
+
+        if (stylus_type == STYLUS_PEN)
+            _hovered_shape->ui()->stylus_pen_leave()->schedule_activation();
+        else if (stylus_type == STYLUS_ERASER)
+            _hovered_shape->ui()->stylus_eraser_leave()->schedule_activation();
+
         _hovered_shape = nullptr;
-
         // cut the event synthesis when enter/leave happened
         GRAPH_EXEC;
     }
@@ -349,11 +346,10 @@ Picking::genericTouchPress (double x, double y, int id, float pressure)
 bool
 Picking::genericTabletPress (double x, double y, stylus_type stylus_type, mouse_button button, double pressure)
 {
-
     _mouse_released = false;
     bool exec_      = false;
 
-    /* windows setting */
+    // Set stylus parameters in the window
     if (stylus_type == STYLUS_PEN) {
         _win->stylus_pen_press_x ()->set_value (x, true);
         _win->stylus_pen_press_y ()->set_value (y, true);
@@ -364,71 +360,58 @@ Picking::genericTabletPress (double x, double y, stylus_type stylus_type, mouse_
         _win->stylus_eraser_pressure ()->set_value (pressure, true);
     }
 
-    /* shape */
+    // Handle PickUI object
     PickUI* s = this->pick (x, y);
-    if (s != nullptr && check_for_ui (s)) {
-
-        /* setting */
+    if (s && check_for_ui (s)) {
+        // Set stylus parameters in PickUI
         if (stylus_type == STYLUS_PEN) {
             s->ui ()->stylus_pen_press_x ()->set_value (x, true);
             s->ui ()->stylus_pen_press_y ()->set_value (y, true);
             s->ui ()->stylus_pen_pressure ()->set_value (pressure, true);
+
+            if (s != _hovered_shape)
+                s->ui ()->stylus_pen_enter ()->schedule_activation ();
+            s->ui ()->stylus_pen_press ()->schedule_activation ();
         } else if (stylus_type == STYLUS_ERASER) {
             s->ui ()->stylus_eraser_press_x ()->set_value (x, true);
             s->ui ()->stylus_eraser_press_y ()->set_value (y, true);
             s->ui ()->stylus_eraser_pressure ()->set_value (pressure, true);
-        }
 
-        /* event */
-        if (stylus_type == STYLUS_PEN) {
-            if (s != _hovered_shape)
-                s->ui ()->stylus_pen_enter ()->schedule_activation ();
-            s->ui ()->stylus_pen_press ()->schedule_activation (); // press generic for stylus pen
-        } else if (stylus_type == STYLUS_ERASER) {
             if (s != _hovered_shape)
                 s->ui ()->stylus_eraser_enter ()->schedule_activation ();
-            s->ui ()->stylus_eraser_press ()->schedule_activation (); // press generic for stylus pen
+            s->ui ()->stylus_eraser_press ()->schedule_activation ();
         }
 
-        /* reset _hovered_shape and _caught_shape */
+        // Update captured shapes
         _caught_shape  = s;
         _hovered_shape = s;
-
-        exec_ = true;
+        exec_          = true;
     }
 
-    /* button */
-    switch (button) {
-    case BUTTON_LEFT:
-        if (s != nullptr && check_for_ui (s)) {
+    // Handle button activation
+    if (s && check_for_ui (s)) {
+        switch (button) {
+        case BUTTON_LEFT:
             s->ui ()->left_press ()->schedule_activation ();
-        }
-        break;
-    case BUTTON_RIGHT:
-        if (s != nullptr && check_for_ui (s)) {
+            break;
+        case BUTTON_RIGHT:
             s->ui ()->right_press ()->schedule_activation ();
-        }
-        break;
-    case BUTTON_MIDDLE:
-        if (s != nullptr && check_for_ui (s)) {
+            break;
+        case BUTTON_MIDDLE:
             s->ui ()->middle_press ()->schedule_activation ();
+            break;
+        default:
+            break;
         }
-        break;
-    default:
-        break;
     }
 
-    /* windows event schedule event After shape event*/
-    if (stylus_type == STYLUS_PEN) {
-        if (_win->stylus_pen_press ()->has_coupling ()) {
-            _win->stylus_pen_press ()->schedule_activation ();
-            exec_ = true;
-        }
-    } else if (stylus_type == STYLUS_ERASER) {
-        if (_win->stylus_eraser_press ()->has_coupling ()) {
-            _win->stylus_eraser_press ()->schedule_activation ();
-            exec_ = true;
-        }
+    // Schedule stylus events for window after PickUI events
+    if (stylus_type == STYLUS_PEN && _win->stylus_pen_press ()->has_coupling ()) {
+        _win->stylus_pen_press ()->schedule_activation ();
+        exec_ = true;
+    } else if (stylus_type == STYLUS_ERASER && _win->stylus_eraser_press ()->has_coupling ()) {
+        _win->stylus_eraser_press ()->schedule_activation ();
+        exec_ = true;
     }
 
     return exec_;
@@ -626,156 +609,121 @@ Picking::genericTabletMove (double x, double y, stylus_type stylus_type, double 
     bool exec_ = false;
 
     rmt_BeginCPUSample (windows_setting, RMTSF_Aggregate);
-    
-    /* windows setting */
-    double old_x = 0, old_y = 0;
-    if (stylus_type == STYLUS_PEN) {
-        old_x = _win->stylus_pen_move_x ()->get_value ();
-        old_y = _win->stylus_pen_move_y ()->get_value ();
-        // set pressure anyway
-        _win->stylus_pen_pressure ()->set_value (pressure, true);
-        exec_ = true;
-    } else if (stylus_type == STYLUS_ERASER) {
-        old_x = _win->stylus_eraser_move_x ()->get_value ();
-        old_y = _win->stylus_eraser_move_y ()->get_value ();
-        // set pressure anyway
-        _win->stylus_eraser_pressure ()->set_value (pressure, true);
-        exec_ = true;
-    }
 
+    // Set initial stylus coordinates and pressure in window settings
+    double old_x = (stylus_type == STYLUS_PEN) ? _win->stylus_pen_move_x ()->get_value () : _win->stylus_eraser_move_x ()->get_value ();
+    double old_y = (stylus_type == STYLUS_PEN) ? _win->stylus_pen_move_y ()->get_value () : _win->stylus_eraser_move_y ()->get_value ();
+
+    // Update pressure in window settings
+    auto win_pressure = (stylus_type == STYLUS_PEN) ? _win->stylus_pen_pressure () : _win->stylus_eraser_pressure ();
+    win_pressure->set_value (pressure, true);
+    exec_ = true;
+
+    // Update x and y coordinates if they have changed
     if (x != old_x) {
         if (stylus_type == STYLUS_PEN)
             _win->stylus_pen_move_x ()->set_value (x, true);
-        else if (stylus_type == STYLUS_ERASER)
+        else
             _win->stylus_eraser_move_x ()->set_value (x, true);
         exec_ = true;
     }
     if (y != old_y) {
         if (stylus_type == STYLUS_PEN)
             _win->stylus_pen_move_y ()->set_value (y, true);
-        else if (stylus_type == STYLUS_ERASER)
+        else
             _win->stylus_eraser_move_y ()->set_value (y, true);
         exec_ = true;
     }
     rmt_EndCPUSample ();
 
     rmt_BeginCPUSample (shape, RMTSF_Aggregate);
-    /* shape */
+
+    // Handle shape interaction
     rmt_BeginCPUSample (pick, RMTSF_Aggregate);
     PickUI* s = this->pick (x, y);
     rmt_EndCPUSample ();
     exec_ |= tabletEnterLeave (s, stylus_type);
+
     if (s && check_for_ui (s)) {
+        // Update x and y coordinates in shape settings
+        if (x != old_x || y != old_y) {
+            auto move_x = (stylus_type == STYLUS_PEN) ? s->ui ()->stylus_pen_move_x () : s->ui ()->stylus_eraser_move_x ();
+            auto move_y = (stylus_type == STYLUS_PEN) ? s->ui ()->stylus_pen_move_y () : s->ui ()->stylus_eraser_move_y ();
 
-        /* setting */
-        if (x != old_x) {
-            DoubleProperty* p1 = nullptr;
-            if (stylus_type == STYLUS_PEN)
-                p1 = s->ui ()->stylus_pen_move_x ();
-            else if (stylus_type == STYLUS_ERASER)
-                p1 = s->ui ()->stylus_eraser_move_x ();
-            p1->set_value (x, true);
-            if (p1->has_coupling ())
-                p1->schedule_activation ();
-        }
-        if (y != old_y) {
-            DoubleProperty* p1 = nullptr;
-            if (stylus_type == STYLUS_PEN)
-                p1 = s->ui ()->stylus_pen_move_y ();
-            else if (stylus_type == STYLUS_ERASER)
-                p1 = s->ui ()->stylus_eraser_move_y ();
-            p1->set_value (y, true);
-            if (p1->has_coupling ())
-                p1->schedule_activation ();
+            if (x != old_x)
+                move_x->set_value (x, true);
+            if (y != old_y)
+                move_y->set_value (y, true);
+
+            if (move_x->has_coupling ())
+                move_x->schedule_activation ();
+            if (move_y->has_coupling ())
+                move_y->schedule_activation ();
         }
 
-        // /* event */
-        if (stylus_type == STYLUS_PEN) {
-            s->ui ()->stylus_pen_move ()->schedule_activation ();
-            s->ui ()->stylus_pen_pressure ()->set_value (pressure, true);
-            s->ui ()->stylus_pen_pressure ()->schedule_activation ();
-        } else if (stylus_type == STYLUS_ERASER) {
-            s->ui ()->stylus_eraser_move ()->schedule_activation ();
-            s->ui ()->stylus_eraser_pressure ()->set_value (pressure, true);
-            s->ui ()->stylus_eraser_pressure ()->schedule_activation ();
-        }
+        // Trigger movement and pressure events for shape
+        auto move_event     = (stylus_type == STYLUS_PEN) ? s->ui ()->stylus_pen_move () : s->ui ()->stylus_eraser_move ();
+        auto pressure_event = (stylus_type == STYLUS_PEN) ? s->ui ()->stylus_pen_pressure () : s->ui ()->stylus_eraser_pressure ();
+
+        move_event->schedule_activation ();
+        pressure_event->set_value (pressure, true);
+        pressure_event->schedule_activation ();
 
         exec_ = true;
     }
     rmt_EndCPUSample ();
 
     rmt_BeginCPUSample (caught_shape, RMTSF_Aggregate);
-    /* _caught_shape */
-    if (_caught_shape != nullptr && _caught_shape != s) {
 
-        /* setting */
-        if (x != old_x) {
-            DoubleProperty* p1 = nullptr;
-            if (stylus_type == STYLUS_PEN)
-                p1 = _caught_shape->ui ()->stylus_pen_move_x ();
-            else if (stylus_type == STYLUS_ERASER)
-                p1 = _caught_shape->ui ()->stylus_eraser_move_x ();
-            p1->set_value (x, true);
-            if (p1->has_coupling ())
-                p1->schedule_activation ();
-        }
-        if (y != old_y) {
-            DoubleProperty* p1 = nullptr;
-            if (stylus_type == STYLUS_PEN)
-                p1 = _caught_shape->ui ()->stylus_pen_move_y ();
-            else if (stylus_type == STYLUS_ERASER)
-                p1 = _caught_shape->ui ()->stylus_eraser_move_y ();
-            p1->set_value (y, true);
-            if (p1->has_coupling ())
-                p1->schedule_activation ();
+    // Handle _caught_shape if it's different from current shape `s`
+    if (_caught_shape && _caught_shape != s) {
+        if (x != old_x || y != old_y) {
+            auto caught_x = (stylus_type == STYLUS_PEN) ? _caught_shape->ui ()->stylus_pen_move_x () : _caught_shape->ui ()->stylus_eraser_move_x ();
+            auto caught_y = (stylus_type == STYLUS_PEN) ? _caught_shape->ui ()->stylus_pen_move_y () : _caught_shape->ui ()->stylus_eraser_move_y ();
+
+            if (x != old_x)
+                caught_x->set_value (x, true);
+            if (y != old_y)
+                caught_y->set_value (y, true);
+
+            if (caught_x->has_coupling ())
+                caught_x->schedule_activation ();
+            if (caught_y->has_coupling ())
+                caught_y->schedule_activation ();
         }
 
-        /* event */
-        if (stylus_type == STYLUS_PEN) {
-            _caught_shape->ui ()->stylus_pen_move ()->schedule_activation ();
-            _caught_shape->ui ()->stylus_pen_pressure ()->set_value (pressure, true);
-            _caught_shape->ui ()->stylus_pen_pressure ()->schedule_activation ();
-        } else if (stylus_type == STYLUS_ERASER) {
-            _caught_shape->ui ()->stylus_eraser_move ()->schedule_activation ();
-            _caught_shape->ui ()->stylus_eraser_pressure ()->set_value (pressure, true);
-            _caught_shape->ui ()->stylus_eraser_pressure ()->schedule_activation ();
-        }
+        // Trigger movement and pressure events for _caught_shape
+        auto move_event     = (stylus_type == STYLUS_PEN) ? _caught_shape->ui ()->stylus_pen_move () : _caught_shape->ui ()->stylus_eraser_move ();
+        auto pressure_event = (stylus_type == STYLUS_PEN) ? _caught_shape->ui ()->stylus_pen_pressure () : _caught_shape->ui ()->stylus_eraser_pressure ();
+
+        move_event->schedule_activation ();
+        pressure_event->set_value (pressure, true);
+        pressure_event->schedule_activation ();
 
         exec_ = true;
     }
     rmt_EndCPUSample ();
 
     rmt_BeginCPUSample (window_event, RMTSF_Aggregate);
-    /* windows event schedule event After shape event*/
 
-    if (stylus_type == STYLUS_PEN) {
-        if (_win->stylus_pen_move ()->has_coupling ()) {
-            _win->stylus_pen_move ()->schedule_activation ();
-            exec_ = true;
-        }
-        if (_win->stylus_pen_move_x ()->has_coupling ()) {
-            _win->stylus_pen_move_x ()->schedule_activation ();
-            exec_ = true;
-        }
-        if (_win->stylus_pen_move_y ()->has_coupling ()) {
-            _win->stylus_pen_move_y ()->schedule_activation ();
-            exec_ = true;
-        }
-    } else if (stylus_type == STYLUS_ERASER) {
-        if (_win->stylus_eraser_move ()->has_coupling ()) {
-            _win->stylus_eraser_move ()->schedule_activation ();
-            exec_ = true;
-        }
-        if (_win->stylus_eraser_move_x ()->has_coupling ()) {
-            _win->stylus_eraser_move_x ()->schedule_activation ();
-            exec_ = true;
-        }
-        if (_win->stylus_eraser_move_y ()->has_coupling ()) {
-            _win->stylus_eraser_move_y ()->schedule_activation ();
-            exec_ = true;
-        }
+    // Schedule window events after shape events
+    auto win_move   = (stylus_type == STYLUS_PEN) ? _win->stylus_pen_move () : _win->stylus_eraser_move ();
+    auto win_move_x = (stylus_type == STYLUS_PEN) ? _win->stylus_pen_move_x () : _win->stylus_eraser_move_x ();
+    auto win_move_y = (stylus_type == STYLUS_PEN) ? _win->stylus_pen_move_y () : _win->stylus_eraser_move_y ();
+
+    if (win_move->has_coupling ()) {
+        win_move->schedule_activation ();
+        exec_ = true;
     }
-  
+    if (win_move_x->has_coupling ()) {
+        win_move_x->schedule_activation ();
+        exec_ = true;
+    }
+    if (win_move_y->has_coupling ()) {
+        win_move_y->schedule_activation ();
+        exec_ = true;
+    }
+
     rmt_EndCPUSample ();
     rmt_EndCPUSample ();
 
@@ -935,7 +883,7 @@ Picking::genericTabletRelease (double x, double y, stylus_type stylus_type, mous
     _mouse_released = true;
     bool exec_      = false;
 
-    /* windows setting */
+    /* Windows setting - set release coordinates based on stylus type */
     if (stylus_type == STYLUS_PEN) {
         _win->stylus_pen_release_x ()->set_value (x, true);
         _win->stylus_pen_release_y ()->set_value (y, true);
@@ -944,11 +892,10 @@ Picking::genericTabletRelease (double x, double y, stylus_type stylus_type, mous
         _win->stylus_eraser_release_y ()->set_value (y, true);
     }
 
-    /* shape */
+    /* Shape handling */
     PickUI* s = this->pick (x, y);
     if (s && check_for_ui (s)) {
-
-        /* setting */
+        // Set release coordinates and trigger release/leave events for shape
         if (stylus_type == STYLUS_PEN) {
             s->ui ()->stylus_pen_release_x ()->set_value (x, true);
             s->ui ()->stylus_pen_release_y ()->set_value (y, true);
@@ -960,50 +907,46 @@ Picking::genericTabletRelease (double x, double y, stylus_type stylus_type, mous
             s->ui ()->stylus_eraser_release ()->schedule_activation ();
             s->ui ()->stylus_eraser_leave ()->schedule_activation ();
         }
-
         exec_ = true;
     }
 
-    /* reset _hovered_shape if no mouse tracking */
+    /* Reset _hovered_shape if mouse tracking is disabled */
     if (mouse_tracking == 0) {
         _hovered_shape = nullptr;
     }
 
-    /* reset _caught_shape */
+    /* Reset _caught_shape and trigger release event if different from current shape */
     if (_caught_shape && _caught_shape != s) {
-        if (stylus_type == STYLUS_PEN)
+        if (stylus_type == STYLUS_PEN) {
             _caught_shape->ui ()->stylus_pen_release ()->schedule_activation ();
-        else if (stylus_type == STYLUS_ERASER)
+        } else if (stylus_type == STYLUS_ERASER) {
             _caught_shape->ui ()->stylus_eraser_release ()->schedule_activation ();
+        }
         exec_ = true;
     }
     _caught_shape = nullptr;
 
-    /* reset _hovered_shape */
+    /* Reset _hovered_shape */
     _hovered_shape = nullptr;
 
-    /* button */
-    switch (button) {
-    case BUTTON_LEFT:
-        if (s != nullptr && check_for_ui (s)) {
+    /* Handle button-specific release events */
+    if (s && check_for_ui (s)) {
+        switch (button) {
+        case BUTTON_LEFT:
             s->ui ()->left_release ()->schedule_activation ();
-        }
-        break;
-    case BUTTON_RIGHT:
-        if (s != nullptr && check_for_ui (s)) {
+            break;
+        case BUTTON_RIGHT:
             s->ui ()->right_release ()->schedule_activation ();
-        }
-        break;
-    case BUTTON_MIDDLE:
-        if (s != nullptr && check_for_ui (s)) {
+            break;
+        case BUTTON_MIDDLE:
             s->ui ()->middle_release ()->schedule_activation ();
+            break;
+        default:
+            break;
         }
-        break;
-    default:
-        break;
     }
 
-    /* windows event schedule event After shape event*/
+    /* Schedule windows event after shape event */
     if (stylus_type == STYLUS_PEN) {
         if (_win->stylus_pen_release ()->has_coupling ()) {
             _win->stylus_pen_release ()->schedule_activation ();
