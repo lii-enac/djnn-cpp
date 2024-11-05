@@ -15,6 +15,7 @@
 #include <fstream>
 #include <functional>
 #include <locale>
+#include <algorithm>
 
 #include "core/serializer/serializer.h"
 #include "utils.h"
