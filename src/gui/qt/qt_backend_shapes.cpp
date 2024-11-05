@@ -780,7 +780,7 @@ areAlmostEqual (double a, double b, double epsilon = 1e-4)
 //   - The DPI of the screen has changed, this is automatically handled.
 //   - The user has activated the layer's damaged spike: this enables the user to finely tune the redraw algorithm (e.g., after 200ms of dwell after a zoom).
 void
-QtBackend::draw_layer (Layer* l, children_t _children)
+QtBackend::draw_layer (Layer* l, const children_t& _children)
 {
     rmt_BeginCPUSample (recompute_pixmap_layer, RMTSF_Aggregate);
 

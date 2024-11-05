@@ -96,7 +96,7 @@ class AbstractBackend {
     draw_image (Image* i) {
     }
     virtual void
-    draw_layer (Layer* l, children_t _children) {
+    draw_layer (Layer* l, const children_t& _children) {
     }
     virtual int
     get_pixel (Image* i, double x, double y) {
