@@ -154,60 +154,48 @@ Container::add_child (CoreProcess* child, const string& name)
 void
 Container::move_child (CoreProcess* child_to_move, child_position_e spec, CoreProcess* child2)
 {
-    /* create a copy of _children if necessary*/
     if (is_altered () == false) {
         _unaltered_children = new ordered_children_t (_children);
     }
 
-    if (child2 == 0) {
+    Container::remove_child_from_children_only (child_to_move); // Remove first to prevent invalidation issues
+
+    if (child2 == nullptr) {
         if (spec == FIRST) {
-            Container::remove_child_from_children_only (child_to_move);
-            _children.insert (_children.begin (), child_to_move);
+            _children.insert (_children.begin (), child_to_move); // it is the same children so do not add it in _not_alterated_children
             for (auto s : structure_observer_list) {
                 s->move_child_to (this, child_to_move, 0, spec, 0);
             }
-            return;
         } else if (spec == LAST) {
-            Container::remove_child_from_children_only (child_to_move);
-            _children.push_back (child_to_move); // it is the same children so do not add it in _not_alterated_children
+            _children.push_back (child_to_move);
             for (auto s : structure_observer_list) {
                 s->move_child_to (this, child_to_move, 0, spec, _children.size () - 1);
             }
-            return;
-        } else
-            return;
+        }
+        return;
     }
-    // check for existance
+
     auto it = djnnstl::find (_children.begin (), _children.end (), child2);
     if (it == _children.end ()) {
         return;
-    } else {
-        if (spec == BEFORE) {
-            Container::remove_child_from_children_only (child_to_move);
-            // update it and index
-            it         = djnnstl::find (_children.begin (), _children.end (), child2);
-            auto index = std::distance (_children.begin (), it);
-            _children.insert (_children.begin () + index, child_to_move); // it is the same children so do not add it in _not_alterated_children
-            for (auto s : structure_observer_list) {
-                s->move_child_to (this, child_to_move, index, spec, index); // BUG ? : using the same index for _children and GUIstructureHolder ?
-            }
-            return;
-        } else if (spec == AFTER) {
-            Container::remove_child_from_children_only (child_to_move);
-            // update it and index
-            it         = djnnstl::find (_children.begin (), _children.end (), child2);
-            auto index = std::distance (_children.begin (), it);
-            _children.insert (_children.begin () + index + 1, child_to_move); // it is the same children so do not add it in _not_alterated_children
-            for (auto s : structure_observer_list) {
-                s->move_child_to (this, child_to_move, index + 1, spec, index); // BUG ? : using the same index for _children and GUIstructureHolder ?
-            }
-            return;
-        } else {
-#ifndef DJNN_NO_DEBUG
-            loginfo (string ("spec = ") + __to_string (std::underlying_type<child_position_e>::type (spec)));
-#endif
-            warning (this, (string ("Undefined spec to move child ") + child_to_move->get_name (child_to_move->get_parent ())).c_str ());
+    }
+
+    size_t index = std::distance (_children.begin (), it);
+    if (spec == BEFORE) {
+        _children.insert (_children.begin () + index, child_to_move); // it is the same children so do not add it in _not_alterated_children
+        for (auto s : structure_observer_list) {
+            s->move_child_to (this, child_to_move, index, spec, index);
         }
+    } else if (spec == AFTER) {
+        _children.insert (_children.begin () + index + 1, child_to_move); // it is the same children so do not add it in _not_alterated_children
+        for (auto s : structure_observer_list) {
+            s->move_child_to (this, child_to_move, index + 1, spec, index);
+        }
+    } else {
+#ifndef DJNN_NO_DEBUG
+        loginfo ("spec = " + __to_string (static_cast<std::underlying_type<child_position_e>::type> (spec)));
+#endif
+        warning (this, ("Undefined spec to move child " + child_to_move->get_name (child_to_move->get_parent ())).c_str ());
     }
 }
 
