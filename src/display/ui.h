@@ -22,7 +22,7 @@
 
 namespace djnn {
 
-extern djnnstl::vector<djnnstl::string> __ui_interface;
+extern const djnnstl::vector<djnnstl::string> __ui_interface;
 
 class UI {
   public:

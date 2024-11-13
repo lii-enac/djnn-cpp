@@ -22,7 +22,7 @@
 #include "core/tree/list.h"
 
 namespace djnn {
-djnnstl::vector<djnnstl::string> __ui_interface = {"pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse", "wheel", "pen", "eraser"};
+const djnnstl::vector<djnnstl::string> __ui_interface = {"pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse", "wheel", "pen", "eraser"};
 
 UI::UI (CoreProcess* parent_, FatProcess* f)
     : parent (parent_)
