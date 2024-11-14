@@ -865,8 +865,6 @@ Graph::traverse_depth_first (Vertex* v)
     }
     else if (_DEBUG_ENABLE_STRESS_TEST == 2) {
         auto __reverse_edges = v->get_edges ();
-        std::random_device rd;
-        std::mt19937 g(rd());
     
         // debug
         //std::cerr << "reverse " << __reverse_edges.size () << " edges" << std::endl;
