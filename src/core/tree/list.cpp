@@ -139,6 +139,10 @@ void
 AbstractList::clear ()
 {
     /* empty _children without calling delete on each element IF they are pointers */
+    /* so each item becomes orphans */
+    for (auto* child : _children)
+        child->set_parent (nullptr);
+
     _children.clear ();
     _size.set_value (0, true);
 }

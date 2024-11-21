@@ -550,11 +550,19 @@ FatProcess::notify_change (unsigned int notify_mask_)
 void
 ChildProcess::set_parent (CoreProcess* parent)
 {
-    /* note:
-     *  do not try to remove parentless process from parentless_name if only set_parent has been called
-     *  remove from parentless_name only through add_symbol else the parent will not recognise his children.
-     */
+    /* Note:
+    *  Do not attempt to remove a parentless process from `parentless_name` if only `set_parent` has been called.
+    *  Only remove it from `parentless_name` through `add_symbol`; otherwise, the parent will not recognize its children.
+    *  ALSO WHEN:
+    *  - The parent is set to `nullptr` (e.g., when clearing a `djnn::List`).
+    *  In such cases, we must also add this orphaned process to `parentless_name` using his original name (get_debug_name)
+    */
+
     _parent = djnn_dynamic_cast<FatProcess*> (parent);
+
+    if (_parent == nullptr) 
+        parentless_names[this] = djnn::pair<string, int>{get_debug_name (), parentless_names_order++};
+
 #if !DJNN_NO_DEBUG
     set_debug_parent (parent);
 #endif

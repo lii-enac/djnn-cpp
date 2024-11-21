@@ -218,6 +218,7 @@ Container::remove_child (CoreProcess* c)
     if (is_altered ())
         _unaltered_children->erase (djnnstl::remove (_unaltered_children->begin (), _unaltered_children->end (), c), _unaltered_children->end ());
     remove_child_from_children_only (c);
+    c->set_parent (nullptr);
 }
 
 /* note:
