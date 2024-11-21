@@ -74,8 +74,8 @@ Matrix4x4::Matrix4x4 (const Matrix4x4& m)
 Matrix4x4::~Matrix4x4 ()
 {
     for (int i = 0; i < 4; i++)
-        delete _matrix[i];
-    delete _matrix;
+        delete[] _matrix[i];
+    delete[] _matrix;
 }
 
 void
