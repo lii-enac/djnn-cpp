@@ -219,10 +219,10 @@ AbstractRRR::AbstractRRR (CoreProcess* parent, const string& name, CoreProcess* 
 AbstractRRR::~AbstractRRR ()
 {
 
-    map<int, RRR_touch*>::iterator it;
-    for (it = _touches_map_RRR.begin (); it != _touches_map_RRR.end (); ++it) {
+    map<int, RRR_touch*>::iterator it = _touches_map_RRR.begin();
+    while (it != _touches_map_RRR.end()) {
         RRR_touch* touch = it->second;
-        _touches_map_RRR.erase (it);
+        it = _touches_map_RRR.erase(it); // keep track on the iterator
         delete touch;
     }
 
