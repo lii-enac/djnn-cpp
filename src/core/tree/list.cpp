@@ -56,21 +56,26 @@ AbstractList::dump (int level)
 #endif
 
 void
-AbstractList::add_child (CoreProcess* c, const string& name)
+AbstractList::add_child (CoreProcess* child, const string& name)
 {
-    if (c == nullptr)
+    if (child == nullptr)
         return;
 
-    Container::push_back_child (c);
-
     /* We don't want multiple parenthood */
-    if (c->get_parent () != nullptr && c->get_parent () != this) {
-        c->get_parent ()->remove_child (c);
+    CoreProcess* parent = child->get_parent ();
+    if (parent != nullptr && parent != this) {
+        //removed child from his own parent.
+        parent->remove_child (child);
     }
+
+    Container::push_back_child (child);
+
     for (auto s : structure_observer_list) {
-        s->add_child_to_container (this, c, _children.size () - 1);
+        s->add_child_to_container (this, child, _children.size () - 1);
     }
-    finalize_child_insertion (c);
+
+    // finalize and set the new parent
+    finalize_child_insertion (child);
 }
 
 void
