@@ -281,4 +281,19 @@ class RR_T : public AbstractRRR
     int   _touchID1, _touchID2;
 };
 
+class RRR_MT : public AbstractRRR
+{
+
+  public:
+    RRR_MT (CoreProcess* parent, const string& name, CoreProcess* shape, CoreProcess* matrix)
+        : AbstractRRR (parent, name, shape, matrix) {};
+    ~RRR_MT () {};
+    void on_press_touch_event () override;
+    void on_release_touch_event () override;
+    void on_move_touch_event (Touch* t) override;
+
+  private:
+    RRR_touch *_touch1, *_touch2;
+};
+
 } // namespace djnn
