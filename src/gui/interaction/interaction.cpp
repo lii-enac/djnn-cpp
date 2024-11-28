@@ -45,6 +45,9 @@ print_state (State s)
     case RRR:
         return "RRR";
         break;
+    case RESIZING:
+        return "RESIZING";
+        break;
     default:
         return "UNKNOWN STATE";
         break;
@@ -158,7 +161,7 @@ leftScale (AbstractHomography* matrix, double scale, Point center)
 }
 
 static bool
-computeRRR (AbstractHomography* matrix, Point fixedPoint, Point oldPoint, Point newPoint)
+computeRRR (AbstractHomography* matrix, Point& fixedPoint, Point& oldPoint, Point& newPoint)
 {
 
     if (oldPoint.equals (newPoint) == true) {
@@ -179,6 +182,13 @@ computeRRR (AbstractHomography* matrix, Point fixedPoint, Point oldPoint, Point 
     leftScale (matrix, dscale, fixedPoint);
 
     return true;
+}
+
+static void
+computeResizing (AbstractHomography* matrix, Point& fixedPoint, Point& oldPoint, Point& newPoint)
+{
+    double dscale = Point::distance (fixedPoint, newPoint) / Point::distance (fixedPoint, oldPoint);
+    leftScale (matrix, dscale, fixedPoint);
 }
 
 AbstractRRR::AbstractRRR (CoreProcess* parent, const string& name, CoreProcess* shape, CoreProcess* matrix)
@@ -323,7 +333,7 @@ RRR_2T::on_release_touch_event ()
 
     map<int, RRR_touch*>::iterator it = _touches_map_RRR.find (t->get_id ());
     if (it == _touches_map_RRR.end ()) {
-        warning (this, "touch not found on remove");
+        warning (this, "touch not found on release");
         return;
     }
 
@@ -436,23 +446,22 @@ RRR_2T::on_move_touch_event (Touch* t)
         break;
     case RRR:
         // guard & action
-        if ((t->get_id () == _touchID1) || (t->get_id () == _touchID2)) {
+        if ((t->get_id() == _touchID1) || (t->get_id() == _touchID2)) {
+            Point &fixedPoint = (t->get_id() == _touchID1) ? _lastPoint2 : _lastPoint1;
+            Point &oldPoint = (t->get_id() == _touchID1) ? _lastPoint1 : _lastPoint2;
+            Point &newPoint = ta->new_pt;
+
+            // Local copies of points for updating _lastPoint1 and _lastPoint2 after RRR is applied
             Point newPoint1 = _lastPoint1;
             Point newPoint2 = _lastPoint2;
-            Point fixedPoint, oldPoint;
-            Point newPoint = ta->new_pt;
 
-            if (t->get_id () == _touchID1) {
-                newPoint1  = newPoint;
-                oldPoint   = _lastPoint1;
-                fixedPoint = _lastPoint2;
+            if (t->get_id() == _touchID1) {
+                newPoint1 = newPoint;
             } else {
-                newPoint2  = newPoint;
-                oldPoint   = _lastPoint2;
-                fixedPoint = _lastPoint1;
+                newPoint2 = newPoint;
             }
 
-            bool RRRapplied = computeRRR (_matrix, fixedPoint, oldPoint, newPoint);
+            bool RRRapplied = computeRRR(_matrix, fixedPoint, oldPoint, newPoint);
             if (RRRapplied) {
                 _lastPoint1 = newPoint1;
                 _lastPoint2 = newPoint2;
@@ -470,6 +479,8 @@ RRR_2T::on_move_touch_event (Touch* t)
 
 void
 RRR_MT::on_press_touch_event ()
+void
+RR_T::on_press_touch_event ()
 {
 
     Touch* added_touch = (Touch*)getRef (_added);
@@ -502,7 +513,7 @@ RRR_MT::on_press_touch_event ()
         _lastPoint2     = new_touch_alive->new_pt;
         _lastPointHyst2 = _lastPoint2;
 
-        _current_FSM_state = RRR;
+        _current_FSM_state = RESIZING;
         break;
     default:
         break;
@@ -513,7 +524,7 @@ RRR_MT::on_press_touch_event ()
 }
 
 void
-RRR_MT::on_release_touch_event ()
+RR_T::on_release_touch_event ()
 {
     Touch* t = (Touch*)getRef (_removed);
 
@@ -522,7 +533,7 @@ RRR_MT::on_release_touch_event ()
 
     map<int, RRR_touch*>::iterator it = _touches_map_RRR.find (t->get_id ());
     if (it == _touches_map_RRR.end ()) {
-        warning (this, "touch not found on remove");
+        warning (this, "touch not found on release");
         return;
     }
 
@@ -547,7 +558,7 @@ RRR_MT::on_release_touch_event ()
             _current_FSM_state = START;
         }
         break;
-    case RRR:
+    case RESIZING:
         if ((t->get_id () == _touchID1) || (t->get_id () == _touchID2)) {
             if (t->get_id () == _touchID1) {
                 _touchID1   = _touchID2;
@@ -570,7 +581,7 @@ RRR_MT::on_release_touch_event ()
 }
 
 void
-RRR_MT::on_move_touch_event (Touch* t)
+RR_T::on_move_touch_event (Touch* t)
 {
     // debug
     // std::cerr << "- RRR_move_touch - " << t->get_id () << std::endl;
@@ -620,7 +631,7 @@ RRR_MT::on_move_touch_event (Touch* t)
         if (guard) {
             _lastPoint1        = _lastPointHyst1;
             _lastPoint2        = _lastPointHyst2;
-            _current_FSM_state = RRR;
+            _current_FSM_state = RESIZING;
             // is_state_changed = true;
         }
         break;
@@ -633,29 +644,26 @@ RRR_MT::on_move_touch_event (Touch* t)
             _lastPoint1 = newPoint;
         }
         break;
-    case RRR:
+    case RESIZING:
         // guard & action
-        if ((t->get_id () == _touchID1) || (t->get_id () == _touchID2)) {
-            Point newPoint1 = _lastPoint1;
-            Point newPoint2 = _lastPoint2;
-            Point fixedPoint, oldPoint;
-            Point newPoint = ta->new_pt;
+        if ((t->get_id() == _touchID1) || (t->get_id() == _touchID2)) {
+            Point &fixedPoint = (t->get_id() == _touchID1) ? _lastPoint2 : _lastPoint1;
+            Point &oldPoint = (t->get_id() == _touchID1) ? _lastPoint1 : _lastPoint2;
+            Point &newPoint = ta->new_pt;
 
-            if (t->get_id () == _touchID1) {
-                newPoint1  = newPoint;
-                oldPoint   = _lastPoint1;
-                fixedPoint = _lastPoint2;
+            computeResizing(_matrix, fixedPoint, oldPoint, newPoint);
+
+            if (t->get_id() == _touchID1) {
+                _lastPoint1 = newPoint;
             } else {
-                newPoint2  = newPoint;
-                oldPoint   = _lastPoint2;
-                fixedPoint = _lastPoint1;
+                _lastPoint2 = newPoint;
             }
 
-            bool RRRapplied = computeRRR (_matrix, fixedPoint, oldPoint, newPoint);
-            if (RRRapplied) {
-                _lastPoint1 = newPoint1;
-                _lastPoint2 = newPoint2;
-            }
+            //bool RRRapplied = computeRRR (_matrix, fixedPoint, oldPoint, newPoint);
+            // if (RRRapplied) {
+            //_lastPoint1 = newPoint1;
+            //_lastPoint2 = newPoint2;
+            // }
         }
         break;
     default:

@@ -27,6 +27,7 @@ typedef enum State
     WAITHYST2,
     DRAGGING,
     RRR,
+    RESIZING,
 } State;
 
 class AbstractHomography;
@@ -263,13 +264,13 @@ class RRR_2T : public AbstractRRR
     int   _touchID1, _touchID2;
 };
 
-class RRR_MT : public AbstractRRR
+class RR_T : public AbstractRRR
 {
 
   public:
-    RRR_MT (CoreProcess* parent, const string& name, CoreProcess* shape, CoreProcess* matrix)
+    RR_T (CoreProcess* parent, const string& name, CoreProcess* shape, CoreProcess* matrix)
         : AbstractRRR (parent, name, shape, matrix) {};
-    ~RRR_MT () {};
+    ~RR_T () {};
     void on_press_touch_event () override;
     void on_release_touch_event () override;
     void on_move_touch_event (Touch* t) override;
