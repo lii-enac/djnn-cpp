@@ -885,6 +885,11 @@ else
 # pkg install (brew, deb, arch)
 djnn_install_prefix := $(abspath $(DESTDIR)$(PREFIX))
 pkg_config_install_prefix := $(abspath $(DESTDIR)$(PREFIX))
+ifeq ($(os),Linux)
+sed_pkg_config_install_prefix := /usr
+else
+sed_pkg_config_install_prefix := pkg_config_install_prefix
+endif
 endif
 
 djnn_install_headers_dir ?= $(djnn_install_prefix)/include/djnn-cpp
@@ -897,7 +902,7 @@ pkgconf: $(pkgconfig_targets)
 
 $(build_dir)/%.pc: distrib/%.pc.in
 	@mkdir -p $(dir $@)
-	@sed -e 's,@PREFIX@,$(pkg_config_install_prefix),;s,@MAJOR@,$(MAJOR),;s,@MINOR@,$(MINOR),;s,@MINOR2@,$(MINOR2),' $< > $@
+	@sed -e 's,@PREFIX@,$(sed_pkg_config_install_prefix),;s,@MAJOR@,$(MAJOR),;s,@MINOR@,$(MINOR),;s,@MINOR2@,$(MINOR2),' $< > $@
 
 
 #----------------------------------------
