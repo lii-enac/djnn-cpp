@@ -515,7 +515,6 @@ RRR_MT::on_press_touch_event ()
     case WAITHYST2:
     case RRR:
         _touch2 = newTouch;
-        std::cerr << " Press RRR - _touch2 ID " << _touch2->t->get_id () << std::endl;
         break;
 
     case DRAGGING:
