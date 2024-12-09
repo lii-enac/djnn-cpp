@@ -712,7 +712,6 @@ struct LayerStuff : LayerCache
     QPixmap*   hpm;
     double     tx, ty;
     double     s;
-    QMatrix4x4 m;
     LayerStuff ()
         : pm (nullptr), lpm (nullptr), hpm (nullptr), s (1) {}
     ~LayerStuff ()
@@ -884,7 +883,7 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
         _in_cache = true;
 
         // -- Save the current matrix
-        ls->m = _cur_origin;
+        auto msav = _cur_origin;
 
         // -- Apply inverse translation for tx and ty
         QMatrix4x4 newm;
@@ -944,7 +943,7 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
         _painter = buff_painter;
         _picking_view->set_painter (buff_pick_painter);
         _in_cache   = false;
-        _cur_origin = ls->m;
+        _cur_origin = msav;
 
 #ifndef DJNN_NO_DEBUG
         if (ls && (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT || _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY)) {
@@ -993,14 +992,14 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
     newm.translate (tx, ty);  // Reverse the translation to origin
     newm.rotate (r, 0, 0, 1); // r in degree
     newm.translate (x, y);
+    newm.scale (s, s);
     if (ls->tx < 0) {
-        newm.translate ((-ls->tx) * s, 0); // apply no-emptiness translation
+        newm.translate (-ls->tx, 0); // apply no-emptiness translation
     }
     if (ls->ty < 0) {
-        newm.translate (0, (-ls->ty) * s); // apply no-emptiness translation
+        newm.translate (0, -ls->ty * s); // apply no-emptiness translation
     }
-    newm.translate (-pad * s, -pad * s);
-    newm.scale (s, s);
+    newm.translate (-pad, -pad);
 
     // update current transform in context
     _cur_origin = newm;
