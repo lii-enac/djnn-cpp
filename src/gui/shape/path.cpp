@@ -27,6 +27,7 @@
 #include "gui/shape/path_clip.h"
 #include "gui/shape/sdf.h"
 #include "utils/debug.h" // UNIMPL
+//#include "core/utils/iostream.h"
 
 namespace djnn {
 static const char*
@@ -892,8 +893,23 @@ PathArc::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
     return res;
 }
 
+
+void
+Path::SpecUpdateAction::impl_activate ()
+{
+    Path* path = dynamic_cast<Path*> (get_parent ());
+    if (path != nullptr) {
+        path->items()->clean_up_content();
+        parse_path (path, path->spec ().get_value ().c_str ());
+    }
+}
+
+
 Path::Path (CoreProcess* parent, const string& name)
-    : AbstractGShape (parent, name)
+    : AbstractGShape (parent, name),
+    _spec (this, "spec", ""),
+    _updateaction (this, "action"),
+    _c_update (&_spec, ACTIVATION, &_updateaction, ACTIVATION, true)
 {
     _items        = new List (this, "items");
     _bounding_box = new Blank (this, "bounding_box");
@@ -916,6 +932,7 @@ Path::Path (CoreProcess* parent, const string& name)
 Path::Path (CoreProcess* parent, const string& name, const string& path_spec)
     : Path (parent, name)
 {
+    _spec.set_value (path_spec, false);
     parse_path (this, path_spec.c_str ());
 }
 
@@ -934,12 +951,14 @@ void
 Path::impl_activate ()
 {
     AbstractGObj::impl_activate ();
+    _c_update.enable ();
     _items->activate ();
 }
 
 void
 Path::impl_deactivate ()
 {
+    _c_update.disable ();
     _items->deactivate ();
     AbstractGShape::impl_deactivate ();
 }

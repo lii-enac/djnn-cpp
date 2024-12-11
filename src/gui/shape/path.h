@@ -137,6 +137,15 @@ class PathClosure : public AbstractGObj {
 };
 
 class Path : public AbstractGShape {
+  class SpecUpdateAction : public Action {
+      public:
+        SpecUpdateAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {};
+
+        virtual ~SpecUpdateAction () {}
+        void impl_activate () override;
+    };
+
   public:
     Path (CoreProcess* parent, const string& name);
     Path (CoreProcess* parent, const string& name, const string& path_spec);
@@ -146,6 +155,7 @@ class Path : public AbstractGShape {
     // and use the correct draw function
     List*               items () { return _items; }
     GUIStructureHolder* items_GH () { return _items_GH; }
+    TextProperty&       spec () { return _spec; }
 
     void   draw () override;
     void   get_bounding_box (double& x, double& y, double& w, double& h) const override;
@@ -163,6 +173,10 @@ class Path : public AbstractGShape {
     FatProcess*         _bounding_box;
     DoubleProperty *    _bbx, *_bby, *_bbw, *_bbh;
     GUIStructureHolder* _items_GH; // HACK to get access directly to GUIstructureHolder of items
+
+    TextProperty        _spec;
+    SpecUpdateAction    _updateaction;
+    Coupling            _c_update;
 };
 
 int parse_path (Path* p, const char* path_spec);
