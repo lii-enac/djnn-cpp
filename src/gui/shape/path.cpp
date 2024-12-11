@@ -932,7 +932,7 @@ Path::Path (CoreProcess* parent, const string& name)
 Path::Path (CoreProcess* parent, const string& name, const string& path_spec)
     : Path (parent, name)
 {
-    _spec.set_value (path_spec, false);
+    _spec.set_value (path_spec, true);
     parse_path (this, path_spec.c_str ());
 }
 
