@@ -19,6 +19,8 @@
 #include "core/utils/algorithm.h"
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
+#include "core/utils/utils-dev.h"
+
 
 namespace djnn {
 ProcessDeleter::ProcessDeleter (CoreProcess* parent, const string& name)
@@ -162,6 +164,67 @@ ProcessCollector::remove_all ()
 {
     _list.clear ();
     _size.set_value (0, true);
+}
+
+CoreProcess*
+ProcessCollector::find_child_impl (const string& path)
+{
+
+    /* case of .. and ../foobar */
+    if (path[0] == '.' && path[1] == '.') {
+        if (get_parent () && path[2] == '/')
+            return get_parent ()->find_child_impl (path.substr (3));
+        else
+            return get_parent ();
+    }
+    
+    if (path.compare ("rm_all") == 0)
+        return &_s_rm_all;
+    else if (path.compare ("add") == 0)
+        return &_add;
+    else if (path.compare ("rm") == 0)
+        return &_remove;
+    else if (path.compare ("size") == 0)
+        return &_size;
+    if (path.compare ("add_one_action") == 0)
+        return &_add_one;
+    else if (path.compare ("remove_one_action") == 0)
+        return &_rm_one;
+    else if (path.compare ("remove_all_action") == 0)
+        return &_rm_all;
+    else {
+        try {
+            string::size_type sz;
+            size_t            index = stoi (path, &sz) - 1;
+            if (index < _list.size ()) {
+                auto* c = _list.at (index);
+                if (path.length () > sz) {
+                    return c->find_child_impl (path.substr (sz + 1));
+                } else
+                    return c;
+            } else {
+                /* we have to dispay index as the API user index */
+                warning (this, "index " + __to_string (index + 1) + " is out of bound for ProcessCollector - should be between 1 and size \'" + get_name () + "\'");
+            }
+        } catch (std::invalid_argument& arg) {
+            // FIXME: comment the warning for now because it polluted the find_child ("//*")
+            // warning (this, "invalid child path '" + path + "' for ProcessCollector - should be between 1 and size '" + get_name () + "'");
+        }
+    }
+    return nullptr;
+}
+
+CoreProcess*
+ProcessCollector::find_child_impl (int index)
+{
+    if ((index - 1) < (int)_list.size ()) {
+        return _list.at (index - 1);
+
+    } else {
+        /* we have to dispay index as the API user index */
+        warning (this, "index " + __to_string (index) + " is out of bound for ProcessCollector - should be between 1 and size \'" + get_name () + "\'");
+    }
+    return nullptr;
 }
 
 CollectionDeleter::CollectionDeleter (CoreProcess* parent, const string& name)

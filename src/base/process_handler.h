@@ -185,6 +185,8 @@ class ProcessCollector : public FatProcess {
     void                        remove_one ();
     void                        remove_one (CoreProcess* p);
     void                        remove_all ();
+    CoreProcess* find_child_impl (const string& path) override;
+    CoreProcess* find_child_impl (int index) override;
     const vector<CoreProcess*>& get_list () { return _list; }
     process_type_e              get_process_type () const override { return PROCESS_COLLECTOR_T; }
 
