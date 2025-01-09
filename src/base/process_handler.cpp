@@ -11,6 +11,7 @@
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *
  */
+#include <stdexcept>
 
 #include "process_handler.h"
 
