@@ -38,7 +38,8 @@
 
 namespace djnn {
 
-extern FatProcess* GPUs; // display.h
+extern CoreProcess* GPUs; // display.h
+using djnnstl::string;
 
 DRMDevice::DRMDevice (CoreProcess* parent, const string& name, int fd, int min_width, int max_width,
                       int min_height, int max_height)
@@ -157,7 +158,7 @@ DRMUdev::handle_udev_msg ()
     udev_device_unref (dev);
 }
 
-static vector<string> _type_names = {
+static djnnstl::vector<string> _type_names = {
     "Unknown", "VGA", "DVI-I", "DVI-D", "DVI-A",
     "Composite", "SVIDEO", "LVDS", "Component",
     "DIN", "DP", "HDMI-A", "HDMI-B", "TV",
@@ -177,20 +178,35 @@ build_name (drmModeConnector* drm_conn)
 void
 DRMUdev::handle_drm_device (const char* filename, struct udev_device* dev)
 {
+    errno            = 0;
     const char* name = udev_device_get_property_value (dev, "DEVNAME");
-    if (!name)
+    if (!name) {
+        perror ("");
+        if (filename)
+            warning (nullptr, string ("DRM: could not udev_device_get_property_value for ") + filename);
+        else
+            warning (nullptr, "DRM: could not udev_device_get_property_value");
         return;
+    }
     if (filename) {
-        int         fd  = open (filename, O_RDWR);
-        drmModeRes* res = drmModeGetResources (fd);
-        if (!res)
+        int fd = open (filename, O_RDWR);
+        if (fd == -1) {
+            perror ("");
+            warning (nullptr, string ("DRM: could not open ") + filename);
             return;
+        }
+        drmModeRes* res = drmModeGetResources (fd);
+        if (!res) {
+            perror ("");
+            warning (nullptr, "DRM: could not get resources");
+            return;
+        }
         string      str (name);
         std::size_t found    = str.find_last_of ("/");
         string      dev_name = str.substr (found + 1);
         DRMDevice*  drm_dev  = new DRMDevice (GPUs, dev_name, fd, res->min_width, res->max_width, res->min_height, res->max_height);
 #if DEBUG
-        std::cout << "New DRM device found: " << dev_name << " " << res->min_width << " " << res->max_width << " " << res->min_height << " " << res->max_height << endl;
+        djnnstl::cout << "New DRM device found: " << dev_name << " " << res->min_width << " " << res->max_width << " " << res->min_height << " " << res->max_height << djnnstl::endl;
 #endif
         drmModeConnector* drm_conn;
         for (int i = 0; i < res->count_connectors; ++i) {
@@ -214,13 +230,19 @@ DRMUdev::update_drm_device (const char* filename, struct udev_device* dev)
     std::size_t found    = str.find_last_of ("/");
     string      dev_name = str.substr (found + 1);
     DRMDevice*  drm_dev  = (DRMDevice*)GPUs->find_child_impl (dev_name);
-    if (!drm_dev)
+    if (!drm_dev) {
+        perror ("");
+        warning (nullptr, "DRM: no DRMDevice");
         return;
+    }
 
     int         fd  = drm_dev->get_fd ();
     drmModeRes* res = drmModeGetResources (fd);
-    if (!res)
+    if (!res) {
+        perror ("");
+        warning (nullptr, "DRM: could not drmModeGetResources");
         return;
+    }
     drmModeConnector* drm_conn;
     for (int i = 0; i < res->count_connectors; ++i) {
         uint32_t id = res->connectors[i];
@@ -231,7 +253,8 @@ DRMUdev::update_drm_device (const char* filename, struct udev_device* dev)
         bool          is_connected = drm_conn->connection == DRM_MODE_CONNECTED;
         DRMConnector* conn         = (DRMConnector*)drm_dev->find_child_impl ("connectors/" + conn_name);
         if (conn == nullptr) {
-            std::cout << "connector not found\n";
+            perror ("");
+            warning (nullptr, "DRM: connector not found");
             drmModeFreeConnector (drm_conn);
             continue;
         }

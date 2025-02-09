@@ -17,6 +17,13 @@
 namespace djnn {
 static DRMUdev* udev;
 
+#define MACRO(lowkey, capkey) const int DJN_Key_##lowkey = 0; // FIXME
+#include "display/const_keys.h"
+MACRO (Shift, SHIFT); // for multiline
+MACRO (Control, CONTROL);
+MACRO (Alt, ALT)
+#undef MACRO
+
 void
 p_init_display ()
 {

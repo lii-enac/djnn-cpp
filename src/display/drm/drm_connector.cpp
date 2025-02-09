@@ -36,7 +36,7 @@
 
 namespace djnn {
 
-vector<DRMConnector*> conn_list;
+djnnstl::vector<DRMConnector*> conn_list;
 
 void
 p_clear_display ()
@@ -111,7 +111,8 @@ DRMConnector::init_fb (buff* b)
     creq.bpp    = 32;
     success     = drmIoctl (_fd, DRM_IOCTL_MODE_CREATE_DUMB, &creq);
     if (success < 0) {
-        cerr << "failed to create framebuffer\n";
+        djnnstl::cerr << "DRM: failed to create framebuffer" << __FL__;
+        perror ("");
         return -1;
     }
     b->stride = creq.pitch;
@@ -120,19 +121,22 @@ DRMConnector::init_fb (buff* b)
     success   = drmModeAddFB (_fd, b->width, b->height, 24, 32, b->stride,
                               b->handle, &b->fb);
     if (success < 0) {
-        cerr << "failed to create framebuffer\n";
+        djnnstl::cerr << "DRM: failed to create framebuffer" << __FL__;
+        perror ("");
         goto err_destroy;
     }
     memset (&mreq, 0, sizeof (mreq));
     mreq.handle = b->handle;
     success     = drmIoctl (_fd, DRM_IOCTL_MODE_MAP_DUMB, &mreq);
     if (success < 0) {
-        cerr << "failed to create framebuffer\n";
+        djnnstl::cerr << "failed to create framebuffer" << __FL__;
+        perror ("");
         goto err_fb;
     }
     b->map = (uint8_t*)mmap (0, b->size, PROT_READ | PROT_WRITE, MAP_SHARED, _fd, mreq.offset);
     if (b->map == MAP_FAILED) {
-        cerr << "failed to create framebuffer\n";
+        djnnstl::cerr << "failed to create framebuffer" << __FL__;
+        perror ("");
         goto err_fb;
     }
     memset (b->map, 0, b->size);
@@ -171,23 +175,23 @@ DRMConnector::init_connection (drmModeRes* res, drmModeConnector* drm_conn)
 
     int ret = get_crtc (res, drm_conn);
     if (!ret) {
-        error (this, string ("no valid crtc for connector ") + __to_string (
-                                                                   drm_conn->connector_id));
+        error (this, string ("DRM: no valid crtc for connector ") + djnnstl::to_string (
+                                                                        drm_conn->connector_id));
     }
 
     ret = init_fb (&_buffs[0]);
     ret &= init_fb (&_buffs[1]);
     if (!ret) {
-        error (this, string ("Cannot create framebuffer for connector ") + __to_string (
-                                                                               drm_conn->connector_id));
+        error (this, string ("DRM: cannot create framebuffer for connector ") + djnnstl::to_string (
+                                                                                    drm_conn->connector_id));
     }
 
     _saved_crtc = drmModeGetCrtc (_fd, _crtc_id);
     buff* b     = &_buffs[0];
     ret         = init_connection_crtc (b->fb);
     if (ret) {
-        error (this, string ("failed to set mode for connector ") + __to_string (
-                                                                        drm_conn->connector_id));
+        error (this, string ("DRM: failed to set mode for connector ") + djnnstl::to_string (
+                                                                             drm_conn->connector_id));
     }
 }
 
