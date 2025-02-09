@@ -538,10 +538,8 @@ CouplingProcess::remove_deactivation_coupling (Coupling* c)
 void
 FatProcess::notify_change (unsigned int notify_mask_)
 {
-    auto* p = get_parent ();
-    if (p) {
+    if (auto* p = get_parent ())
         p->notify_change (notify_mask_);
-    }
 }
 
 // -----------------------------------------------------------------------
