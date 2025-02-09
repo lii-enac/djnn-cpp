@@ -902,7 +902,7 @@ pkgconf: $(pkgconfig_targets)
 
 $(build_dir)/%.pc: distrib/%.pc.in
 	@mkdir -p $(dir $@)
-	@sed -e 's,@PREFIX@,$(sed_pkg_config_install_prefix),;s,@MAJOR@,$(MAJOR),;s,@MINOR@,$(MINOR),;s,@MINOR2@,$(MINOR2),' $< > $@
+	@sed -e 's,@PREFIX@,$(sed_pkg_config_install_prefix),;s:@LIBPRIVATE@:$(call uniq,$(filter-out -lssl -lcrypto,$(ldflags_static))):; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $< > $@
 
 
 #----------------------------------------
@@ -1023,6 +1023,7 @@ pkg:
 # all_pkg = $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
 
 #pkgdeps += make # obvioulsy already installed
+pkgdeps += pkgconfig
 pkgdeps += bison flex
 
 ifeq ($(pkgcmd),)
@@ -1088,9 +1089,9 @@ endif
 #else
 
 ifeq ($(pkgcmdtype),apt)
-pkgdeps += g++ pkg-config
-pkglibdeps += udev1 rtmidi6
-pkglibdeps += expat1 curl4 evdev2 openal1
+pkgdeps += g++
+pkglibdeps += udev rtmidi
+pkglibdeps += expat1 curl4-openssl evdev openal
 #libboost-thread-dev 
 #libboost-fiber-dev
 ifeq ($(display),QT)
@@ -1114,6 +1115,9 @@ endif
 ifeq ($(graphics),GL)
 	pkglibdeps += freetype6 fontconfig1 glm
 endif
+ifeq ($(graphics),SDLGPU)
+	pkglibdeps += freetype6 fontconfig1 glm
+endif
 pkglibdeps_full := $(addprefix lib,$(pkglibdeps))
 #pkglibdeps_full := $(addsuffix -dev,$(pkglibdeps_full))
 pkgdeps += $(pkglibdeps_full)
@@ -1123,7 +1127,7 @@ toto:
 	@echo $(pkglibdeps_full)
 
 ifeq ($(pkgcmdtype),apk)
-pkgdeps += g++ pkgconfig
+pkgdeps += g++
 pkglibdeps += eudev rtmidi
 pkglibdeps += curl libevdev expat openal-soft flex
 
@@ -1147,25 +1151,33 @@ endif
 ifeq ($(graphics),GL)
 	pkglibdeps += freetype fontconfig glm 
 endif
+ifeq ($(graphics),SDLGPU)
+	pkglibdeps += freetype fontconfig glm
+endif
 #pkglibdeps_full := $(addsuffix -dev,$(pkglibdeps))
 pkglibdeps_full := $(pkglibdeps)
 pkgdeps += $(pkglibdeps_full)
 endif
 
 ifeq ($(pkgcmdtype),brew)
-pkgdeps += expat curl pkgconfig
+pkgdeps += expat curl
 #pkgdeps += libusb #crazyflie
 pkgdeps += rtmidi
 ifeq ($(graphics),QT)
 	pkgdeps += qt5
 endif
 ifeq ($(display),SDL)
-	pkgdeps += sdl2 sdl2_image
+	#pkgdeps += sdl2 sdl2_image
+	pkgdeps += sdl3
+	#sdl3_image
 endif
 ifeq ($(graphics),CAIRO)
 	pkgdeps += cairo pango
 endif
 ifeq ($(graphics),GL)
+	pkgdeps += glm fontconfig freetype2
+endif
+ifeq ($(graphics),SDLGPU)
 	pkgdeps += glm fontconfig freetype2
 endif
 ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
@@ -1174,39 +1186,43 @@ endif
 endif
 
 ifeq ($(pkgcmdtype),pacman)
-#https://www.msys2.org/
-#pkgdeps := git make pkg-config
+	#https://www.msys2.org/
 
-#pkginst := pacboy -S --needed
-#pkgupg := pacboy -Syu --needed
+	#pkgdeps := git make pkg-config
 
-#boost
-mgwpkgdeps += gcc expat curl
-#pkgdeps += libusb #crazyflie
-mgwpkgdeps += rtmidi
-ifeq ($(graphics),QT)
-mgwpkgdeps += qt5
-endif
-ifeq ($(display),SDL)
-mgwpkgdeps += SDL2 SDL2_image
-endif
-ifeq ($(graphics),CAIRO)
-mgwpkgdeps += cairo pango
-endif
-ifeq ($(graphics),GL)
-mgwpkgdeps += glm fontconfig freetype
-endif
-ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
-mgwpkgdeps += openal
-endif
+	#pkginst := pacboy -S --needed
+	#pkgupg := pacboy -Syu --needed
 
-# mgwpkgdeps += gcc boost expat curl qt5
-# mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
-# ifeq ($(graphics),GL)
-# 	mgwpkgdeps += glm
-# endif
-mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
-pkgdeps += $(mgwpkgdeps)
+	#boost
+	mgwpkgdeps += gcc expat curl
+	#pkgdeps += libusb #crazyflie
+	mgwpkgdeps += rtmidi
+	ifeq ($(graphics),QT)
+		mgwpkgdeps += qt5
+	endif
+	ifeq ($(display),SDL)
+		mgwpkgdeps += SDL2 SDL2_image
+	endif
+	ifeq ($(graphics),CAIRO)
+		mgwpkgdeps += cairo pango
+	endif
+	ifeq ($(graphics),GL)
+		mgwpkgdeps += glm fontconfig freetype
+	endif
+	ifeq ($(graphics),SDLGPU)
+		mgwpkgdeps += glm fontconfig freetype
+	endif
+	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
+		mgwpkgdeps += openal
+	endif
+
+	# mgwpkgdeps += gcc boost expat curl qt5
+	# mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
+	# ifeq ($(graphics),GL)
+	# 	mgwpkgdeps += glm
+	# endif
+	mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
+	pkgdeps += $(mgwpkgdeps)
 endif
 
 #endif
@@ -1231,6 +1247,9 @@ endif
 # 		mgwpkgdeps += cairo pango
 # 	endif
 # 	ifeq ($(graphics),GL)
+# 		mgwpkgdeps += glm fontconfig freetype
+# 	endif
+# 	ifeq ($(graphics),SDLGPU)
 # 		mgwpkgdeps += glm fontconfig freetype
 # 	endif
 # 	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
