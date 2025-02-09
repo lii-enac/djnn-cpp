@@ -902,7 +902,7 @@ pkgconf: $(pkgconfig_targets)
 
 $(build_dir)/%.pc: distrib/%.pc.in
 	@mkdir -p $(dir $@)
-	@sed -e 's,@PREFIX@,$(sed_pkg_config_install_prefix),;s:@LIBPRIVATE@:$(call uniq,$(filter-out -lssl -lcrypto,$(ldflags_static))):; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $< > $@
+	@sed -e 's,@PREFIX@,$(sed_pkg_config_install_prefix),; s,@LIBPRIVATE@,$(call uniq,$(filter-out -lssl -lcrypto,$(ldflags_static))),; s,@MAJOR@,$(MAJOR),; s,@MINOR@,$(MINOR),; s,@MINOR2@,$(MINOR2),' $< > $@
 
 
 #----------------------------------------
