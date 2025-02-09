@@ -13,6 +13,8 @@
  *
  */
 
+#include <SDL3/SDL_video.h>
+
 // #include "sdl_mainloop.h"
 #include "sdl_window.h"
 
@@ -22,31 +24,34 @@
 #include "core/property/int_property.h"
 #include "core/property/ref_property.h"
 #include "core/property/text_property.h"
+#include "display/display-dev.h"  // GenericKeyboard
+#include "display/display-priv.h" // GUIKeyboard
 #include "display/display.h"
 // #include "core/property/bool_property.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
+#include "core/core-dev.h" // graph add/remove edge
+#include "core/utils/error.h"
+#include "core/utils/remotery.h"
+#include "exec_env/global_mutex.h"
+#include "exec_env/main_loop.h"
+// #include <SDL3_image/SDL_image.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "core/core-dev.h" // graph add/remove edge
-#include "core/utils/error.h"
 #include "core/utils/iostream.h"
-#include "core/utils/remotery.h"
-#include "exec_env/global_mutex.h"
-#include "exec_env/main_loop.h"
+#include "utils/debug.h"
 
 // #define attr(a) #a ":" << a << " "
 
 namespace djnn {
 
 // https://stackoverflow.com/questions/32294913/getting-contiunous-window-resize-event-in-sdl-2
-static int
+static bool
 resizingEventWatcher (void* data, SDL_Event* event)
 {
-    if (event->type == SDL_WINDOWEVENT && event->window.event == SDL_WINDOWEVENT_RESIZED) {
+    if (event->type == /*SDL_WINDOWEVENT && event->window.event ==*/ SDL_EVENT_WINDOW_RESIZED) {
         SDL_Window* win     = SDL_GetWindowFromID (event->window.windowID);
         SDLWindow*  djnnwin = (SDLWindow*)data;
         if (win == djnnwin->sdl_window ()) {
@@ -56,28 +61,33 @@ resizingEventWatcher (void* data, SDL_Event* event)
             djnnwin->handle_resized (w, h);
         }
     }
-    return 0;
+    return true;
 }
 
-SDLWindow::SDLWindow (djnn::Window* win, const string& title, double x, double y, double w, double h)
+SDLWindow::SDLWindow (djnn::Window* win, const djnnstl::string& title, double x, double y, double w, double h)
     : _window (win), _sdl_window (nullptr), _cursor (nullptr), _cursor_surface (nullptr), is_activated (false)
 {
     SDL_AddEventWatch (resizingEventWatcher, this);
 }
 
 void
-SDLWindow::set_cursor (const string& path, int hotX, int hotY)
+SDLWindow::set_cursor (const djnnstl::string& path, int hotX, int hotY)
 {
     if (_cursor)
-        SDL_FreeCursor (_cursor);
+        SDL_DestroyCursor (_cursor);
     if (_cursor_surface)
-        SDL_FreeSurface (_cursor_surface);
+        SDL_DestroySurface (_cursor_surface);
+#if 0 // use png or jpg loading and get rid of SDL_image...
     _cursor_surface = IMG_Load (path.c_str ());
+#else
+    std::cerr << "djnn: cannot set cursor with SDL without SDL_image" << __FL__;
+    _cursor_surface = nullptr;
+#endif
     if (!_cursor_surface)
         return;
     _cursor = SDL_CreateColorCursor (_cursor_surface, hotX, hotY);
     if (!_cursor) {
-        SDL_FreeSurface (_cursor_surface);
+        SDL_DestroySurface (_cursor_surface);
         return;
     }
     SDL_SetCursor (_cursor);
@@ -86,9 +96,9 @@ SDLWindow::set_cursor (const string& path, int hotX, int hotY)
 SDLWindow::~SDLWindow ()
 {
     if (_cursor_surface)
-        SDL_FreeSurface (_cursor_surface);
+        SDL_DestroySurface (_cursor_surface);
     if (_cursor)
-        SDL_FreeCursor (_cursor);
+        SDL_DestroyCursor (_cursor);
 }
 
 void
@@ -131,82 +141,109 @@ SDLWindow::redraw ()
     return button_id;
   }
 #endif
-void
+bool
 SDLWindow::handle_event (SDL_Event& e)
 {
     // std::cerr << e.type << __FL__;
+    bool exec = false;
     switch (e.type) {
-    case SDL_TEXTINPUT:
-        _window->key_pressed ()->set_value (e.key.keysym.sym, 1);
-        _window->key_pressed_text ()->set_value (e.text.text, 1);
+    case SDL_EVENT_QUIT:
+        DBG;
         break;
-    case SDL_KEYDOWN:
-        //   //DBG;
-        //   _window->key_pressed ()->set_value (e.key.keysym.sym, 1);
-        //   //if (!(event->key() >= 0x1000000 && event->key() <= 0x01020001)) {
-        //     _window->key_pressed_text ()->set_value (SDL_GetKeyName(e.key.keysym.sym), 1);
-        //   //}
-        //   //redraw ();
+    case SDL_EVENT_TEXT_INPUT:
+        _window->key_pressed ()->set_value ((int)e.key.key, 1); // FIXME_SDL
+        _window->key_pressed_text ()->set_value (e.text.text, 1);
+        exec = true;
+        break;
+    case SDL_EVENT_KEY_DOWN:
+        _window->key_pressed ()->set_value ((int)e.key.key, 1); // FIXME_SDL
+        ((GUIKeyboard*)GenericKeyboard)->key_pressed ()->set_value ((int)e.key.key, 1);
+        exec = true;
+        break;
+    case SDL_EVENT_KEY_UP:
+        _window->key_released ()->set_value ((int)e.key.key, 1); // FIXME_SDL
+        ((GUIKeyboard*)GenericKeyboard)->key_released ()->set_value ((int)e.key.key, 1);
+        exec = true;
         break;
 
-    case SDL_USEREVENT: {
+    case SDL_EVENT_USER: {
         switch (e.user.code) {
         case user_event_awake: {
             // std::cerr << "sdl window wakeup" << __FL__;
+            rmt_BeginCPUSample (trigger_redraw, RMTSF_Aggregate);
             trigger_redraw ();
+            rmt_EndCPUSample ();
+            exec = true;
             break;
         }
         case user_event_geometry: {
             update_geometry_for_good ();
+            exec = true;
             break;
         } break;
         }
         break;
     }
-    case SDL_WINDOWEVENT: {
-        switch (e.window.event) {
-        case SDL_WINDOWEVENT_SHOWN:
-        case SDL_WINDOWEVENT_EXPOSED: {
-            trigger_redraw ();
-            break;
-        }
-        case SDL_WINDOWEVENT_MOVED: {
-            int x = e.window.data1;
-            int y = e.window.data2;
-            _window->pos_x ()->set_value (x, true);
-            _window->pos_y ()->set_value (y, true);
-            update_hidpi ();
-            break;
-        }
-        case SDL_WINDOWEVENT_SIZE_CHANGED: {
-            int width  = e.window.data1;
-            int height = e.window.data2;
-            if (width == _window->width ()->get_value () && height == _window->height ()->get_value ())
-                return;
+    //case SDL_WINDOWEVENT: {
+    //    switch (e.window.event) {
+    case SDL_EVENT_WINDOW_SHOWN:
+    case SDL_EVENT_WINDOW_EXPOSED: {
+        trigger_redraw ();
+        exec = true;
+        break;
+    }
+    case SDL_EVENT_WINDOW_MOVED: {
+        int x = e.window.data1;
+        int y = e.window.data2;
+        _window->pos_x ()->set_value (x, true);
+        _window->pos_y ()->set_value (y, true);
+        update_hidpi ();
+        exec = true;
+        break;
+    }
+    case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
+        auto scale = _window->hidpi_scale ()->get_value (); // SDL_GetDisplayContentScale(SDL_GetDisplayForWindow(_sdl_window));
+        int width  = e.window.data1 / scale;
+        int height = e.window.data2 / scale;
+        //std::cerr << "******* " << scale << " " << width << " " << _window->width ()->get_value () << __FL__; // SDL_GetDisplayContentScale(SDL_GetDisplayForWindow(_sdl_window))
+        
+        if (width == _window->width ()->get_value () && height == _window->height ()->get_value ()) {
+            // do nothing
+        } else {
             //_window->width ()->set_value (width, true);
             //_window->height ()->set_value (height, true);
             update_hidpi ();
             handle_resized (width, height);
+            exec = true;
             // redraw ();
-
-            break;
         }
-        case SDL_WINDOWEVENT_CLOSE: {
-            e.type = SDL_QUIT;
-            SDL_PushEvent (&e);
-            break;
-        }
-        default:
-            break;
-        }
+        break;
     }
+    case SDL_EVENT_WINDOW_CLOSE_REQUESTED: {
+        // e.type = SDL_EVENT_QUIT;
+        // SDL_PushEvent (&e);
+        _window->close ()->activate ();
+        exec = true;
+        break;
     }
+    case SDL_EVENT_WINDOW_FOCUS_GAINED:
+        SDL_StartTextInput (_sdl_window);
+        break;
+    case SDL_EVENT_WINDOW_FOCUS_LOST:
+        SDL_StopTextInput (_sdl_window);
+        break;
+    default:
+        break;
+    }
+    //}
+    //}
+    return exec;
 }
 
 void
 SDLWindow::trigger_redraw ()
 {
-    rmt_BeginCPUSample (trigger_redraw, 0);
+    rmt_BeginCPUSample (trigger_redraw, RMTSF_None);
 #if 1
     redraw ();
     _window->refreshed ()->notify_activation ();
@@ -233,7 +270,7 @@ SDLWindow::update_geometry ()
 {
     // macOS: should be done in GUI thread...
     SDL_Event e;
-    e.type            = SDL_USEREVENT;
+    e.type            = SDL_EVENT_USER;
     e.user.code       = SDLWindow::user_event_geometry;
     e.window.windowID = SDL_GetWindowID (_sdl_window);
     SDL_PushEvent (&e);

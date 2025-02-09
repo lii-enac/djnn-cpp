@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include <SDL.h>
+#include <SDL3/SDL_events.h>
 
 #include "core/ontology/process.h"
 #include "display/window.h"
@@ -30,17 +30,18 @@ class SDLPickingView;
 
 class SDLWindow : public WinImpl {
   public:
-    SDLWindow (Window* win, const string& title, double x, double y, double w, double h);
+    SDLWindow (Window* win, const djnnstl::string& title, double x, double y, double w, double h);
     virtual ~SDLWindow ();
     SDL_Window* sdl_window () { return _sdl_window; }
-    void        set_cursor (const string& path, int hotX, int hotY) override;
-    void        set_cursor (int cursor_shape) override {};
+    void        set_cursor (const djnnstl::string& path, int hotX, int hotY) override;
+    void        set_cursor (int cursor_shape) override {} // TODO
+  
     enum {
         user_event_awake,
         user_event_geometry
     };
 
-    virtual void handle_event (SDL_Event&);
+    virtual bool handle_event (SDL_Event&);
     virtual void handle_resized (int w, int h);
     virtual void update_hidpi ();
     void         trigger_redraw ();

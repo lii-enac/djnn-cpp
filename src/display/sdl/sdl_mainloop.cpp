@@ -12,6 +12,8 @@
  *
  */
 
+#include <SDL3/SDL_timer.h>  // SDL_Delay
+
 #include "sdl_mainloop.h"
 
 #include "exec_env/global_mutex.h"
@@ -24,8 +26,10 @@
 #include "exec_env/djnn_time_manager.h"
 #endif
 
+#include "core/utils/error.h"
 #include "core/utils/iostream.h"
 #include "core/utils/remotery.h"
+#include "utils/debug.h"
 
 namespace djnn {
 
@@ -120,15 +124,14 @@ SDLMainloop::sdl_run_coop ()
 void
 SDLMainloop::wakeup (SDLWindow* requestingWin)
 {
-    // if(_wakeup_already_triggered) return;
+    // if (_wakeup_already_triggered) return;
     // DBG;
-    //  push a dummy event into the queue so that the event loop has a chance to stop
+    // push a dummy event into the queue so that the event loop has a chance to stop
     SDL_Event e;
-    e.type      = SDL_USEREVENT;
+    e.type      = SDL_EVENT_USER;
     e.user.code = SDLWindow::user_event_awake;
     if (requestingWin)
         e.window.windowID = SDL_GetWindowID (requestingWin->sdl_window ());
-    // SDL_PeepEvents (&e, 1, SDL_ADDEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
     SDL_PushEvent (&e);
     _wakeup_already_triggered = true;
 }
@@ -147,10 +150,7 @@ SDLMainloop::sdl_run ()
 {
     set_please_stop (false);
 
-    SDL_StartTextInput ();
-
     while (!get_please_stop ()) {
-        _wakeup_already_triggered = false;
         SDL_Event e;
         // std::cerr << ">> SDL_WaitEvent " << __FL__;
         SDL_WaitEvent (&e); // blocking call
@@ -160,7 +160,6 @@ SDLMainloop::sdl_run ()
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     }
 
-    SDL_StopTextInput ();
 
     ////MainLoop::instance().please_stop();
     ////MainLoop::instance().join();
@@ -177,11 +176,11 @@ sdl_event_to_char (Uint32 t)
         return #ev; \
         break;
     switch (t) {
-        HE (SDL_USEREVENT);
-        HE (SDL_MOUSEMOTION);
-        HE (SDL_FINGERMOTION);
-        HE (SDL_FINGERDOWN);
-        HE (SDL_FINGERUP);
+        HE (SDL_EVENT_USER);
+        HE (SDL_EVENT_MOUSE_MOTION);
+        HE (SDL_EVENT_FINGER_MOTION);
+        HE (SDL_EVENT_FINGER_DOWN);
+        HE (SDL_EVENT_FINGER_UP);
     default:
         return "unknown SDL event";
         break;
@@ -198,9 +197,10 @@ SDLMainloop::handle_events (SDL_Event& first_event)
     bool      redraw_awake = false;
     SDL_Event redraw_event;
 
+    // handle first_event...
     if (!get_please_stop ()) {
         auto& e = first_event;
-        if (e.type == SDL_USEREVENT && e.user.code == SDLWindow::user_event_awake) {
+        if (e.type == SDL_EVENT_USER && e.user.code == SDLWindow::user_event_awake) {
             redraw_awake = true;
             redraw_event = e;
         } else {
@@ -208,15 +208,18 @@ SDLMainloop::handle_events (SDL_Event& first_event)
         }
     }
 
+    // ...then handle other pending events while we are at it...
     const unsigned int max_events = 10;
     SDL_Event          es[max_events];
-    int                pending = SDL_PeepEvents (es, max_events, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
+    int                pending = SDL_PeepEvents (es, max_events, SDL_GETEVENT, SDL_EVENT_FIRST, SDL_EVENT_LAST);
     // std::cerr << "   pending events: " << pending << " " << __FL__;
     if (pending && !get_please_stop ()) {
-        SDL_Event& e = es[max_events - pending];
+        // SDL_Event &e = es[max_events-pending];
+        int index = 0;
         do {
-            SDL_WaitEvent (&e); // should be non-blocking call, since there are pending events
-            if (e.type == SDL_USEREVENT && e.user.code == SDLWindow::user_event_awake) {
+            // SDL_WaitEvent (&e); // should be non-blocking call, since there are pending events
+            SDL_Event& e = es[index++];
+            if (e.type == SDL_EVENT_USER && e.user.code == SDLWindow::user_event_awake) {
                 redraw_awake = true;
                 redraw_event = e;
                 continue;
@@ -224,19 +227,21 @@ SDLMainloop::handle_events (SDL_Event& first_event)
             handle_single_event (e);
             if (get_please_stop ())
                 break;
-        } while (--pending);
+        } while (index < pending);
     } else {
         // djnn::release_exclusive_access (DBG_REL);
         // this_thread::yield();
     }
+
+    // ...then redraw if necessary
     if (redraw_awake) {
         handle_single_event (redraw_event);
+        //_wakeup_already_triggered = false;
     }
-#else
-    // simple loop: handle one event at a time, might be costly to acquire mutex each time
-    if (!get_please_stop ())
-        handle_event (e);
 #endif
+    //   // simple loop: handle one event at a time, might be costly to acquire mutex each time
+    //   if (!get_please_stop ()) handle_event (e);
+    // #endif
     // rmt_LogText("<< logging");
     // rmt_EndCPUSample();
 }
@@ -251,15 +256,20 @@ SDLMainloop::handle_single_event (SDL_Event& e)
     switch (e.type) {
     // case Expose:
     // case EnterNotify:
-    case SDL_KEYDOWN:
-    case SDL_KEYUP:
-    case SDL_TEXTINPUT:
-    case SDL_MOUSEBUTTONDOWN:
-    case SDL_MOUSEBUTTONUP:
-    case SDL_MOUSEMOTION:
-    case SDL_MOUSEWHEEL:
-    case SDL_WINDOWEVENT:
-    case SDL_USEREVENT: // redraw
+    case SDL_EVENT_KEY_DOWN:
+    case SDL_EVENT_KEY_UP:
+    case SDL_EVENT_TEXT_INPUT:
+    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+    case SDL_EVENT_MOUSE_BUTTON_UP:
+    case SDL_EVENT_MOUSE_MOTION:
+    case SDL_EVENT_MOUSE_WHEEL:
+    //case SDL_WINDOWEVENT:
+    case SDL_EVENT_WINDOW_SHOWN:
+    case SDL_EVENT_WINDOW_EXPOSED:
+    case SDL_EVENT_WINDOW_MOVED:
+    case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
+    case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+    case SDL_EVENT_USER: // redraw
     {
         // std::cerr << "sdl mainloop wakeup " << sdl_event_to_char(e.type) << " " << __FL__;
         auto it = _windows.find (e.window.windowID);
@@ -271,9 +281,9 @@ SDLMainloop::handle_single_event (SDL_Event& e)
         }
         break;
     }
-    case SDL_FINGERDOWN:
-    case SDL_FINGERUP:
-    case SDL_FINGERMOTION: {
+    case SDL_EVENT_FINGER_DOWN:
+    case SDL_EVENT_FINGER_UP:
+    case SDL_EVENT_FINGER_MOTION: {
         // std::cout << sdl_event_to_char(e.type) << " " << e.tfinger.x << " " << e.tfinger.y << " " << e.tfinger.touchId << " " << __FL__;
         if (!_windows.empty ()) {
             // SDL does not try to associate touch events and window
@@ -310,13 +320,13 @@ sh=rect.h;
         }
         break;
     }
-    case SDL_QUIT:
-        std::cout << "Shutting down now!!!" << std::endl;
+    case SDL_EVENT_QUIT:
+        std::cout << "SDL: shutting down now!!!" << std::endl;
         please_stop ();
         break;
-    default:
-        // std::cout << "do nothing " << sdl_event_to_char(e.type) << __FL__;
-        break;
+    // default:
+    //     std::cout << "do nothing 0x" << std::hex << e.type <<std::dec << " " << sdl_event_to_char (e.type) << __FL__;
+    //     break;
     }
     // rmt_LogText("<< logging single");
     // rmt_EndCPUSample();

@@ -14,9 +14,10 @@
 
 #pragma once
 
-#include <SDL.h>
 #include <memory>
 #include <mutex> // std::call_once
+
+#include <SDL3/SDL_events.h>
 
 #include "exec_env/external_source.h"
 
@@ -48,7 +49,7 @@ class SDLMainloop : public ExternalSource {
     void handle_events (SDL_Event&);
     void handle_single_event (SDL_Event&);
 
-    map<Uint32, SDLWindow*> _windows;
+    djnnstl::map<Uint32, SDLWindow*> _windows;
 
     SDLMainloop ();
     static SDLMainloop*   _instance;
