@@ -7,4 +7,6 @@
 /jq_script
 /ignore
 /-.json
+/make2ninja.py
 /*.diff
+/MGL.gputrace
