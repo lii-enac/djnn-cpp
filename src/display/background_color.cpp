@@ -9,13 +9,12 @@ namespace djnn {
 
 BackgroundColor::BackgroundColor (CoreProcess* parent, const string& name, int r, int g, int b)
     : FatProcess (name),
-      raw_props{.r = r, .g = g, .b = b},
+      raw_props{.r = r, .g = g, .b = b, .value = ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff)},
       _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
       _toValue (this, "toValue"),
       _toRGB (this, "toRGB"),
       _is_updating (false)
 {
-    raw_props.value = ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
     finalize_construction (parent, name);
 }
 
