@@ -53,9 +53,9 @@ typedef QMutex djnn_mutex_t;
 #endif
 
 #if DJNN_USE_SDL_THREAD
-#include <SDL2/SDL_mutex.h>
+#include <SDL3/SDL_mutex.h>
 namespace djnn {
-typedef SDL_mutex djnn_mutex_t;
+typedef SDL_Mutex djnn_mutex_t;
 }
 #define DJNN_MUTEX_IS_POINTER 1
 #endif

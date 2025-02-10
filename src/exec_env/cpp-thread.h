@@ -69,7 +69,7 @@ typedef QThread djnn_thread_t;
 #define DJNN_THREAD_IS_POINTER 1
 
 #elif DJNN_USE_SDL_THREAD
-#include <SDL2/SDL.h>
+#include <SDL3/SDL_thread.h>
 #define DJNN_THREAD_IS_POINTER 1
 
 namespace djnn {
