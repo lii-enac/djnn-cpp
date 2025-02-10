@@ -1022,9 +1022,6 @@ pkg:
 # should use the following variable
 # all_pkg = $(call uniq,$(foreach lib,$(djnn_libs), $(value $(lib)_lib_pkg)))
 
-#pkgdeps += make # obvioulsy already installed
-pkgdeps += pkgconfig
-pkgdeps += bison flex
 
 ifeq ($(pkgcmd),)
 
@@ -1088,10 +1085,14 @@ endif
 endif
 #else
 
+#pkgdeps += make # obvioulsy already installed
+pkgdeps += bison flex
+
 ifeq ($(pkgcmdtype),apt)
+pkgdeps += pkg-config
 pkgdeps += g++
-pkglibdeps += udev rtmidi
-pkglibdeps += expat1 curl4-openssl evdev openal
+pkglibdeps += udev1 rtmidi6
+pkglibdeps += expat1 curl4 evdev2 openal1
 #libboost-thread-dev 
 #libboost-fiber-dev
 ifeq ($(display),QT)
@@ -1127,6 +1128,7 @@ toto:
 	@echo $(pkglibdeps_full)
 
 ifeq ($(pkgcmdtype),apk)
+pkgdeps += pkgconfig
 pkgdeps += g++
 pkglibdeps += eudev rtmidi
 pkglibdeps += curl libevdev expat openal-soft flex
@@ -1160,6 +1162,7 @@ pkgdeps += $(pkglibdeps_full)
 endif
 
 ifeq ($(pkgcmdtype),brew)
+pkgdeps += pkg-config
 pkgdeps += expat curl
 #pkgdeps += libusb #crazyflie
 pkgdeps += rtmidi
