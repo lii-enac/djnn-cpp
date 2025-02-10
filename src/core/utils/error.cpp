@@ -55,7 +55,7 @@ djnn__error (const CoreProcess* p, const char* msg, const char* ctxinfo)
     out << "\033[0m";
     out << "\"" << (p ? p->get_debug_name () : "") << "\" - " << msg;
     if (p && p->debug_info ().lineno)
-        out << " - " << p->debug_info ().filepath << ":" << p->debug_info ().lineno << ":";
+        out << " - " << p->debug_info ().filepath << ":" << p->debug_info ().lineno;
     else if (ctxinfo)
         out << " - " << ctxinfo << ":";
 
@@ -93,7 +93,7 @@ djnn__warning (const CoreProcess* p, const char* msg, const char* ctxinfo)
     out << "\033[0m";
     out << "\"" << (p ? p->get_debug_name () : "") << "\" - " << msg;
     if (p && p->debug_info ().lineno)
-        out << " - " << p->debug_info ().filepath << ":" << p->debug_info ().lineno << ":";
+        out << " - " << p->debug_info ().filepath << ":" << p->debug_info ().lineno;
     else if (ctxinfo)
         out << " - " << ctxinfo << ":";
 
