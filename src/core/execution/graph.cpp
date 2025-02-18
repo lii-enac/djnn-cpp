@@ -298,8 +298,8 @@ static vector<string>              data_flow_result;
 static string                      print_process_fileno (CoreProcess* p);
 static string                      print_process_full_name (CoreProcess* p);
 static string                      print_process_debug_info (CoreProcess* p);
-static string                      extract_filename (string s);
-static string                      extract_code_from_file (string filepath, int lineno);
+static string                      extract_filename (const string& s);
+static string                      extract_code_from_file (const string& filepath, int lineno);
 
 void
 print_data_flow_paths_save_single (Vertex* v, int index, Vertex* start_v)
@@ -341,7 +341,7 @@ print_data_flow_paths_save (Vertex* v)
         std::cerr << "!!! Multiples flow detected ";
     std::cerr << std::endl;
     int index = 0;
-    for (auto s : data_flow_result)
+    for (auto & s : data_flow_result)
         std::cerr << index++ << ":" << std::endl
                   << s << std::endl;
 
@@ -894,7 +894,7 @@ Graph::reset_vertices_execution_round ()
 }
 
 static string
-extract_filename (string s)
+extract_filename (const string& s)
 {
     std::string::size_type n;
     n                = s.rfind ('/');
@@ -904,7 +904,7 @@ extract_filename (string s)
 }
 
 static string
-extract_code_from_file (string filepath, int lineno)
+extract_code_from_file (const string& filepath, int lineno)
 {
     std::ifstream file (filepath); // ouverture du fichier
     string        line;
