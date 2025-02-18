@@ -583,7 +583,8 @@ $1_lib_all_ldflags_static := $$($1_lib_ldflags_static)
 ifeq ($(os),$(filter $(os),Darwin Linux MinGW))
 ifdef lib_djnn_deps
 $1_djnn_deps := $$(addsuffix $$(lib_suffix),$$(addprefix $$(build_lib_dir)/libdjnn-,$$(lib_djnn_deps)))
-$1_lib_all_ldflags += $$(addprefix -ldjnn-,$$(lib_djnn_deps))
+$1_lib_djnn_deps := $$(addprefix -ldjnn-,$$(lib_djnn_deps))
+#$1_lib_all_ldflags += $$1_lib_djnn_deps
 #$1_lib_all_ldflags += $$(foreach lib,$$(lib_djnn_deps), $$(value $$(lib)_lib_ldflags))
 endif
 endif
@@ -625,10 +626,10 @@ CXXLD ?= $$(CXX)
 $$($1_lib): $$($1_objs)
 	@mkdir -p $$(dir $$@)
 ifeq ($$V,max)
-	$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname) $(lib_soname)
+	$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_djnn_deps) $$($1_lib_soname) $(lib_soname)
 else
 	@$(call rule_message,linking,$$(stylized_target))
-	@$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname) $(lib_soname)
+	@$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_djnn_deps) $$($1_lib_soname) $(lib_soname)
 endif
 
 $$($1_lib_static): $$($1_objs)
@@ -659,8 +660,7 @@ $1_clean:
 $1_dbg:
 #	@echo $$($1)
 #	@echo $$($1_objs)
-#	@echo $$($1_djnn_deps)
-#	@echo $$($1_lib_ldflags)
+	@echo $$($1_djnn_deps)
 	@echo $$($1_lib_ldflags)
 
 srcs += $$($1_srcs)
