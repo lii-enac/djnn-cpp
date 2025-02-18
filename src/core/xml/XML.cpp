@@ -15,6 +15,7 @@
  */
 
 #include <expat.h>
+#include <assert.h>
 
 #include "xml.h"
 
@@ -241,6 +242,7 @@ XML::djn_RegisterXMLParser (const string& uri, djn_XMLTagLookupProc l, const cha
     }
 
     h         = (djn__XMLParser*)malloc (sizeof (djn__XMLParser));
+    assert (h);
     h->lookup = l;
     h->format = f;
 
@@ -315,6 +317,7 @@ void
 XML::djn__XMLPushTagHandler (djn_XMLTagHandler* h)
 {
     djn__XMLTagHandlerList* l = (djn__XMLTagHandlerList*)malloc (sizeof (djn__XMLTagHandlerList));
+    assert (l);
     l->handler                = h;
     l->next                   = handlerStack;
     handlerStack              = l;
