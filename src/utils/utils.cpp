@@ -76,7 +76,7 @@ run_stats (CoreProcess* p)
         num_more_than_one_coupling += p->get_activation_couplings ().size () + p->get_deactivation_couplings ().size () > 1 ? 1 : 0;
         size += sizeof (*p);
     });
-    for (auto item : num_by_type) {
+    for (auto& item : num_by_type) {
         cerr << "type: " << item.first << " count: " << item.second << endl;
     }
     cerr << "num_no_coupling: " << num_no_coupling << " - " << (num_no_coupling * 100) / i << "%" << endl;

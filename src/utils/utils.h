@@ -55,7 +55,7 @@ class Properties : public FatProcess {
 };
 
 inline void
-depth_first_traverse (CoreProcess* p, std::function<void (FatProcess*)> f) {
+depth_first_traverse (CoreProcess* p, const std::function<void (FatProcess*)>& f) {
     auto* fp = dynamic_cast<FatProcess*> (p);
     if (!fp)
         return;
