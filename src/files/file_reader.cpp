@@ -59,7 +59,7 @@ FileReader::impl_deactivate ()
 void
 FileReader::read ()
 {
-    string        filename = _input->get_value ();
+    string&       filename = _input->get_value ();
     std::ifstream file (filename.c_str ());
 
     // https://stackoverflow.com/a/2602258

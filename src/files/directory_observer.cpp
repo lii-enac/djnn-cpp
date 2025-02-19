@@ -135,9 +135,9 @@ DirectoryObserver::iterate ()
         old_files.push_back (((File*)p)->get_filename ().c_str ());
     }
     bool found = false;
-    for (auto nf : new_files) {
+    for (auto& nf : new_files) {
         found = false;
-        for (auto of : old_files) {
+        for (auto& of : old_files) {
             if (nf.filename () == of) {
                 found = true;
                 break;
@@ -150,9 +150,9 @@ DirectoryObserver::iterate ()
             added = true;
         }
     }
-    for (auto of : old_files) {
+    for (auto& of : old_files) {
         found = false;
-        for (auto nf : new_files) {
+        for (auto& nf : new_files) {
             if (nf.filename () == of) {
                 found = true;
                 break;
