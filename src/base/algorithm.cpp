@@ -103,7 +103,7 @@ Sorter::sort ()
         }
         djnn::stable_sort (to_sort.begin (), to_sort.end (), compare_number);
         i = 0;
-        for (auto v : to_sort) {
+        for (auto& v : to_sort) {
             if (_ascending.get_value ())
                 _container->set_child (cpy[v.second], i);
             else
@@ -124,7 +124,7 @@ Sorter::sort ()
         }
         djnn::stable_sort (to_sort.begin (), to_sort.end (), compare_string);
         i = 0;
-        for (auto v : to_sort) {
+        for (auto& v : to_sort) {
             if (_ascending.get_value ())
                 _container->set_child (cpy[v.second], i);
             else

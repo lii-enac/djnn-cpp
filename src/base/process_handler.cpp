@@ -335,7 +335,7 @@ CollectionActivator::activate_all ()
 {
     ProcessCollector* coll = dynamic_cast<ProcessCollector*> (_collection.get_value ());
     if (coll) {
-        string path = _path.get_value ();
+        string& path = _path.get_value ();
         for (auto to_act : coll->get_list ()) {
             auto* p = to_act->find_child_impl (path);
             if (p)
@@ -404,7 +404,7 @@ CollectionSetDoubleValue::set_value ()
 {
     ProcessCollector* coll = dynamic_cast<ProcessCollector*> (_collection.get_value ());
     if (coll) {
-        string path = _path.get_value ();
+        string& path = _path.get_value ();
         for (auto to_act : coll->get_list ()) {
             auto* p = djnn_dynamic_cast<AbstractSimpleProperty*> (to_act->find_child_impl (path));
             if (p)
@@ -442,7 +442,7 @@ CollectionSetStringValue::set_value ()
 {
     ProcessCollector* coll = dynamic_cast<ProcessCollector*> (_collection.get_value ());
     if (coll) {
-        string path = _path.get_value ();
+        string& path = _path.get_value ();
         for (auto to_act : coll->get_list ()) {
             auto* p = djnn_dynamic_cast<AbstractSimpleProperty*> (to_act->find_child_impl (path));
             if (p)

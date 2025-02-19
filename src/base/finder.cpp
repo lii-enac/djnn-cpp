@@ -30,8 +30,8 @@ void
 Finder::FinderAction::impl_activate ()
 {
     Finder* f    = (Finder*)get_parent ();
-    string  path = f->_path.get_value ();
-    string  key  = f->_key.get_value ();
+    string& path = f->_path.get_value ();
+    string& key  = f->_key.get_value ();
     if (key.empty ()) {
         warning (this, "finder - \"key\" is empty \n");
         f->_result.set_value ((CoreProcess*)nullptr, true); // ??
