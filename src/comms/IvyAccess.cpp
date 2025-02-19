@@ -164,7 +164,7 @@ _on_ivy_message (IvyClientPtr app, void* user_data, int argc, char** argv)
     // pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*>* keypair =
     //(pair<string, map<string, vector<pair<int, djnn::TextProperty*>>>*> *) user_data;
     djnn::IvyAccess::regexp_keypair_t* keypair = mcud->keypair; // reinterpret_cast<djnn::IvyAccess::regexp_keypair_t*>(user_data);
-    djnnstl::string                    regexp  = keypair->first;
+    djnnstl::string&                   regexp  = keypair->first;
     // map<string, vector<pair<int, djnn::TextProperty*>>>*
     djnn::IvyAccess::in_map_t*
         in_map = keypair->second;
@@ -296,7 +296,7 @@ IvyAccess::IvyOutAction::impl_activate () // coupling_activation_hook ()
 void
 IvyAccess::IvySendDieAction::impl_activate () // coupling_activation_hook ()
 {
-    const string appName_to_found = _send_die->get_value ();
+    const string& appName_to_found = _send_die->get_value ();
 
     /* send "Die" to all ivy application that have these name : _send_die->get_value () */
     bool found = false;
@@ -382,10 +382,10 @@ IvyAccess::~IvyAccess ()
     auto it = _in_map.begin ();
     while (it != _in_map.end ()) {
         // note it->second is a vector of pair <index, *textProperty>
-        auto v = it->second;
+        auto& v = it->second;
         while (!v.empty ()) {
             // note v.back () is a pair <index, *textProperty>
-            auto p = v.back ();
+            auto& p = v.back ();
             // remove and delete the Textproperty
             this->remove_child (p.second);
             delete p.second;
@@ -409,7 +409,7 @@ IvyAccess::~IvyAccess ()
             it_s++;
         } else {
             delete it_s->second;
-            std::string key_to_remove = it_s->first;
+            const std::string& key_to_remove = it_s->first;
             it_s++; // to keep iterator valid
             this->remove_symbol (key_to_remove);
         }
@@ -570,7 +570,7 @@ IvyAccess::find_child_impl (const string& key)
         AbstractTextProperty* tmp = dynamic_cast<AbstractTextProperty*> (FatProcess::find_child_impl (regexp));
         if (tmp) {
 
-            string reg_str = tmp->get_value ();
+            string& reg_str = tmp->get_value ();
 
 #ifdef __IVY_DEBUG__
             cout << "REPLACE : \"" << regexp << "\" -> \"" << reg_str << "\"" << endl;
