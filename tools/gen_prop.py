@@ -164,7 +164,11 @@ namespace djnn
   {
     %(INHERITS)s::impl_activate ();
     auto _frame = get_frame ();
-    %(DEF_COUPLINGS_ENABLE)s;
+    if (_frame) {
+      %(DEF_COUPLINGS_ENABLE)s;
+    }
+    else
+      djnn_error (nullptr, "%(CLASS)s::impl_activate () - Unable to find frame");
   }
 
   void
