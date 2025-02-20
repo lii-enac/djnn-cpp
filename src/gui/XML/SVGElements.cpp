@@ -291,7 +291,7 @@ StartRect (const char** attrs, FatProcess* current)
                              djn_RectArgs.rx, djn_RectArgs.ry);
     if (!djn_GraphicalShapeArgs.classname.empty ()) {
         vector<string> classes = get_classes (djn_GraphicalShapeArgs.classname);
-        for (auto cl : classes) {
+        for (auto& cl : classes) {
             ((AbstractGShape*)e)->add_style_class (cl);
         }
     }
@@ -351,7 +351,7 @@ StartImage (const char** attrs, FatProcess* current)
     }
     if (!djn_GraphicalShapeArgs.classname.empty ()) {
         vector<string> classes = get_classes (djn_GraphicalShapeArgs.classname);
-        for (auto cl : classes) {
+        for (auto& cl : classes) {
             ((AbstractGShape*)e)->add_style_class (cl);
         }
     }
@@ -411,7 +411,7 @@ StartEllipse (const char** attrs, FatProcess* current)
                            djn_EllipseArgs.ry);
     if (!djn_GraphicalShapeArgs.classname.empty ()) {
         vector<string> classes = get_classes (djn_GraphicalShapeArgs.classname);
-        for (auto cl : classes) {
+        for (auto& cl : classes) {
             ((AbstractGShape*)e)->add_style_class (cl);
         }
     }
@@ -469,7 +469,7 @@ StartCircle (const char** attrs, FatProcess* current)
                     djn_CircleArgs.cx, djn_CircleArgs.cy, djn_CircleArgs.r);
     if (!djn_GraphicalShapeArgs.classname.empty ()) {
         vector<string> classes = get_classes (djn_GraphicalShapeArgs.classname);
-        for (auto cl : classes) {
+        for (auto& cl : classes) {
             ((AbstractGShape*)e)->add_style_class (cl);
         }
     }
@@ -529,7 +529,7 @@ StartLine (const char** attrs, FatProcess* current)
                   djn_LineArgs.x1, djn_LineArgs.y1, djn_LineArgs.x2, djn_LineArgs.y2);
     if (!djn_GraphicalShapeArgs.classname.empty ()) {
         vector<string> classes = get_classes (djn_GraphicalShapeArgs.classname);
-        for (auto cl : classes) {
+        for (auto& cl : classes) {
             ((AbstractGShape*)e)->add_style_class (cl);
         }
     }
@@ -700,10 +700,11 @@ TextData (const char* data, int len, FatProcess* current)
     if (h) {
         char* content = (char*)malloc (len + 1);
         strncpy (content, data, len);
-        content[len] = '\0';
-        h->handle_attr (&current, content);
-        if (content)
+        if (content) {
+            content[len] = '\0';
+            h->handle_attr (&current, content);
             free (content);
+        }
     }
     return current;
 }
@@ -1295,7 +1296,7 @@ djnUnloadTextBuf (FatProcess* e)
                               djn_TextArgs.data);
     if (!djn_GraphicalShapeArgs.classname.empty ()) {
         vector<string> classes = get_classes (djn_GraphicalShapeArgs.classname);
-        for (auto cl : classes) {
+        for (auto& cl : classes) {
             ((AbstractGShape*)t)->add_style_class (cl);
         }
     }
