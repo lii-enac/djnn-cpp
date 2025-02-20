@@ -1,0 +1,6 @@
+{
+    "skip-analysis-in-path": [
+      "build/src/gui/css-parser/scanner.cpp"
+    ]
+  }
+  
