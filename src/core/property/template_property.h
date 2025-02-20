@@ -71,7 +71,7 @@ class TemplateProperty : public AbstractTemplateProperty<X> {
   public:
     TemplateProperty (CoreProcess* parent, const string& name, const X& v)
         : AbstractTemplateProperty<X> (parent, name), value (v) {}
-    CoreProcess* impl_clone (djnnstl::map<const CoreProcess*, CoreProcess*>& origs_clones) const override {
+    CoreProcess* impl_clone (djnnstl::map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override {
         error (this, "*PropertyProxy should not be cloned");
         return nullptr;
     }
