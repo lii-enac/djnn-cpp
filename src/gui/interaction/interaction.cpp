@@ -26,6 +26,7 @@
 
 namespace djnn {
 
+#if 0
 static const char*
 print_state (State s)
 {
@@ -54,16 +55,6 @@ print_state (State s)
     }
 }
 
-template <typename K, typename V>
-V GetFirstNotId(std::map<K, V>& m, const K& id) {
-    for (auto& pair : m) {
-        if (pair.first != id) {
-            return pair.second; // V is already a pointer
-        }
-    }
-    return nullptr; // Return nullptr if no such element is found
-}
-
 static void
 print_matrix (const std::string& s, Matrix4x4 m)
 {
@@ -86,6 +77,18 @@ print_matrix (const std::string& s, AbstractHomography* m)
     std::cerr << m->m31 ()->get_value () << "  " << m->m32 ()->get_value () << "  " << m->m33 ()->get_value () << "  " << m->m34 ()->get_value () << std::endl;
     std::cerr << m->m41 ()->get_value () << "  " << m->m42 ()->get_value () << "  " << m->m43 ()->get_value () << "  " << m->m44 ()->get_value () << std::endl;
     std::cerr << std::endl;
+}
+
+#endif
+
+template <typename K, typename V>
+V GetFirstNotId(std::map<K, V>& m, const K& id) {
+    for (auto& pair : m) {
+        if (pair.first != id) {
+            return pair.second; // V is already a pointer
+        }
+    }
+    return nullptr; // Return nullptr if no such element is found
 }
 
 static void
