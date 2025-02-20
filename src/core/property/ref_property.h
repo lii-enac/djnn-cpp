@@ -44,7 +44,7 @@ class RefProperty : public AbstractRefProperty {
     double       get_double_value () const override;
     string       get_string_value () override;
     string       get_string_value () const override;
-    RefProperty* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    RefProperty* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     CoreProcess* find_child_impl (const string& path) override;

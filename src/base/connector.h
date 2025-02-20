@@ -162,7 +162,7 @@ class Connector : public FatProcess {
     bool           _copy_on_activation;
 
   public:
-    Connector* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    Connector* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif

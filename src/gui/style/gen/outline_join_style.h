@@ -32,7 +32,7 @@ class OutlineJoinStyle : public AbstractStyle {
     OutlineJoinStyle (CoreProcess* parent, const string& name, int join);
     virtual ~OutlineJoinStyle ();
     void                  draw () override;
-    OutlineJoinStyle*     impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    OutlineJoinStyle*     impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     void                  get_properties_values (int& join);
     const vector<string>& get_properties_name () const override;
     virtual CoreProcess*  find_child_impl (const string&) override;

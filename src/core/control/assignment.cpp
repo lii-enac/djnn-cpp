@@ -391,13 +391,13 @@ Assignment::perform_action ()
 }
 
 Assignment*
-Assignment::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Assignment::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
     auto sit           = origs_clones.find (_src);
     auto dit           = origs_clones.find (_dst);
     auto s             = sit != origs_clones.end () ? sit->second : _src; // the source of the assignment can be outside the cloned subtree
     auto d             = dit != origs_clones.end () ? dit->second : _dst; // the destination of the assignment can be outside the cloned subtree
-    auto res           = new Assignment (nullptr, get_name (), s, d, is_model ());
+    auto res           = new Assignment (nullptr, name, s, d, is_model ());
     origs_clones[this] = res;
     return res;
 }

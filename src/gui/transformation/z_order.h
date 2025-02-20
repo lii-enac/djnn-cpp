@@ -8,7 +8,7 @@ class ZOrder : public AbstractGObj {
     ZOrder (CoreProcess* parent, const string& name, int z);
     ~ZOrder () {}
     void        draw () override;
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     void        impl_activate () override;
     void        impl_deactivate () override;
 

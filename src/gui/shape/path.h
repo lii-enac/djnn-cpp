@@ -37,7 +37,7 @@ class PathMove : public PathPoint {
     PathMove (CoreProcess* parent, const string& name, double x, double y)
         : PathPoint (parent, name, x, y) {}
     void      draw () override;
-    PathMove* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    PathMove* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class PathLine : public PathPoint {
@@ -45,7 +45,7 @@ class PathLine : public PathPoint {
     PathLine (CoreProcess* parent, const string& name, double x, double y)
         : PathPoint (parent, name, x, y) {}
     void      draw () override;
-    PathLine* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    PathLine* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class PathQuadratic : public AbstractGObj {
@@ -58,7 +58,7 @@ class PathQuadratic : public AbstractGObj {
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*)find_child_impl ("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override;
-    PathQuadratic*          impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    PathQuadratic*          impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
     struct raw_props_t {
@@ -82,7 +82,7 @@ class PathCubic : public AbstractGObj {
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*)find_child_impl ("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override;
-    PathCubic*              impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    PathCubic*              impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
     struct raw_props_t {
@@ -108,7 +108,7 @@ class PathArc : public AbstractGObj {
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*)find_child_impl ("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override;
-    PathArc*                impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    PathArc*                impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
     struct raw_props_t {
@@ -125,7 +125,7 @@ class PathClosure : public AbstractGObj {
     PathClosure (CoreProcess* parent, const string& name);
     virtual ~PathClosure () {}
     void         draw () override;
-    PathClosure* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    PathClosure* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
     void impl_activate () override {
@@ -160,8 +160,8 @@ class Path : public AbstractGShape {
     void   draw () override;
     void   get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
-    // Path* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
-    Path* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    // Path* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
+    Path* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     void  set_bounding_box (double x, double y, double w, double h);
     void  invalidate_bounding_box () { _bbw->set_value (-1, true); }
     bool  is_bounding_box_valid () const { return _bbw->get_value () >= 0; }

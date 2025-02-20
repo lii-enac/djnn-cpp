@@ -194,9 +194,9 @@ def_draw = """
 
 def_clone = """
   %(CLASS)s*
-  %(CLASS)s::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+  %(CLASS)s::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
   {
-    auto res = new %(CLASS)s (nullptr, get_name (), %(RAW_PROP_PARAMS)s);
+    auto res = new %(CLASS)s (nullptr, name, %(RAW_PROP_PARAMS)s);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

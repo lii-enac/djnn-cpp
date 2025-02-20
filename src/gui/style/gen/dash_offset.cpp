@@ -140,9 +140,9 @@ DashOffset::draw ()
 }
 
 DashOffset*
-DashOffset::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+DashOffset::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new DashOffset (nullptr, get_name (), raw_props.offset);
+    auto res           = new DashOffset (nullptr, name, raw_props.offset);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

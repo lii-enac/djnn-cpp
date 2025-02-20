@@ -12,8 +12,7 @@ class Group : public Container {
     void impl_activate () override;
     void impl_deactivate () override;
     void draw () override;
-    // Group* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
-    Group* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    Group* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     AbstractGObj* _gobj;

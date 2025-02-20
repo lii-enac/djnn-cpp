@@ -137,10 +137,10 @@ class TDeref : public DerefProperty {
         }
     }
 
-    CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override {
+    CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override {
         auto ref              = origs_clones.find (get_ref ());
         auto s                = ref != origs_clones.end () ? ref->second : get_ref ();
-        auto res              = new TDeref<T> (nullptr, get_name (), const_cast<CoreProcess*> (s), get_str_path (), get_dir ());
+        auto res              = new TDeref<T> (nullptr, name, const_cast<CoreProcess*> (s), get_str_path (), get_dir ());
         origs_clones[this]    = res;
         origs_clones[&_value] = res->get_value ();
         return res;

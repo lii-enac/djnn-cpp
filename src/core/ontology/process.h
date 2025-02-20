@@ -165,7 +165,7 @@ class CoreProcess {
 
     // should be protected
   public:
-    virtual CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const;
+    virtual CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const;
 
     // should be protected
   public:

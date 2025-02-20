@@ -21,7 +21,7 @@ class Homography : public AbstractHomography {
     void         draw () override;
     virtual void transform (double& x, double& y) override;
     virtual void inverse_transform (double& x, double& y) override;
-    FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class GradientHomography : public AbstractHomography {
@@ -34,7 +34,7 @@ class GradientHomography : public AbstractHomography {
                         double m31 = 0, double m32 = 0, double m33 = 1);
     virtual ~GradientHomography ();
     void        draw () override;
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class SimpleGradientTransform : public AbstractHomography {
@@ -45,6 +45,6 @@ class SimpleGradientTransform : public AbstractHomography {
                              double f);
     virtual ~SimpleGradientTransform ();
     void        draw () override;
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 } // namespace djnn

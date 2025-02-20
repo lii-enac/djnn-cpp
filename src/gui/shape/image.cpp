@@ -127,9 +127,9 @@ Image::sdf (double x, double y) const
 }
 
 Image*
-Image::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Image::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Image (nullptr, get_name (), raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
+    auto res           = new Image (nullptr, name, raw_props.path, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -208,9 +208,9 @@ DataImage::draw ()
 }
 
 DataImage*
-DataImage::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+DataImage::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new DataImage (nullptr, get_name (), raw_props.data, raw_props.format, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
+    auto res           = new DataImage (nullptr, name, raw_props.data, raw_props.format, AbstractImage::raw_props.x, AbstractImage::raw_props.y, AbstractImage::raw_props.width, AbstractImage::raw_props.height);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

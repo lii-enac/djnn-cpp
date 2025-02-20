@@ -110,15 +110,15 @@ AbstractDoubleProperty::serialize (const djnnstl::string& format)
 #endif
 
 DoubleProperty*
-DoubleProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+DoubleProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new DoubleProperty (nullptr, get_name (), get_value ());
+    auto res           = new DoubleProperty (nullptr, name, get_value ());
     origs_clones[this] = res;
     return res;
 }
 
 DoublePropertyProxy*
-DoublePropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+DoublePropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
     error (this, "*PropertyProxy should not be cloned");
     return nullptr;

@@ -55,7 +55,7 @@ class List : public AbstractList {
   public:
     List (CoreProcess* parent, const string& name);
     virtual ~List ();
-    List* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    List* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
     void finalize_child_insertion (CoreProcess* child) override;

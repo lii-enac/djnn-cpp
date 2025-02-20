@@ -389,9 +389,9 @@ PathLine::draw ()
 }
 
 PathLine*
-PathLine::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+PathLine::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new PathLine (nullptr, get_name (), raw_props.x, raw_props.y);
+    auto res           = new PathLine (nullptr, name, raw_props.x, raw_props.y);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -407,9 +407,9 @@ PathMove::draw ()
 }
 
 PathMove*
-PathMove::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+PathMove::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new PathMove (nullptr, get_name (), raw_props.x, raw_props.y);
+    auto res           = new PathMove (nullptr, name, raw_props.x, raw_props.y);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -439,9 +439,9 @@ PathClosure::draw ()
 }
 
 PathClosure*
-PathClosure::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+PathClosure::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new PathClosure (nullptr, get_name ());
+    auto res           = new PathClosure (nullptr, name);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -568,9 +568,9 @@ PathQuadratic::draw ()
 }
 
 PathQuadratic*
-PathQuadratic::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+PathQuadratic::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new PathQuadratic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
+    auto res           = new PathQuadratic (nullptr, name, raw_props.x1, raw_props.y1, raw_props.x, raw_props.y);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -720,9 +720,9 @@ PathCubic::draw ()
 }
 
 PathCubic*
-PathCubic::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+PathCubic::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new PathCubic (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
+    auto res           = new PathCubic (nullptr, name, raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2, raw_props.x, raw_props.y);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -885,9 +885,9 @@ PathArc::draw ()
 }
 
 PathArc*
-PathArc::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+PathArc::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new PathArc (nullptr, get_name (), raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
+    auto res           = new PathArc (nullptr, name, raw_props.rx, raw_props.ry, raw_props.rotx, raw_props.fl, raw_props.swfl, raw_props.x, raw_props.y);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -977,7 +977,7 @@ Path::draw ()
 /*Path*
 Pathimpl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
 {
-  Path* clone = new Path (nullptr, get_name ());
+  Path* clone = new Path (nullptr, name);
   for (auto p: _items->children ()) {
     clone->items ()->add_child (p->clone (), "");
   }
@@ -985,11 +985,11 @@ Pathimpl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
 }*/
 
 Path*
-Path::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Path::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto* clone = new Path (nullptr, get_name ());
+    auto* clone = new Path (nullptr, name);
     for (auto c : _items->children ()) {
-        auto cclone = c->impl_clone (origs_clones);
+        auto cclone = c->impl_clone (origs_clones, name);
         // origs_clones[c] = cclone;
         clone->items ()->add_child (cclone, this->find_child_name (c));
     }
@@ -1009,7 +1009,7 @@ PathClip::draw ()
 /*PathClip*
 PathClipimpl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
 {
-  PathClip* clone = new PathClip (nullptr, get_name ());
+  PathClip* clone = new PathClip (nullptr, name);
   for (auto p: _items->children ()) {
     clone->items ()->add_child (p->clone (), "");
   }
@@ -1017,11 +1017,11 @@ PathClipimpl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
 }*/
 
 PathClip*
-PathClip::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+PathClip::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto* clone = new PathClip (nullptr, get_name ());
+    auto* clone = new PathClip (nullptr, name);
     for (auto c : _items->children ()) {
-        auto cclone = c->impl_clone (origs_clones);
+        auto cclone = c->impl_clone (origs_clones, name);
         // origs_clones[c] = cclone;
         clone->items ()->add_child (cclone, this->find_child_name (c));
     }

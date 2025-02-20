@@ -383,9 +383,9 @@ Text::get_cursor_from_local_x (double pos)
 }
 
 Text*
-Text::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Text::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Text (nullptr, this->get_name (), raw_props.x, raw_props.y, _text.get_value ());
+    auto res           = new Text (nullptr, name, raw_props.x, raw_props.y, _text.get_value ());
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

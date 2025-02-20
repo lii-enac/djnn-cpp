@@ -140,9 +140,9 @@ TextAnchor::draw ()
 }
 
 TextAnchor*
-TextAnchor::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+TextAnchor::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new TextAnchor (nullptr, get_name (), raw_props.anchor);
+    auto res           = new TextAnchor (nullptr, name, raw_props.anchor);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

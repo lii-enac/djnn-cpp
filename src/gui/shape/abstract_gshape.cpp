@@ -66,15 +66,11 @@ SVGHolderimpl_clone (map<CoreProcess*, CoreProcess*>& origs_clones)
 }*/
 
 SVGHolder*
-SVGHolder::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+SVGHolder::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
     auto* clone        = new SVGHolder (nullptr, "SVGHolder");
     origs_clones[this] = clone;
-    for (auto c : _children) {
-        auto cclone = c->impl_clone (origs_clones);
-        // origs_clones[c] = cclone;
-        clone->add_child (cclone, this->find_child_name (c));
-    }
+    impl_clone_children (origs_clones, clone);
     clone->_gobj = dynamic_cast<FatProcess*> (clone->_children.back ());
     return clone;
 }

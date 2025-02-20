@@ -95,26 +95,12 @@ Layer::draw ()
 }
 
 Layer*
-Layer::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Layer::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    /*Layer* newg = new Layer (nullptr, get_name ());
-
-    for (auto c : _children) {
-      auto * child = c->clone ();
-      if (child != nullptr)
-        newg->add_child (child, this->find_child_name(c));
-    }
-
-    return newg;*/
-
-    auto* clone        = new Layer (nullptr, get_name ());
+    auto* clone        = new Layer (nullptr, name);
     origs_clones[this] = clone;
     // impl_clone_properties (clone, origs_clones);
-    for (auto c : _children) {
-        auto cclone = c->impl_clone (origs_clones);
-        // origs_clones[c] = cclone;
-        clone->add_child (cclone, this->find_child_name (c));
-    }
+    impl_clone_children (origs_clones, clone);
 
     return clone;
 }

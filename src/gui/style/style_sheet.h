@@ -7,7 +7,7 @@ class StyleSheet : public Container {
   public:
     StyleSheet (CoreProcess* parent, const string& name);
     virtual ~StyleSheet () override {}
-    StyleSheet*   impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    StyleSheet*   impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     const string& classname () { return _classname; }
     int           id () { return _id; }
     static int    get_id (const string& classname);

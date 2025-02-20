@@ -51,7 +51,7 @@ class Timer : public FatProcess, public djnn_internal::Time::Timer {
     virtual ~Timer ();
     CoreProcess* get_delay () { return &_delay; }
     CoreProcess* get_end () { return &_end; }
-    CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
     // djnn_internal::Time::Timer
     virtual void do_it (const djnn_internal::Time::duration& actualduration) override;

@@ -32,7 +32,7 @@ class OutlineMiterLimit : public AbstractStyle {
     OutlineMiterLimit (CoreProcess* parent, const string& name, int limit);
     virtual ~OutlineMiterLimit ();
     void                  draw () override;
-    OutlineMiterLimit*    impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    OutlineMiterLimit*    impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     void                  get_properties_values (int& limit);
     const vector<string>& get_properties_name () const override;
     virtual CoreProcess*  find_child_impl (const string&) override;

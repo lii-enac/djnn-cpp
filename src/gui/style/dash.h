@@ -22,7 +22,7 @@ class DashArray : public AbstractStyle {
     void       impl_activate () override { AbstractStyle::impl_activate (); }
     void       impl_deactivate () override { AbstractStyle::impl_deactivate (); }
     void       draw () override;
-    DashArray* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    DashArray* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
     vector<double> _dash_array;
@@ -36,6 +36,6 @@ class NoDashArray : public AbstractStyle {
     void         impl_activate () override { AbstractStyle::impl_activate (); }
     void         impl_deactivate () override { AbstractStyle::impl_deactivate (); }
     void         draw () override;
-    NoDashArray* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    NoDashArray* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 } // namespace djnn

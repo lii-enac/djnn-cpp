@@ -96,9 +96,9 @@ Timer::update_period ()
 }
 
 CoreProcess*
-Timer::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Timer::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res              = new Timer (nullptr, get_name (), _delay.get_value (), is_model ());
+    auto res              = new Timer (nullptr, name, _delay.get_value (), is_model ());
     origs_clones[this]    = res;
     origs_clones[&_delay] = res->get_delay ();
     origs_clones[&_end]   = res->get_end ();

@@ -123,9 +123,9 @@ PolyPoint::draw ()
 }
 
 PolyPoint*
-PolyPoint::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+PolyPoint::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new PolyPoint (nullptr, get_name (), raw_props.x, raw_props.y);
+    auto res           = new PolyPoint (nullptr, name, raw_props.x, raw_props.y);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -213,17 +213,11 @@ Poly::set_bounding_box (double x, double y, double w, double h)
 }
 
 Poly*
-Poly::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Poly::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    /*Poly* newp = new Poly (nullptr, get_name (), _closed);
-    for (auto p: _points->children ()) {
-      newp->_points->add_child (p->clone (), "");
-    }
-    return newp;*/
-
-    auto* clone = new Poly (nullptr, get_name (), _closed);
+    auto* clone = new Poly (nullptr, name, _closed);
     for (auto c : _points->children ()) {
-        auto cclone = c->impl_clone (origs_clones);
+        auto cclone = c->impl_clone (origs_clones, name);
         // origs_clones[c] = cclone;
         clone->_points->add_child (cclone, this->find_child_name (c));
     }

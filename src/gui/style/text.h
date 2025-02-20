@@ -15,7 +15,7 @@ class FontSize : public AbstractPropFontSize {
     FontSize (CoreProcess* parent, const string& name, int unit, double size);
     void      impl_activate () override;
     void      draw () override;
-    FontSize* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FontSize* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
 };
@@ -26,7 +26,7 @@ class FontWeight : public AbstractPropFontWeight // AbstractStyle
     FontWeight (CoreProcess* parent, const string& name, int weight);
     void        impl_activate () override;
     void        draw () override;
-    FontWeight* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FontWeight* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class FontStyle : public AbstractPropFontStyle // AbstractStyle
@@ -36,7 +36,7 @@ class FontStyle : public AbstractPropFontStyle // AbstractStyle
     FontStyle (CoreProcess* parent, const string& name, int style);
     void       impl_activate () override;
     void       draw () override;
-    FontStyle* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FontStyle* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class FontFamily : public AbstractPropFontFamily // AbstractStyle
@@ -45,6 +45,6 @@ class FontFamily : public AbstractPropFontFamily // AbstractStyle
     FontFamily (CoreProcess* parent, const string& name, const string& family);
     void        impl_activate () override;
     void        draw () override;
-    FontFamily* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FontFamily* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 } // namespace djnn

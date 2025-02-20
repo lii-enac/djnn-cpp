@@ -56,6 +56,8 @@ class Container : public FatProcess {
     ordered_children_t  _children;
     ordered_children_t* _unaltered_children;                                           // to enable proper deletion, store original children sequence as soon as move_child is used on the container
     bool                is_altered () const { return _unaltered_children != nullptr; } // has move_child been used on the container or not?
+    void impl_clone_children (map<const CoreProcess*, CoreProcess*>& origs_clones, CoreProcess* parent_clone) const;
+
 
     context_t _cur_context; // FIXME horrible: every single container has that, though it's only for font style !!!
 };

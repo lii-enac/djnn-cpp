@@ -30,9 +30,9 @@ Ellipse::Ellipse (CoreProcess* parent, const string& name, double cx, double cy,
 }
 
 Ellipse*
-Ellipse::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Ellipse::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Ellipse (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);
+    auto res           = new Ellipse (nullptr, name, raw_props.cx, raw_props.cy, raw_props.rx, raw_props.ry);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

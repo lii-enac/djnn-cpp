@@ -120,9 +120,9 @@ AbstractRemoteProperty::serialize (const djnn::string& format)
 #endif
 
 FatProcess*
-RemoteProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+RemoteProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new RemoteProperty (nullptr, get_name (), _value);
+    auto res           = new RemoteProperty (nullptr, name, _value);
     origs_clones[this] = res;
     return res;
 }

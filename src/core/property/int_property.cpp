@@ -88,15 +88,15 @@ AbstractIntProperty::set_value (CoreProcess* v, bool propagate)
 }
 
 FatProcess*
-IntProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+IntProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new IntProperty (nullptr, get_name (), get_value ());
+    auto res           = new IntProperty (nullptr, name, get_value ());
     origs_clones[this] = res;
     return res;
 }
 
 FatProcess*
-IntPropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+IntPropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
     error (this, "*PropertyProxy should not be cloned");
     return nullptr;

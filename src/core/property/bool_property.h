@@ -59,7 +59,7 @@ class BoolProperty : public AbstractBoolProperty {
   public:
     BoolProperty (CoreProcess* parent, const string& name, bool v)
         : AbstractBoolProperty (parent, name), value (v) { finalize_construction (parent, name); }
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     virtual bool&       get_ref_value () override { return value; }
@@ -73,7 +73,7 @@ class BoolPropertyProxy : public AbstractBoolProperty {
   public:
     BoolPropertyProxy (CoreProcess* parent, const string& name, bool& v, int notify_mask = notify_none)
         : AbstractBoolProperty (parent, name, notify_mask), value (v) { finalize_construction (parent, name); }
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     virtual bool&       get_ref_value () override { return value; }

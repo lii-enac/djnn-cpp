@@ -74,13 +74,13 @@ MultiConnector (CoreProcess* parent, CoreProcess* src, CoreProcess* dst, bool co
 }
 
 Connector*
-Connector::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Connector::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
     auto sit           = origs_clones.find (_assignment.get_src ());
     auto dit           = origs_clones.find (_assignment.get_dst ());
     auto s             = sit != origs_clones.end () ? sit->second : const_cast<CoreAssignment&> (_assignment).get_src (); // the source of the connector can be outside the cloned subtree
     auto d             = dit != origs_clones.end () ? dit->second : const_cast<CoreAssignment&> (_assignment).get_dst (); // the destination of the connector can be outside the cloned subtree
-    auto res           = new Connector (nullptr, get_name (), s, d, _copy_on_activation);
+    auto res           = new Connector (nullptr, name, s, d, _copy_on_activation);
     origs_clones[this] = res;
     return res;
 }

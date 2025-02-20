@@ -45,22 +45,10 @@ Defs::impl_deactivate ()
 }
 
 Defs*
-Defs::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Defs::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    /*Defs* newd = new Defs (nullptr, get_name ());
-
-    for (auto c : _children) {
-      newd->add_child (c->clone (), this->find_child_name(c));
-    }
-
-    return newd;*/
-
-    auto* clone = new Defs (nullptr, get_name ());
-    for (auto c : _children) {
-        auto cclone = c->impl_clone (origs_clones);
-        // origs_clones[c] = cclone;
-        clone->add_child (cclone, this->find_child_name (c));
-    }
+    auto* clone = new Defs (nullptr, name);
+    impl_clone_children (origs_clones, clone);
     origs_clones[this] = clone;
     return clone;
 }

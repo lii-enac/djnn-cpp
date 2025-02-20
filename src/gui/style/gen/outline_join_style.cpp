@@ -140,9 +140,9 @@ OutlineJoinStyle::draw ()
 }
 
 OutlineJoinStyle*
-OutlineJoinStyle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+OutlineJoinStyle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new OutlineJoinStyle (nullptr, get_name (), raw_props.join);
+    auto res           = new OutlineJoinStyle (nullptr, name, raw_props.join);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

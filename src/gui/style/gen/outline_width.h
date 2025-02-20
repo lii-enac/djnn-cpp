@@ -32,7 +32,7 @@ class OutlineWidth : public AbstractStyle {
     OutlineWidth (CoreProcess* parent, const string& name, double width);
     virtual ~OutlineWidth ();
     void                    draw () override;
-    OutlineWidth*           impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    OutlineWidth*           impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     void                    get_properties_values (double& width);
     const vector<string>&   get_properties_name () const override;
     virtual CoreProcess*    find_child_impl (const string&) override;

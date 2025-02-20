@@ -8,6 +8,6 @@ class Identity : public AbstractTransformation {
     Identity (CoreProcess* parent, const string& name);
     Identity ();
     void        draw () override;
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 } // namespace djnn

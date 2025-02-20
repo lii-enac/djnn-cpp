@@ -32,9 +32,9 @@ RectangleClip::RectangleClip (CoreProcess* parent, const string& name, double x,
 }
 
 RectangleClip*
-RectangleClip::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+RectangleClip::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new RectangleClip (nullptr, get_name (), raw_props.x, raw_props.y, raw_props.width, raw_props.height);
+    auto res           = new RectangleClip (nullptr, name, raw_props.x, raw_props.y, raw_props.width, raw_props.height);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

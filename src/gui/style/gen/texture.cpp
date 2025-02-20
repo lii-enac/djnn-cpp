@@ -140,9 +140,9 @@ Texture::draw ()
 }
 
 Texture*
-Texture::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Texture::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Texture (nullptr, get_name (), raw_props.path);
+    auto res           = new Texture (nullptr, name, raw_props.path);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

@@ -27,7 +27,7 @@ class AssignmentSequence : public Container {
     void                impl_activate () override;
     void                post_activate () override;
     void                impl_deactivate () override {};
-    AssignmentSequence* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    AssignmentSequence* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;

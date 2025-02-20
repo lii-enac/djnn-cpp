@@ -37,7 +37,7 @@ class GradientStop : public AbstractPropGradientStop {
     GradientStop (CoreProcess* parent, const string& name, double r, double g, double b, double a, double offset);
     virtual ~GradientStop ();
     void          draw () override;
-    GradientStop* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    GradientStop* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class LinearGradient : public AbstractPropLinearGradient {
@@ -49,7 +49,7 @@ class LinearGradient : public AbstractPropLinearGradient {
     LinearGradient (CoreProcess* parent, const string& name, LinearGradient* lg);
     virtual ~LinearGradient ();
     void            draw () override;
-    LinearGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    LinearGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class RefLinearGradient : public AbstractStyle {
@@ -59,7 +59,7 @@ class RefLinearGradient : public AbstractStyle {
     void               impl_activate () override;
     void               impl_deactivate () override;
     void               draw () override;
-    RefLinearGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    RefLinearGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
     void            activate_children ();
@@ -75,7 +75,7 @@ class RadialGradient : public AbstractPropRadialGradient {
     RadialGradient (CoreProcess* parent, const string& name, RadialGradient* rg);
     virtual ~RadialGradient ();
     void            draw () override;
-    RadialGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    RadialGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class RefRadialGradient : public AbstractStyle {
@@ -85,7 +85,7 @@ class RefRadialGradient : public AbstractStyle {
     void               impl_activate () override;
     void               impl_deactivate () override;
     void               draw () override;
-    RefRadialGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    RefRadialGradient* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
     void            activate_children ();

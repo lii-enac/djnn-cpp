@@ -140,9 +140,9 @@ OutlineWidth::draw ()
 }
 
 OutlineWidth*
-OutlineWidth::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+OutlineWidth::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new OutlineWidth (nullptr, get_name (), raw_props.width);
+    auto res           = new OutlineWidth (nullptr, name, raw_props.width);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

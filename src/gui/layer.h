@@ -51,7 +51,7 @@ class Layer : public Container {
     bool           hdpi () { return _hdpi; }
     void           set_invalid_cache (bool v);
     void           set_hdpi (bool v);
-    Layer*         impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    Layer*         impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     process_type_e get_process_type () const override { return LAYER_T; }
 
     Spike*       damaged () { return &_damaged; }

@@ -128,15 +128,15 @@ AbstractBoolProperty::serialize (const string& format)
 #endif
 
 FatProcess*
-BoolProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+BoolProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new BoolProperty (nullptr, get_name (), get_value ());
-    origs_clones[this] = res;
-    return res;
+    auto clone = new BoolProperty (nullptr, name, get_value ());
+    origs_clones[this] = clone;
+    return clone;
 }
 
 FatProcess*
-BoolPropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+BoolPropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
     error (this, "*PropertyProxy should not be cloned");
     return nullptr;

@@ -828,11 +828,16 @@ CoreProcess*
 CoreProcess::clone () const
 {
     map<const CoreProcess*, CoreProcess*> origs_clones;
-    return impl_clone (origs_clones);
+    const string* name = &default_name;
+    if (auto *p = get_parent ())
+        name = &get_name (p);
+    else
+        name = &get_debug_name ();
+    return impl_clone (origs_clones, *name);
 }
 
 CoreProcess*
-CoreProcess::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+CoreProcess::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
 #ifndef DJNN_NO_DEBUG
     auto* pp = this;

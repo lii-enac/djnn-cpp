@@ -140,9 +140,9 @@ OutlineCapStyle::draw ()
 }
 
 OutlineCapStyle*
-OutlineCapStyle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+OutlineCapStyle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new OutlineCapStyle (nullptr, get_name (), raw_props.cap);
+    auto res           = new OutlineCapStyle (nullptr, name, raw_props.cap);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

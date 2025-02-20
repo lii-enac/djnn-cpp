@@ -170,9 +170,9 @@ RefProperty::dump (int level)
 #endif
 
 RefProperty*
-RefProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+RefProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new RefProperty (nullptr, get_name (), _value);
+    auto res           = new RefProperty (nullptr, name, _value);
     origs_clones[this] = res;
     return res;
 }

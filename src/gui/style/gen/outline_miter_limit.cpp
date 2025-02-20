@@ -140,9 +140,9 @@ OutlineMiterLimit::draw ()
 }
 
 OutlineMiterLimit*
-OutlineMiterLimit::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+OutlineMiterLimit::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new OutlineMiterLimit (nullptr, get_name (), raw_props.limit);
+    auto res           = new OutlineMiterLimit (nullptr, name, raw_props.limit);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

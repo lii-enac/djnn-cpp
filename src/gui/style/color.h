@@ -80,7 +80,7 @@ class FillColor : public AbstractColor {
         : AbstractColor (parent, name, v) { finalize_construction (parent, name); }
     virtual ~FillColor () {}
     void       draw () override;
-    FillColor* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FillColor* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class OutlineColor : public AbstractColor {
@@ -91,7 +91,7 @@ class OutlineColor : public AbstractColor {
         : AbstractColor (parent, name, v) { finalize_construction (parent, name); }
     virtual ~OutlineColor () {}
     void          draw () override;
-    OutlineColor* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    OutlineColor* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class RGBToLCHConverter : public FatProcess {

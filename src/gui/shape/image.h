@@ -14,7 +14,7 @@ class Image : public AbstractPathImage {
     Image (CoreProcess* parent, const string& name, const string& path, double x, double y, double w, double h);
     virtual ~Image ();
     void                 draw () override;
-    Image*               impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    Image*               impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     virtual CoreProcess* find_child_impl (const string&) override;
     void*                cache () { return _cache; }
     void                 set_cache (void* cache) { _cache = cache; }
@@ -43,7 +43,7 @@ class DataImage : public AbstractDataImage {
     DataImage (CoreProcess* parent, const string& name, double x, double y, double w, double h);
     virtual ~DataImage ();
     void                 draw () override;
-    DataImage*           impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    DataImage*           impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     virtual CoreProcess* find_child_impl (const string&) override;
     void*                cache () { return _cache; }
     void                 set_cache (void* cache) { _cache = cache; }

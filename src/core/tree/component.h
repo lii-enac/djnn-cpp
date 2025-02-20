@@ -23,8 +23,8 @@ class Component : public Container {
     Component (CoreProcess* parent, const string& name, bool is_model = false)
         : Container (parent, name, is_model) { finalize_construction (parent, name); }
     // virtual process_type_e get_process_type () const override { return CONTAINER_T; }
-    // Component* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
-    Component* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    // Component* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
+    Component* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;
 #endif

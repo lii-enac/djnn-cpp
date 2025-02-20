@@ -59,7 +59,7 @@ class DoubleProperty : public AbstractDoubleProperty {
   public:
     DoubleProperty (CoreProcess* parent, const string& name, double v)
         : AbstractDoubleProperty (parent, name), value (v) {}
-    DoubleProperty* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    DoubleProperty* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     virtual double&       get_ref_value () override { return value; }
@@ -73,7 +73,7 @@ class DoublePropertyProxy : public AbstractDoubleProperty {
   public:
     DoublePropertyProxy (CoreProcess* parent, const string& name, double& v, int notify_mask = notify_none)
         : AbstractDoubleProperty (parent, name, notify_mask), value (v) {}
-    DoublePropertyProxy* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    DoublePropertyProxy* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     virtual double&       get_ref_value () override { return value; }

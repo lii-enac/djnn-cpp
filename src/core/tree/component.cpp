@@ -20,13 +20,10 @@
 
 namespace djnn {
 Component*
-Component::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Component::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto* clone = new Component (nullptr, get_name ());
-    for (auto c : _children) {
-        auto cclone = c->impl_clone (origs_clones);
-        clone->add_child (cclone, this->find_child_name (c));
-    }
+    auto* clone = new Component (nullptr, name);
+    impl_clone_children (origs_clones, clone);
     origs_clones[this] = clone;
     return clone;
 }

@@ -32,7 +32,7 @@ class Texture : public AbstractStyle {
     Texture (CoreProcess* parent, const string& name, const string& path);
     virtual ~Texture ();
     void                  draw () override;
-    Texture*              impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    Texture*              impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     void                  get_properties_values (string& path);
     const vector<string>& get_properties_name () const override;
     virtual CoreProcess*  find_child_impl (const string&) override;

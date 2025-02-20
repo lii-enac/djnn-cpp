@@ -30,9 +30,9 @@ Circle::Circle (CoreProcess* parent, const string& name, double cx, double cy, d
 }
 
 Circle*
-Circle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Circle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Circle (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r);
+    auto res           = new Circle (nullptr, name, raw_props.cx, raw_props.cy, raw_props.r);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

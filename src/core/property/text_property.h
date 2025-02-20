@@ -57,7 +57,7 @@ class TextProperty : public AbstractTextProperty {
   public:
     TextProperty (CoreProcess* parent, const string& name, const string& v)
         : AbstractTextProperty (parent, name), value (v) {}
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     virtual string&       get_ref_value () override { return value; }
@@ -71,7 +71,7 @@ class TextPropertyProxy : public AbstractTextProperty {
   public:
     TextPropertyProxy (CoreProcess* parent, const string& name, string& v, int notify_mask = notify_none)
         : AbstractTextProperty (parent, name, notify_mask), value (v) {}
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     virtual string&       get_ref_value () override { return value; }

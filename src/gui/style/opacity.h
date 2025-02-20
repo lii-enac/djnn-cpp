@@ -9,7 +9,7 @@ class OutlineOpacity : public AbstractOpacity {
         : AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }
     virtual ~OutlineOpacity () {}
     void            draw () override;
-    OutlineOpacity* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    OutlineOpacity* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class FillOpacity : public AbstractOpacity {
@@ -18,7 +18,7 @@ class FillOpacity : public AbstractOpacity {
         : AbstractOpacity (parent, name, alpha) { finalize_construction (parent, name); }
     virtual ~FillOpacity () {}
     void         draw () override;
-    FillOpacity* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FillOpacity* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 } // namespace djnn

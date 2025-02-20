@@ -256,6 +256,27 @@ Container::set_child (CoreProcess* child, int i)
 }
 
 void
+Container::impl_clone_children (map<const CoreProcess*, CoreProcess*>& origs_clones, CoreProcess* parent_clone) const
+{
+    map<CoreProcess*, const string*> rev_sym;
+    for (const auto& p: symtable()) {
+        rev_sym[p.second]=&p.first;
+    }
+    for (auto c : _children) {
+        const string* cc_name;
+        auto it = rev_sym.find(c);
+        if (it!=rev_sym.end()) {
+            cc_name = it->second;
+        }
+        else {
+            cc_name = &default_name;
+        }
+        auto cclone = c->impl_clone (origs_clones, *cc_name);
+        parent_clone->add_child (cclone, *cc_name);        
+    }
+}
+
+void
 Container::impl_activate ()
 {
     Container* c = djnn_dynamic_cast<Container*> (get_parent ());

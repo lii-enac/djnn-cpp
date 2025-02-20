@@ -151,7 +151,7 @@ class Assignment : public FatProcess {
         FatProcess::set_parent (parent);
     }
 
-    Assignment* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    Assignment* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     // for legacy reason, to get rid of?
     Assignment (CoreProcess* parent, const string& name,
                 CoreProcess* src, const string& sspec,

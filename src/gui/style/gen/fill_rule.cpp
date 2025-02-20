@@ -138,9 +138,9 @@ FillRule::draw ()
 }
 
 FillRule*
-FillRule::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+FillRule::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new FillRule (nullptr, get_name (), raw_props.rule);
+    auto res           = new FillRule (nullptr, name, raw_props.rule);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

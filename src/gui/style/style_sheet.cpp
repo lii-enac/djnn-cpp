@@ -35,22 +35,10 @@ StyleSheet::StyleSheet (CoreProcess* parent, const string& n)
 }
 
 StyleSheet*
-StyleSheet::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+StyleSheet::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    /*StyleSheet* newd = new StyleSheet (nullptr, get_name ());
-
-    for (auto c : _children) {
-      newd->add_child (c->clone (), this->find_child_name(c));
-    }
-
-    return newd;*/
-
-    auto* clone = new StyleSheet (nullptr, get_name ());
-    for (auto c : _children) {
-        auto cclone = c->impl_clone (origs_clones);
-        // origs_clones[c] = cclone;
-        clone->add_child (cclone, this->find_child_name (c));
-    }
+    auto* clone = new StyleSheet (nullptr, name);
+    impl_clone_children (origs_clones, clone);
     origs_clones[this] = clone;
     return clone;
 }

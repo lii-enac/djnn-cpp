@@ -100,7 +100,7 @@ class Binding : public FatProcess //, virtual CoreBinding
 
     virtual ~Binding ();
     void         set_parent (CoreProcess* parent) override;
-    CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    CoreProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     void impl_activate () override { _b.impl_activate (); }

@@ -12,6 +12,6 @@ class Scaling : public AbstractScaling {
     void         draw () override;
     virtual void transform (double& x, double& y) override;
     virtual void inverse_transform (double& x, double& y) override;
-    FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 } // namespace djnn

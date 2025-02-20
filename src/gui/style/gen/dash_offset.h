@@ -32,7 +32,7 @@ class DashOffset : public AbstractStyle {
     DashOffset (CoreProcess* parent, const string& name, double offset);
     virtual ~DashOffset ();
     void                    draw () override;
-    DashOffset*             impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    DashOffset*             impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     void                    get_properties_values (double& offset);
     const vector<string>&   get_properties_name () const override;
     virtual CoreProcess*    find_child_impl (const string&) override;

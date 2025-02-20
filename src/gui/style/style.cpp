@@ -47,9 +47,9 @@ FillColor::draw ()
 }
 
 FillColor*
-FillColor::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+FillColor::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new FillColor (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b);
+    auto res           = new FillColor (nullptr, name, raw_props.r, raw_props.g, raw_props.b);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -65,9 +65,9 @@ OutlineColor::draw ()
 }
 
 OutlineColor*
-OutlineColor::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+OutlineColor::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new OutlineColor (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b);
+    auto res           = new OutlineColor (nullptr, name, raw_props.r, raw_props.g, raw_props.b);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -83,18 +83,18 @@ NoOutline::draw ()
 }
 
 NoOutline*
-NoOutline::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+NoOutline::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new NoOutline (nullptr, get_name ());
+    auto res           = new NoOutline (nullptr, name);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
 }
 
 NoPickOutline*
-NoPickOutline::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+NoPickOutline::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new NoPickOutline (nullptr, get_name ());
+    auto res           = new NoPickOutline (nullptr, name);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -110,9 +110,9 @@ NoPickOutline::draw ()
 }
 
 PickOutline*
-PickOutline::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+PickOutline::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new PickOutline (nullptr, get_name ());
+    auto res           = new PickOutline (nullptr, name);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -137,9 +137,9 @@ NoFill::draw ()
 }
 
 NoFill*
-NoFill::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+NoFill::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new NoFill (nullptr, get_name ());
+    auto res           = new NoFill (nullptr, name);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -155,9 +155,9 @@ NoPickFill::draw ()
 }
 
 NoPickFill*
-NoPickFill::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+NoPickFill::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new NoPickFill (nullptr, get_name ());
+    auto res           = new NoPickFill (nullptr, name);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -173,9 +173,9 @@ PickFill::draw ()
 }
 
 PickFill*
-PickFill::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+PickFill::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new PickFill (nullptr, get_name ());
+    auto res           = new PickFill (nullptr, name);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -191,9 +191,9 @@ OutlineOpacity::draw ()
 }
 
 OutlineOpacity*
-OutlineOpacity::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+OutlineOpacity::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new OutlineOpacity (nullptr, get_name (), raw_props.a);
+    auto res           = new OutlineOpacity (nullptr, name, raw_props.a);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -209,9 +209,9 @@ FillOpacity::draw ()
 }
 
 FillOpacity*
-FillOpacity::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+FillOpacity::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new FillOpacity (nullptr, get_name (), raw_props.a);
+    auto res           = new FillOpacity (nullptr, name, raw_props.a);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -227,9 +227,9 @@ DashArray::draw ()
 }
 
 DashArray*
-DashArray::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+DashArray::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto* res = new DashArray (nullptr, get_name ());
+    auto* res = new DashArray (nullptr, name);
     for (auto d : _dash_array) {
         res->_dash_array.push_back (d);
     }
@@ -248,9 +248,9 @@ NoDashArray::draw ()
 }
 
 NoDashArray*
-NoDashArray::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+NoDashArray::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new NoDashArray (nullptr, get_name ());
+    auto res           = new NoDashArray (nullptr, name);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -277,9 +277,9 @@ GradientStop::~GradientStop ()
 }
 
 GradientStop*
-GradientStop::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+GradientStop::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new GradientStop (nullptr, get_name (), raw_props.r, raw_props.g, raw_props.b, raw_props.a, raw_props.offset);
+    auto res           = new GradientStop (nullptr, name, raw_props.r, raw_props.g, raw_props.b, raw_props.a, raw_props.offset);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -332,27 +332,17 @@ LinearGradient::LinearGradient (CoreProcess* parent, const string& name, double 
 }
 
 LinearGradient*
-LinearGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+LinearGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    /*LinearGradient *g = new LinearGradient (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2,
-                                            AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
-    for (auto s : _stops->children ()) {
-      g->stops ()->add_child (s->clone (), s->get_name (_stops));
-    }
-    for (auto t : _transforms->children ()) {
-      g->transforms ()->add_child (t->clone (), t->get_name (_stops));
-    }
-    return g;*/
-
-    auto* clone = new LinearGradient (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2,
+    auto* clone = new LinearGradient (nullptr, name, raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2,
                                       AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
     for (auto c : _stops->children ()) {
-        auto cclone = c->impl_clone (origs_clones);
+        auto cclone = c->impl_clone (origs_clones, name);
         // origs_clones[c] = cclone;
         clone->stops ()->add_child (cclone, c->find_child_name (_stops));
     }
     for (auto c : _transforms->children ()) {
-        auto cclone = c->impl_clone (origs_clones);
+        auto cclone = c->impl_clone (origs_clones, name);
         // origs_clones[c] = cclone;
         clone->transforms ()->add_child (cclone, c->find_child_name (_stops));
     }
@@ -416,9 +406,9 @@ RefLinearGradient::draw ()
 }
 
 RefLinearGradient*
-RefLinearGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+RefLinearGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new RefLinearGradient (nullptr, get_name (), _lg);
+    auto res           = new RefLinearGradient (nullptr, name, _lg);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -441,27 +431,17 @@ RadialGradient::RadialGradient (CoreProcess* parent, const string& name, double 
 RadialGradient::~RadialGradient () {}
 
 RadialGradient*
-RadialGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+RadialGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    /*RadialGradient *rg = new RadialGradient (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r, raw_props.fx,
-                                             raw_props.fy, AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
-    for (auto s : _stops->children ()) {
-      rg->stops ()->add_child (s->clone (), s->get_name (_stops));
-    }
-    for (auto t : _transforms->children ()) {
-      rg->transforms ()->add_child (t->clone (), t->get_name (_stops));
-    }
-    return rg;*/
-
-    auto* clone = new RadialGradient (nullptr, get_name (), raw_props.cx, raw_props.cy, raw_props.r, raw_props.fx,
+    auto* clone = new RadialGradient (nullptr, name, raw_props.cx, raw_props.cy, raw_props.r, raw_props.fx,
                                       raw_props.fy, AbstractGradient::raw_props.spread, AbstractGradient::raw_props.coords);
     for (auto c : _stops->children ()) {
-        auto cclone = c->impl_clone (origs_clones);
+        auto cclone = c->impl_clone (origs_clones, name);
         // origs_clones[c] = cclone;
         clone->stops ()->add_child (cclone, c->find_child_name (_stops));
     }
     for (auto c : _transforms->children ()) {
-        auto cclone = c->impl_clone (origs_clones);
+        auto cclone = c->impl_clone (origs_clones, name);
         // origs_clones[c] = cclone;
         clone->transforms ()->add_child (cclone, c->find_child_name (_stops));
     }
@@ -521,9 +501,9 @@ RefRadialGradient::draw ()
 }
 
 RefRadialGradient*
-RefRadialGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+RefRadialGradient::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new RefRadialGradient (nullptr, get_name (), _rg);
+    auto res           = new RefRadialGradient (nullptr, name, _rg);
     origs_clones[this] = res;
     return res;
 }
@@ -569,9 +549,9 @@ FontSize::draw ()
 }
 
 FontSize*
-FontSize::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+FontSize::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new FontSize (nullptr, get_name (), raw_props.unit, raw_props.size);
+    auto res           = new FontSize (nullptr, name, raw_props.unit, raw_props.size);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -602,9 +582,9 @@ FontWeight::draw ()
 }
 
 FontWeight*
-FontWeight::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+FontWeight::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new FontWeight (nullptr, get_name (), raw_props.weight);
+    auto res           = new FontWeight (nullptr, name, raw_props.weight);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -641,9 +621,9 @@ FontStyle::draw ()
 }
 
 FontStyle*
-FontStyle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+FontStyle::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new FontStyle (nullptr, get_name (), raw_props.style);
+    auto res           = new FontStyle (nullptr, name, raw_props.style);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -674,9 +654,9 @@ FontFamily::draw ()
 }
 
 FontFamily*
-FontFamily::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+FontFamily::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new FontFamily (nullptr, get_name (), raw_props.family);
+    auto res           = new FontFamily (nullptr, name, raw_props.family);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

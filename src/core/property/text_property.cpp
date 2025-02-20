@@ -149,15 +149,15 @@ AbstractTextProperty::serialize (const string& format)
 #endif
 
 FatProcess*
-TextProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+TextProperty::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new TextProperty (nullptr, get_name (), value);
+    auto res           = new TextProperty (nullptr, name, value);
     origs_clones[this] = res;
     return res;
 }
 
 FatProcess*
-TextPropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+TextPropertyProxy::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
     error (this, "*PropertyProxy should not be cloned");
     return nullptr;

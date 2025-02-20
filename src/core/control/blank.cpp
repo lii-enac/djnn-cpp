@@ -33,9 +33,9 @@ Blank::serialize (const string& format)
 #endif
 
 FatProcess*
-Blank::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Blank::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Blank (nullptr, get_name ());
+    auto res           = new Blank (nullptr, name);
     origs_clones[this] = res;
     return res;
 }

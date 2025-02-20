@@ -59,7 +59,7 @@ class IntProperty : public AbstractIntProperty {
   public:
     IntProperty (CoreProcess* parent, const string& name, int v)
         : AbstractIntProperty (parent, name), value (v) {}
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     virtual int&       get_ref_value () override { return value; }
@@ -73,7 +73,7 @@ class IntPropertyProxy : public AbstractIntProperty {
   public:
     IntPropertyProxy (CoreProcess* parent, const string& name, int& v, int notify_mask = notify_none)
         : AbstractIntProperty (parent, name, notify_mask), value (v) {}
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     virtual int&       get_ref_value () override { return value; }

@@ -30,9 +30,9 @@ Line::Line (CoreProcess* parent, const string& name, double x1, double y1, doubl
 }
 
 Line*
-Line::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Line::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Line (nullptr, get_name (), raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
+    auto res           = new Line (nullptr, name, raw_props.x1, raw_props.y1, raw_props.x2, raw_props.y2);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

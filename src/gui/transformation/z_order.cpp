@@ -39,9 +39,9 @@ ZOrder::draw ()
 }
 
 FatProcess*
-ZOrder::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+ZOrder::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new ZOrder (nullptr, get_name (), _z.get_value ());
+    auto res           = new ZOrder (nullptr, name, _z.get_value ());
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

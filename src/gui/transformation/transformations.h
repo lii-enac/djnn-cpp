@@ -32,7 +32,7 @@ class GradientTranslation : public AbstractTranslation {
   public:
     GradientTranslation (CoreProcess* parent, const string& name, double tx, double ty);
     GradientTranslation (double tx, double ty);
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     virtual ~GradientTranslation ();
     void draw () override;
 };
@@ -50,7 +50,7 @@ class Rotation : public AbstractRotation {
     void         draw () override;
     virtual void transform (double& x, double& y) override;
     virtual void inverse_transform (double& x, double& y) override;
-    FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class GradientRotation : public AbstractRotation {
@@ -59,7 +59,7 @@ class GradientRotation : public AbstractRotation {
     GradientRotation (double a, double cx, double cy);
     virtual ~GradientRotation ();
     void        draw () override;
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 } // namespace djnn
 
@@ -73,7 +73,7 @@ class GradientScaling : public AbstractScaling {
     GradientScaling (double sx, double sy, double cx, double cy);
     virtual ~GradientScaling ();
     void        draw () override;
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 } // namespace djnn
@@ -90,7 +90,7 @@ class SkewX : public AbstractSkew {
     void         draw () override;
     virtual void transform (double& x, double& y) override;
     virtual void inverse_transform (double& x, double& y) override;
-    FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class GradientSkewX : public AbstractSkew {
@@ -99,7 +99,7 @@ class GradientSkewX : public AbstractSkew {
     GradientSkewX (double a);
     virtual ~GradientSkewX ();
     void        draw () override;
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class SkewY : public AbstractSkew {
@@ -110,7 +110,7 @@ class SkewY : public AbstractSkew {
     void         draw () override;
     virtual void transform (double& x, double& y) override;
     virtual void inverse_transform (double& x, double& y) override;
-    FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess*  impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class GradientSkewY : public AbstractSkew {
@@ -119,7 +119,7 @@ class GradientSkewY : public AbstractSkew {
     GradientSkewY (double a);
     virtual ~GradientSkewY ();
     void        draw () override;
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;
+    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
 class ScreenToLocal : public FatProcess {

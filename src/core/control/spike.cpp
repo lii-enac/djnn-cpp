@@ -49,9 +49,9 @@ Spike::serialize (const string& format)
 #endif
 
 FatProcess*
-Spike::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Spike::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Spike (nullptr, get_name ());
+    auto res           = new Spike (nullptr, name);
     origs_clones[this] = res;
     return res;
 }

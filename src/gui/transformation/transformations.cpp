@@ -71,9 +71,9 @@ Identity::draw ()
 }
 
 FatProcess*
-Identity::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Identity::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Identity (nullptr, get_name ());
+    auto res           = new Identity (nullptr, name);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -113,9 +113,9 @@ Translation::inverse_transform (double& x, double& y)
 }
 
 FatProcess*
-Translation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Translation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Translation (nullptr, get_name (), raw_props.tx, raw_props.ty);
+    auto res           = new Translation (nullptr, name, raw_props.tx, raw_props.ty);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -148,9 +148,9 @@ GradientTranslation::draw ()
 }
 
 FatProcess*
-GradientTranslation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+GradientTranslation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new GradientTranslation (nullptr, get_name (), raw_props.tx, raw_props.ty);
+    auto res           = new GradientTranslation (nullptr, name, raw_props.tx, raw_props.ty);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -210,9 +210,9 @@ Rotation::inverse_transform (double& x, double& y)
 }
 
 FatProcess*
-Rotation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Rotation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Rotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
+    auto res           = new Rotation (nullptr, name, raw_props.a, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -245,9 +245,9 @@ GradientRotation::draw ()
 }
 
 FatProcess*
-GradientRotation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+GradientRotation::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new GradientRotation (nullptr, get_name (), raw_props.a, raw_props.cx, raw_props.cy);
+    auto res           = new GradientRotation (nullptr, name, raw_props.a, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -299,9 +299,9 @@ Scaling::inverse_transform (double& x, double& y)
 }
 
 FatProcess*
-Scaling::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Scaling::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Scaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
+    auto res           = new Scaling (nullptr, name, raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -334,9 +334,9 @@ GradientScaling::draw ()
 }
 
 FatProcess*
-GradientScaling::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+GradientScaling::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new GradientScaling (nullptr, get_name (), raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
+    auto res           = new GradientScaling (nullptr, name, raw_props.sx, raw_props.sy, raw_props.cx, raw_props.cy);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -376,9 +376,9 @@ SkewX::inverse_transform (double& x, double& y)
 }
 
 FatProcess*
-SkewX::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+SkewX::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new SkewX (nullptr, get_name (), raw_props.a);
+    auto res           = new SkewX (nullptr, name, raw_props.a);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -411,9 +411,9 @@ GradientSkewX::draw ()
 }
 
 FatProcess*
-GradientSkewX::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+GradientSkewX::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new GradientSkewX (nullptr, get_name (), raw_props.a);
+    auto res           = new GradientSkewX (nullptr, name, raw_props.a);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -453,9 +453,9 @@ SkewY::inverse_transform (double& x, double& y)
 }
 
 FatProcess*
-SkewY::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+SkewY::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new SkewY (nullptr, get_name (), raw_props.a);
+    auto res           = new SkewY (nullptr, name, raw_props.a);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -488,9 +488,9 @@ GradientSkewY::draw ()
 }
 
 FatProcess*
-GradientSkewY::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+GradientSkewY::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new GradientSkewY (nullptr, get_name (), raw_props.a);
+    auto res           = new GradientSkewY (nullptr, name, raw_props.a);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;
@@ -2186,9 +2186,9 @@ Homography::inverse_transform (double& x, double& y)
 }
 
 FatProcess*
-Homography::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+Homography::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Homography (nullptr, get_name (),
+    auto res           = new Homography (nullptr, name,
                                          raw_props.m11, raw_props.m12, raw_props.m13, raw_props.m14,
                                          raw_props.m21, raw_props.m22, raw_props.m23, raw_props.m24,
                                          raw_props.m31, raw_props.m32, raw_props.m33, raw_props.m34,
@@ -2226,9 +2226,9 @@ GradientHomography::draw ()
 }
 
 FatProcess*
-GradientHomography::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+GradientHomography::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new GradientHomography (nullptr, get_name (),
+    auto res           = new GradientHomography (nullptr, name,
                                                  raw_props.m11, raw_props.m12, raw_props.m13,
                                                  raw_props.m21, raw_props.m22, raw_props.m23,
                                                  raw_props.m31, raw_props.m32, raw_props.m33);
@@ -2265,9 +2265,9 @@ SimpleGradientTransform::draw ()
 }
 
 FatProcess*
-SimpleGradientTransform::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+SimpleGradientTransform::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new GradientHomography (nullptr, get_name (),
+    auto res           = new GradientHomography (nullptr, name,
                                                  raw_props.m11, raw_props.m12, raw_props.m13,
                                                  raw_props.m21, raw_props.m22, raw_props.m23,
                                                  raw_props.m31, raw_props.m32, raw_props.m33);

@@ -89,11 +89,11 @@ AssignmentSequence::~AssignmentSequence ()
 }
 
 AssignmentSequence*
-AssignmentSequence::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
+AssignmentSequence::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto* clone = new AssignmentSequence (nullptr, get_name (), is_model ());
+    auto* clone = new AssignmentSequence (nullptr, name, is_model ());
     for (auto c : _children) {
-        auto cclone = c->impl_clone (origs_clones);
+        auto cclone = c->impl_clone (origs_clones, name);
         clone->add_child (cclone, this->find_child_name (c));
     }
     origs_clones[this] = clone;
