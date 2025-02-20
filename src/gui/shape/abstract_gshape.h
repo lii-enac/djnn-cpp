@@ -92,9 +92,9 @@ class Touch : public FatProcess {
     void        set_init_shape (PickUI* s) { _shape = s; }
     void        set_touch_local_coords (PickUI* t, double x, double y, bool is_move);
     void        set_current_shape (PickUI* s) {
-        if (s == nullptr){
-          _last_shape->set_value ((CoreProcess*)nullptr, true);
-          return;
+        if (s == nullptr) {
+            _last_shape->set_value ((CoreProcess*)nullptr, true);
+            return;
         }
         CoreProcess* ss = dynamic_cast<CoreProcess*> (s);
         if (ss)

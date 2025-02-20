@@ -127,7 +127,7 @@ GUIStructureHolder::draw ()
 AbstractGShape*
 GUIStructureHolder::pick_analytical (PickAnalyticalContext& pac)
 {
-    AbstractGShape* picked = nullptr;
+    AbstractGShape* picked    = nullptr;
     auto            saved_pac = pac;
     for (auto p : _children) {
         AbstractGShape* picked_ = p.first->pick_analytical (pac);

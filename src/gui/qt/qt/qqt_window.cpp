@@ -120,8 +120,8 @@ MyQQWidget::event (QEvent* event)
     case QEvent::TabletPress:
     case QEvent::TabletMove:
     case QEvent::TabletRelease:
-        djnn::get_exclusive_access (DBG_GET); 
-        tabletEvent(static_cast<QTabletEvent*> (event));
+        djnn::get_exclusive_access (DBG_GET);
+        tabletEvent (static_cast<QTabletEvent*> (event));
         event->accept (); // We have to tell Qt that we consumed the event to prevent it from generating a mouse event.
         djnn::release_exclusive_access (DBG_REL);
         break;
@@ -279,15 +279,15 @@ MyQQWidget::wheelEvent (QWheelEvent* event)
 }
 
 void
-MyQQWidget::tabletEvent(QTabletEvent *event)
+MyQQWidget::tabletEvent (QTabletEvent* event)
 {
     auto tablet_pos_x = event->x ();
     auto tablet_pos_y = event->y ();
     tablet_pos_y -= 3; // QT bug?? it is the same for stylus
     auto pressure = event->pressure ();
-   
+
     // dbg
-    //std::cerr << "x: " << tablet_pos_x << " - y: " << tablet_pos_y <<  " - pointer type: " << event->pointerType () << "- pressure: " << pressure << std::endl;
+    // std::cerr << "x: " << tablet_pos_x << " - y: " << tablet_pos_y <<  " - pointer type: " << event->pointerType () << "- pressure: " << pressure << std::endl;
 
     bool exec_ = false;
 

@@ -87,20 +87,21 @@ Picking::tabletEnterLeave (PickUI* picked, stylus_type stylus_type)
 {
     if (picked && picked != _hovered_shape) {
 
-        if (!check_for_ui(picked)) return false;
+        if (!check_for_ui (picked))
+            return false;
 
         if (_hovered_shape) {
             if (stylus_type == STYLUS_PEN)
-                _hovered_shape->ui()->stylus_pen_leave()->schedule_activation();
+                _hovered_shape->ui ()->stylus_pen_leave ()->schedule_activation ();
             else if (stylus_type == STYLUS_ERASER)
-                _hovered_shape->ui()->stylus_eraser_leave()->schedule_activation();
+                _hovered_shape->ui ()->stylus_eraser_leave ()->schedule_activation ();
             GRAPH_EXEC;
         }
 
         if (stylus_type == STYLUS_PEN)
-            picked->ui()->stylus_pen_enter()->schedule_activation();
+            picked->ui ()->stylus_pen_enter ()->schedule_activation ();
         else if (stylus_type == STYLUS_ERASER)
-            picked->ui()->stylus_eraser_enter()->schedule_activation();
+            picked->ui ()->stylus_eraser_enter ()->schedule_activation ();
 
         _hovered_shape = picked;
         // cut the event synthesis when enter/leave happened
@@ -109,9 +110,9 @@ Picking::tabletEnterLeave (PickUI* picked, stylus_type stylus_type)
     } else if (!picked && _hovered_shape) {
 
         if (stylus_type == STYLUS_PEN)
-            _hovered_shape->ui()->stylus_pen_leave()->schedule_activation();
+            _hovered_shape->ui ()->stylus_pen_leave ()->schedule_activation ();
         else if (stylus_type == STYLUS_ERASER)
-            _hovered_shape->ui()->stylus_eraser_leave()->schedule_activation();
+            _hovered_shape->ui ()->stylus_eraser_leave ()->schedule_activation ();
 
         _hovered_shape = nullptr;
         // cut the event synthesis when enter/leave happened
@@ -192,8 +193,8 @@ Picking::genericCheckShapeAfterDraw (double x, double y)
     exec_ |= genericEnterLeave (s);
 
     // TODO : MP
-    // chack for touch and tablet/stylus event 
-    // tabletEnterLeave ? 
+    // check for touch and tablet/stylus event
+    // tabletEnterLeave ?
 
     return exec_;
 }

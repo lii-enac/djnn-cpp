@@ -20,8 +20,7 @@
 
 namespace djnn {
 
-typedef enum State
-{
+typedef enum State {
     START,
     WAITHYST,
     WAITHYST2,
@@ -33,8 +32,7 @@ typedef enum State
 class AbstractHomography;
 
 class Point;
-class Vector
-{
+class Vector {
     friend Point;
 
   public:
@@ -43,23 +41,19 @@ class Vector
     Vector (const Point& p1, const Point& p2);
     virtual ~Vector () {}
     double
-    dx ()
-    {
+    dx () {
         return _dx;
     }
     double
-    dy ()
-    {
+    dy () {
         return _dy;
     }
     void
-    set_dx (double dx)
-    {
+    set_dx (double dx) {
         _dx = dx;
     }
     void
-    set_dy (double dy)
-    {
+    set_dy (double dy) {
         _dy = dy;
     }
     double        norm_sq () const;
@@ -74,8 +68,7 @@ class Vector
     double _dx, _dy;
 };
 
-class Point
-{
+class Point {
     friend Vector;
 
   public:
@@ -85,26 +78,22 @@ class Point
         : _x (p._x), _y (p._y) {}
     virtual ~Point () {}
     void
-    set_values (double x, double y)
-    {
+    set_values (double x, double y) {
         _x = x;
         _y = y;
     }
     void
-    set_values (const Point& p)
-    {
+    set_values (const Point& p) {
         _x = p._x;
         _y = p._y;
     }
     void
-    set_values (Point* p)
-    {
+    set_values (Point* p) {
         _x = p->_x;
         _y = p->_y;
     }
     Point&
-    operator= (const Point& p)
-    {
+    operator= (const Point& p) {
         if (this != &p) {
             _x = p._x;
             _y = p._y;
@@ -112,18 +101,15 @@ class Point
         return *this;
     }
     double
-    x () const
-    {
+    x () const {
         return _x;
     }
     double
-    y () const
-    {
+    y () const {
         return _y;
     }
     bool
-    equals (const Point& p) const
-    {
+    equals (const Point& p) const {
         return (_x == p._x) && (_y == p._y);
     }
     static double distance_sq (const Point& p1, const Point& p2);
@@ -136,8 +122,7 @@ class Point
     double _y;
 };
 
-class Matrix4x4
-{
+class Matrix4x4 {
   public:
     Matrix4x4 ();
     Matrix4x4 (const Matrix4x4& m);
@@ -152,8 +137,7 @@ class Matrix4x4
     void right_translate_by (double tx, double ty);
     void left_translate_by (double tx, double ty);
     double*&
-    operator[] (const int i) const
-    {
+    operator[] (const int i) const {
         return _matrix[i];
     }
 
@@ -163,8 +147,7 @@ class Matrix4x4
 
 class AbstractRRR;
 
-class RRR_touch
-{
+class RRR_touch {
   public:
     RRR_touch (AbstractRRR*, Touch*); //, Action*);
     virtual ~RRR_touch ();
@@ -172,8 +155,7 @@ class RRR_touch
     Touch* t;
 
   private:
-    class MoveTouchAction : public Action
-    {
+    class MoveTouchAction : public Action {
       public:
         MoveTouchAction (CoreProcess* parent, const string& name, RRR_touch* ta)
             : Action (parent, name), ta (ta) {}
@@ -186,38 +168,32 @@ class RRR_touch
     Coupling        _cpl;
 };
 
-class AbstractRRR : public FatProcess
-{
+class AbstractRRR : public FatProcess {
   private:
-    class AddTouchAction : public Action
-    {
+    class AddTouchAction : public Action {
       public:
         AddTouchAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         ~AddTouchAction () {}
 
         void
-        impl_activate () override
-        {
+        impl_activate () override {
             ((AbstractRRR*)get_parent ())->on_press_touch_event ();
         };
     };
 
-    class RemoveTouchAction : public Action
-    {
+    class RemoveTouchAction : public Action {
       public:
         RemoveTouchAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
         ~RemoveTouchAction () {}
         void
-        impl_activate () override
-        {
+        impl_activate () override {
             ((AbstractRRR*)get_parent ())->on_release_touch_event ();
         };
     };
 
-    class MoveTouchAction : public Action
-    {
+    class MoveTouchAction : public Action {
       public:
         MoveTouchAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {}
@@ -230,8 +206,8 @@ class AbstractRRR : public FatProcess
     ~AbstractRRR ();
     void         impl_activate () override;
     void         impl_deactivate () override;
-    virtual void on_press_touch_event () = 0;
-    virtual void on_release_touch_event () = 0;
+    virtual void on_press_touch_event ()        = 0;
+    virtual void on_release_touch_event ()      = 0;
     virtual void on_move_touch_event (Touch* t) = 0;
 
   protected:
@@ -247,8 +223,7 @@ class AbstractRRR : public FatProcess
     MoveTouchAction*     _move_touch_action;
 };
 
-class RRR_2T : public AbstractRRR
-{
+class RRR_2T : public AbstractRRR {
 
   public:
     RRR_2T (CoreProcess* parent, const string& name, CoreProcess* shape, CoreProcess* matrix)
@@ -264,8 +239,7 @@ class RRR_2T : public AbstractRRR
     int   _touchID1, _touchID2;
 };
 
-class RR_T : public AbstractRRR
-{
+class RR_T : public AbstractRRR {
 
   public:
     RR_T (CoreProcess* parent, const string& name, CoreProcess* shape, CoreProcess* matrix)
@@ -281,8 +255,7 @@ class RR_T : public AbstractRRR
     int   _touchID1, _touchID2;
 };
 
-class RRR_MT : public AbstractRRR
-{
+class RRR_MT : public AbstractRRR {
 
   public:
     RRR_MT (CoreProcess* parent, const string& name, CoreProcess* shape, CoreProcess* matrix)

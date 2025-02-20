@@ -27,7 +27,7 @@
 #include "gui/shape/path_clip.h"
 #include "gui/shape/sdf.h"
 #include "utils/debug.h" // UNIMPL
-//#include "core/utils/iostream.h"
+// #include "core/utils/iostream.h"
 
 namespace djnn {
 static const char*
@@ -893,23 +893,21 @@ PathArc::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const 
     return res;
 }
 
-
 void
 Path::SpecUpdateAction::impl_activate ()
 {
     Path* path = dynamic_cast<Path*> (get_parent ());
     if (path != nullptr) {
-        path->items()->clean_up_content();
+        path->items ()->clean_up_content ();
         parse_path (path, path->spec ().get_value ().c_str ());
     }
 }
 
-
 Path::Path (CoreProcess* parent, const string& name)
     : AbstractGShape (parent, name),
-    _spec (this, "spec", ""),
-    _updateaction (this, "action"),
-    _c_update (&_spec, ACTIVATION, &_updateaction, ACTIVATION, true)
+      _spec (this, "spec", ""),
+      _updateaction (this, "action"),
+      _c_update (&_spec, ACTIVATION, &_updateaction, ACTIVATION, true)
 {
     _items        = new List (this, "items");
     _bounding_box = new Blank (this, "bounding_box");

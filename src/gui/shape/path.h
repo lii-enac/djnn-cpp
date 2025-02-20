@@ -137,7 +137,7 @@ class PathClosure : public AbstractGObj {
 };
 
 class Path : public AbstractGShape {
-  class SpecUpdateAction : public Action {
+    class SpecUpdateAction : public Action {
       public:
         SpecUpdateAction (CoreProcess* parent, const string& name)
             : Action (parent, name) {};
@@ -174,9 +174,9 @@ class Path : public AbstractGShape {
     DoubleProperty *    _bbx, *_bby, *_bbw, *_bbh;
     GUIStructureHolder* _items_GH; // HACK to get access directly to GUIstructureHolder of items
 
-    TextProperty        _spec;
-    SpecUpdateAction    _updateaction;
-    Coupling            _c_update;
+    TextProperty     _spec;
+    SpecUpdateAction _updateaction;
+    Coupling         _c_update;
 };
 
 int parse_path (Path* p, const char* path_spec);

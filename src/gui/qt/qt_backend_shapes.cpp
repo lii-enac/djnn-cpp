@@ -707,11 +707,11 @@ QtBackend::draw_data_image (DataImage* i)
 
 struct LayerStuff : LayerCache
 {
-    QPixmap*   pm;
-    QPixmap*   lpm;
-    QPixmap*   hpm;
-    double     tx, ty;
-    double     s;
+    QPixmap* pm;
+    QPixmap* lpm;
+    QPixmap* hpm;
+    double   tx, ty;
+    double   s;
     LayerStuff ()
         : pm (nullptr), lpm (nullptr), hpm (nullptr), s (1) {}
     ~LayerStuff ()

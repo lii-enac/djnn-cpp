@@ -242,10 +242,10 @@ AbstractRRR::AbstractRRR (CoreProcess* parent, const string& name, CoreProcess* 
 AbstractRRR::~AbstractRRR ()
 {
 
-    map<int, RRR_touch*>::iterator it = _touches_map_RRR.begin();
-    while (it != _touches_map_RRR.end()) {
+    map<int, RRR_touch*>::iterator it = _touches_map_RRR.begin ();
+    while (it != _touches_map_RRR.end ()) {
         RRR_touch* touch = it->second;
-        it = _touches_map_RRR.erase(it); // keep track on the iterator
+        it               = _touches_map_RRR.erase (it); // keep track on the iterator
         delete touch;
     }
 
@@ -459,22 +459,22 @@ RRR_2T::on_move_touch_event (Touch* t)
         break;
     case RRR:
         // guard & action
-        if ((t->get_id() == _touchID1) || (t->get_id() == _touchID2)) {
-            Point &fixedPoint = (t->get_id() == _touchID1) ? _lastPoint2 : _lastPoint1;
-            Point &oldPoint = (t->get_id() == _touchID1) ? _lastPoint1 : _lastPoint2;
-            Point &newPoint = ta->new_pt;
+        if ((t->get_id () == _touchID1) || (t->get_id () == _touchID2)) {
+            Point& fixedPoint = (t->get_id () == _touchID1) ? _lastPoint2 : _lastPoint1;
+            Point& oldPoint   = (t->get_id () == _touchID1) ? _lastPoint1 : _lastPoint2;
+            Point& newPoint   = ta->new_pt;
 
             // Local copies of points for updating _lastPoint1 and _lastPoint2 after RRR is applied
             Point newPoint1 = _lastPoint1;
             Point newPoint2 = _lastPoint2;
 
-            if (t->get_id() == _touchID1) {
+            if (t->get_id () == _touchID1) {
                 newPoint1 = newPoint;
             } else {
                 newPoint2 = newPoint;
             }
 
-            bool RRRapplied = computeRRR(_matrix, fixedPoint, oldPoint, newPoint);
+            bool RRRapplied = computeRRR (_matrix, fixedPoint, oldPoint, newPoint);
             if (RRRapplied) {
                 _lastPoint1 = newPoint1;
                 _lastPoint2 = newPoint2;
@@ -495,7 +495,7 @@ RRR_MT::on_press_touch_event ()
 {
 
     Touch* added_touch = (Touch*)getRef (_added);
-    Point touch_point (added_touch->get_move_x (), added_touch->get_move_y ());
+    Point  touch_point (added_touch->get_move_x (), added_touch->get_move_y ());
 
     // debug
     // std::cerr << "=====> on_press_touch_event - " << added_touch->get_id () << std::endl;
@@ -529,8 +529,8 @@ RRR_MT::on_press_touch_event ()
         break;
     }
 
-    //debug
-    //std::cerr << "Current State: " << print_state (_current_FSM_state) << std::endl;
+    // debug
+    // std::cerr << "Current State: " << print_state (_current_FSM_state) << std::endl;
 }
 
 void
@@ -547,25 +547,25 @@ RRR_MT::on_release_touch_event ()
         return;
     }
 
-    bool guard = false;
+    bool       guard     = false;
     RRR_touch* rrr_touch = it->second;
 
     switch (_current_FSM_state) {
     case WAITHYST:
-        //case 1 = not the last touch
-        
-        //guard
+        // case 1 = not the last touch
+
+        // guard
         guard = (_touches_map_RRR.size () > 1) && (it != _touches_map_RRR.end ());
 
         // action and quit
-        if (guard){
+        if (guard) {
             _touches_map_RRR.erase (it);
             delete rrr_touch;
-            _touch1 = GetFirstNotId (_touches_map_RRR, _touch2->t->get_id ()); //changed _touch1 reference
+            _touch1 = GetFirstNotId (_touches_map_RRR, _touch2->t->get_id ()); // changed _touch1 reference
             break;
         }
 
-        // case 2 : last touch 
+        // case 2 : last touch
         guard = (_touches_map_RRR.size () == 1) && (it->second->t->get_id () == _touch1->t->get_id ());
 
         // action and goto
@@ -577,40 +577,40 @@ RRR_MT::on_release_touch_event ()
         }
         break;
     case WAITHYST2:
-        if (it != _touches_map_RRR.end()) {
+        if (it != _touches_map_RRR.end ()) {
             // Case 1: More than two touches
-            if (_touches_map_RRR.size() > 2) {
+            if (_touches_map_RRR.size () > 2) {
 
                 // Erase the touch and update references if necessary
-                if (it->second->t->get_id() == _touch1->t->get_id()) {
-                    _touches_map_RRR.erase(it);
+                if (it->second->t->get_id () == _touch1->t->get_id ()) {
+                    _touches_map_RRR.erase (it);
                     delete rrr_touch;
-                    _touch1 = GetFirstNotId(_touches_map_RRR, _touch2->t->get_id());
-                } else if (it->second->t->get_id() == _touch2->t->get_id()) {
-                    _touches_map_RRR.erase(it);
+                    _touch1 = GetFirstNotId (_touches_map_RRR, _touch2->t->get_id ());
+                } else if (it->second->t->get_id () == _touch2->t->get_id ()) {
+                    _touches_map_RRR.erase (it);
                     delete rrr_touch;
-                    _touch2 = GetFirstNotId(_touches_map_RRR, _touch1->t->get_id());
+                    _touch2 = GetFirstNotId (_touches_map_RRR, _touch1->t->get_id ());
                 } else {
-                    _touches_map_RRR.erase(it);
+                    _touches_map_RRR.erase (it);
                     delete rrr_touch;
                 }
                 break;
-            } 
+            }
 
             // Case 2: Exactly two touches
-            if (_touches_map_RRR.size() == 2) {
+            if (_touches_map_RRR.size () == 2) {
 
                 // Erase the touch and update FSM state
-                if (it->second->t->get_id() == _touch1->t->get_id()) {
-                    _touches_map_RRR.erase(it);
+                if (it->second->t->get_id () == _touch1->t->get_id ()) {
+                    _touches_map_RRR.erase (it);
                     delete rrr_touch;
-                    _touch1 = _touch2;
-                    _touch2 = nullptr;
+                    _touch1            = _touch2;
+                    _touch2            = nullptr;
                     _current_FSM_state = DRAGGING;
-                } else if (it->second->t->get_id() == _touch2->t->get_id()) {
-                    _touches_map_RRR.erase(it);
+                } else if (it->second->t->get_id () == _touch2->t->get_id ()) {
+                    _touches_map_RRR.erase (it);
                     delete rrr_touch;
-                    _touch2 = nullptr;
+                    _touch2            = nullptr;
                     _current_FSM_state = DRAGGING;
                 }
                 break;
@@ -624,7 +624,7 @@ RRR_MT::on_release_touch_event ()
         if (guard) {
             _touches_map_RRR.erase (it);
             delete rrr_touch;
-            _touch1 = GetFirstNotId (_touches_map_RRR, _touch2->t->get_id ()); //changed _touch1 reference
+            _touch1 = GetFirstNotId (_touches_map_RRR, _touch2->t->get_id ()); // changed _touch1 reference
             break;
         }
 
@@ -650,50 +650,50 @@ RRR_MT::on_release_touch_event ()
         }
         break;
     case RRR:
-        if (it != _touches_map_RRR.end()) {
+        if (it != _touches_map_RRR.end ()) {
             // Case 1: More than two touches
-            if (_touches_map_RRR.size() > 2) {
+            if (_touches_map_RRR.size () > 2) {
                 // Erase the touch and update references if necessary
-                if (it->second->t->get_id() == _touch1->t->get_id()) {
-                    _touches_map_RRR.erase(it);
+                if (it->second->t->get_id () == _touch1->t->get_id ()) {
+                    _touches_map_RRR.erase (it);
                     delete rrr_touch;
-                    _touch1 = GetFirstNotId(_touches_map_RRR, _touch2->t->get_id());
-                } else if (it->second->t->get_id() == _touch2->t->get_id()) {
-                    _touches_map_RRR.erase(it);
+                    _touch1 = GetFirstNotId (_touches_map_RRR, _touch2->t->get_id ());
+                } else if (it->second->t->get_id () == _touch2->t->get_id ()) {
+                    _touches_map_RRR.erase (it);
                     delete rrr_touch;
-                    _touch2 = GetFirstNotId(_touches_map_RRR, _touch1->t->get_id());
+                    _touch2 = GetFirstNotId (_touches_map_RRR, _touch1->t->get_id ());
                 } else {
-                    _touches_map_RRR.erase(it);
+                    _touches_map_RRR.erase (it);
                     delete rrr_touch;
                 }
                 break;
-            } 
+            }
 
             // Case 2: Exactly two touches
-            if (_touches_map_RRR.size() == 2) {
+            if (_touches_map_RRR.size () == 2) {
                 // Erase the touch and update FSM state
-                if (it->second->t->get_id() == _touch1->t->get_id()) {
-                    _touches_map_RRR.erase(it);
+                if (it->second->t->get_id () == _touch1->t->get_id ()) {
+                    _touches_map_RRR.erase (it);
                     delete rrr_touch;
-                    _touch1 = _touch2;
-                    _touch2 = nullptr;
+                    _touch1            = _touch2;
+                    _touch2            = nullptr;
                     _current_FSM_state = DRAGGING;
-                } else if (it->second->t->get_id() == _touch2->t->get_id()) {
-                    _touches_map_RRR.erase(it);
+                } else if (it->second->t->get_id () == _touch2->t->get_id ()) {
+                    _touches_map_RRR.erase (it);
                     delete rrr_touch;
-                    _touch2 = nullptr;
+                    _touch2            = nullptr;
                     _current_FSM_state = DRAGGING;
                 }
                 break;
-            } 
+            }
         }
         break;
     default:
         break;
     }
 
-    //debug
-    //std::cerr << "Current State: " << print_state (_current_FSM_state) << std::endl;
+    // debug
+    // std::cerr << "Current State: " << print_state (_current_FSM_state) << std::endl;
 }
 
 void
@@ -702,10 +702,10 @@ RRR_MT::on_move_touch_event (Touch* touch)
     // debug
     // std::cerr << "- RRR_move_touch - " << t->get_id () << std::endl;
 
-    //debug - To avoid having too much irrelevant information.
-    //bool is_state_changed = false;
+    // debug - To avoid having too much irrelevant information.
+    // bool is_state_changed = false;
 
-    bool guard = false;
+    bool                           guard = false;
     map<int, RRR_touch*>::iterator it;
 
     Point touch_point (touch->get_move_x (), touch->get_move_y ());
@@ -717,9 +717,9 @@ RRR_MT::on_move_touch_event (Touch* touch)
 
         // action & goto
         if (guard) {
-           _touch1->new_pt = touch_point;
-           _current_FSM_state = DRAGGING;
-           //is_state_changed = true;
+            _touch1->new_pt    = touch_point;
+            _current_FSM_state = DRAGGING;
+            // is_state_changed = true;
         }
         break;
     case WAITHYST2:
@@ -727,36 +727,36 @@ RRR_MT::on_move_touch_event (Touch* touch)
         guard = (touch->get_id () == _touch1->t->get_id ()) && (Point::distance_sq (_touch1->new_pt, touch_point) > _distHyst);
 
         if (guard) {
-            _touch1->new_pt = touch_point ;
+            _touch1->new_pt    = touch_point;
             _current_FSM_state = RRR;
-            //is_state_changed = true;
+            // is_state_changed = true;
             break;
         }
-        
+
         // case 2 : _touch2
         guard = (touch->get_id () == _touch2->t->get_id ()) && (Point::distance_sq (_touch2->new_pt, touch_point) > _distHyst);
 
         if (guard) {
-            _touch2->new_pt = touch_point ;
+            _touch2->new_pt    = touch_point;
             _current_FSM_state = RRR;
-            //is_state_changed = true;
+            // is_state_changed = true;
             break;
         }
 
         // case 3 : another touch
-        it = _touches_map_RRR.find (touch->get_id ());
-        guard =  (it != _touches_map_RRR.end () &&  it->first != _touch1->t->get_id () && it->first != _touch2->t->get_id ());
+        it    = _touches_map_RRR.find (touch->get_id ());
+        guard = (it != _touches_map_RRR.end () && it->first != _touch1->t->get_id () && it->first != _touch2->t->get_id ());
 
         if (guard) {
             it->second->new_pt = touch_point;
         }
         break;
     case DRAGGING:
-        // case 1 : touch is _touch1 
+        // case 1 : touch is _touch1
         // guard & action
-        if (touch->get_id () == _touch1->t->get_id()) {
+        if (touch->get_id () == _touch1->t->get_id ()) {
             Vector v = Point::minus (touch_point, _touch1->new_pt);
-            _matrix->leftTranslate (v.dx (), v.dy());
+            _matrix->leftTranslate (v.dx (), v.dy ());
             _touch1->new_pt = touch_point;
             break;
         }
@@ -971,14 +971,14 @@ RR_T::on_move_touch_event (Touch* t)
         break;
     case RESIZING:
         // guard & action
-        if ((t->get_id() == _touchID1) || (t->get_id() == _touchID2)) {
-            Point &fixedPoint = (t->get_id() == _touchID1) ? _lastPoint2 : _lastPoint1;
-            Point &oldPoint = (t->get_id() == _touchID1) ? _lastPoint1 : _lastPoint2;
-            Point &newPoint = ta->new_pt;
+        if ((t->get_id () == _touchID1) || (t->get_id () == _touchID2)) {
+            Point& fixedPoint = (t->get_id () == _touchID1) ? _lastPoint2 : _lastPoint1;
+            Point& oldPoint   = (t->get_id () == _touchID1) ? _lastPoint1 : _lastPoint2;
+            Point& newPoint   = ta->new_pt;
 
-            computeResizing(_matrix, fixedPoint, oldPoint, newPoint);
+            computeResizing (_matrix, fixedPoint, oldPoint, newPoint);
 
-            if (t->get_id() == _touchID1) {
+            if (t->get_id () == _touchID1) {
                 _lastPoint1 = newPoint;
             } else {
                 _lastPoint2 = newPoint;

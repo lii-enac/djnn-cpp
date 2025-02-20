@@ -24,8 +24,7 @@
 namespace djnn {
 
 class Window;
-class Picking
-{
+class Picking {
   public:
     Picking (Window* win);
     virtual ~Picking ();
@@ -60,8 +59,7 @@ class Picking
     bool check_for_ui (PickUI* gobj);
 #else
     bool
-    check_for_ui (PickUI* gobj)
-    {
+    check_for_ui (PickUI* gobj) {
         return true;
     }
 #endif
