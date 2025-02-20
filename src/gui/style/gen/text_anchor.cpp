@@ -120,7 +120,10 @@ TextAnchor::impl_activate ()
 {
     AbstractStyle::impl_activate ();
     auto _frame = get_frame ();
-    enable (_canchor, _frame->damaged ());
+    if (_frame) {
+        enable (_canchor, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "TextAnchor::impl_activate () - Unable to find frame");
 }
 
 void

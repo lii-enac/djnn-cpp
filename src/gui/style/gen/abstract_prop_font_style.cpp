@@ -118,7 +118,10 @@ AbstractPropFontStyle::impl_activate ()
 {
     AbstractStyle::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cstyle, _frame->damaged ());
+    if (_frame) {
+        enable (_cstyle, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropFontStyle::impl_activate () - Unable to find frame");
 }
 
 void

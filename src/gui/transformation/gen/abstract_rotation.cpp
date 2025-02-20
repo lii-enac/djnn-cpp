@@ -144,9 +144,12 @@ AbstractRotation::impl_activate ()
 {
     AbstractTransformation::impl_activate ();
     auto _frame = get_frame ();
-    enable (_ca, _frame->damaged ());
-    enable (_ccx, _frame->damaged ());
-    enable (_ccy, _frame->damaged ());
+    if (_frame) {
+        enable (_ca, _frame->damaged ());
+        enable (_ccx, _frame->damaged ());
+        enable (_ccy, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractRotation::impl_activate () - Unable to find frame");
 }
 
 void

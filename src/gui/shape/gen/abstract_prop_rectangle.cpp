@@ -184,12 +184,15 @@ AbstractPropRectangle::impl_activate ()
 {
     AbstractGShape::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cx, _frame->damaged ());
-    enable (_cy, _frame->damaged ());
-    enable (_cwidth, _frame->damaged ());
-    enable (_cheight, _frame->damaged ());
-    enable (_crx, _frame->damaged ());
-    enable (_cry, _frame->damaged ());
+    if (_frame) {
+        enable (_cx, _frame->damaged ());
+        enable (_cy, _frame->damaged ());
+        enable (_cwidth, _frame->damaged ());
+        enable (_cheight, _frame->damaged ());
+        enable (_crx, _frame->damaged ());
+        enable (_cry, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropRectangle::impl_activate () - Unable to find frame");
 }
 
 void

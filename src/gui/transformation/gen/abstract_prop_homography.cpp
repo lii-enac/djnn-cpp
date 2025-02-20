@@ -313,22 +313,25 @@ AbstractPropHomography::impl_activate ()
 {
     AbstractTransformation::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cm11, _frame->damaged ());
-    enable (_cm12, _frame->damaged ());
-    enable (_cm13, _frame->damaged ());
-    enable (_cm14, _frame->damaged ());
-    enable (_cm21, _frame->damaged ());
-    enable (_cm22, _frame->damaged ());
-    enable (_cm23, _frame->damaged ());
-    enable (_cm24, _frame->damaged ());
-    enable (_cm31, _frame->damaged ());
-    enable (_cm32, _frame->damaged ());
-    enable (_cm33, _frame->damaged ());
-    enable (_cm34, _frame->damaged ());
-    enable (_cm41, _frame->damaged ());
-    enable (_cm42, _frame->damaged ());
-    enable (_cm43, _frame->damaged ());
-    enable (_cm44, _frame->damaged ());
+    if (_frame) {
+        enable (_cm11, _frame->damaged ());
+        enable (_cm12, _frame->damaged ());
+        enable (_cm13, _frame->damaged ());
+        enable (_cm14, _frame->damaged ());
+        enable (_cm21, _frame->damaged ());
+        enable (_cm22, _frame->damaged ());
+        enable (_cm23, _frame->damaged ());
+        enable (_cm24, _frame->damaged ());
+        enable (_cm31, _frame->damaged ());
+        enable (_cm32, _frame->damaged ());
+        enable (_cm33, _frame->damaged ());
+        enable (_cm34, _frame->damaged ());
+        enable (_cm41, _frame->damaged ());
+        enable (_cm42, _frame->damaged ());
+        enable (_cm43, _frame->damaged ());
+        enable (_cm44, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropHomography::impl_activate () - Unable to find frame");
 }
 
 void

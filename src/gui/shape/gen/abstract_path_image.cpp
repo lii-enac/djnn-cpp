@@ -119,7 +119,10 @@ AbstractPathImage::impl_activate ()
 {
     AbstractImage::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cpath, _frame->damaged ());
+    if (_frame) {
+        enable (_cpath, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPathImage::impl_activate () - Unable to find frame");
 }
 
 void

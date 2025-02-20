@@ -158,10 +158,13 @@ AbstractPropLine::impl_activate ()
 {
     AbstractGShape::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cx1, _frame->damaged ());
-    enable (_cy1, _frame->damaged ());
-    enable (_cx2, _frame->damaged ());
-    enable (_cy2, _frame->damaged ());
+    if (_frame) {
+        enable (_cx1, _frame->damaged ());
+        enable (_cy1, _frame->damaged ());
+        enable (_cx2, _frame->damaged ());
+        enable (_cy2, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropLine::impl_activate () - Unable to find frame");
 }
 
 void

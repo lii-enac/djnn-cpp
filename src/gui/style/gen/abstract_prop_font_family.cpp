@@ -118,7 +118,10 @@ AbstractPropFontFamily::impl_activate ()
 {
     AbstractStyle::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cfamily, _frame->damaged ());
+    if (_frame) {
+        enable (_cfamily, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropFontFamily::impl_activate () - Unable to find frame");
 }
 
 void

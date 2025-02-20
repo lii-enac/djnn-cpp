@@ -131,8 +131,11 @@ AbstractTranslation::impl_activate ()
 {
     AbstractTransformation::impl_activate ();
     auto _frame = get_frame ();
-    enable (_ctx, _frame->damaged ());
-    enable (_cty, _frame->damaged ());
+    if (_frame) {
+        enable (_ctx, _frame->damaged ());
+        enable (_cty, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractTranslation::impl_activate () - Unable to find frame");
 }
 
 void

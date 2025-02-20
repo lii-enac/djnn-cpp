@@ -168,11 +168,14 @@ AbstractPropGradientStop::impl_activate ()
 {
     AbstractStyle::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cr, _frame->damaged ());
-    enable (_cg, _frame->damaged ());
-    enable (_cb, _frame->damaged ());
-    enable (_ca, _frame->damaged ());
-    enable (_coffset, _frame->damaged ());
+    if (_frame) {
+        enable (_cr, _frame->damaged ());
+        enable (_cg, _frame->damaged ());
+        enable (_cb, _frame->damaged ());
+        enable (_ca, _frame->damaged ());
+        enable (_coffset, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropGradientStop::impl_activate () - Unable to find frame");
 }
 
 void

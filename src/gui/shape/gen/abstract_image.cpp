@@ -158,10 +158,13 @@ AbstractImage::impl_activate ()
 {
     AbstractGShape::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cx, _frame->damaged ());
-    enable (_cy, _frame->damaged ());
-    enable (_cwidth, _frame->damaged ());
-    enable (_cheight, _frame->damaged ());
+    if (_frame) {
+        enable (_cx, _frame->damaged ());
+        enable (_cy, _frame->damaged ());
+        enable (_cwidth, _frame->damaged ());
+        enable (_cheight, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractImage::impl_activate () - Unable to find frame");
 }
 
 void

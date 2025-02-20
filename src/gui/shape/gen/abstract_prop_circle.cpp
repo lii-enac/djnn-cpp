@@ -145,9 +145,12 @@ AbstractPropCircle::impl_activate ()
 {
     AbstractGShape::impl_activate ();
     auto _frame = get_frame ();
-    enable (_ccx, _frame->damaged ());
-    enable (_ccy, _frame->damaged ());
-    enable (_cr, _frame->damaged ());
+    if (_frame) {
+        enable (_ccx, _frame->damaged ());
+        enable (_ccy, _frame->damaged ());
+        enable (_cr, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropCircle::impl_activate () - Unable to find frame");
 }
 
 void

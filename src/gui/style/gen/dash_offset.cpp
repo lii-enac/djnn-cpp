@@ -120,7 +120,10 @@ DashOffset::impl_activate ()
 {
     AbstractStyle::impl_activate ();
     auto _frame = get_frame ();
-    enable (_coffset, _frame->damaged ());
+    if (_frame) {
+        enable (_coffset, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "DashOffset::impl_activate () - Unable to find frame");
 }
 
 void

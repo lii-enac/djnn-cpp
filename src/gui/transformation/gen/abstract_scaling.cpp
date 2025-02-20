@@ -157,10 +157,13 @@ AbstractScaling::impl_activate ()
 {
     AbstractTransformation::impl_activate ();
     auto _frame = get_frame ();
-    enable (_csx, _frame->damaged ());
-    enable (_csy, _frame->damaged ());
-    enable (_ccx, _frame->damaged ());
-    enable (_ccy, _frame->damaged ());
+    if (_frame) {
+        enable (_csx, _frame->damaged ());
+        enable (_csy, _frame->damaged ());
+        enable (_ccx, _frame->damaged ());
+        enable (_ccy, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractScaling::impl_activate () - Unable to find frame");
 }
 
 void

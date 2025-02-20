@@ -120,7 +120,10 @@ OutlineJoinStyle::impl_activate ()
 {
     AbstractStyle::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cjoin, _frame->damaged ());
+    if (_frame) {
+        enable (_cjoin, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "OutlineJoinStyle::impl_activate () - Unable to find frame");
 }
 
 void

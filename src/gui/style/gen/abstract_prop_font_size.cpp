@@ -131,8 +131,11 @@ AbstractPropFontSize::impl_activate ()
 {
     AbstractStyle::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cunit, _frame->damaged ());
-    enable (_csize, _frame->damaged ());
+    if (_frame) {
+        enable (_cunit, _frame->damaged ());
+        enable (_csize, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropFontSize::impl_activate () - Unable to find frame");
 }
 
 void

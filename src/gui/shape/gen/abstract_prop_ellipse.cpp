@@ -158,10 +158,13 @@ AbstractPropEllipse::impl_activate ()
 {
     AbstractGShape::impl_activate ();
     auto _frame = get_frame ();
-    enable (_ccx, _frame->damaged ());
-    enable (_ccy, _frame->damaged ());
-    enable (_crx, _frame->damaged ());
-    enable (_cry, _frame->damaged ());
+    if (_frame) {
+        enable (_ccx, _frame->damaged ());
+        enable (_ccy, _frame->damaged ());
+        enable (_crx, _frame->damaged ());
+        enable (_cry, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropEllipse::impl_activate () - Unable to find frame");
 }
 
 void

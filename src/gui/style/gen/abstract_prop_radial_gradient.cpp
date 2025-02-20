@@ -171,11 +171,14 @@ AbstractPropRadialGradient::impl_activate ()
 {
     AbstractGradient::impl_activate ();
     auto _frame = get_frame ();
-    enable (_ccx, _frame->damaged ());
-    enable (_ccy, _frame->damaged ());
-    enable (_cr, _frame->damaged ());
-    enable (_cfx, _frame->damaged ());
-    enable (_cfy, _frame->damaged ());
+    if (_frame) {
+        enable (_ccx, _frame->damaged ());
+        enable (_ccy, _frame->damaged ());
+        enable (_cr, _frame->damaged ());
+        enable (_cfx, _frame->damaged ());
+        enable (_cfy, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropRadialGradient::impl_activate () - Unable to find frame");
 }
 
 void
