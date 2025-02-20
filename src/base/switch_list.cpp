@@ -187,7 +187,7 @@ SwitchList::find_child_impl (const string& path)
 SwitchList*
 SwitchList::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const
 {
-    /*SwitchList* clone = new SwitchList (nullptr, get_name());
+    /*SwitchList* clone = new SwitchList (nullptr, get_name ());
     for (auto c : _children) {
       clone->add_child (c->clone (), c->get_name (this));
     }
