@@ -236,7 +236,7 @@ class CoreProcess {
     void          set_debug_name (const string& n) {}
 #endif
 
-    const string&                 get_name (CoreProcess* parent) const; // WARNING : low efficiency function cause by linear search. use with care !
+    const string&                 get_name (const CoreProcess* parent) const; // WARNING : low efficiency function cause by linear search. use with care !
     static vector<string>         default_properties_name;
     virtual const vector<string>& get_properties_name () const; // { vector<string> res; return res; }
     struct DebugInfo {

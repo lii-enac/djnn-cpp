@@ -254,7 +254,7 @@ ChildProcess::finalize_construction (CoreProcess* parent, const string& name, Co
 // management
 
 const string&
-CoreProcess::get_name (CoreProcess* parent) const
+CoreProcess::get_name (const CoreProcess* parent) const
 {
     return parent->find_child_name (this);
 }
