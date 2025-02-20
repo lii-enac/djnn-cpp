@@ -209,14 +209,17 @@ AbstractPropSound::impl_activate ()
 {
     AbstractSObj::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cgain, _frame->damaged ());
-    enable (_clowpass_gain, _frame->damaged ());
-    enable (_clowpass_freq, _frame->damaged ());
-    enable (_cx, _frame->damaged ());
-    enable (_cy, _frame->damaged ());
-    enable (_cz, _frame->damaged ());
-    enable (_cpitch_mul, _frame->damaged ());
-    enable (_cloop, _frame->damaged ());
+    if (_frame) {
+        enable (_cgain, _frame->damaged ());
+        enable (_clowpass_gain, _frame->damaged ());
+        enable (_clowpass_freq, _frame->damaged ());
+        enable (_cx, _frame->damaged ());
+        enable (_cy, _frame->damaged ());
+        enable (_cz, _frame->damaged ());
+        enable (_cpitch_mul, _frame->damaged ());
+        enable (_cloop, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropSound::impl_activate () - Unable to find frame");
 }
 
 void

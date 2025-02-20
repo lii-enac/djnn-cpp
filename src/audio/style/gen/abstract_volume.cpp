@@ -118,7 +118,10 @@ AbstractVolume::impl_activate ()
 {
     AbstractAudioStyle::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cvolume, _frame->damaged ());
+    if (_frame) {
+        enable (_cvolume, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractVolume::impl_activate () - Unable to find frame");
 }
 
 void
