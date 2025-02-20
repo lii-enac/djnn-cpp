@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# howTo
+# cd tools
+# ./format_clang.sh ../src/core 
+
 # Utiliser le premier argument comme répertoire. Si aucun argument n'est fourni, utiliser le répertoire courant.
 dir=${1:-.}
 
