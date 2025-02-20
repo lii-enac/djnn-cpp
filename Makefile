@@ -600,8 +600,8 @@ $1_lib_soname += -Wl,-flat_namespace,-undefined,dynamic_lookup
 else
 $1_lib_soname += -Wl,--no-undefined
 endif
-
 endif
+
 ifeq ($(linker), llvm)
 $1_lib_soname := -Wl,-install_name,$$(abspath $$(build_dir))/lib/$$($1_libname) -Wl,-current_version,1.0.0 -Wl,-compatibility_version,1.0.0 
 #$1_lib_soname :=
@@ -873,7 +873,7 @@ distclean clear:
 
 ifeq ($(PREFIX),)
 # dev install
-djnn_install_prefix :=  $(abspath $(build_dir))
+djnn_install_prefix := $(abspath $(build_dir))
 ifeq ($(os),Darwin)
 pkg_config_install_prefix := /usr/local
 else ifeq ($(os),vcpkg)
@@ -881,6 +881,7 @@ pkg_config_install_prefix := /Users/conversy/recherche/istar/code/misc/vcpkg/ins
 else
 pkg_config_install_prefix := /usr
 endif
+
 else
 # pkg install (brew, deb, arch)
 djnn_install_prefix := $(abspath $(DESTDIR)$(PREFIX))
@@ -890,6 +891,7 @@ sed_pkg_config_install_prefix := /usr
 else
 sed_pkg_config_install_prefix := pkg_config_install_prefix
 endif
+
 endif
 
 djnn_install_headers_dir ?= $(djnn_install_prefix)/include/djnn-cpp
