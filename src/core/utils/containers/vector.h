@@ -60,7 +60,7 @@ class vector {
     const_iterator rbegin () const;
     const_iterator rend () const;
 
-    T& operator[] (size_t);
+    T&       operator[] (size_t);
     const T& operator[] (size_t) const;
     T&       at (size_t);
     const T& at (size_t) const;

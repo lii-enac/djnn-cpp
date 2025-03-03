@@ -22,7 +22,6 @@
 #include "core/utils/error.h"
 #include "core/utils/utils-dev.h"
 
-
 namespace djnn {
 ProcessDeleter::ProcessDeleter (CoreProcess* parent, const string& name)
     : FatProcess (name),
@@ -178,7 +177,7 @@ ProcessCollector::find_child_impl (const string& path)
         else
             return get_parent ();
     }
-    
+
     if (path.compare ("rm_all") == 0)
         return &_s_rm_all;
     else if (path.compare ("add") == 0)

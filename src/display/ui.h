@@ -83,30 +83,30 @@ class UI {
     DoubleProperty* mouse_local_wheel_y () { return _mouse_local_wheel_y; }
 
     DoubleProperty* stylus_pen_pressure () { return _stylus_pen_pressure; }
-    FatProcess* stylus_pen_press () { return _stylus_pen_press; }
+    FatProcess*     stylus_pen_press () { return _stylus_pen_press; }
     DoubleProperty* stylus_pen_press_x () { return _stylus_pen_press_x; }
     DoubleProperty* stylus_pen_press_y () { return _stylus_pen_press_y; }
-    FatProcess* stylus_pen_release () { return _stylus_pen_release; }
+    FatProcess*     stylus_pen_release () { return _stylus_pen_release; }
     DoubleProperty* stylus_pen_release_x () { return _stylus_pen_release_x; }
     DoubleProperty* stylus_pen_release_y () { return _stylus_pen_release_y; }
-    FatProcess* stylus_pen_move () { return _stylus_pen_move; }
+    FatProcess*     stylus_pen_move () { return _stylus_pen_move; }
     DoubleProperty* stylus_pen_move_x () { return _stylus_pen_move_x; }
     DoubleProperty* stylus_pen_move_y () { return _stylus_pen_move_y; }
-    FatProcess* stylus_pen_enter () {return _stylus_pen_enter; }
-    FatProcess* stylus_pen_leave () {return _stylus_pen_leave; }
-    
+    FatProcess*     stylus_pen_enter () { return _stylus_pen_enter; }
+    FatProcess*     stylus_pen_leave () { return _stylus_pen_leave; }
+
     DoubleProperty* stylus_eraser_pressure () { return _stylus_eraser_pressure; }
-    FatProcess* stylus_eraser_press () { return _stylus_eraser_press; }
+    FatProcess*     stylus_eraser_press () { return _stylus_eraser_press; }
     DoubleProperty* stylus_eraser_press_x () { return _stylus_eraser_press_x; }
     DoubleProperty* stylus_eraser_press_y () { return _stylus_eraser_press_y; }
-    FatProcess* stylus_eraser_release () { return _stylus_eraser_release; }
+    FatProcess*     stylus_eraser_release () { return _stylus_eraser_release; }
     DoubleProperty* stylus_eraser_release_x () { return _stylus_eraser_release_x; }
     DoubleProperty* stylus_eraser_release_y () { return _stylus_eraser_release_y; }
-    FatProcess* stylus_eraser_move () { return _stylus_eraser_move; }
+    FatProcess*     stylus_eraser_move () { return _stylus_eraser_move; }
     DoubleProperty* stylus_eraser_move_x () { return _stylus_eraser_move_x; }
     DoubleProperty* stylus_eraser_move_y () { return _stylus_eraser_move_y; }
-    FatProcess* stylus_eraser_enter () {return _stylus_eraser_enter; }
-    FatProcess* stylus_eraser_leave () {return _stylus_eraser_leave; }
+    FatProcess*     stylus_eraser_enter () { return _stylus_eraser_enter; }
+    FatProcess*     stylus_eraser_leave () { return _stylus_eraser_leave; }
 
     DoubleProperty* wheel_dx () { return _wheel_dx; }
     DoubleProperty* wheel_dy () { return _wheel_dy; }

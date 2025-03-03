@@ -42,7 +42,7 @@ using djnnstl::endl;
 #include "core/control/assignment.h"
 #include "core/utils/utils-dev.h"
 
-static int graph_counter_act = 0;
+static int  graph_counter_act  = 0;
 static bool _display_info_once = false;
 
 #if _DEBUG_GRAPH_INSERT_TIME
@@ -341,7 +341,7 @@ print_data_flow_paths_save (Vertex* v)
         std::cerr << "!!! Multiples flow detected ";
     std::cerr << std::endl;
     int index = 0;
-    for (auto & s : data_flow_result)
+    for (auto& s : data_flow_result)
         std::cerr << index++ << ":" << std::endl
                   << s << std::endl;
 
@@ -418,8 +418,7 @@ Graph::exec ()
     if (_display_info_once == false) {
         if (_DEBUG_ENABLE_STRESS_TEST == 1) {
             std::cerr << "STRESS_TEST MODE ENABLED : shuffle" << std::endl;
-        }
-        else if (_DEBUG_ENABLE_STRESS_TEST == 2) {
+        } else if (_DEBUG_ENABLE_STRESS_TEST == 2) {
             std::cerr << "STRESS_TEST MODE ENABLED : reverse" << std::endl;
         }
         _display_info_once = true;
@@ -784,7 +783,7 @@ Graph::sort (Vertex* v_root)
 
     _sorted = true;
 
-    //print_sorted ();
+    // print_sorted ();
 
 #if _DEBUG_ENABLE_CHECK_ORDER
     if (!_pair_to_check.empty ()) {
@@ -850,29 +849,27 @@ Graph::traverse_depth_first (Vertex* v)
                 traverse_depth_first (v2);
             }
         }
-    }
-    else if (_DEBUG_ENABLE_STRESS_TEST == 1) {
-        auto __shuffle_edges = v->get_edges ();
+    } else if (_DEBUG_ENABLE_STRESS_TEST == 1) {
+        auto               __shuffle_edges = v->get_edges ();
         std::random_device rd;
-        std::mt19937 g(rd());
-    
+        std::mt19937       g (rd ());
+
         // debug
         // std::cerr << "shuffle " << __shuffle_edges.size () << " edges" << std::endl;
-        
-        std::shuffle(__shuffle_edges.begin(), __shuffle_edges.end(), g);
+
+        std::shuffle (__shuffle_edges.begin (), __shuffle_edges.end (), g);
         for (auto* v2 : __shuffle_edges) {
             if (v2->get_execution_round () < EXECUTION_ROUND) {
                 traverse_depth_first (v2);
             }
         }
-    }
-    else if (_DEBUG_ENABLE_STRESS_TEST == 2) {
+    } else if (_DEBUG_ENABLE_STRESS_TEST == 2) {
         auto __reverse_edges = v->get_edges ();
-    
-        // debug
-        //std::cerr << "reverse " << __reverse_edges.size () << " edges" << std::endl;
 
-        std::reverse(__reverse_edges.begin(), __reverse_edges.end());
+        // debug
+        // std::cerr << "reverse " << __reverse_edges.size () << " edges" << std::endl;
+
+        std::reverse (__reverse_edges.begin (), __reverse_edges.end ());
         for (auto* v2 : __reverse_edges) {
             if (v2->get_execution_round () < EXECUTION_ROUND) {
                 traverse_depth_first (v2);

@@ -66,7 +66,7 @@ static int
 ParseOffset (FatProcess** e, const char* v)
 {
     double value = 0;
-    int    ret = XML_Utils::djn_XMLParseLength (&value, v);
+    int    ret   = XML_Utils::djn_XMLParseLength (&value, v);
     if (ret == 2)
         value /= 100.;
     djn_GradientStopArgs.offset = value;

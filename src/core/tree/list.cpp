@@ -64,7 +64,7 @@ AbstractList::add_child (CoreProcess* child, const string& name)
     /* We don't want multiple parenthood */
     CoreProcess* parent = child->get_parent ();
     if (parent != nullptr && parent != this) {
-        //removed child from his own parent.
+        // removed child from his own parent.
         parent->remove_child (child);
     }
 

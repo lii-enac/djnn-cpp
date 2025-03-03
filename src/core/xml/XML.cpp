@@ -241,7 +241,7 @@ XML::djn_RegisterXMLParser (const string& uri, djn_XMLTagLookupProc l, const cha
         return 0;
     }
 
-    h         = (djn__XMLParser*)malloc (sizeof (djn__XMLParser));
+    h = (djn__XMLParser*)malloc (sizeof (djn__XMLParser));
     assert (h);
     h->lookup = l;
     h->format = f;
@@ -318,9 +318,9 @@ XML::djn__XMLPushTagHandler (djn_XMLTagHandler* h)
 {
     djn__XMLTagHandlerList* l = (djn__XMLTagHandlerList*)malloc (sizeof (djn__XMLTagHandlerList));
     assert (l);
-    l->handler                = h;
-    l->next                   = handlerStack;
-    handlerStack              = l;
+    l->handler   = h;
+    l->next      = handlerStack;
+    handlerStack = l;
 }
 
 djn_XMLTagHandler*

@@ -34,7 +34,7 @@ class SuperAbstractProperty : public FatProcess {
     void notify_parent () {
         if (_notify_mask != notify_none)
             if (auto* p = get_parent ())
-              p->notify_change (_notify_mask);
+                p->notify_change (_notify_mask);
     }
     unsigned int get_notify_mask () const { return _notify_mask; }
 

@@ -62,7 +62,7 @@ XMLSerializer::start (const string& name)
     cout << "<" << name;
 
     if (__curXMLDumpContext == 0) {
-        for (auto & module_name : djnn::loadedModules) {
+        for (auto& module_name : djnn::loadedModules) {
             int l = name.length () + 3;
             if (module_name.compare ("core") == 0)
                 cout << " xmlns:core=\"http://xml.djnn.net/2012/" << module_name << "\"";

@@ -526,7 +526,7 @@ TextField::add_str (const string& str)
 {
     if (str.empty ())
         return;
-    string cur_text = _line.get_content ();
+    string        cur_text = _line.get_content ();
     const string& cpy      = str;
     if (has_selection ())
         del_selection ();

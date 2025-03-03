@@ -68,7 +68,7 @@ parse_path (Path* p, const char* path_spec)
     int    num;
     int    firstPt  = 1;
     char   prevItem = ' ';
-    char   curItem = ' ';
+    char   curItem  = ' ';
 
     /* read a list of commands and their parameters */
     while (*path_spec) {

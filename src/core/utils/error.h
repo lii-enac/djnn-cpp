@@ -78,7 +78,14 @@ inline int djnn__exit (int ret) {
 
 #define error(p, msg)   djnn_error (p, msg)
 #define warning(p, msg) djnn_warning (p, msg)
-#define warn_once(p, msg) { static int once=0; if(!once) { djnn_warning (p, msg); once=1; } }
+#define warn_once(p, msg)          \
+    {                              \
+        static int once = 0;       \
+        if (!once) {               \
+            djnn_warning (p, msg); \
+            once = 1;              \
+        }                          \
+    }
 
 class Context {
   public:
