@@ -1,0 +1,139 @@
+#0
+build/src/gui/css-parser/scanner.cpp:1707: error: Dead Store
+  The value written to `&yy_current_state` is never used. 
+
+#1
+build/src/gui/css-parser/scanner.cpp:2263: error: Null Dereference
+  `b` could be null (from the call to `Cssalloc()` on line 2259) and is dereferenced. 
+
+#2
+build/src/gui/css-parser/scanner.cpp:2274: error: Null Dereference
+  `b->yy_ch_buf` could be null (from the call to `Cssalloc()` on line 2268) and is dereferenced in the call to `CssFlexLexer::yy_init_buffer()`. 
+
+#3
+src/base/text.cpp:253: error: Null Dereference
+  `p` could be null (from the call to `djnn::FatProcess::find_child_impl()` on line 251) and is dereferenced. 
+  251.                 AbstractTextProperty* p   = dynamic_cast<AbstractTextProperty*> (_parent->find_child_impl (std::to_string (i)));
+  252.                 const string          res = match.str (i).c_str (); // FIXME copy of string even if no EASTL (or not, if optimized?)
+  253.                 p->set_value (res, true);
+                       ^
+  254.             }
+  255.         }
+
+#4
+src/core/execution/graph.cpp:175: error: Use After Delete
+  accessing `v` that was invalidated by `delete` on line 175. 
+  173.     /* delete vertices from _vertices and clear */
+  174.     for (auto* v : _vertices)
+  175.         delete v;
+               ^
+  176.     _vertices.clear ();
+  177. 
+
+#5
+src/gui/interaction/interaction.cpp:456: error: Unnecessary Copy Assignment
+  `newPoint` is copy assigned into field `_lastPoint1` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  454.             Vector v        = Point::minus (newPoint, _lastPoint1);
+  455.             _matrix->leftTranslate (v.dx (), v.dy ());
+  456.             _lastPoint1 = newPoint;
+                   ^
+  457.         }
+  458.         break;
+
+#6
+src/gui/interaction/interaction.cpp:503: error: Unnecessary Copy Assignment
+  `std::move()` is copy assigned into field `new_pt` but is not modified afterwards. Even though `std::move` is called, nothing is actually getting moved (e.g. the type doesn't have a move operation) so make sure the copy is expected.
+  501. 
+  502.     RRR_touch* newTouch                      = new RRR_touch (this, added_touch);
+  503.     newTouch->new_pt                         = std::move (touch_point);
+           ^
+  504.     _touches_map_RRR[added_touch->get_id ()] = newTouch;
+  505. 
+
+#7
+src/gui/interaction/interaction.cpp:968: error: Unnecessary Copy Assignment
+  `std::move()` is copy assigned into field `_lastPoint1` but is not modified afterwards. Even though `std::move` is called, nothing is actually getting moved (e.g. the type doesn't have a move operation) so make sure the copy is expected.
+  966.             Vector v        = Point::minus (newPoint, _lastPoint1);
+  967.             _matrix->leftTranslate (v.dx (), v.dy ());
+  968.             _lastPoint1 = std::move (newPoint);
+                   ^
+  969.         }
+  970.         break;
+
+#8
+src/gui/interaction/interaction.cpp:983: error: Unnecessary Copy Assignment
+  `newPoint` is copy assigned into field `_lastPoint2` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  981.                 _lastPoint1 = newPoint;
+  982.             } else {
+  983.                 _lastPoint2 = newPoint;
+                       ^
+  984.             }
+  985.         }
+
+#9
+src/gui/qt/qt_backend.cpp:203: error: Unnecessary Copy Assignment
+  `&result` is copy assigned into field `gradientTransform` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  201.             double m33 = result.m33 ();
+  202.             result.setMatrix (m11, m12, m13, m21, m22, m23, m31, m32, m33);
+  203.             cur_context->gradientTransform = result;
+                   ^
+  204.         }
+  205.     }
+
+#10
+src/gui/qt/qt_backend_shapes.cpp:497: error: Unnecessary Copy Assignment
+  `&clip` is copy assigned into field `clip` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  495.         clip.addRect (x, y, w, h);
+  496.         _context->clipTransform = QTransform (_context->matrix.toTransform ());
+  497.         _context->clip          = clip;
+               ^
+  498.         return;
+  499.     }
+
+#11
+src/gui/qt/qt_backend_text.cpp:539: error: Unnecessary Copy Assignment
+  copy assigned variable `sub` is not modified after it is copied from `&text` on line 539. To avoid the copy, call `std::move` instead. If this copy was intentional, call `folly::copy` to make it explicit and hence suppress the warning.
+  537.     if (index >= text.length ()) {
+  538.         // infer:ignore
+  539.         sub = text;
+               ^
+  540.     } else {
+  541.         size_t i = 0;
+
+#12
+src/gui/qt/qt_backend_transformation.cpp:172: error: Unnecessary Copy Assignment
+  `&result` is copy assigned into field `gradientTransform` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  170.     QTransform newT (m11, m12, m13, m21, m22, m23, m31, m32, m33);
+  171.     QTransform result              = origin * newT;
+  172.     cur_context->gradientTransform = result;
+           ^
+  173. }
+  174. } /* namespace djnn */
+
+#13
+src/gui/shape/path.cpp:71: error: Dead Store
+  The value written to `&curItem` is never used. 
+  69.     int    firstPt  = 1;
+  70.     char   prevItem = ' ';
+  71.     char   curItem = ' ';
+          ^
+  72. 
+  73.     /* read a list of commands and their parameters */
+
+#14
+src/gui/widgets/multiline_edit.cpp:838: error: Unnecessary Copy
+  copied variable `cpy` is not modified after it is copied from `str` on line 838. To avoid the copy, use reference `&`. If this copy was intentional, call `folly::copy` to make it explicit and hence suppress the warning.
+  836.     string cur_text = _line->get_content ();
+  837.     // infer:ignore
+  838.     string cpy      = str;
+                             ^
+  839.     if (has_selection ())
+  840.         del_selection ();
+
+Found 15 issues
+                                      Issue Type(ISSUED_TYPE_ID): #
+  Unnecessary Copy Assignment(PULSE_UNNECESSARY_COPY_ASSIGNMENT): 8
+                           Null Dereference(NULLPTR_DEREFERENCE): 3
+                                          Dead Store(DEAD_STORE): 2
+                              Use After Delete(USE_AFTER_DELETE): 1
+                        Unnecessary Copy(PULSE_UNNECESSARY_COPY): 1

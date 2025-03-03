@@ -53,3 +53,9 @@ echo -e "\n"
 # Exécution de la commande Infer avec filtrage des erreurs dyld
 # cd .. &&  exec env INFER_CONFIG_FILE="$INFER_CONFIG_FILE" script -q /dev/null "$INFER_BIN" run --keep-going -- $TARGET 2>&1 | filter_output
 cd .. &&  exec script -q /dev/null "$INFER_BIN" run --keep-going -- $TARGET 2>&1 | filter_output
+
+# Copie du rapport infer
+cp "$PROJECT_ROOT/infer-out/"report.txt "$PROJECT_ROOT/tools/infer_report.txt"
+
+# Ouverture du report infer
+open "$PROJECT_ROOT/tools/infer_report.txt"
