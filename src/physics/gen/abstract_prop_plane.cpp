@@ -155,10 +155,13 @@ AbstractPropPlane::impl_activate ()
 {
     PhyObj::impl_activate ();
     auto _frame = get_frame ();
-    enable (_ca, _frame->damaged ());
-    enable (_cb, _frame->damaged ());
-    enable (_cc, _frame->damaged ());
-    enable (_cd, _frame->damaged ());
+    if (_frame) {
+        enable (_ca, _frame->damaged ());
+        enable (_cb, _frame->damaged ());
+        enable (_cc, _frame->damaged ());
+        enable (_cd, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropPlane::impl_activate () - Unable to find frame");
 }
 
 void

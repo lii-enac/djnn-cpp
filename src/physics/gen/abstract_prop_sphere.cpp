@@ -116,7 +116,10 @@ AbstractPropSphere::impl_activate ()
 {
     PhyObj::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cradius, _frame->damaged ());
+    if (_frame) {
+        enable (_cradius, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropSphere::impl_activate () - Unable to find frame");
 }
 
 void

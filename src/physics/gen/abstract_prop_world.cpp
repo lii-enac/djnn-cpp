@@ -155,10 +155,13 @@ AbstractPropWorld::impl_activate ()
 {
     AbstractPObj::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cx, _frame->damaged ());
-    enable (_cy, _frame->damaged ());
-    enable (_cz, _frame->damaged ());
-    enable (_cdt, _frame->damaged ());
+    if (_frame) {
+        enable (_cx, _frame->damaged ());
+        enable (_cy, _frame->damaged ());
+        enable (_cz, _frame->damaged ());
+        enable (_cdt, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropWorld::impl_activate () - Unable to find frame");
 }
 
 void

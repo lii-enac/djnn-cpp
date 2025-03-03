@@ -259,18 +259,21 @@ AbstractPropPhyObj::impl_activate ()
 {
     AbstractPObj::impl_activate ();
     auto _frame = get_frame ();
-    enable (_cx, _frame->damaged ());
-    enable (_cy, _frame->damaged ());
-    enable (_cz, _frame->damaged ());
-    enable (_cdx, _frame->damaged ());
-    enable (_cdy, _frame->damaged ());
-    enable (_cdz, _frame->damaged ());
-    enable (_croll, _frame->damaged ());
-    enable (_cpitch, _frame->damaged ());
-    enable (_cyall, _frame->damaged ());
-    enable (_cmass, _frame->damaged ());
-    enable (_cdensity, _frame->damaged ());
-    enable (_cfriction, _frame->damaged ());
+    if (_frame) {
+        enable (_cx, _frame->damaged ());
+        enable (_cy, _frame->damaged ());
+        enable (_cz, _frame->damaged ());
+        enable (_cdx, _frame->damaged ());
+        enable (_cdy, _frame->damaged ());
+        enable (_cdz, _frame->damaged ());
+        enable (_croll, _frame->damaged ());
+        enable (_cpitch, _frame->damaged ());
+        enable (_cyall, _frame->damaged ());
+        enable (_cmass, _frame->damaged ());
+        enable (_cdensity, _frame->damaged ());
+        enable (_cfriction, _frame->damaged ());
+    } else
+        djnn_error (nullptr, "AbstractPropPhyObj::impl_activate () - Unable to find frame");
 }
 
 void
