@@ -521,12 +521,14 @@ Graph::exec ()
             data_flow_paths_save.clear ();
 #endif
 
+#ifndef DJNN_NO_DEBUG
         // use only of _DEBUG_GRAPH_CYCLE_DETECT
         //  note: These two variables are merely a safeguard against the
         //  detection of false cycles caused by an erroneous topological sort.
         //  The MAX is merely a palliative value and is not a solution in itself.
         int local_cycle_counter = 0;
         int MAX_cycle_accepted  = 2;
+#endif
 
         Vertex* v = nullptr;
         while (!_activation_deque.empty ()) {
@@ -841,6 +843,7 @@ Graph::traverse_depth_first (Vertex* v)
 
     v->set_execution_round (EXECUTION_ROUND);
 
+#ifndef DJNN_NO_DEBUG
     if (_DEBUG_ENABLE_STRESS_TEST == 0) {
         for (auto* v2 : v->get_edges ()) {
             if (v2->get_execution_round () < EXECUTION_ROUND) {
@@ -876,6 +879,7 @@ Graph::traverse_depth_first (Vertex* v)
             }
         }
     }
+#endif
 
     v->set_order_stamp (++_cur_stamp);
 }
