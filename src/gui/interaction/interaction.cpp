@@ -92,7 +92,7 @@ V GetFirstNotId(std::map<K, V>& m, const K& id) {
 }
 
 static void
-LeftRotateByVector (AbstractHomography* matrix, Vector u, Vector v, Point center)
+LeftRotateByVector (AbstractHomography* matrix, const Vector& u, const Vector& v, const Point& center)
 {
 
     // Compute transform matrix for shape
@@ -136,7 +136,7 @@ LeftRotateByVector (AbstractHomography* matrix, Vector u, Vector v, Point center
 }
 
 static void
-leftScale (AbstractHomography* matrix, double scale, Point center)
+leftScale (AbstractHomography* matrix, double scale, const Point& center)
 {
 
     Matrix4x4 t (matrix->m11 ()->get_value (), matrix->m12 ()->get_value (), matrix->m13 ()->get_value (), matrix->m14 ()->get_value (),

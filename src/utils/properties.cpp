@@ -74,7 +74,7 @@ Properties::impl_deactivate ()
 void
 Properties::add_property ()
 {
-    string s     = _input->get_value ();
+    string& s     = _input->get_value ();
     size_t found = s.find_first_of ('=');
     if (found == string::npos)
         return;

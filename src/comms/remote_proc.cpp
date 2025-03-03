@@ -121,7 +121,7 @@ RemoteProc::ReceiveAction::run ()
         vector<string> msg = tokenize (buffer, sz);
 
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
-        for (auto s : msg) {
+        for (auto& s : msg) {
             std::size_t found = s.find ('=');
             if (found != string::npos) {
                 dist_map_t::iterator it = props.find (s.substr (0, found));

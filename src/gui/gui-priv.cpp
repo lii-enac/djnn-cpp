@@ -110,7 +110,7 @@ GUIStructureHolder::draw ()
     // if other container
     else {
         ComponentObserver::instance ().start_draw ();
-        for (auto p : _children) {
+        for (auto& p : _children) {
             p.first->draw ();
         }
         ComponentObserver::instance ().end_draw ();
@@ -129,7 +129,7 @@ GUIStructureHolder::pick_analytical (PickAnalyticalContext& pac)
 {
     AbstractGShape* picked    = nullptr;
     auto            saved_pac = pac;
-    for (auto p : _children) {
+    for (auto& p : _children) {
         AbstractGShape* picked_ = p.first->pick_analytical (pac);
         if (picked_)
             picked = picked_;

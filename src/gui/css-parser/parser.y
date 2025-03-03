@@ -128,7 +128,7 @@ std::string filename_tmp;
   }
 
   void
-  make_num_property (djnnstl::string property, float arg)
+  make_num_property (const djnnstl::string& property, float arg)
   {
     if (property == "fill") {
       new FillColor (cur_parent, "fill", arg);

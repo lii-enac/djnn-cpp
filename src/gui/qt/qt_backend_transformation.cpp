@@ -166,7 +166,7 @@ QtBackend::load_gradient_homography (AbstractHomography* h)
     double m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44;
     h->get_properties_values (m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
     QtContext* cur_context = _context_manager->get_current ();
-    QTransform origin      = cur_context->gradientTransform;
+    QTransform& origin      = cur_context->gradientTransform;
     QTransform newT (m11, m12, m13, m21, m22, m23, m31, m32, m33);
     QTransform result              = origin * newT;
     cur_context->gradientTransform = result;

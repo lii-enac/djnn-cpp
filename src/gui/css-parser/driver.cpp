@@ -36,11 +36,13 @@ Driver::parse_stream (std::istream& in, const string& name, FatProcess* p)
     stream = name.c_str ();
 
     Scanner scanner (&in);
-    this->_lexer = &scanner;
+    this->_lexer = &scanner;  // Assign lexer 
     Parser parser (*this);
-    _lexer = nullptr; // scanner will not exist anymore when the method returns
 
-    return (parser.parse () == 0);
+    bool result = (parser.parse () == 0);  // call parse() before updating _lexer to nullptr
+    _lexer = nullptr;
+
+    return result;
 }
 
 bool

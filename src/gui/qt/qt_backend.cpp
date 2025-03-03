@@ -185,7 +185,7 @@ QtBackend::load_drawing_context (AbstractGShape* s, QtContext* cur_context, doub
      * the translation values in the global coordinate system*/
     if (cur_context->brush.style () == Qt::LinearGradientPattern || cur_context->brush.style () == Qt::RadialGradientPattern) {
         if (cur_context->brush.gradient ()->coordinateMode () == QGradient::ObjectBoundingMode) {
-            QTransform origin = cur_context->gradientTransform;
+            QTransform& origin = cur_context->gradientTransform;
             QTransform newT   = QTransform ();
             newT.translate (tx, ty);
             QTransform result = origin * newT;

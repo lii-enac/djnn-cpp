@@ -24,9 +24,9 @@ namespace djnn {
 void
 QtBackend::open_dialog (FileDialog* dialog)
 {
-    string    title  = dialog->title ().get_value ();
-    string    from   = dialog->from ().get_value ();
-    string    filter = dialog->filter ().get_value ();
+    const string&    title  = dialog->title ().get_value ();
+    const string&    from   = dialog->from ().get_value ();
+    const string&    filter = dialog->filter ().get_value ();
     auto      frame  = dialog->get_frame ();
     QtWindow* impl   = dynamic_cast<QtWindow*> (frame->win_impl ());
     if (impl == nullptr)
@@ -42,9 +42,9 @@ QtBackend::open_dialog (FileDialog* dialog)
 void
 QtBackend::save_dialog (FileDialog* dialog)
 {
-    string    title  = dialog->title ().get_value ();
-    string    from   = dialog->from ().get_value ();
-    string    filter = dialog->filter ().get_value ();
+    const string&    title  = dialog->title ().get_value ();
+    const string&    from   = dialog->from ().get_value ();
+    const string&    filter = dialog->filter ().get_value ();
     auto      frame  = dialog->get_frame ();
     QtWindow* impl   = dynamic_cast<QtWindow*> (frame->win_impl ());
     if (impl == nullptr)

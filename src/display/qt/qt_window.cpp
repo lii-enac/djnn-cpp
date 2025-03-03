@@ -87,24 +87,27 @@ QtWindow::impl_activate ()
 {
     QtDisplayBackend::instance ()->add_window (this);
     _qwidget = dynamic_cast<QtDisplayBackend*> (DisplayBackend::instance ())->create_qwidget (_window, this);
-    WinImpl::set_picking_view (_qwidget->get_picking_view ());
+    if (_qwidget) {
+        WinImpl::set_picking_view (_qwidget->get_picking_view ());
 
-    if (mouse_tracking)
-        _qwidget->setMouseTracking (true);
-    if (full_screen)
-        _qwidget->setWindowState (_qwidget->windowState () ^ Qt::WindowFullScreen);
-    if (hide_pointer)
-        _qwidget->setCursor (Qt::BlankCursor);
+        if (mouse_tracking)
+            _qwidget->setMouseTracking (true);
+        if (full_screen)
+            _qwidget->setWindowState (_qwidget->windowState () ^ Qt::WindowFullScreen);
+        if (hide_pointer)
+            _qwidget->setCursor (Qt::BlankCursor);
 
-    QRect rect (_window->pos_x ()->get_value (), _window->pos_y ()->get_value (), _window->width ()->get_value (),
-                _window->height ()->get_value ());
-    _qwidget->setGeometry (rect);
-    _window->set_background_opacity_and_color ();
-    _qwidget->setParent (0); // Create TopLevel-Widget
-    _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());
-    _qwidget->set_building (true);
-    _qwidget->show ();
-    _qwidget->set_building (false);
+        QRect rect (_window->pos_x ()->get_value (), _window->pos_y ()->get_value (), _window->width ()->get_value (),
+                    _window->height ()->get_value ());
+        _qwidget->setGeometry (rect);
+        _window->set_background_opacity_and_color ();
+        _qwidget->setParent (0); // Create TopLevel-Widget
+        _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());
+        _qwidget->set_building (true);
+        _qwidget->show ();
+        _qwidget->set_building (false);
+    } else
+        djnn_error (nullptr, "QtWindow::impl_activate () - Unable to create QtWindow");
 }
 
 void

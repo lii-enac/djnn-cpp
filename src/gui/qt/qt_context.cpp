@@ -132,7 +132,7 @@ QtVectorShapeToDraw::add_item (AbstractGShape* shape, QtContext* context)
 void
 QtVectorShapeToDraw::draw ()
 {
-    for (auto p : _shapes) {
+    for (auto& p : _shapes) {
         p.first->draw ();
     }
 }

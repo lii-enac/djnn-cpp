@@ -515,7 +515,7 @@ TextField::del_selection ()
 void
 TextField::add_string_input ()
 {
-    string str = _str_input.get_value ();
+    string& str = _str_input.get_value ();
     if (str.empty ())
         return;
     add_str (str);
@@ -527,7 +527,7 @@ TextField::add_str (const string& str)
     if (str.empty ())
         return;
     string cur_text = _line.get_content ();
-    string cpy      = str;
+    const string& cpy      = str;
     if (has_selection ())
         del_selection ();
 
@@ -559,7 +559,7 @@ TextField::copy ()
 void
 TextField::paste ()
 {
-    string str = _copy_buffer.get_value ();
+    string& str = _copy_buffer.get_value ();
     add_str (str);
 }
 

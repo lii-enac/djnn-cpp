@@ -104,13 +104,13 @@ QtBackend::draw_z_ordered_group (ZOrderedGroup* g)
     if (h == nullptr) {
         return;
     }
-    for (auto c : h->children ()) {
+    for (auto& c : h->children ()) {
         c.first->draw ();
     }
     djnnstl::sort (shapes_vectors.begin (), shapes_vectors.end (), compare_z_order);
     z_processing_step = 2;
     for (auto v : shapes_vectors) {
-        for (auto item : v->shapes ()) {
+        for (auto& item : v->shapes ()) {
             cur_context = &item.second;
             item.first->draw ();
         }
@@ -599,7 +599,7 @@ QtBackend::draw_image (Image* i)
     /* manage opacity on image */
     qreal old_opacity = _painter->opacity ();
 
-    QColor c = _context->brush.color ();
+    const QColor& c = _context->brush.color ();
     _painter->setOpacity (c.alphaF ());
     //_painter->setRenderHint (QPainter::SmoothPixmapTransform); // do not need anymore if djnn::Layer is used correctly
     _painter->drawPixmap (rect, *pm);

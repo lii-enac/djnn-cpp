@@ -65,7 +65,7 @@ ParseStopOpacity (FatProcess** e, const char* v)
 static int
 ParseOffset (FatProcess** e, const char* v)
 {
-    double value;
+    double value = 0;
     int    ret = XML_Utils::djn_XMLParseLength (&value, v);
     if (ret == 2)
         value /= 100.;

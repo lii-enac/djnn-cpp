@@ -58,7 +58,7 @@ QtBackend::draw_simple_text (SimpleText* t, QFontMetrics* fm, int posX, int posY
     load_drawing_context (t, _context, posX, posY, 1, 1);
     // rmt_EndCPUSample ();
     QPointF p (posX, posY);
-    QPen    oldPen = _context->pen;
+    QPen&   oldPen = _context->pen;
     QPen    newPen (oldPen);
 
     newPen.setColor (_context->brush.color ());
@@ -344,8 +344,8 @@ QtBackend::draw_text (Text* t)
 
     /* Qt draws text with the outline color
      but we want it to use the fill color */
-    QPen oldPen = _context->pen;
-    QPen newPen (oldPen);
+    QPen& oldPen = _context->pen;
+    QPen  newPen (oldPen);
     newPen.setColor (_context->brush.color ());
     if (_context->brush.style () == Qt::SolidPattern)
         newPen.setStyle (Qt::SolidLine);
@@ -424,7 +424,7 @@ QtBackend::get_cursor_from_index (Text* t, int i)
 }
 
 static int
-next_index (size_t i, string& str)
+next_index (size_t i, const string& str)
 {
     if (i > str.size ())
         return i;
@@ -439,7 +439,7 @@ next_index (size_t i, string& str)
 pair<double, int>
 QtBackend::get_cursor_from_local_x (Text* t, double loc_x)
 {
-    string text = t->get_raw_text ();
+    const string& text = t->get_raw_text ();
     if (text.length () == 0)
         return pair<double, int> (0, 0);
     QString       s (text.c_str ());
