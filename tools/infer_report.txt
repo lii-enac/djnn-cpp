@@ -1,26 +1,34 @@
 #0
 build/src/gui/css-parser/scanner.cpp:1707: error: Dead Store
   The value written to `&yy_current_state` is never used. 
+  1705. 				(yy_c_buf_p) =
+  1706. 				&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[(yy_n_chars)];
+  1707. 
+            ^
+  1708. 				yy_current_state = yy_get_previous_state(  );
+  1709. 
 
 #1
 build/src/gui/css-parser/scanner.cpp:2263: error: Null Dereference
   `b` could be null (from the call to `Cssalloc()` on line 2259) and is dereferenced. 
+  2261. 	if ( ! b )
+  2262. 		YY_FATAL_ERROR( "out of dynamic memory in yy_create_buffer()" );
+  2263. 
+         ^
+  2264. 	b->yy_buf_size = size;
+  2265. 
 
 #2
 build/src/gui/css-parser/scanner.cpp:2274: error: Null Dereference
   `b->yy_ch_buf` could be null (from the call to `Cssalloc()` on line 2268) and is dereferenced in the call to `CssFlexLexer::yy_init_buffer()`. 
+  2272. 
+  2273. 	b->yy_is_our_buffer = 1;
+  2274. 
+         ^
+  2275. 	yy_init_buffer( b, file );
+  2276. 
 
 #3
-src/base/text.cpp:253: error: Null Dereference
-  `p` could be null (from the call to `djnn::FatProcess::find_child_impl()` on line 251) and is dereferenced. 
-  251.                 AbstractTextProperty* p   = dynamic_cast<AbstractTextProperty*> (_parent->find_child_impl (std::to_string (i)));
-  252.                 const string          res = match.str (i).c_str (); // FIXME copy of string even if no EASTL (or not, if optimized?)
-  253.                 p->set_value (res, true);
-                       ^
-  254.             }
-  255.         }
-
-#4
 src/core/execution/graph.cpp:175: error: Use After Delete
   accessing `v` that was invalidated by `delete` on line 175. 
   173.     /* delete vertices from _vertices and clear */
@@ -30,47 +38,117 @@ src/core/execution/graph.cpp:175: error: Use After Delete
   176.     _vertices.clear ();
   177. 
 
+#4
+src/core/ontology/process.cpp:831: error: Dead Store
+  The value written to `&name` is never used. 
+  829. {
+  830.     map<const CoreProcess*, CoreProcess*> origs_clones;
+  831.     const string* name = &default_name;
+           ^
+  832.     if (auto *p = get_parent ())
+  833.         name = &get_name (p);
+
 #5
-src/gui/interaction/interaction.cpp:456: error: Unnecessary Copy Assignment
-  `newPoint` is copy assigned into field `_lastPoint1` but is not modified afterwards. Rather than copying into the field, move into it instead.
-  454.             Vector v        = Point::minus (newPoint, _lastPoint1);
-  455.             _matrix->leftTranslate (v.dx (), v.dy ());
-  456.             _lastPoint1 = newPoint;
-                   ^
-  457.         }
-  458.         break;
+src/gui/XML/SVGShapeAttrs.cpp:386: error: Dead Store
+  The value written to `&v` is never used. 
+  384.     if (*vv != ')')
+  385.         goto invalid;
+  386.     ++v;
+           ^
+  387.     new Homography (*el, "matrix", a, c, 0, e, b, d, 0, f, 0, 0, 1, 0, 0, 0, 0, 1);
+  388.     return 1;
 
 #6
-src/gui/interaction/interaction.cpp:503: error: Unnecessary Copy Assignment
-  `std::move()` is copy assigned into field `new_pt` but is not modified afterwards. Even though `std::move` is called, nothing is actually getting moved (e.g. the type doesn't have a move operation) so make sure the copy is expected.
-  501. 
-  502.     RRR_touch* newTouch                      = new RRR_touch (this, added_touch);
-  503.     newTouch->new_pt                         = std::move (touch_point);
-           ^
-  504.     _touches_map_RRR[added_touch->get_id ()] = newTouch;
-  505. 
+src/gui/interaction/interaction.cpp:454: error: Unnecessary Copy
+  copied variable `newPoint` is not modified after it is copied from `ta->new_pt` on line 454. To avoid the copy, use reference `&`. If this copy was intentional, call `folly::copy` to make it explicit and hence suppress the warning.
+  452.         // guard & action
+  453.         if (t->get_id () == _touchID1) {
+  454.             Point  newPoint = ta->new_pt;
+                                     ^
+  455.             Vector v        = Point::minus (newPoint, _lastPoint1);
+  456.             _matrix->leftTranslate (v.dx (), v.dy ());
 
 #7
-src/gui/interaction/interaction.cpp:968: error: Unnecessary Copy Assignment
-  `std::move()` is copy assigned into field `_lastPoint1` but is not modified afterwards. Even though `std::move` is called, nothing is actually getting moved (e.g. the type doesn't have a move operation) so make sure the copy is expected.
-  966.             Vector v        = Point::minus (newPoint, _lastPoint1);
-  967.             _matrix->leftTranslate (v.dx (), v.dy ());
-  968.             _lastPoint1 = std::move (newPoint);
+src/gui/interaction/interaction.cpp:457: error: Unnecessary Copy Assignment
+  `&newPoint` is copy assigned into field `_lastPoint1` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  455.             Vector v        = Point::minus (newPoint, _lastPoint1);
+  456.             _matrix->leftTranslate (v.dx (), v.dy ());
+  457.             _lastPoint1 = newPoint;
                    ^
-  969.         }
-  970.         break;
+  458.         }
+  459.         break;
 
 #8
-src/gui/interaction/interaction.cpp:983: error: Unnecessary Copy Assignment
-  `newPoint` is copy assigned into field `_lastPoint2` but is not modified afterwards. Rather than copying into the field, move into it instead.
-  981.                 _lastPoint1 = newPoint;
-  982.             } else {
-  983.                 _lastPoint2 = newPoint;
+src/gui/interaction/interaction.cpp:479: error: Unnecessary Copy Assignment
+  `&newPoint1` is copy assigned into field `_lastPoint1` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  477.             bool RRRapplied = computeRRR (_matrix, fixedPoint, oldPoint, newPoint);
+  478.             if (RRRapplied) {
+  479.                 _lastPoint1 = newPoint1;
                        ^
-  984.             }
-  985.         }
+  480.                 _lastPoint2 = newPoint2;
+  481.             }
 
 #9
+src/gui/interaction/interaction.cpp:480: error: Unnecessary Copy Assignment
+  `&newPoint2` is copy assigned into field `_lastPoint2` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  478.             if (RRRapplied) {
+  479.                 _lastPoint1 = newPoint1;
+  480.                 _lastPoint2 = newPoint2;
+                       ^
+  481.             }
+  482.         }
+
+#10
+src/gui/interaction/interaction.cpp:504: error: Unnecessary Copy Assignment
+  `&touch_point` is copy assigned into field `new_pt` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  502. 
+  503.     RRR_touch* newTouch                      = new RRR_touch (this, added_touch);
+  504.     newTouch->new_pt                         = touch_point;
+           ^
+  505.     _touches_map_RRR[added_touch->get_id ()] = newTouch;
+  506. 
+
+#11
+src/gui/interaction/interaction.cpp:966: error: Unnecessary Copy
+  copied variable `newPoint` is not modified after it is copied from `ta->new_pt` on line 966. To avoid the copy, use reference `&`. If this copy was intentional, call `folly::copy` to make it explicit and hence suppress the warning.
+  964.         // guard & action
+  965.         if (t->get_id () == _touchID1) {
+  966.             Point  newPoint = ta->new_pt;
+                                     ^
+  967.             Vector v        = Point::minus (newPoint, _lastPoint1);
+  968.             _matrix->leftTranslate (v.dx (), v.dy ());
+
+#12
+src/gui/interaction/interaction.cpp:969: error: Unnecessary Copy Assignment
+  `&newPoint` is copy assigned into field `_lastPoint1` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  967.             Vector v        = Point::minus (newPoint, _lastPoint1);
+  968.             _matrix->leftTranslate (v.dx (), v.dy ());
+  969.             _lastPoint1 = newPoint;
+                   ^
+  970.         }
+  971.         break;
+
+#13
+src/gui/interaction/interaction.cpp:982: error: Unnecessary Copy Assignment
+  `newPoint` is copy assigned into field `_lastPoint1` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  980. 
+  981.             if (t->get_id () == _touchID1) {
+  982.                 _lastPoint1 = newPoint;
+                       ^
+  983.             } else {
+  984.                 _lastPoint2 = newPoint;
+
+#14
+src/gui/interaction/interaction.cpp:984: error: Unnecessary Copy Assignment
+  `newPoint` is copy assigned into field `_lastPoint2` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  982.                 _lastPoint1 = newPoint;
+  983.             } else {
+  984.                 _lastPoint2 = newPoint;
+                       ^
+  985.             }
+  986.         }
+
+#15
 src/gui/qt/qt_backend.cpp:203: error: Unnecessary Copy Assignment
   `&result` is copy assigned into field `gradientTransform` but is not modified afterwards. Rather than copying into the field, move into it instead.
   201.             double m33 = result.m33 ();
@@ -80,7 +158,7 @@ src/gui/qt/qt_backend.cpp:203: error: Unnecessary Copy Assignment
   204.         }
   205.     }
 
-#10
+#16
 src/gui/qt/qt_backend_shapes.cpp:497: error: Unnecessary Copy Assignment
   `&clip` is copy assigned into field `clip` but is not modified afterwards. Rather than copying into the field, move into it instead.
   495.         clip.addRect (x, y, w, h);
@@ -90,50 +168,60 @@ src/gui/qt/qt_backend_shapes.cpp:497: error: Unnecessary Copy Assignment
   498.         return;
   499.     }
 
-#11
-src/gui/qt/qt_backend_text.cpp:539: error: Unnecessary Copy Assignment
-  copy assigned variable `sub` is not modified after it is copied from `&text` on line 539. To avoid the copy, call `std::move` instead. If this copy was intentional, call `folly::copy` to make it explicit and hence suppress the warning.
-  537.     if (index >= text.length ()) {
-  538.         // infer:ignore
-  539.         sub = text;
-               ^
-  540.     } else {
-  541.         size_t i = 0;
+#17
+src/gui/qt/qt_backend_style.cpp:257: error: Unnecessary Copy Assignment
+  `&brush` is copy assigned into field `brush` but is not modified afterwards. Rather than copying into the field, move into it instead.
+  255.     }
+  256.     QBrush brush (*cur_gradient);
+  257.     _context_manager->get_current ()->brush = brush;
+           ^
+  258. }
+  259. 
 
-#12
+#18
+src/gui/qt/qt_backend_text.cpp:538: error: Unnecessary Copy Assignment
+  copy assigned variable `sub` is not modified after it is copied from `&text` on line 538. To avoid the copy, call `std::move` instead. If this copy was intentional, call `folly::copy` to make it explicit and hence suppress the warning.
+  536.     string sub;
+  537.     if (index >= text.length ()) {
+  538.         sub = text;
+               ^
+  539.     } else {
+  540.         size_t i = 0;
+
+#19
 src/gui/qt/qt_backend_transformation.cpp:172: error: Unnecessary Copy Assignment
   `&result` is copy assigned into field `gradientTransform` but is not modified afterwards. Rather than copying into the field, move into it instead.
-  170.     QTransform newT (m11, m12, m13, m21, m22, m23, m31, m32, m33);
-  171.     QTransform result              = origin * newT;
+  170.     QTransform  newT (m11, m12, m13, m21, m22, m23, m31, m32, m33);
+  171.     QTransform  result             = origin * newT;
   172.     cur_context->gradientTransform = result;
            ^
   173. }
   174. } /* namespace djnn */
 
-#13
+#20
 src/gui/shape/path.cpp:71: error: Dead Store
   The value written to `&curItem` is never used. 
   69.     int    firstPt  = 1;
   70.     char   prevItem = ' ';
-  71.     char   curItem = ' ';
+  71.     char   curItem  = ' ';
           ^
   72. 
   73.     /* read a list of commands and their parameters */
 
-#14
-src/gui/widgets/multiline_edit.cpp:838: error: Unnecessary Copy
-  copied variable `cpy` is not modified after it is copied from `str` on line 838. To avoid the copy, use reference `&`. If this copy was intentional, call `folly::copy` to make it explicit and hence suppress the warning.
+#21
+src/gui/widgets/multiline_edit.cpp:837: error: Unnecessary Copy
+  copied variable `cpy` is not modified after it is copied from `str` on line 837. To avoid the copy, use reference `&`. If this copy was intentional, call `folly::copy` to make it explicit and hence suppress the warning.
+  835.         return;
   836.     string cur_text = _line->get_content ();
-  837.     // infer:ignore
-  838.     string cpy      = str;
+  837.     string cpy      = str;
                              ^
-  839.     if (has_selection ())
-  840.         del_selection ();
+  838.     if (has_selection ())
+  839.         del_selection ();
 
-Found 15 issues
+Found 22 issues
                                       Issue Type(ISSUED_TYPE_ID): #
-  Unnecessary Copy Assignment(PULSE_UNNECESSARY_COPY_ASSIGNMENT): 8
-                           Null Dereference(NULLPTR_DEREFERENCE): 3
-                                          Dead Store(DEAD_STORE): 2
+  Unnecessary Copy Assignment(PULSE_UNNECESSARY_COPY_ASSIGNMENT): 12
+                                          Dead Store(DEAD_STORE): 4
+                        Unnecessary Copy(PULSE_UNNECESSARY_COPY): 3
+                           Null Dereference(NULLPTR_DEREFERENCE): 2
                               Use After Delete(USE_AFTER_DELETE): 1
-                        Unnecessary Copy(PULSE_UNNECESSARY_COPY): 1
