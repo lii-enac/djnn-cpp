@@ -149,7 +149,7 @@ AbstractRotation::impl_activate ()
         enable (_ccx, _frame->damaged ());
         enable (_ccy, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractRotation::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractRotation::impl_activate () - Unable to find frame\n\n");
 }
 
 void

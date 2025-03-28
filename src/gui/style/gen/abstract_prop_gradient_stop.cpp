@@ -175,7 +175,7 @@ AbstractPropGradientStop::impl_activate ()
         enable (_ca, _frame->damaged ());
         enable (_coffset, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropGradientStop::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropGradientStop::impl_activate () - Unable to find frame\n\n");
 }
 
 void

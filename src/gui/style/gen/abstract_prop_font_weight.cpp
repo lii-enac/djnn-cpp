@@ -121,7 +121,7 @@ AbstractPropFontWeight::impl_activate ()
     if (_frame) {
         enable (_cweight, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropFontWeight::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropFontWeight::impl_activate () - Unable to find frame\n\n");
 }
 
 void

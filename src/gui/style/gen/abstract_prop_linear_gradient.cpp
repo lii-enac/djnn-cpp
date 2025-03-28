@@ -164,7 +164,7 @@ AbstractPropLinearGradient::impl_activate ()
         enable (_cx2, _frame->damaged ());
         enable (_cy2, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropLinearGradient::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropLinearGradient::impl_activate () - Unable to find frame\n\n");
 }
 
 void

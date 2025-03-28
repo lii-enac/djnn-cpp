@@ -135,7 +135,7 @@ AbstractTranslation::impl_activate ()
         enable (_ctx, _frame->damaged ());
         enable (_cty, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractTranslation::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractTranslation::impl_activate () - Unable to find frame\n\n");
 }
 
 void

@@ -123,7 +123,7 @@ Texture::impl_activate ()
     if (_frame) {
         enable (_cpath, _frame->damaged ());
     } else
-        djnn_error (nullptr, "Texture::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "Texture::impl_activate () - Unable to find frame\n\n");
 }
 
 void

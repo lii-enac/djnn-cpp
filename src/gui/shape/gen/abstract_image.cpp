@@ -164,7 +164,7 @@ AbstractImage::impl_activate ()
         enable (_cwidth, _frame->damaged ());
         enable (_cheight, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractImage::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractImage::impl_activate () - Unable to find frame\n\n");
 }
 
 void

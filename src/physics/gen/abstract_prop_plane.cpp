@@ -161,7 +161,7 @@ AbstractPropPlane::impl_activate ()
         enable (_cc, _frame->damaged ());
         enable (_cd, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropPlane::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropPlane::impl_activate () - Unable to find frame\n\n");
 }
 
 void

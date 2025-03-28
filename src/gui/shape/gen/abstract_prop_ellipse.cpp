@@ -164,7 +164,7 @@ AbstractPropEllipse::impl_activate ()
         enable (_crx, _frame->damaged ());
         enable (_cry, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropEllipse::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropEllipse::impl_activate () - Unable to find frame\n\n");
 }
 
 void

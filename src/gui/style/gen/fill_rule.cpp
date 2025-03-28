@@ -121,7 +121,7 @@ FillRule::impl_activate ()
     if (_frame) {
         enable (_crule, _frame->damaged ());
     } else
-        djnn_error (nullptr, "FillRule::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "FillRule::impl_activate () - Unable to find frame\n\n");
 }
 
 void

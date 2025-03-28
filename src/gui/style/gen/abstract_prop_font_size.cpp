@@ -135,7 +135,7 @@ AbstractPropFontSize::impl_activate ()
         enable (_cunit, _frame->damaged ());
         enable (_csize, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropFontSize::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropFontSize::impl_activate () - Unable to find frame\n\n");
 }
 
 void

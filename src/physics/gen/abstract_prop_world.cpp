@@ -161,7 +161,7 @@ AbstractPropWorld::impl_activate ()
         enable (_cz, _frame->damaged ());
         enable (_cdt, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropWorld::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropWorld::impl_activate () - Unable to find frame\n\n");
 }
 
 void

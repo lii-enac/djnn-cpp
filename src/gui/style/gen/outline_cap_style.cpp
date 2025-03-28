@@ -123,7 +123,7 @@ OutlineCapStyle::impl_activate ()
     if (_frame) {
         enable (_ccap, _frame->damaged ());
     } else
-        djnn_error (nullptr, "OutlineCapStyle::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "OutlineCapStyle::impl_activate () - Unable to find frame\n\n");
 }
 
 void

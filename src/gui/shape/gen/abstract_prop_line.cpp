@@ -164,7 +164,7 @@ AbstractPropLine::impl_activate ()
         enable (_cx2, _frame->damaged ());
         enable (_cy2, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropLine::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropLine::impl_activate () - Unable to find frame\n\n");
 }
 
 void

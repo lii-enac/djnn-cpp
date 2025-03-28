@@ -121,7 +121,7 @@ AbstractOpacity::impl_activate ()
     if (_frame) {
         enable (_ca, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractOpacity::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractOpacity::impl_activate () - Unable to find frame\n\n");
 }
 
 void

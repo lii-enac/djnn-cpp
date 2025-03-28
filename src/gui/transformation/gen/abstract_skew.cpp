@@ -121,7 +121,7 @@ AbstractSkew::impl_activate ()
     if (_frame) {
         enable (_ca, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractSkew::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractSkew::impl_activate () - Unable to find frame\n\n");
 }
 
 void

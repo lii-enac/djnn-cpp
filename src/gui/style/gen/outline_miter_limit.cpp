@@ -123,7 +123,7 @@ OutlineMiterLimit::impl_activate ()
     if (_frame) {
         enable (_climit, _frame->damaged ());
     } else
-        djnn_error (nullptr, "OutlineMiterLimit::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "OutlineMiterLimit::impl_activate () - Unable to find frame\n\n");
 }
 
 void

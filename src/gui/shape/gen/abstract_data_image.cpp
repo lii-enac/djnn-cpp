@@ -138,7 +138,7 @@ AbstractDataImage::impl_activate ()
         enable (_cdata, _frame->damaged ());
         enable (_cformat, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractDataImage::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractDataImage::impl_activate () - Unable to find frame\n\n");
 }
 
 void

@@ -119,7 +119,7 @@ AbstractPropSphere::impl_activate ()
     if (_frame) {
         enable (_cradius, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropSphere::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropSphere::impl_activate () - Unable to find frame\n\n");
 }
 
 void

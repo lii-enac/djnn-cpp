@@ -123,7 +123,7 @@ DashOffset::impl_activate ()
     if (_frame) {
         enable (_coffset, _frame->damaged ());
     } else
-        djnn_error (nullptr, "DashOffset::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "DashOffset::impl_activate () - Unable to find frame\n\n");
 }
 
 void

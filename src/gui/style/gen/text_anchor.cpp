@@ -123,7 +123,7 @@ TextAnchor::impl_activate ()
     if (_frame) {
         enable (_canchor, _frame->damaged ());
     } else
-        djnn_error (nullptr, "TextAnchor::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "TextAnchor::impl_activate () - Unable to find frame\n\n");
 }
 
 void

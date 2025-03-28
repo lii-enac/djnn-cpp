@@ -168,7 +168,7 @@ namespace djnn
       %(DEF_COUPLINGS_ENABLE)s;
     }
     else
-      djnn_error (nullptr, "%(CLASS)s::impl_activate () - Unable to find frame");
+      djnn_warning (nullptr, "%(CLASS)s::impl_activate () - Unable to find frame\\n\\n");
   }
 
   void

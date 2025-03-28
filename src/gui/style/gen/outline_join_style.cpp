@@ -123,7 +123,7 @@ OutlineJoinStyle::impl_activate ()
     if (_frame) {
         enable (_cjoin, _frame->damaged ());
     } else
-        djnn_error (nullptr, "OutlineJoinStyle::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "OutlineJoinStyle::impl_activate () - Unable to find frame\n\n");
 }
 
 void

@@ -133,7 +133,7 @@ AbstractPropGradient::impl_activate ()
         enable (_cspread, _frame->damaged ());
         enable (_ccoords, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropGradient::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropGradient::impl_activate () - Unable to find frame\n\n");
 }
 
 void

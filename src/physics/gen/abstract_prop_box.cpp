@@ -147,7 +147,7 @@ AbstractPropBox::impl_activate ()
         enable (_ch, _frame->damaged ());
         enable (_cd, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropBox::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropBox::impl_activate () - Unable to find frame\n\n");
 }
 
 void

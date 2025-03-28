@@ -8,10 +8,10 @@ class Group : public Container {
   public:
     Group (CoreProcess* parent, const string& name);
     virtual ~Group () override;
-    auto get_frame () { return _gobj->get_frame (); }
-    void impl_activate () override;
-    void impl_deactivate () override;
-    void draw () override;
+    auto   get_frame () { return _gobj->get_frame (); }
+    void   impl_activate () override;
+    void   impl_deactivate () override;
+    void   draw () override;
     Group* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:

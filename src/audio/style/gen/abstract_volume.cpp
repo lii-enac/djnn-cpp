@@ -121,7 +121,7 @@ AbstractVolume::impl_activate ()
     if (_frame) {
         enable (_cvolume, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractVolume::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractVolume::impl_activate () - Unable to find frame\n\n");
 }
 
 void

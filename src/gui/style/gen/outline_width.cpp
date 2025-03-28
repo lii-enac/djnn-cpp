@@ -123,7 +123,7 @@ OutlineWidth::impl_activate ()
     if (_frame) {
         enable (_cwidth, _frame->damaged ());
     } else
-        djnn_error (nullptr, "OutlineWidth::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "OutlineWidth::impl_activate () - Unable to find frame\n\n");
 }
 
 void

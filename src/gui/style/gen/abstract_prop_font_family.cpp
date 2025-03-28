@@ -121,7 +121,7 @@ AbstractPropFontFamily::impl_activate ()
     if (_frame) {
         enable (_cfamily, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropFontFamily::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropFontFamily::impl_activate () - Unable to find frame\n\n");
 }
 
 void

@@ -273,7 +273,7 @@ AbstractPropPhyObj::impl_activate ()
         enable (_cdensity, _frame->damaged ());
         enable (_cfriction, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropPhyObj::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropPhyObj::impl_activate () - Unable to find frame\n\n");
 }
 
 void

@@ -178,7 +178,7 @@ AbstractPropRadialGradient::impl_activate ()
         enable (_cfx, _frame->damaged ());
         enable (_cfy, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropRadialGradient::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropRadialGradient::impl_activate () - Unable to find frame\n\n");
 }
 
 void

@@ -150,7 +150,7 @@ AbstractPropCircle::impl_activate ()
         enable (_ccy, _frame->damaged ());
         enable (_cr, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropCircle::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropCircle::impl_activate () - Unable to find frame\n\n");
 }
 
 void

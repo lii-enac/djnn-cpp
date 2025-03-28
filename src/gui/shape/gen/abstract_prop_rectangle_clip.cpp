@@ -164,7 +164,7 @@ AbstractPropRectangleClip::impl_activate ()
         enable (_cwidth, _frame->damaged ());
         enable (_cheight, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropRectangleClip::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropRectangleClip::impl_activate () - Unable to find frame\n\n");
 }
 
 void

@@ -331,7 +331,7 @@ AbstractPropHomography::impl_activate ()
         enable (_cm43, _frame->damaged ());
         enable (_cm44, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropHomography::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropHomography::impl_activate () - Unable to find frame\n\n");
 }
 
 void

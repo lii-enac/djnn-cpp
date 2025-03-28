@@ -219,7 +219,7 @@ AbstractPropSound::impl_activate ()
         enable (_cpitch_mul, _frame->damaged ());
         enable (_cloop, _frame->damaged ());
     } else
-        djnn_error (nullptr, "AbstractPropSound::impl_activate () - Unable to find frame");
+        djnn_warning (nullptr, "AbstractPropSound::impl_activate () - Unable to find frame\n\n");
 }
 
 void

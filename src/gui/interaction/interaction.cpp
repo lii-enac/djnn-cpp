@@ -82,7 +82,9 @@ print_matrix (const std::string& s, AbstractHomography* m)
 #endif
 
 template <typename K, typename V>
-V GetFirstNotId(std::map<K, V>& m, const K& id) {
+V
+GetFirstNotId (std::map<K, V>& m, const K& id)
+{
     for (auto& pair : m) {
         if (pair.first != id) {
             return pair.second; // V is already a pointer
