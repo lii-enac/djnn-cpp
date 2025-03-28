@@ -470,7 +470,7 @@ def gen_prop(dc, finalize_construction=True):
         FINALIZE_CONSTRUCTION = "finalize_construction (parent, name);"
     # print (SET_ORIGIN)
 
-    decl_clone = "%(CLASS)s* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones) const override;"
+    decl_clone = "%(CLASS)s* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;"
 
     DECL_DRAW = ''
     if(dc.finalize_construction):
