@@ -98,9 +98,9 @@ Window*
 find_frame (CoreProcess* obj)
 {
     /*  this algorithm is a little bit tricky. We want to find the closest running frame
-     *  on the left side of the current object (cur_child). For this, we take its parent (curget_parent ()) and go through its
+     *  on the left side of the current object (cur_child). For this, we take its parent (cur_parent ()) and go through its
      *  children in order to find a frame. If no frame is found when the list iteration process arrived to (cur_child),
-     *  then we set (cur_child) to its parent (curget_parent ()), and (curget_parent ()) is set to (curget_parent ()->parent).
+     *  then we set (cur_child) to its parent (cur_parent ()), and (cur_parent ()) is set to (cur_parent ()->parent).
      *  May be there is a place for simplification */
     bool         found      = false;
     FatProcess*  cur_parent = obj->get_parent ();
@@ -133,6 +133,50 @@ find_frame (CoreProcess* obj)
     return frame;
 }
 
+Window*
+find_frame_debug (CoreProcess* obj)
+{
+    /*  this algorithm is a little bit tricky. We want to find the closest running frame
+     *  on the left side of the current object (cur_child). For this, we take its parent (cur_parent ()) and go through its
+     *  children in order to find a frame. If no frame is found when the list iteration process arrived to (cur_child),
+     *  then we set (cur_child) to its parent (cur_parent ()), and (cur_parent ()) is set to (cur_parent ()->parent).
+     *  May be there is a place for simplification */
+    bool         found      = false;
+    FatProcess*  cur_parent = obj->get_parent ();
+    CoreProcess* cur_child  = obj;
+
+    Window* frame = nullptr;
+
+    while (!found && cur_parent != nullptr) {
+        std::cerr << "find_frame_debug: " << cur_parent->get_debug_name() << std::endl;
+        if (cur_parent->get_process_type () == CONTAINER_T) {
+            Container* cont = dynamic_cast<Container*> (cur_parent);
+            for (auto c : cont->children ()) {
+                if (c == cur_child)
+                    break;
+                else if (c->get_process_type () == WINDOW_T && c->somehow_activating ()) {
+                    frame = dynamic_cast<Window*> (c);
+                    found = true;
+                }
+            }
+        }
+        do {
+            cur_child  = cur_parent;
+            cur_parent = cur_parent->get_parent ();
+            if (cur_parent)
+                std::cerr << "find_frame_debug (do): " << cur_parent->get_debug_name() << std::endl;
+            else
+                std::cerr << "find_frame_debug (do): cur_parent is NULL !" << std::endl;
+        } while (cur_parent != nullptr && cur_parent->get_process_type () != CONTAINER_T);
+    }
+
+    if (!found) {
+        return nullptr;
+    }
+
+    return frame;
+}
+
 void
 AbstractGObj::update_frame_if_necessary ()
 {
@@ -141,6 +185,7 @@ AbstractGObj::update_frame_if_necessary ()
         Window* frame = find_frame (this);
 
         if (!frame) {
+            find_frame_debug (this);
             warning (nullptr, " no running frame found for graphic_obj " + get_name () + "\n");
             return;
         }

@@ -451,21 +451,27 @@ void
 AbstractColor::impl_activate ()
 {
     AbstractStyle::impl_activate ();
-    // auto _frame = get_frame ();
-    auto* damaged = get_frame ()->damaged ();
-    enable (_cr, damaged);
-    enable (_cg, damaged);
-    enable (_cb, damaged);
-    enable (_cv, damaged);
 
-    if (_c_rv)
-        _c_rv->enable ();
-    if (_c_gv)
-        _c_gv->enable ();
-    if (_c_bv)
-        _c_bv->enable ();
-    if (_c_vrgb)
-        _c_vrgb->enable ();
+    auto _frame = get_frame ();
+    if (_frame) {
+        auto* damaged = _frame->damaged ();
+
+        enable (_cr, damaged);
+        enable (_cg, damaged);
+        enable (_cb, damaged);
+        enable (_cv, damaged);
+
+        if (_c_rv)
+            _c_rv->enable ();
+        if (_c_gv)
+            _c_gv->enable ();
+        if (_c_bv)
+            _c_bv->enable ();
+        if (_c_vrgb)
+            _c_vrgb->enable ();
+    }
+    else
+        djnn_warning (nullptr, "AbstractColor::impl_activate () - Unable to find frame\n\n");
 }
 
 void
