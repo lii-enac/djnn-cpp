@@ -22,6 +22,7 @@
 #include "core/core-dev.h" // graph add/remove edge
 #include "display/window.h"
 #include "gui/style/abstract_style.h"
+#include "core/utils/error.h"
 
 namespace djnn {
 // D65 Reference White
