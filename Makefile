@@ -176,7 +176,9 @@ include_pch = -pch_include $(dst_pch)
 echo ?= echo -e
 
 CFLAGS += -MMD
-CFLAGS += -Wall -Wextra -pedantic -Wno-unused-parameter #-Wno-vla-extension
+CFLAGS += -Wall
+CFLAGS += -Wextra -pedantic
+CFLAGS += -Wno-unused-parameter #-Wno-vla-extension
 
 CFLAGS += $(PRE_COV_CFLAGS)
 LDFLAGS += $(PRE_COV_LDFLAGS)
@@ -331,10 +333,16 @@ endif
 
 #ARFLAGS ?= -r -u
 
-ifeq (g++,$(findstring g++,$(CXX)))
-#DJNN_CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+
+# compiler-specific options
+
+ifeq ($(compiler),gcc)
+#CFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 endif
 
+ifeq ($(compiler),llvm)
+CFLAGS += -Wno-vla-cxx-extension
+endif
 
 linker ?= $(compiler)
 
