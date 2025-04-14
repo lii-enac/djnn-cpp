@@ -545,6 +545,11 @@ FatProcess::notify_change (unsigned int notify_mask_)
 // -----------------------------------------------------------------------
 // tree, component, symtable
 
+ChildProcess::ChildProcess (bool model)
+: CouplingProcess (model), _parent (nullptr), _state_dependency (nullptr)
+{
+}
+
 void
 ChildProcess::set_parent (CoreProcess* parent)
 {

@@ -293,8 +293,7 @@ class CouplingProcess : public CoreProcess {
 
 class ChildProcess : public CouplingProcess {
   public:
-    ChildProcess (bool model = false)
-        : CouplingProcess (model), _parent (nullptr), _state_dependency (nullptr) {}
+    ChildProcess (bool model = false);
     virtual void      set_parent (CoreProcess* p) override;
     FatProcess*       get_parent () override { return _parent; }
     const FatProcess* get_parent () const override { return _parent; }
