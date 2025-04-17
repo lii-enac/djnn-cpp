@@ -282,7 +282,6 @@ Container::impl_activate ()
     Container* c = djnn_dynamic_cast<Container*> (get_parent ());
     if (c)
         init_context (c->get_context ());
-    ComponentObserver::instance ().start_component ();
     /* WARNING Here we don't use C++ iterator as we want to allow
      * the dynamic modification of children list */
     unsigned int i = 0;
@@ -292,7 +291,6 @@ Container::impl_activate ()
         }
         i++;
     }
-    ComponentObserver::instance ().end_component ();
 }
 
 void

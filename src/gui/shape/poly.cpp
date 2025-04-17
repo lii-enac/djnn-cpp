@@ -145,9 +145,6 @@ Poly::Poly (CoreProcess* parent, const string& name, int closed)
     _bounding_box->add_symbol ("width", _bbw);
     _bounding_box->add_symbol ("height", _bbh);
 
-    // save pointer to th eGUIStructureHolder of points to call the correct draw function
-    _points_GH = gui_structure_observer->structure_map ()[_points];
-
     finalize_construction (parent, name);
 }
 

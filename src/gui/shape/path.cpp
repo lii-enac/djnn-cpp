@@ -932,9 +932,6 @@ Path::Path (CoreProcess* parent, const string& name)
     _bounding_box->add_symbol ("height", _bbh);
     invalidate_bounding_box ();
 
-    // save pointer to th eGUIStructureHolder of items to call the correct draw function
-    _items_GH = gui_structure_observer->structure_map ()[_items];
-
     finalize_construction (parent, name);
 }
 
@@ -976,10 +973,8 @@ void
 Path::draw ()
 {
     auto _frame = get_frame ();
-    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
-        AbstractGShape::pre_draw ();
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) { 
         Backend::instance ()->draw_path (this);
-        AbstractGShape::post_draw ();
     }
 }
 

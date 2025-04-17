@@ -151,10 +151,7 @@ class Path : public AbstractGShape {
     Path (CoreProcess* parent, const string& name, const string& path_spec);
     virtual ~Path ();
 
-    // HACK to get access directly to GUIstructureHolder of items
-    // and use the correct draw function
     List*               items () { return _items; }
-    GUIStructureHolder* items_GH () { return _items_GH; }
     TextProperty&       spec () { return _spec; }
 
     void   draw () override;
@@ -172,7 +169,6 @@ class Path : public AbstractGShape {
     List*               _items;
     FatProcess*         _bounding_box;
     DoubleProperty *    _bbx, *_bby, *_bbw, *_bbh;
-    GUIStructureHolder* _items_GH; // HACK to get access directly to GUIstructureHolder of items
 
     TextProperty     _spec;
     SpecUpdateAction _updateaction;

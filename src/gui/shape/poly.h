@@ -38,10 +38,7 @@ class Poly : public AbstractGShape {
     Poly (CoreProcess* parent, const string& name, int closed);
     virtual ~Poly ();
 
-    // HACK to get access directly to GUIstructureHolder of points
-    // and use the correct draw function
     List*               points () { return _points; }
-    GUIStructureHolder* points_GH () { return _points_GH; }
 
     bool   closed () { return _closed; }
     void   draw () override;
@@ -59,7 +56,6 @@ class Poly : public AbstractGShape {
     FatProcess*         _bounding_box;
     DoubleProperty *    _bbx, *_bby, *_bbw, *_bbh;
     bool                _closed;
-    GUIStructureHolder* _points_GH; // HACK to get access directly to GUIstructureHolder of points
 };
 
 class Polygon : public Poly {

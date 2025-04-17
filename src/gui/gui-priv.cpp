@@ -25,6 +25,7 @@
 #include "gui/backend.h"
 #include "gui/layer.h"
 #include "gui/picking/analytical_picking_context.h"
+#include "utils/debug.h"
 
 // #include <boost/range/adaptor/reversed.hpp>
 
@@ -96,31 +97,30 @@ GUIStructureHolder::draw ()
     if (content_process->somehow_deactivating ())
         return;
 
+    ComponentObserver::instance ().start_draw ();   
     // if Layer and the correct frame
     if (content_process->get_process_type () == LAYER_T) {
         Layer* l = dynamic_cast<Layer*> (content_process);
         if (DisplayBackend::instance ()->window () == l->get_frame ()) {
-            ComponentObserver::instance ().start_draw ();
             Backend::instance ()->draw_layer (l, _children);
-            ComponentObserver::instance ().end_draw ();
         }
     } else if (content_process->get_process_type () == Z_ORDERED_GROUP_T) {
         content_process->draw ();
     }
     // if other container
     else {
-        ComponentObserver::instance ().start_draw ();
         for (auto& p : _children) {
             p.first->draw ();
         }
-        ComponentObserver::instance ().end_draw ();
     }
+    ComponentObserver::instance ().end_draw ();
 
 #if _DEBUG_SEE_GUI_INFO_PREF
-    cerr << "\033[1;36m" << endl;
-    cerr << "NB DRAWING OBJS: " << __nb_Drawing_object << endl;
-    cerr << "NB DRAWING OBJS PICKING VIEW: " << __nb_Drawing_object_picking << endl;
-    cerr << "\033[0m";
+    std::cerr << "\033[1;36m" << std::endl;
+    std::cerr << content_process->get_debug_name () << std::endl;
+    std::cerr << "NB DRAWING OBJS: " << __nb_Drawing_object << std::endl;
+    std::cerr << "NB DRAWING OBJS PICKING VIEW: " << __nb_Drawing_object_picking << std::endl;
+    std::cerr << "\033[0m";
 #endif
 }
 

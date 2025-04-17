@@ -243,9 +243,12 @@ QtBackend::draw_poly (Poly* p)
     QPainterPath path;
     cur_poly = QPolygonF ();
 
-    // HACK use GUIStructureHolder::draw instead of container/list::draw
-    // p->points ()->draw ();
-    p->points_GH ()->draw ();
+    // HACK: Prefer GUIStructureHolder::draw over container/list::draw.
+    // Since the context remains the same for all items/points, we avoid unnecessary save/restore operations.
+    // A simple for loop over all items/points is more efficient. 
+    for (auto& p : p->points ()->children ()) {
+        p->draw ();
+    }
 
     path.addPolygon (cur_poly);
     if (p->closed ())
@@ -290,9 +293,12 @@ QtBackend::draw_path (Path* p)
     }
     cur_path = QPainterPath ();
 
-    // HACK use GUIStructureHolder::draw instead of container/list::draw
-    // p->items ()->draw ();
-    p->items_GH ()->draw ();
+    // HACK: Prefer GUIStructureHolder::draw over container/list::draw.
+    // Since the context remains the same for all items/points, we avoid unnecessary save/restore operations.
+    // A simple for loop over all items/points is more efficient. 
+    for (auto& p : p->items ()->children ()) {
+        p->draw ();
+    }
 
     cur_path.setFillRule (_context->fillRule);
     p->set_bounding_box (cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
@@ -526,7 +532,13 @@ QtBackend::draw_path_clip (Path* p)
     rmt_BeginCPUSample (draw_path_clip, RMTSF_Aggregate);
     QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
     cur_path            = QPainterPath ();
-    p->items_GH ()->draw ();
+    
+    // HACK: Prefer GUIStructureHolder::draw over container/list::draw.
+    // Since the context remains the same for all items/points, we avoid unnecessary save/restore operations.
+    // A simple for loop over all items/points is more efficient. 
+    for (auto& p : p->items ()->children ()) {
+        p->draw ();
+    }
     if (z_processing_step == 1) {
         add_shape (p, _context);
         QPainterPath clip (cur_path);
