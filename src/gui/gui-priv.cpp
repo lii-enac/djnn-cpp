@@ -25,6 +25,7 @@
 #include "gui/backend.h"
 #include "gui/layer.h"
 #include "gui/picking/analytical_picking_context.h"
+#include "core/utils/remotery.h"
 #include "utils/debug.h"
 
 // #include <boost/range/adaptor/reversed.hpp>
@@ -97,6 +98,7 @@ GUIStructureHolder::draw ()
     if (content_process->somehow_deactivating ())
         return;
 
+    rmt_BeginCPUSample (guistructureholder_draw, RMTSF_Recursive); 
     ComponentObserver::instance ().start_draw ();   
     // if Layer and the correct frame
     if (content_process->get_process_type () == LAYER_T) {
@@ -114,6 +116,7 @@ GUIStructureHolder::draw ()
         }
     }
     ComponentObserver::instance ().end_draw ();
+    rmt_EndCPUSample ();
 
 #if _DEBUG_SEE_GUI_INFO_PREF
     std::cerr << "\033[1;36m" << std::endl;
