@@ -50,8 +50,8 @@ Synchronizer::~Synchronizer ()
     if (get_parent () && _dst) {
         remove_state_dependency (get_parent (), &_action);
     }
-    int sz = _c_list.size ();
-    for (int i = sz - 1; i >= 0; i--) {
+    auto sz = _c_list.size ();
+    for (auto i = sz - 1; i >= 0; i--) {
         auto* c = _c_list[i];
         delete c;
     }
