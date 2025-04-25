@@ -23,7 +23,7 @@ namespace djnn {
 
 class AbstractBoolProperty : public AbstractSimpleProperty {
   public:
-    AbstractBoolProperty (CoreProcess* parent, const string& name, int notify_mask = notify_none);
+    AbstractBoolProperty (CoreProcess* parent, const string& name, unsigned int notify_mask = notify_none);
     virtual ~AbstractBoolProperty ();
     virtual property_type_e get_property_type () const override { return Boolean; }
     // virtual process_type_e get_process_type () const override { return BOOL_PROPERTY_T; }
@@ -71,7 +71,7 @@ class BoolProperty : public AbstractBoolProperty {
 
 class BoolPropertyProxy : public AbstractBoolProperty {
   public:
-    BoolPropertyProxy (CoreProcess* parent, const string& name, bool& v, int notify_mask = notify_none)
+    BoolPropertyProxy (CoreProcess* parent, const string& name, bool& v, unsigned int notify_mask = notify_none)
         : AbstractBoolProperty (parent, name, notify_mask), value (v) { finalize_construction (parent, name); }
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 

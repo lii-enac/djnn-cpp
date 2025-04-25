@@ -21,7 +21,7 @@ namespace djnn {
 
 class AbstractTextProperty : public AbstractSimpleProperty {
   public:
-    AbstractTextProperty (CoreProcess* parent, const string& name, int notify_mask = notify_none)
+    AbstractTextProperty (CoreProcess* parent, const string& name, unsigned int notify_mask = notify_none)
         : AbstractSimpleProperty (parent, name, notify_mask) { finalize_construction (parent, name); };
     virtual property_type_e get_property_type () const override { return String; }
     // virtual process_type_e get_process_type () const override { return TEXT_PROPERTY_T; }
@@ -69,7 +69,7 @@ class TextProperty : public AbstractTextProperty {
 
 class TextPropertyProxy : public AbstractTextProperty {
   public:
-    TextPropertyProxy (CoreProcess* parent, const string& name, string& v, int notify_mask = notify_none)
+    TextPropertyProxy (CoreProcess* parent, const string& name, string& v, unsigned int notify_mask = notify_none)
         : AbstractTextProperty (parent, name, notify_mask), value (v) {}
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
