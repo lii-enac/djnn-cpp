@@ -47,6 +47,20 @@ CFLAGS += -g
 #CFLAGS += -fno-limit-debug-info -fstandalone-debug
 #LDFLAGS += -fno-limit-debug-info -fstandalone-debug
 
+# Compiler Options Hardening Guide for C and C++
+# https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html
+CFLAGS += -O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrough \
+-Werror=format-security \
+-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 \
+-D_GLIBCXX_ASSERTIONS \
+-fstrict-flex-arrays=3 \
+-fstack-protector-strong \
+#-fstack-clash-protection
+
+LIBS += -Wl,-z,nodlopen -Wl,-z,noexecstack \
+-Wl,-z,relro -Wl,-z,now \
+-Wl,--as-needed -Wl,--no-copy-dt-needed-entries
+
 
 build_dir := build
 
