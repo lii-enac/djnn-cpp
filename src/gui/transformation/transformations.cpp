@@ -696,7 +696,7 @@ AbstractHomography::rightScale2d (double sx, double sy)
     case APPLY_SHEAR | APPLY_SCALE:
         m11 ()->set_value (old_m11 * sx, false);
         m22 ()->set_value (old_m22 * sy, false);
-        // fall-through
+        [[fallthrough]];
     case APPLY_SHEAR | APPLY_TRANSLATE:
     case APPLY_SHEAR:
         new_m12 = old_m12 * sy;
@@ -783,11 +783,11 @@ AbstractHomography::leftScale2d (double sx, double sy)
             mystate = mystate & ~APPLY_TRANSLATE;
             state2d = mystate;
         }
-        // fall-through
+        [[fallthrough]];
     case APPLY_SHEAR | APPLY_SCALE:
         m11 ()->set_value (old_m11 * sx, false);
         m22 ()->set_value (old_m22 * sy, false);
-        // fall-through
+        [[fallthrough]];
     case APPLY_SHEAR:
         new_m12 = old_m12 * sx;
         new_m21 = old_m21 * sy;
@@ -829,7 +829,7 @@ AbstractHomography::leftScale2d (double sx, double sy)
             mystate = mystate & ~APPLY_TRANSLATE;
             state2d = mystate;
         }
-        // fall-through
+        [[fallthrough]];
     case APPLY_SCALE:
         new_m11 = old_m11 * sx;
         new_m22 = old_m22 * sy;
@@ -848,7 +848,7 @@ AbstractHomography::leftScale2d (double sx, double sy)
             mystate = mystate & ~APPLY_TRANSLATE;
             state2d = mystate;
         }
-        // fall-through
+        [[fallthrough]];
     case APPLY_IDENTITY:
         m11 ()->set_value (sx, false);
         m22 ()->set_value (sy, false);
@@ -1226,7 +1226,7 @@ AbstractHomography::leftSkew2d (double dax_in_degrees, double day_in_degrees)
         old_m24 = m24 ()->get_value ();
         m14 ()->set_value (old_m14 + shx * old_m24, false);
         m24 ()->set_value (old_m24 + shy * old_m14, false);
-        // fall-through
+        [[fallthrough]];
     case APPLY_SHEAR | APPLY_SCALE:
     case APPLY_SHEAR:
         old_m11 = m11 ()->get_value ();
@@ -1250,7 +1250,7 @@ AbstractHomography::leftSkew2d (double dax_in_degrees, double day_in_degrees)
             mystate = mystate & ~APPLY_TRANSLATE;
             state2d = mystate;
         }
-        // fall-through
+        [[fallthrough]];
     case APPLY_SCALE:
         new_m12 = shx * m22 ()->get_value ();
         new_m21 = shy * m11 ()->get_value ();
@@ -1271,7 +1271,7 @@ AbstractHomography::leftSkew2d (double dax_in_degrees, double day_in_degrees)
             mystate = mystate & ~APPLY_TRANSLATE;
             state2d = mystate;
         }
-        // fall-through
+        [[fallthrough]];
     case APPLY_IDENTITY:
         new_m12 = shx;
         new_m21 = shy;

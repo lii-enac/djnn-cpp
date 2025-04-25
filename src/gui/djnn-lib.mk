@@ -14,7 +14,7 @@ lib_srcs += src/gui/css-parser/parser.cpp src/gui/css-parser/scanner.cpp src/gui
 
 #define my_lib_rules
 
-#$(build_dir)/src/gui/css-parser/scanner.o: DJNN_CXXFLAGS += -Dregister=""
+$(build_dir)/src/gui/css-parser/scanner.o: DJNN_CXXFLAGS += -Wno-implicit-fallthrough
 $(build_dir)/src/gui/css-parser/%.o: DJNN_CXXFLAGS += -I$(build_dir)/src/gui/css-parser -Isrc/gui/css-parser -Wno-misleading-indentation
 
 $(build_dir)/src/gui/css-parser/scanner.o $(build_dir)/src/gui/css-parser/parser.o $(build_dir)/src/gui/css-parser/driver.o: $(build_dir)/src/gui/css-parser/parser.hpp

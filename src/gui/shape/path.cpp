@@ -85,6 +85,7 @@ parse_path (Path* p, const char* path_spec)
 
         case 'm':
             rel = 1;
+            [[fallthrough]];
         case 'M':
             path_spec = ParseCoords (path_spec, 2, coords, &num);
             if (num != 2)
@@ -111,6 +112,7 @@ parse_path (Path* p, const char* path_spec)
 
         case 'l':
             rel = 1;
+            [[fallthrough]];
         case 'L':
             do {
                 path_spec = ParseCoords (path_spec, 2, coords, &num);
@@ -126,6 +128,7 @@ parse_path (Path* p, const char* path_spec)
 
         case 'v':
             rel = 1;
+            [[fallthrough]];
         case 'V':
             do {
                 path_spec = ParseCoords (path_spec, 1, coords, &num);
@@ -138,6 +141,7 @@ parse_path (Path* p, const char* path_spec)
 
         case 'h':
             rel = 1;
+            [[fallthrough]];
         case 'H':
             do {
                 path_spec = ParseCoords (path_spec, 1, coords, &num);
@@ -150,6 +154,7 @@ parse_path (Path* p, const char* path_spec)
 
         case 'c':
             rel = 1;
+            [[fallthrough]];
         case 'C':
             do {
                 path_spec = ParseCoords (path_spec, 6, coords, &num);
@@ -175,6 +180,7 @@ parse_path (Path* p, const char* path_spec)
 
         case 's':
             rel = 1;
+            [[fallthrough]];
         case 'S':
             do {
                 path_spec = ParseCoords (path_spec, 4, coords, &num);
@@ -207,6 +213,7 @@ parse_path (Path* p, const char* path_spec)
 
         case 'q':
             rel = 1;
+            [[fallthrough]];
         case 'Q':
             do {
                 path_spec = ParseCoords (path_spec, 4, coords, &num);
@@ -232,6 +239,7 @@ parse_path (Path* p, const char* path_spec)
 
         case 't':
             rel = 1;
+            [[fallthrough]];
         case 'T':
             do {
                 path_spec = ParseCoords (path_spec, 2, coords, &num);
@@ -254,6 +262,7 @@ parse_path (Path* p, const char* path_spec)
 
         case 'a':
             rel = 1;
+            [[fallthrough]];
         case 'A':
             do {
                 path_spec = ParseCoords (path_spec, 7, coords, &num);
@@ -273,6 +282,7 @@ parse_path (Path* p, const char* path_spec)
             break;
 
         case 'z':
+            [[fallthrough]];
         case 'Z':
             new PathClosure (p, "");
             curx    = initx;
