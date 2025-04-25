@@ -43,7 +43,7 @@ CFLAGS += -g
 #CFLAGS += -fsanitize=thread
 #LDFLAGS += -fsanitize=thread
 
-CFLAGS += -Wno-gnu #-null-pointer-arithmetic
+# CFLAGS += -Wno-gnu #-null-pointer-arithmetic
 #CFLAGS += -fno-limit-debug-info -fstandalone-debug
 #LDFLAGS += -fno-limit-debug-info -fstandalone-debug
 
