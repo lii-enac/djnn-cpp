@@ -51,8 +51,11 @@ Synchronizer::~Synchronizer ()
         remove_state_dependency (get_parent (), &_action);
     }
     auto sz = _c_list.size ();
-    for (auto i = sz - 1; i >= 0; i--) {
-        auto* c = _c_list[i];
+    // index_type might be unsigned int
+    // since unsigned int cannot be negative, we cannot stop as soon as i<0
+    // so lets go from sz to 1 (>0), and get the corresponding index with i-1
+    for (auto i = sz; i > 0; --i) { 
+        auto* c = _c_list[i-1];
         delete c;
     }
 }
