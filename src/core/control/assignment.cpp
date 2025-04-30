@@ -447,20 +447,25 @@ MultiAssignment (CoreProcess* parent, CoreProcess* src, CoreProcess* dst, bool i
 {
     Container* cont_src = dynamic_cast<Container*> (src);
     Container* cont_dst = dynamic_cast<Container*> (dst);
-    if (cont_src && cont_dst) {
-        for (auto c : cont_src->children ()) {
-            const string& name     = c->get_name (c->get_parent ());
-            CoreProcess*  prop_dst = cont_dst->find_child_impl (name);
-            if (dst)
-                new Assignment (parent, "", c, prop_dst, is_model);
+    if (cont_src) {
+        for (auto csrc : cont_src->children ()) {
+            const string& name = csrc->get_name (cont_src);
+            if (!name.empty()) { // find_child_impl returns "this" if name is empty
+                CoreProcess*  prop_dst = dst->find_child_impl (name);
+                if (prop_dst) {
+                    new Assignment (parent, "", csrc, prop_dst, is_model);
+                }
+            }
         }
-        return;
     }
-    for (auto& c : src->get_properties_name ()) {
-        CoreProcess* prop_src = src->find_child_impl (c);
-        CoreProcess* prop_dst = dst->find_child_impl (c);
-        if (prop_src && prop_dst)
-            new Assignment (parent, "", prop_src, prop_dst, is_model);
+    else
+    for (auto& name : src->get_properties_name ()) {
+        if (!name.empty()) { // find_child_impl returns "this" if name is empty
+            CoreProcess* prop_src = src->find_child_impl (name);
+            CoreProcess* prop_dst = dst->find_child_impl (name);
+            if (prop_src && prop_dst)
+                new Assignment (parent, "", prop_src, prop_dst, is_model);
+        }
     }
 }
 
