@@ -446,7 +446,7 @@ void
 MultiAssignment (CoreProcess* parent, CoreProcess* src, CoreProcess* dst, bool is_model)
 {
     Container* cont_src = dynamic_cast<Container*> (src);
-    Container* cont_dst = dynamic_cast<Container*> (dst);
+    //Container* cont_dst = dynamic_cast<Container*> (dst);
     if (cont_src) {
         for (auto csrc : cont_src->children ()) {
             const string& name = csrc->get_name (cont_src);
