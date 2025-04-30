@@ -19,6 +19,8 @@
 #include "core/ontology/coupling.h"
 #include "core/ontology/process.h"
 
+#include "core/utils/containers/vector.h"
+
 namespace djnn {
 
 class CoreBinding : public CoreProcess {
@@ -114,4 +116,10 @@ class Binding : public FatProcess //, virtual CoreBinding
     void serialize (const string& format) override;
 #endif
 };
+
+// TODO
+void MultiBinding (CoreProcess* parent, CoreProcess* src, const djnnstl::vector<djnnstl::string>& src_props, activation_flag_e src_flag, CoreProcess* dst, const djnnstl::vector<djnnstl::string>& dst_props, activation_flag_e dst_flag);
+void MultiBinding (CoreProcess* parent, CoreProcess* src, const char* src_props[], size_t src_size, activation_flag_e src_flag, CoreProcess* dst, const char* dst_props[], size_t dst_size, activation_flag_e dst_flag);
+// no: cpt1->cpt2 already has a semantic // void MultiBinding (CoreProcess* parent, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag);
+
 } // namespace djnn
