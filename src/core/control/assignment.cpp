@@ -405,7 +405,7 @@ Assignment::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, con
 using namespace djnnstl;
 
 void
-MultiAssignment (CoreProcess* parent, CoreProcess* src, const vector<string>& src_props, CoreProcess* dst, const vector<string>& dst_props, bool copy_on_activation)
+MultiAssignment (CoreProcess* parent, CoreProcess* src, const vector<string>& src_props, CoreProcess* dst, const vector<string>& dst_props, bool is_model)
 {
     if (src_props.size () != dst_props.size ()) {
         error (src, "Incompatible number of properties in multiple assignment");
@@ -419,12 +419,12 @@ MultiAssignment (CoreProcess* parent, CoreProcess* src, const vector<string>& sr
         if (!dst_prop) {
             error (nullptr, "dst property not found in multiple connector: " + dst_props[i]);
         }
-        new Assignment (parent, "toto", src_prop, dst_prop, copy_on_activation);
+        new Assignment (parent, "toto", src_prop, dst_prop, is_model);
     }
 }
 
 void
-MultiAssignment (CoreProcess* parent, CoreProcess* src, const char* src_props[], size_t src_size, CoreProcess* dst, const char* dst_props[], size_t dst_size, bool copy_on_activation)
+MultiAssignment (CoreProcess* parent, CoreProcess* src, const char* src_props[], size_t src_size, CoreProcess* dst, const char* dst_props[], size_t dst_size, bool is_model)
 {
     if (src_size != dst_size) {
         error (src, "Incompatible number of properties in multiple assignment");
@@ -438,12 +438,12 @@ MultiAssignment (CoreProcess* parent, CoreProcess* src, const char* src_props[],
         if (!dst_prop) {
             error (nullptr, "dst property not found in multiple connector: " + string (dst_props[i]));
         }
-        new Assignment (parent, "toto", src_prop, dst_prop, copy_on_activation);
+        new Assignment (parent, "toto", src_prop, dst_prop, is_model);
     }
 }
 
 void
-MultiAssignment (CoreProcess* parent, CoreProcess* src, CoreProcess* dst, bool copy_on_activation)
+MultiAssignment (CoreProcess* parent, CoreProcess* src, CoreProcess* dst, bool is_model)
 {
     Container* cont_src = dynamic_cast<Container*> (src);
     Container* cont_dst = dynamic_cast<Container*> (dst);
@@ -452,7 +452,7 @@ MultiAssignment (CoreProcess* parent, CoreProcess* src, CoreProcess* dst, bool c
             const string& name     = c->get_name (c->get_parent ());
             CoreProcess*  prop_dst = cont_dst->find_child_impl (name);
             if (dst)
-                new Assignment (parent, "", c, prop_dst, copy_on_activation);
+                new Assignment (parent, "", c, prop_dst, is_model);
         }
         return;
     }
@@ -460,7 +460,7 @@ MultiAssignment (CoreProcess* parent, CoreProcess* src, CoreProcess* dst, bool c
         CoreProcess* prop_src = src->find_child_impl (c);
         CoreProcess* prop_dst = dst->find_child_impl (c);
         if (prop_src && prop_dst)
-            new Assignment (parent, "", prop_src, prop_dst, copy_on_activation);
+            new Assignment (parent, "", prop_src, prop_dst, is_model);
     }
 }
 
