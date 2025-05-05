@@ -13,7 +13,7 @@ class StructureObserver {
   public:
     StructureObserver () {};
     virtual ~StructureObserver () {};
-    virtual void add_container (FatProcess* cont)                                                                            = 0;
+    virtual void ensure_container_registered (FatProcess* cont)                                                                            = 0;
     virtual void remove_container (FatProcess* cont)                                                                         = 0;
     virtual void add_child_to_container (FatProcess* cont, CoreProcess* c, int index)                                        = 0;
     virtual void add_child_at (FatProcess* cont, CoreProcess* c, int neighboor_index, child_position_e spec, int new_index)  = 0;

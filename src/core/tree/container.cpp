@@ -36,9 +36,6 @@ namespace djnn {
 Container::Container (CoreProcess* parent, const string& name, bool is_model)
     : FatProcess (name, is_model), _unaltered_children (nullptr)
 {
-    for (auto s : structure_observer_list) {
-        s->add_container (this);
-    }
     if (parent) {
         set_state_dependency (parent->get_state_dependency ());
     }

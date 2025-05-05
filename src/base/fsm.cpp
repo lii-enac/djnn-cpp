@@ -279,9 +279,10 @@ FSM::FSM (CoreProcess* parent, const string& name)
     finalize_construction (parent, name, &_fsm_state);
 
     // add FSM has potentiel GUIStrucureHolder or GUI container
-    for (auto s : structure_observer_list) {
-        s->add_container (this);
-    }
+    // TODO (2025.05): Commented out code because everything is now handled in GUIStructureObserver::add_child_to_container through ensure_container_registered
+    // for (auto s : structure_observer_list) {
+    //     s->add_container (this);
+    // }
 }
 
 FSM::~FSM ()

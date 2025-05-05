@@ -49,7 +49,7 @@ class GUIStructureObserver : public StructureObserver {
   public:
     GUIStructureObserver () {}
     virtual ~GUIStructureObserver () override;
-    void                add_container (FatProcess* container) override;
+    void                ensure_container_registered (FatProcess* container) override;
     void                remove_container (FatProcess* container) override;
     void                add_child_to_container (FatProcess* container, CoreProcess* child, int index) override;
     void                add_child_at (FatProcess* container, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index) override;
