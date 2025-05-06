@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2019)
+ *      Ecole Nationale de l'Aviation Civile, France (2019-2025)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -10,6 +10,7 @@
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *      Stephane Conversy <stephane.conversy@enac.fr>
+ *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
 
@@ -46,9 +47,22 @@ GUIStructureObserver* gui_structure_observer;
 // GUIStructureHolder
 
 void
-GUIStructureHolder::add_gui_child (CoreProcess* child, size_t index)
+GUIStructureHolder::insert_gui_child (CoreProcess* child, size_t index)
 {
-    _children.push_back (children_t::value_type (child, index));
+    auto it = std::lower_bound(
+        _children.begin(), _children.end(), index,
+        [](const children_t::value_type& p, size_t val) {
+            return p.second < val;
+        });
+    
+    _children.insert(it, {child, index});
+}
+
+void
+GUIStructureHolder::append_gui_child(CoreProcess* child)
+{
+    size_t index = _children.empty() ? 0 : _children.back().second + 1;
+    insert_gui_child(child, index);
 }
 
 void
@@ -204,7 +218,7 @@ GUIStructureObserver::ensure_container_registered (FatProcess* container)
     GUIStructureHolder* holder = new GUIStructureHolder (container);
     _structure_map[container]  = holder;
 
-    FatProcess* parent = container->get_parent ();
+    FatProcess* parent = dynamic_cast<FatProcess*> (container->get_parent ());
 
     // Try to add this holder as a graphical child of its parent.
     if (parent) {
@@ -214,8 +228,42 @@ GUIStructureObserver::ensure_container_registered (FatProcess* container)
             ensure_container_registered (parent);
         }
 
-        // Now the parent should be present.
-        _structure_map[parent]->add_gui_child (holder, parent->children_size () - 1);
+        // The parent is now guaranteed to be present.
+        switch (parent->get_process_type ()) {
+        case Z_ORDERED_GROUP_T:
+        case CONTAINER_T: {
+            
+            // Ensure that the child is added at the same original index it had in the parent.
+            Container* parent_container           = dynamic_cast<Container*> (parent);
+            int        original_index_from_parent = 0;
+            int        new_index                  = -1;
+            for (auto& c : parent_container->children ()) {
+                if (c == container) {
+                    new_index = original_index_from_parent;
+                    break;
+                }
+                ++original_index_from_parent;
+            }
+            // Note:
+            // This should not happen and shouldn't even be possible: a child should always be present in its own parent!
+            // However, this highlights a bug related to LinearGradient loading in gui/groups — for example: the JLV clock.
+            // if (new_index == -1) {
+            //   djnn__warning (nullptr, " Container " + container->get_debug_name () + " has not been found in its parent !");
+            // }
+            _structure_map[parent]->insert_gui_child (holder, new_index);
+            break;
+        }
+        case LAYER_T: // These are made for GUI, so they will contain GOBJ
+        case GOBJ_T:  // such as items for Path or Poly
+        case DEFS_T:  // made for SVG definition
+        case FSM_T:   // FSM states are containers, but with FSM_T parents, and they have to be added.
+            _structure_map[parent]->append_gui_child (holder);
+            break;
+        default: {
+            djnn__warning (nullptr, " Container " + container->get_debug_name () + " parent has an UNKNOWN " + std::to_string (container->get_parent ()->get_process_type ()) + " djnn type");
+            break;
+        }
+        }
     }
 }
 
@@ -233,7 +281,7 @@ GUIStructureObserver::remove_container (FatProcess* container)
 // GUIStructureObserver::print_structure_map () {
 //   std::cerr << "------- _structure_map ------ " << std::endl;
 //   for (auto p : _structure_map) {
-//     std::cout << "stucture of - " << cpp_demangle(typeid(*p.first).name()) << " - " << p.first->get_debug_name () << std::endl;
+//     std::cout << "\nstucture of - " << cpp_demangle(typeid(*p.first).name()) << " - " << p.first->get_debug_name () << std::endl;
 //     int i = 0 ;
 //     GUIStructureHolder* GH = dynamic_cast<GUIStructureHolder*>(p.second);
 //     if (GH) {
@@ -255,7 +303,7 @@ GUIStructureObserver::add_child_to_container (FatProcess* container, CoreProcess
         ensure_container_registered (container);
         auto it_container = _structure_map.find (container);
         if (it_container != _structure_map.end ())
-            it_container->second->add_gui_child (child, index);
+            it_container->second->insert_gui_child (child, index);
         break;
     }
 
@@ -277,12 +325,12 @@ GUIStructureObserver::add_child_to_container (FatProcess* container, CoreProcess
 
             auto it_container = _structure_map.find (container);
             if (it_container != _structure_map.end ()) {
-                it_container->second->add_gui_child (child_GH, index);
+                it_container->second->insert_gui_child (child_GH, index);
             } else {
                 ensure_container_registered (container);
                 it_container = _structure_map.find (container);
                 if (it_container != _structure_map.end ())
-                    it_container->second->add_gui_child (child_GH, index);
+                    it_container->second->insert_gui_child (child_GH, index);
             }
         }
         break;
@@ -292,6 +340,8 @@ GUIStructureObserver::add_child_to_container (FatProcess* container, CoreProcess
         // No action for other process types
         break;
     }
+
+    // print_structure_map ();
 
     container->update_drawing ();
 }

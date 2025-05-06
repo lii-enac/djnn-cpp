@@ -26,7 +26,8 @@ class GUIStructureHolder : public FatProcess {
   public:
     GUIStructureHolder (FatProcess* content)
         : FatProcess ("GUIStructureHolder_of_" + content->get_debug_name ()), content_process (content) {}
-    void            add_gui_child (CoreProcess* child, size_t index);
+    void            insert_gui_child (CoreProcess* child, size_t index);
+    void            append_gui_child(CoreProcess* child);
     void            add_gui_child_at (CoreProcess* child, size_t neighbour_index, child_position_e spec, size_t new_index);
     void            remove_gui_child (CoreProcess* child);
     void            move_child_to (CoreProcess* child, size_t neighbour_index, child_position_e spec, size_t new_index);
@@ -57,6 +58,7 @@ class GUIStructureObserver : public StructureObserver {
     void                remove_child_from_container (FatProcess* container, CoreProcess* c) override;
     void                swap_children (FatProcess* container, int i, int j) override;
     void                set_child (FatProcess* container, CoreProcess* child, int i) override;
+    // void                print_structure_map ();
     GUIStructureHolder* find_holder (CoreProcess* container);
     // void print_structure_map ();
     structures_t& structure_map () { return _structure_map; };
