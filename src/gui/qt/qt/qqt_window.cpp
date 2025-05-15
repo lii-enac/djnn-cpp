@@ -293,13 +293,22 @@ MyQQWidget::tabletEvent (QTabletEvent* event)
 
     switch (event->type ()) {
     case QEvent::TabletPress:
-        exec_ = _picking_view->genericTabletPress (tablet_pos_x, tablet_pos_y, get_stylus_type (event->pointerType ()), get_button (event->button ()), pressure);
+        if (_STYLUS_EMULATE_MOUSE == 1)
+            exec_ = _picking_view->genericMousePress (tablet_pos_x, tablet_pos_y, get_button (event->button ()));
+        else
+            exec_ = _picking_view->genericTabletPress (tablet_pos_x, tablet_pos_y, get_stylus_type (event->pointerType ()), get_button (event->button ()), pressure);
         break;
     case QEvent::TabletMove:
-        exec_ = _picking_view->genericTabletMove (tablet_pos_x, tablet_pos_y, get_stylus_type (event->pointerType ()), pressure);
+        if (_STYLUS_EMULATE_MOUSE == 1)
+            exec_ = _picking_view->genericMouseMove (tablet_pos_x, tablet_pos_y);
+        else
+            exec_ = _picking_view->genericTabletMove (tablet_pos_x, tablet_pos_y, get_stylus_type (event->pointerType ()), pressure);
         break;
     case QEvent::TabletRelease:
-        exec_ = _picking_view->genericTabletRelease (tablet_pos_x, tablet_pos_y, get_stylus_type (event->pointerType ()), get_button (event->button ()), pressure);
+        if (_STYLUS_EMULATE_MOUSE == 1)
+            exec_ = _picking_view->genericMouseRelease (tablet_pos_x, tablet_pos_y, get_button (event->button ()));
+        else
+            exec_ = _picking_view->genericTabletRelease (tablet_pos_x, tablet_pos_y, get_stylus_type (event->pointerType ()), get_button (event->button ()), pressure);
         break;
     default:
         break;

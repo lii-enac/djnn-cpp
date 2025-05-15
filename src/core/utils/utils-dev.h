@@ -92,7 +92,7 @@ extern int _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY;
 extern int _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL;
 
 /*
-  disable touch event  (especially for macos trackpad)
+  Enable touch event  (especially for macos trackpad)
 */
 
 extern int _ENABLE_TOUCHES;
@@ -105,6 +105,12 @@ extern int _ENABLE_TOUCHES;
 */
 
 extern int _DEBUG_ENABLE_STRESS_TEST;
+
+/*
+  Enable mouse emulation with stylus
+*/
+
+extern int _STYLUS_EMULATE_MOUSE;
 
 #else
 
@@ -120,6 +126,7 @@ const int
     _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL  = 0,
     _ENABLE_TOUCHES                               = 0,
     _DEBUG_ENABLE_STRESS_TEST                     = 0;
+    _STYLUS_EMULATE_MOUSE                         = 0;
 
 const char *_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION = "",
 #endif
