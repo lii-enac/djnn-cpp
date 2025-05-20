@@ -1,3 +1,4 @@
+#include "core/core-dev.h"
 namespace djnn {
 #ifndef DJNN_NO_DEBUG // still required to link smala programs
                       // DEBUG OPTIONS
@@ -16,5 +17,7 @@ int
     _STYLUS_EMULATE_MOUSE                         = 0;
 
 const char* _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION = "";
+
+djnnstl::string _SVG_USER_CUSTOM_ATTRS = "";
 #endif
 } // namespace djnn

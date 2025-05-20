@@ -14,7 +14,6 @@
 
 #pragma once
 
-// #include <utility> // pair
 #include "containers.h"
 
 namespace djnn {
@@ -112,6 +111,12 @@ extern int _DEBUG_ENABLE_STRESS_TEST;
 
 extern int _STYLUS_EMULATE_MOUSE;
 
+/*
+  Set of user-defined custom SVG attributes recognized by the system
+*/
+
+extern djnnstl::string _SVG_USER_CUSTOM_ATTRS;
+
 #else
 
 const int
@@ -128,6 +133,8 @@ const int
     _DEBUG_ENABLE_STRESS_TEST                     = 0;
     _STYLUS_EMULATE_MOUSE                         = 0;
 
-const char *_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION = "",
+const char *_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION = "";
+
+djnnstl::string> _SVG_USER_CUSTOM_ATTRS = "";
 #endif
 } // namespace djnn

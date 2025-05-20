@@ -16,6 +16,7 @@
 
 #include <limits>
 #include <numeric>
+#include <sstream>
 
 #include "core/utils/algorithm.h"
 
@@ -35,6 +36,8 @@
 #include "gui/shape/svg_holder.h"
 #include "gui/style/style.h"
 #include "gui/transformation/transformations.h"
+
+#include "core/utils/iostream.h"
 
 namespace djnn {
 /* all the specific tag handling procedures defined in this file */
@@ -106,6 +109,21 @@ static map<string, djn_XMLTagHandler> handlers = {
 
 static int _index_uid_element = 0;
 
+static bool
+contains_exact_attr(const std::string& list, const std::string& key) {
+    std::istringstream ss(list);
+    std::string token;
+    while (std::getline(ss, token, ',')) {
+        // clean "space" if necessairy
+        token.erase(0, token.find_first_not_of(" \t"));
+        token.erase(token.find_last_not_of(" \t") + 1);
+
+        if (token == key)
+            return true;
+    }
+    return false;
+}
+
 djn_XMLTagHandler*
 SVGElements_Hash::djn_SVGElementsLookup (const char* str, unsigned int len)
 {
@@ -174,17 +192,20 @@ StartSVG (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&g, attrs, XMLRectAreaAttrs_Hash::djn_XMLRectAreaAttrsLookup,
-                                    SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in svg element\n", *attrs);
-#endif
-        attrs++;
-        attrs++;
+
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&g, attrs, XMLRectAreaAttrs_Hash::djn_XMLRectAreaAttrsLookup,
+                                          SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup, nullptr);
+
+        if (!ret) {
+            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+                new TextProperty (g, key, val);
+            }
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     /*
             f = new Window(g, "", "", (int) djn_RectAreaArgs.x, (int) djn_RectAreaArgs.y,
@@ -254,17 +275,22 @@ StartRect (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&holder, attrs, XMLRectAttrs_Hash::djn_XMLRectAttrsLookup,
+
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLRectAttrs_Hash::djn_XMLRectAttrsLookup,
                                     SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in rect element\n", *attrs);
-#endif
-        attrs++;
-        attrs++;
+        if (!ret) {
+            if (contains_exact_attr(_SVG_USER_CUSTOM_ATTRS, key)) {
+                if (!holder) {
+                    holder = new SVGHolder (nullptr, "SVGHolder");
+                }
+                new TextProperty (holder, key, val);
+            } 
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     if (djn_GraphicalShapeArgs.id.empty ()) {
         djn_GraphicalShapeArgs.id = "_uid_" + to_string (_index_uid_element++);
@@ -324,17 +350,22 @@ StartImage (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&holder, attrs, XMLImgAttrs_Hash::djn_XMLImgAttrsLookup,
-                                    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in img element\n", *attrs);
-#endif
-        attrs++;
-        attrs++;
+
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLImgAttrs_Hash::djn_XMLImgAttrsLookup,
+                                          SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
+        if (!ret) {
+            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+                if (!holder) {
+                    holder = new SVGHolder (nullptr, "SVGHolder");
+                }
+                new TextProperty (holder, key, val);
+            }
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     if (djn_GraphicalShapeArgs.id.empty ()) {
         djn_GraphicalShapeArgs.id = "_uid_" + to_string (_index_uid_element++);
@@ -387,17 +418,22 @@ StartEllipse (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&holder, attrs, XMLEllipseAttrs_Hash::djn_XMLEllipseAttrsLookup,
-                                    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in ellipse element\n", *attrs);
-#endif
-        attrs++;
-        attrs++;
+
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLEllipseAttrs_Hash::djn_XMLEllipseAttrsLookup,
+                                          SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
+        if (!ret) {
+            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+                if (!holder) {
+                    holder = new SVGHolder (nullptr, "SVGHolder");
+                }
+                new TextProperty (holder, key, val);
+            }
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     if (djn_GraphicalShapeArgs.id.empty ()) {
         djn_GraphicalShapeArgs.id = "_uid_" + to_string (_index_uid_element++);
@@ -446,17 +482,21 @@ StartCircle (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&holder, attrs, XMLCircleAttrs_Hash::djn_XMLCircleAttrsLookup,
-                                    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in circle element\n", *attrs);
-#endif
-        attrs++;
-        attrs++;
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLCircleAttrs_Hash::djn_XMLCircleAttrsLookup,
+                                          SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
+        if (!ret) {
+            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+                if (!holder) {
+                    holder = new SVGHolder (nullptr, "SVGHolder");
+                }
+                new TextProperty (holder, key, val);
+            }
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     if (djn_GraphicalShapeArgs.id.empty ()) {
         djn_GraphicalShapeArgs.id = "_uid_" + to_string (_index_uid_element++);
@@ -506,17 +546,21 @@ StartLine (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&holder, attrs, XMLLineAttrs_Hash::djn_XMLLineAttrsLookup,
-                                    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in line element\n", *attrs);
-#endif
-        attrs++;
-        attrs++;
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLLineAttrs_Hash::djn_XMLLineAttrsLookup,
+                                          SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
+        if (!ret) {
+            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+                if (!holder) {
+                    holder = new SVGHolder (nullptr, "SVGHolder");
+                }
+                new TextProperty (holder, key, val);
+            }
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     if (djn_GraphicalShapeArgs.id.empty ()) {
         djn_GraphicalShapeArgs.id = "_uid_" + to_string (_index_uid_element++);
@@ -562,18 +606,22 @@ StartPoly (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&holder, attrs, XMLPolylineAttrs_Hash::djn_XMLPolylineAttrsLookup,
-                                    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in poly%s element\n",
-                     *attrs, djn_PolyArgs.isPolygon ? "gon" : "line");
-#endif
-        attrs++;
-        attrs++;
+
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLPolylineAttrs_Hash::djn_XMLPolylineAttrsLookup,
+                                          SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
+        if (!ret) {
+            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+                if (!holder) {
+                    holder = new SVGHolder (nullptr, "SVGHolder");
+                }
+                new TextProperty (holder, key, val);
+            }
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     if (djn_GraphicalShapeArgs.id.empty ()) {
         djn_GraphicalShapeArgs.id = "_uid_" + to_string (_index_uid_element++);
@@ -659,17 +707,22 @@ StartText (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&holder, attrs, XMLTextAttrs_Hash::djn_XMLTextAttrsLookup,
-                                    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in text element\n", *attrs);
-#endif
-        attrs++;
-        attrs++;
+
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLTextAttrs_Hash::djn_XMLTextAttrsLookup,
+                                          SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
+        if (!ret) {
+            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+                if (!holder) {
+                    holder = new SVGHolder (nullptr, "SVGHolder");
+                }
+                new TextProperty (holder, key, val);
+            }
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     if (djn_GraphicalShapeArgs.id.empty ()) {
         djn_GraphicalShapeArgs.id = "_uid_" + to_string (_index_uid_element++);
@@ -732,17 +785,21 @@ StartTspan (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&holder, attrs, XMLTextAttrs_Hash::djn_XMLTextAttrsLookup,
-                                    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in tspan element\n", *attrs);
-#endif
-        attrs++;
-        attrs++;
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLTextAttrs_Hash::djn_XMLTextAttrsLookup,
+                                          SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
+        if (!ret) {
+            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+                if (!holder) {
+                    holder = new SVGHolder (nullptr, "SVGHolder");
+                }
+                new TextProperty (holder, key, val);
+            }
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     if (djn_GraphicalShapeArgs.id.empty ()) {
         djn_GraphicalShapeArgs.id = "_uid_" + to_string (_index_uid_element++);
@@ -777,18 +834,21 @@ StartPath (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&holder, attrs, XMLPathAttrs_Hash::djn_XMLPathAttrsLookup,
-                                    SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in path element\n",
-                     *attrs);
-#endif
-        attrs++;
-        attrs++;
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLPathAttrs_Hash::djn_XMLPathAttrsLookup,
+                                          SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
+        if (!ret) {
+            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+                if (!holder) {
+                    holder = new SVGHolder (nullptr, "SVGHolder");
+                }
+                new TextProperty (holder, key, val);
+            }
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     if (djn_GraphicalShapeArgs.id.empty ()) {
         djn_GraphicalShapeArgs.id = "_uid_" + to_string (_index_uid_element++);
@@ -851,16 +911,18 @@ StartGroup (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in group element\n", *attrs);
-#endif
-        attrs++;
-        attrs++;
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&e, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
+
+        if (!ret) {
+            if (contains_exact_attr(_SVG_USER_CUSTOM_ATTRS, key)) {
+                new TextProperty (e, key, val);
+            } 
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     if (djn_GraphicalShapeArgs.id.empty ()) {
         djn_GraphicalShapeArgs.id = "_uid_" + to_string (_index_uid_element++);
@@ -1013,6 +1075,8 @@ StartLinearGradient (const char** attrs, FatProcess* current)
     djn_GradientArgs.inherited = 1 << djn_GradientCoords | 1 << djn_GradientSpread | 1 << djn_GradientStopPoints | 1 << djn_GradientX1 | 1 << djn_GradientY1 | 1 << djn_GradientX2 | 1 << djn_GradientY2;
 
     while (*attrs) {
+
+        
 #ifdef DEBUG
         int ret =
 #endif
@@ -1207,16 +1271,21 @@ StartPathClip (const char** attrs, FatProcess* current)
 
     /* FIXME: should manage optional, mandatory and duplicate attributes */
     while (*attrs) {
-#ifdef DEBUG
-        int ret =
-#endif
-            XML::djn_XMLHandleAttr (&holder, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
-#ifdef DEBUG
-        if (!ret)
-            fprintf (stderr, "unknown attribute '%s' in pathClip element\n", *attrs);
-#endif
-        attrs++;
-        attrs++;
+        const char* key = *attrs;
+        const char* val = *(attrs + 1);
+
+        int ret = XML::djn_XMLHandleAttr (&holder, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
+
+        if (!ret) {
+            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+                if (!holder) {
+                    holder = new SVGHolder (nullptr, "SVGHolder");
+                }
+                new TextProperty (holder, key, val);
+            }
+        }
+
+        attrs += 2; // We move forward by 2 positions (key, value).
     }
     if (djn_GraphicalShapeArgs.id.empty ()) {
         djn_GraphicalShapeArgs.id = "_uid_" + to_string (_index_uid_element++);

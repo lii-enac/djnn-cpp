@@ -49,5 +49,8 @@ extern int
     _STYLUS_EMULATE_MOUSE;
 
 extern const char* _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION;
+
+extern djnnstl::string _SVG_USER_CUSTOM_ATTRS;
+
 #endif
 } // namespace djnn
