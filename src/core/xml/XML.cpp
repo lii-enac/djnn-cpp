@@ -58,20 +58,22 @@ clear_xml ()
     }
 }
 FatProcess*
-load_from_XML (const string& uri)
+load_from_XML (const string& uri, const djnnstl::string& svg_user_custom_attr)
 {
+    _SVG_USER_CUSTOM_ATTRS= svg_user_custom_attr;
     return XML::djnLoadThenClone (uri);
 }
 FatProcess*
-load_from_XML_once (const string& uri)
+load_from_XML_once (const string& uri, const djnnstl::string& svg_user_custom_attr)
 {
+    _SVG_USER_CUSTOM_ATTRS= svg_user_custom_attr;
     return XML::djnLoadFromXML (uri);
 }
 
 FatProcess*
 loadFromXML (const string& uri)
 {
-    warning (nullptr, "loadFromXML is now deprecated :\nPlease use:\n- load_from_XML (string uri)  - to load then clone many times the same XML\n- load_from_XML_once (string uri) - to load only once an XML\n");
+    warning (nullptr, "loadFromXML is now deprecated :\nPlease use:\n- load_from_XML (string uri, string svg_user_custom_attr="")  - to load then clone many times the same XML\n- load_from_XML_once (string uri, string svg_user_custom_attr="") - to load only once an XML\n");
     return XML::djnLoadFromXML (uri);
 }
 

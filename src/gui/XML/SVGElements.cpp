@@ -200,7 +200,7 @@ StartSVG (const char** attrs, FatProcess* current)
                                           SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup, nullptr);
 
         if (!ret) {
-            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+            if (!_SVG_USER_CUSTOM_ATTRS.empty() && contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
                 new TextProperty (g, key, val);
             }
         }
@@ -357,7 +357,7 @@ StartImage (const char** attrs, FatProcess* current)
         int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLImgAttrs_Hash::djn_XMLImgAttrsLookup,
                                           SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
         if (!ret) {
-            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+            if (!_SVG_USER_CUSTOM_ATTRS.empty() && contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
                 if (!holder) {
                     holder = new SVGHolder (nullptr, "SVGHolder");
                 }
@@ -425,7 +425,7 @@ StartEllipse (const char** attrs, FatProcess* current)
         int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLEllipseAttrs_Hash::djn_XMLEllipseAttrsLookup,
                                           SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
         if (!ret) {
-            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+            if (!_SVG_USER_CUSTOM_ATTRS.empty() && contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
                 if (!holder) {
                     holder = new SVGHolder (nullptr, "SVGHolder");
                 }
@@ -488,7 +488,7 @@ StartCircle (const char** attrs, FatProcess* current)
         int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLCircleAttrs_Hash::djn_XMLCircleAttrsLookup,
                                           SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
         if (!ret) {
-            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+            if (!_SVG_USER_CUSTOM_ATTRS.empty() && contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
                 if (!holder) {
                     holder = new SVGHolder (nullptr, "SVGHolder");
                 }
@@ -552,7 +552,7 @@ StartLine (const char** attrs, FatProcess* current)
         int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLLineAttrs_Hash::djn_XMLLineAttrsLookup,
                                           SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
         if (!ret) {
-            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+            if (!_SVG_USER_CUSTOM_ATTRS.empty() && contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
                 if (!holder) {
                     holder = new SVGHolder (nullptr, "SVGHolder");
                 }
@@ -613,7 +613,7 @@ StartPoly (const char** attrs, FatProcess* current)
         int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLPolylineAttrs_Hash::djn_XMLPolylineAttrsLookup,
                                           SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
         if (!ret) {
-            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+            if (!_SVG_USER_CUSTOM_ATTRS.empty() && contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
                 if (!holder) {
                     holder = new SVGHolder (nullptr, "SVGHolder");
                 }
@@ -714,7 +714,7 @@ StartText (const char** attrs, FatProcess* current)
         int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLTextAttrs_Hash::djn_XMLTextAttrsLookup,
                                           SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
         if (!ret) {
-            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+            if (!_SVG_USER_CUSTOM_ATTRS.empty() && contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
                 if (!holder) {
                     holder = new SVGHolder (nullptr, "SVGHolder");
                 }
@@ -791,7 +791,7 @@ StartTspan (const char** attrs, FatProcess* current)
         int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLTextAttrs_Hash::djn_XMLTextAttrsLookup,
                                           SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
         if (!ret) {
-            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+            if (!_SVG_USER_CUSTOM_ATTRS.empty() && contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
                 if (!holder) {
                     holder = new SVGHolder (nullptr, "SVGHolder");
                 }
@@ -840,7 +840,7 @@ StartPath (const char** attrs, FatProcess* current)
         int ret = XML::djn_XMLHandleAttr (&holder, attrs, XMLPathAttrs_Hash::djn_XMLPathAttrsLookup,
                                           SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
         if (!ret) {
-            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+            if (!_SVG_USER_CUSTOM_ATTRS.empty() && contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
                 if (!holder) {
                     holder = new SVGHolder (nullptr, "SVGHolder");
                 }
@@ -1277,7 +1277,7 @@ StartPathClip (const char** attrs, FatProcess* current)
         int ret = XML::djn_XMLHandleAttr (&holder, attrs, SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup, nullptr);
 
         if (!ret) {
-            if (contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
+            if (!_SVG_USER_CUSTOM_ATTRS.empty() && contains_exact_attr (_SVG_USER_CUSTOM_ATTRS, key)) {
                 if (!holder) {
                     holder = new SVGHolder (nullptr, "SVGHolder");
                 }

@@ -25,7 +25,7 @@ void init_xml ();
 void clear_xml ();
 
 class FatProcess;
-FatProcess* load_from_XML (const djnnstl::string& uri);
-FatProcess* load_from_XML_once (const djnnstl::string& uri);
+FatProcess* load_from_XML (const djnnstl::string& uri, const djnnstl::string& svg_user_custom = djnnstl::string(""));
+FatProcess* load_from_XML_once (const djnnstl::string& uri, const djnnstl::string& svg_user_custom = djnnstl::string(""));
 FatProcess* loadFromXML (const djnnstl::string& uri);
 } // namespace djnn
