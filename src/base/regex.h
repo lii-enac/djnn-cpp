@@ -41,7 +41,7 @@ class Regex : public FatProcess {
     virtual ~Regex ();
     void impl_activate () override;
     void impl_deactivate () override;
-    Regex* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
+    //Regex* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
