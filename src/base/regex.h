@@ -46,11 +46,13 @@ class Regex : public FatProcess {
 #endif
 
     FatProcess* find_child_impl (const string&) override;
+    BoolProperty* matched() { return &_matched; }
 
   private:
     void                    set_parent (CoreProcess* parent) override;
     TextProperty            _input;
     TextProperty            _init;
+    BoolProperty            _matched;
     std::regex              _regex;
     RegexAction             _reg_action;
     Coupling                _c_reg;

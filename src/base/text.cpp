@@ -259,6 +259,10 @@ Regex::RegexAction::impl_activate ()
             const string res = match.str (0).c_str (); // FIXME copy of string even if no EASTL (or not, if optimized?)
             it->second->set_value (res, true);
         }
+        static_cast<Regex*>(_parent)->matched()->set_value(true, true);
+    }
+    else {
+        static_cast<Regex*>(_parent)->matched()->set_value(false, true);
     }
 }
 
@@ -266,12 +270,14 @@ Regex::Regex (CoreProcess* parent, const string& name, const string& reg)
     : FatProcess (name),
       _input (this, "input", ""),
       _init (this, "init", reg),
+      _matched (this, "matched", false),
       _regex (reg.c_str ()),
       _reg_action (this, "reg_action", *this),
       _c_reg (&_input, ACTIVATION, &_reg_action, ACTIVATION)
 {
     _c_reg.disable ();
     graph_add_edge (&_input, &_reg_action);
+    graph_add_edge (&_reg_action, &_matched);
     finalize_construction (parent, name);
 }
 
@@ -280,6 +286,7 @@ Regex::~Regex ()
     if (get_parent ()) {
         remove_state_dependency (get_parent (), &_reg_action);
     }
+    graph_remove_edge (&_reg_action, &_matched);
     graph_remove_edge (&_input, &_reg_action);
 
     for (auto p : _in_map) {
@@ -296,6 +303,8 @@ Regex::find_child_impl (const string& key)
         return &_input;
     if (key.compare ("init") == 0)
         return &_init;
+    if (key.compare ("matched") == 0)
+        return &_matched;
 
     try {
         int i = stoi (key, nullptr);
