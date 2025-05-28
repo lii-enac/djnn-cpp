@@ -19,6 +19,7 @@
 #include "core/control/action.h"
 #include "core/ontology/coupling.h"
 #include "core/property/text_property.h"
+#include "core/property/bool_property.h"
 
 namespace djnn {
 
@@ -40,6 +41,7 @@ class Regex : public FatProcess {
     virtual ~Regex ();
     void impl_activate () override;
     void impl_deactivate () override;
+    Regex* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
