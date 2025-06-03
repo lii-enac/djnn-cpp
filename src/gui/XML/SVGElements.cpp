@@ -225,14 +225,12 @@ EndElement (FatProcess* e)
 static void
 djn__CheckStroke (FatProcess* holder)
 {
+    // why ??? (06.2025)
     if (djn_GraphicalShapeArgs.strokeType == djnStrokeNone) {
         /* if it exists, ensure that no-stroke is at the end of the list */
         auto* e = holder->find_child ("no-stroke");
         holder->remove_child (e);
         holder->add_child (e, "no-stroke");
-    } else if (djn_GraphicalShapeArgs.strokeType == djnStrokeUndef) {
-        /* otherwise, create it */
-        new NoOutline (holder, "no-stroke");
     }
 }
 
