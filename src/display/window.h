@@ -133,6 +133,8 @@ class Window : public FatProcess {
 
   public:
     Window (CoreProcess* parent, const string& name, const string& title, double x, double y, double w, double h);
+    Window (CoreProcess* parent, const string& name, const string& title);
+    Window (CoreProcess* parent, const string& name);
     virtual ~Window ();
     virtual process_type_e get_process_type () const override { return WINDOW_T; }
 

@@ -187,6 +187,16 @@ Window::Window (CoreProcess* parent, const string& name, const string& title, do
     finalize_construction (parent, name);
 }
 
+Window::Window (CoreProcess* parent, const string& name, const string& title)
+: Window (parent, name, title, 0, 0, 600, 600)
+{
+}
+
+Window::Window (CoreProcess* parent, const string& name)
+: Window (parent, name, "djnn/smala app")
+{
+}
+
 void
 Window::impl_activate ()
 {
