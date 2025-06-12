@@ -49,13 +49,13 @@ GUIStructureObserver* gui_structure_observer;
 void
 GUIStructureHolder::insert_gui_child (CoreProcess* child, size_t index)
 {
-    auto it = std::lower_bound(
-        _children.begin(), _children.end(), index,
-        [](const children_t::value_type& p, size_t val) {
-            return p.second < val;
+    auto it = std::upper_bound (
+        _children.begin (), _children.end (), index,
+        [] (size_t val, const auto& p) { // Note: arguments inversés par rapport à lower_bound
+            return val < p.second;
         });
-    
-    _children.insert(it, {child, index});
+
+    _children.insert (it, {child, index});
 }
 
 void
@@ -205,6 +205,58 @@ GUIStructureObserver::~GUIStructureObserver ()
         _structure_map.erase (it);
         it = _structure_map.begin ();
     }
+}
+
+void
+GUIStructureObserver::ensure_component_has_correct_index_in_GH_container (FatProcess* container) {
+
+    Container* parent_container = dynamic_cast<Container*> (container);
+    if (parent_container == nullptr)
+        return;
+
+    GUIStructureHolder* container_GH = _structure_map[parent_container];
+    GUIStructureHolder* child_GH;
+    CoreProcess* process_child;
+    if (container_GH) {
+        for (auto& it : container_GH->children ()) {
+
+            // Note:
+            // it.first can be either a CoreProcess or sometimes a GH.
+            // When it's a GH, we need to retrieve the original process it represents.
+            
+            child_GH = dynamic_cast<GUIStructureHolder*> (it.first);
+            if (child_GH)
+                process_child = child_GH->process () ;
+            else
+                process_child = it.first;
+
+            // check process_child index in container
+
+            int        new_index_from_parent = 0;
+            int        new_index                  = -1;
+            for (auto& c : parent_container->children ()) {
+                if (c == process_child) {
+                    new_index = new_index_from_parent;
+                    break;
+                }
+                ++new_index_from_parent;
+            }
+
+            // Finally save the new_index
+
+            if( new_index != -1 ) {
+                it.second = new_index;
+            } 
+        }
+    }
+
+    // then Synchronize GH order with container's current child ordering
+    std::sort (
+        container_GH->children ().begin (),
+        container_GH->children ().end (),
+        [] (const auto& a, const auto& b) {
+            return a.second < b.second;
+        });
 }
 
 void
@@ -381,6 +433,14 @@ GUIStructureObserver::add_child_at (FatProcess* container, CoreProcess* child, i
 void
 GUIStructureObserver::move_child_to (FatProcess* container, CoreProcess* child, int neighbour_index, child_position_e spec, int new_index)
 {
+    // Important note:
+    // A child move has been executed in the container.
+    // We need to maintain this information and reflect it in the corresponding GH.
+    // Because some GH elements may appear later (i.e., are created only when they "discover" they will embed a graphic process).
+    // To be inserted correctly in the GH,
+    // these other GH elements must have the correct index.
+    ensure_component_has_correct_index_in_GH_container (container);
+
     structures_t::iterator it_container = _structure_map.find (container);
     switch (child->get_process_type ()) {
     case GOBJ_T:
