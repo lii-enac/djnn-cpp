@@ -25,7 +25,7 @@ typedef djnnstl::vector<djnnstl::pair<CoreProcess*, size_t>> children_t; // TODO
 class GUIStructureHolder : public FatProcess {
   public:
     GUIStructureHolder (FatProcess* content)
-        : FatProcess ("GUIStructureHolder_of_" + content->get_debug_name ()), content_process (content) {}
+        : FatProcess ("GUIStructureHolder_of_" + content->get_debug_name ()), _content_process (content) {}
     void            insert_gui_child (CoreProcess* child, size_t index);
     void            append_gui_child(CoreProcess* child);
     void            add_gui_child_at (CoreProcess* child, size_t neighbour_index, child_position_e spec, size_t new_index);
@@ -38,10 +38,11 @@ class GUIStructureHolder : public FatProcess {
     void            impl_activate () override {}
     void            impl_deactivate () override {}
     children_t&     children () { return _children; }
+    FatProcess*     process () { return _content_process; }
 
   private:
     children_t  _children;
-    FatProcess* content_process;
+    FatProcess* _content_process;
 };
 
 typedef djnnstl::map<CoreProcess*, GUIStructureHolder*>           structures_t;
@@ -50,7 +51,7 @@ class GUIStructureObserver : public StructureObserver {
   public:
     GUIStructureObserver () {}
     virtual ~GUIStructureObserver () override;
-    void                ensure_container_registered (FatProcess* container) override;
+    void                ensure_container_registered (FatProcess* container);
     void                remove_container (FatProcess* container) override;
     void                add_child_to_container (FatProcess* container, CoreProcess* child, int index) override;
     void                add_child_at (FatProcess* container, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index) override;

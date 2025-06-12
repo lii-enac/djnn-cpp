@@ -108,20 +108,20 @@ GUIStructureHolder::draw ()
     __nb_Drawing_object_picking = 0;
 #endif
 
-    // if the content_process activated else return
-    if (content_process->somehow_deactivating ())
+    // if the _content_process activated else return
+    if (_content_process->somehow_deactivating ())
         return;
 
     rmt_BeginCPUSample (guistructureholder_draw, RMTSF_Recursive); 
     ComponentObserver::instance ().start_draw ();   
     // if Layer and the correct frame
-    if (content_process->get_process_type () == LAYER_T) {
-        Layer* l = dynamic_cast<Layer*> (content_process);
+    if (_content_process->get_process_type () == LAYER_T) {
+        Layer* l = dynamic_cast<Layer*> (_content_process);
         if (DisplayBackend::instance ()->window () == l->get_frame ()) {
             Backend::instance ()->draw_layer (l, _children);
         }
-    } else if (content_process->get_process_type () == Z_ORDERED_GROUP_T) {
-        content_process->draw ();
+    } else if (_content_process->get_process_type () == Z_ORDERED_GROUP_T) {
+        _content_process->draw ();
     }
     // if other container
     else {
@@ -134,7 +134,7 @@ GUIStructureHolder::draw ()
 
 #if _DEBUG_SEE_GUI_INFO_PREF
     std::cerr << "\033[1;36m" << std::endl;
-    std::cerr << content_process->get_debug_name () << std::endl;
+    std::cerr << _content_process->get_debug_name () << std::endl;
     std::cerr << "NB DRAWING OBJS: " << __nb_Drawing_object << std::endl;
     std::cerr << "NB DRAWING OBJS PICKING VIEW: " << __nb_Drawing_object_picking << std::endl;
     std::cerr << "\033[0m";
