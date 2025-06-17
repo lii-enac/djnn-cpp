@@ -439,7 +439,13 @@ GUIStructureObserver::move_child_to (FatProcess* container, CoreProcess* child, 
     // Because some GH elements may appear later (i.e., are created only when they "discover" they will embed a graphic process).
     // To be inserted correctly in the GH,
     // these other GH elements must have the correct index.
-    ensure_component_has_correct_index_in_GH_container (container);
+    // Also,
+    // the LAST spec minimizes effort as it appends directly at the end, regardless of index.
+    // Therefore, this operation is only performed for specs other than LAST,
+    // since ensure_component_has_correct_index_in_GH_container is costly, involving several O(n) loops.
+    if (spec != LAST) {
+        ensure_component_has_correct_index_in_GH_container (container);
+    }
 
     structures_t::iterator it_container = _structure_map.find (container);
     switch (child->get_process_type ()) {
