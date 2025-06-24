@@ -576,9 +576,19 @@ Picking::genericTouchMove (double x, double y, int id, float pressure)
         } else if (s != nullptr && s != cur_shape) {
             if (!check_for_ui (s))
                 return false;
+
             if (cur_shape != nullptr && cur_shape != init_shape)
                 cur_shape->ui ()->touches ()->remove_child (t);
-            s->ui ()->touches ()->add_child (t, djnnstl::to_string (id));
+
+            // HACK : 
+            // s->ui ()->touches ()->add_child (t, djnnstl::to_string (id)); //this line should not be commented
+            
+            // This hack was implemented in 07.2025 for the TARS project to enable touch-based drag-and-drop.
+            // However, a more sustainable solution should be implemented:
+            // - Replace Touch Lists in UI with ProcessCollectors to support multi-parenting
+            // - Handle drag from "user-space" by subscribing to shape/touch[id]/press, then frame/touch[id]/move and release
+            //   to avoid "overreacting" when the line below exits init_shape
+
             t->set_current_shape (s);
             /* setting */
             s->ui ()->move_x ()->set_value (x, true);
