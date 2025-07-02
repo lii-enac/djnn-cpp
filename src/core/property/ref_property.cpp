@@ -117,6 +117,8 @@ RefProperty::set_value (CoreProcess* v, bool propagate)
         notify_activation ();
         notify_parent ();
     }
+
+    _is_null.set_value (v == nullptr, true);
 }
 
 #ifndef DJNN_NO_SERIALIZE
@@ -157,6 +159,9 @@ RefProperty::find_child_impl (const string& path)
         // auto * fpv = dynamic_cast<FatProcess*>(_value);
         // if(fpv)
         //   return fpv->find_child_impl (subpath);
+    }
+    if (key.compare ("is_null") == 0) {
+        return _is_null.find_child_impl (subpath);
     }
     return nullptr;
 }
