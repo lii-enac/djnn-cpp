@@ -1211,7 +1211,7 @@ ifeq ($(pkgcmdtype),pacman)
 	#pkgdeps += libusb #crazyflie
 	mgwpkgdeps += rtmidi
 	ifeq ($(graphics),QT)
-		mgwpkgdeps += qt5
+		mgwpkgdeps += qt5-3d
 	endif
 	ifeq ($(display),SDL)
 		mgwpkgdeps += SDL2 SDL2_image
