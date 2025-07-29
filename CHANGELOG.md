@@ -9,7 +9,52 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
     - Update the Docs !
-    - test on Native Windows 10 compilation
+
+## [1.22.0] - 2025-07-29
+
+### NEW
+
+    - NEW GUIStructureHolder built on the fly
+    - NEW Support for multi-assignment and multi-binding across components and graphical objects
+    - NEW Global `_SVG_USER_CUSTOM_ATTRS` for parsing custom SVG attributes
+    - NEW Global `_STYLUS_EMULATE_MOUSE` for stylus mouse emulation
+    - NEW `is_null` property added to `RefProperty`
+    - NEW SDL backend updated to SDL3
+
+### Added
+
+    - Added Getter for `GUIStructureHolder::process_content`
+    - Remade Support multitouch and interaction behaviors `RR_T` and `RRR_MT`   
+    - Added Remotery integration on `GUIStructureHolder::draw`
+    - Added `matched` and `include` boolean properties for regex
+
+### Changed
+
+    - Changed APIs `load_from_XML` and `load_from_XML_once` added for parsing custom SVG attributes
+    - Changed Child movement tracking in GH containers
+    - Improved context save/restore for containers, paths, and polygons
+    - List removal now nullifies parent and cleans children
+    - Simplified `move_child` and `add_child` logic in tree module
+    - Various code cleanups and style fixes in graph, assignment, and properties
+    - replaced default option _DEBUG_NO_TOUCH_EVENT = 1 by ENABLE_TOUCHES = 0
+    - Removed automatic no-stroke behavior on missing stroke style parsing but existing other styles
+    - Makefile and packaging improved for MSYS2 and Debian
+    - Formatting scripts improved and sources reformatted
+
+### Fixed
+
+    - Type issues in synchronizer and assignment systems
+    - Touch event behavior fixed for hovering non-initial shapes
+    - Shape selection under touch input fixed
+    - Deletion of `~AbstractRRR` and `~Matrix4x4` fixed
+    - Compilation issues fixed in GUI and other modules
+    - Null dereference warnings fixed in `gen_prop.py`
+
+### Removed
+
+    - `impl_clone` declarations removed from headers
+    - Redundant code in graph and tree modules
+    - Deprecated warnings removed in build flags
 
 ## [1.21.0] - 2024-07-15
 
