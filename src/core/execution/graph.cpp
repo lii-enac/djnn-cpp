@@ -248,6 +248,27 @@ Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
     // remove src if necessary
     if (vs->get_edges ().empty () && (vs->get_count_edges_in () == 0)) {
         _vertices.erase (vs->get_position_in_graph_vertices ());
+        // Ensure that 'vs' is properly removed from _activation_deque.
+        //
+        // To verify, you can run:
+        // for (auto& v : _activation_deque) {
+        //     if (v == vs) {
+        //         cerr << "WARNING: 'vs' is still present in _activation_deque" << endl;
+        //         // Optionally, complete with: print_process_full_name(p_src);
+        //     }
+        // }
+        //
+        // If there can be multiple occurrences:
+        // _activation_deque.erase(
+        //     djnnstl::remove(_activation_deque.begin(), _activation_deque.end(), vs),
+        //     _activation_deque.end()
+        // );
+        //
+        // If there is only a single occurrence (as expected), this is more efficient:
+        auto it = std::find(_activation_deque.begin(), _activation_deque.end(), vs);
+        if (it != _activation_deque.end()) {
+            _activation_deque.erase(it);
+        }
         p_src->set_vertex (nullptr);
         delete vs;
     }
@@ -255,6 +276,27 @@ Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
     // remove dst if necessary
     if (vd->get_edges ().empty () && (vd->get_count_edges_in () == 0)) {
         _vertices.erase (vd->get_position_in_graph_vertices ());
+        // Ensure that 'vd' is properly removed from _activation_deque.
+        //
+        // To verify, you can run:
+        // for (auto& v : _activation_deque) {
+        //     if (v == vd) {
+        //         cerr << "WARNING: 'vd' is still present in _activation_deque" << endl;
+        //         // Optionally, complete with: print_process_full_name(p_dst);
+        //     }
+        // }
+        //
+        // If there can be multiple occurrences:
+        // _activation_deque.erase(
+        //     djnnstl::remove(_activation_deque.begin(), _activation_deque.end(), vd),
+        //     _activation_deque.end()
+        // );
+        //
+        // If there is only a single occurrence (as expected), this is more efficient:
+        auto it = std::find(_activation_deque.begin(), _activation_deque.end(), vd);
+        if (it != _activation_deque.end()) {
+            _activation_deque.erase(it);
+        }
         p_dst->set_vertex (nullptr);
         delete vd;
     }
