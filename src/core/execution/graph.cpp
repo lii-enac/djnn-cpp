@@ -181,6 +181,10 @@ Graph::clear ()
     _output_nodes.clear ();
 }
 
+
+#ifndef DJNN_NO_DEBUG
+static string                      print_process_full_name (CoreProcess* p);
+#endif
 // -----------------------------------------------------------------------
 // Graph management
 
@@ -251,12 +255,12 @@ Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
         // Ensure that 'vs' is properly removed from _activation_deque.
         //
         // To verify, you can run:
-        // for (auto& v : _activation_deque) {
-        //     if (v == vs) {
-        //         cerr << "WARNING: 'vs' is still present in _activation_deque" << endl;
-        //         // Optionally, complete with: print_process_full_name(p_src);
-        //     }
-        // }
+        for (auto& v : _activation_deque) {
+            if (v == vs) {
+                cerr << endl << endl << "WARNING graph_exec: 'vs' is still present in _activation_deque - " << print_process_full_name(p_src) << endl << endl;
+                // Optionally, complete with: print_process_full_name(p_src);
+            }
+        }
         //
         // If there can be multiple occurrences:
         // _activation_deque.erase(
@@ -265,10 +269,10 @@ Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
         // );
         //
         // If there is only a single occurrence (as expected), this is more efficient:
-        auto it = std::find(_activation_deque.begin(), _activation_deque.end(), vs);
-        if (it != _activation_deque.end()) {
-            _activation_deque.erase(it);
-        }
+        // auto it = std::find(_activation_deque.begin(), _activation_deque.end(), vs);
+        // if (it != _activation_deque.end()) {
+        //     _activation_deque.erase(it);
+        // }
         p_src->set_vertex (nullptr);
         delete vs;
     }
@@ -279,12 +283,12 @@ Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
         // Ensure that 'vd' is properly removed from _activation_deque.
         //
         // To verify, you can run:
-        // for (auto& v : _activation_deque) {
-        //     if (v == vd) {
-        //         cerr << "WARNING: 'vd' is still present in _activation_deque" << endl;
-        //         // Optionally, complete with: print_process_full_name(p_dst);
-        //     }
-        // }
+        for (auto& v : _activation_deque) {
+            if (v == vd) {
+                cerr << endl << endl << "WARNING graph_exec: 'vd' is still present in _activation_deque - " << print_process_full_name(p_dst) << endl << endl;
+                // Optionally, complete with: print_process_full_name(p_dst);
+            }
+        }
         //
         // If there can be multiple occurrences:
         // _activation_deque.erase(
@@ -293,10 +297,10 @@ Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
         // );
         //
         // If there is only a single occurrence (as expected), this is more efficient:
-        auto it = std::find(_activation_deque.begin(), _activation_deque.end(), vd);
-        if (it != _activation_deque.end()) {
-            _activation_deque.erase(it);
-        }
+        // auto it = std::find(_activation_deque.begin(), _activation_deque.end(), vd);
+        // if (it != _activation_deque.end()) {
+        //     _activation_deque.erase(it);
+        // }
         p_dst->set_vertex (nullptr);
         delete vd;
     }
@@ -338,7 +342,6 @@ static Vertex*                     current_v;
 static map<Vertex*, list<Vertex*>> data_flow_paths_save;
 static vector<string>              data_flow_result;
 static string                      print_process_fileno (CoreProcess* p);
-static string                      print_process_full_name (CoreProcess* p);
 static string                      print_process_debug_info (CoreProcess* p);
 static string                      extract_filename (const string& s);
 static string                      extract_code_from_file (const string& filepath, int lineno);
