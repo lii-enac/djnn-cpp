@@ -269,10 +269,10 @@ Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
         // );
         //
         // If there is only a single occurrence (as expected), this is more efficient:
-        // auto it = std::find(_activation_deque.begin(), _activation_deque.end(), vs);
-        // if (it != _activation_deque.end()) {
-        //     _activation_deque.erase(it);
-        // }
+        auto it = std::find(_activation_deque.begin(), _activation_deque.end(), vs);
+        if (it != _activation_deque.end()) {
+            _activation_deque.erase(it);
+        }
         p_src->set_vertex (nullptr);
         delete vs;
     }
@@ -297,10 +297,10 @@ Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
         // );
         //
         // If there is only a single occurrence (as expected), this is more efficient:
-        // auto it = std::find(_activation_deque.begin(), _activation_deque.end(), vd);
-        // if (it != _activation_deque.end()) {
-        //     _activation_deque.erase(it);
-        // }
+        auto it = std::find(_activation_deque.begin(), _activation_deque.end(), vd);
+        if (it != _activation_deque.end()) {
+            _activation_deque.erase(it);
+        }
         p_dst->set_vertex (nullptr);
         delete vd;
     }
@@ -342,6 +342,7 @@ static Vertex*                     current_v;
 static map<Vertex*, list<Vertex*>> data_flow_paths_save;
 static vector<string>              data_flow_result;
 static string                      print_process_fileno (CoreProcess* p);
+// static string                      print_process_full_name (CoreProcess* p);
 static string                      print_process_debug_info (CoreProcess* p);
 static string                      extract_filename (const string& s);
 static string                      extract_code_from_file (const string& filepath, int lineno);
@@ -408,16 +409,30 @@ Graph::add_in_activation (Vertex* v)
 #endif
 
     if (_sorted) {
-        if (_activation_deque.empty ()) {
-            _activation_deque.push_front (v);
+        if (_activation_deque.empty()) {
+            _activation_deque.push_front(v);
         } else {
-            auto pos = find_if (_activation_deque.begin (), _activation_deque.end (),
-                                [v] (const Vertex* v1) { return v->get_sorted_index () < v1->get_sorted_index (); });
-
-            _activation_deque.insert (pos, v);
+            if (v->get_sorted_index() == -1) {
+                // Cherche le dernier -1 existant
+                auto pos = std::find_if(
+                    _activation_deque.begin(),
+                    _activation_deque.end(),
+                    [] (const Vertex* v1) { return v1->get_sorted_index() != -1; }
+                );
+                // Insère à la fin du bloc de -1 (juste avant le premier != -1, ou à la fin si tous sont -1).
+                _activation_deque.insert(pos, v);
+            } else {
+                // Cas normal : insère avant le premier avec un index supérieur
+                auto pos = std::find_if(
+                    _activation_deque.begin(),
+                    _activation_deque.end(),
+                    [v] (const Vertex* v1) { return v->get_sorted_index() > v1->get_sorted_index(); }
+                );
+                _activation_deque.insert(pos, v);
+            }
         }
     } else {
-        _activation_deque.push_front (v);
+        _activation_deque.push_front(v);
     }
 
 #ifndef DJNN_NO_DEBUG
