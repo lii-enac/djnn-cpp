@@ -60,6 +60,7 @@ class GUIStructureObserver : public StructureObserver {
     void                remove_child_from_container (FatProcess* container, CoreProcess* c) override;
     void                swap_children (FatProcess* container, int i, int j) override;
     void                set_child (FatProcess* container, CoreProcess* child, int i) override;
+    void                dump_observer (FatProcess* container, int level = 0) override;
     // void                print_structure_map ();
     GUIStructureHolder* find_holder (CoreProcess* container);
     // void print_structure_map ();

@@ -524,6 +524,58 @@ GUIStructureObserver::set_child (FatProcess* container, CoreProcess* child, int 
     container->update_drawing ();
 }
 
+extern int indent;
+void                
+GUIStructureObserver::dump_observer (FatProcess* container, int level) 
+{
+
+    /* check if the level is reached */
+    if ((level != 0) && (indent == level - 1)) {
+        return;
+    }
+
+    //loginfonofl ("");
+    indent++;
+
+    int i = 0;
+
+    // If container is not already a GUIStructureHolder, try to find it
+    GUIStructureHolder* GH = dynamic_cast<GUIStructureHolder*>(container);
+    if (!GH)
+        GH = this->find_holder(container);
+
+    if (GH) {
+        loginfonocr(GH->get_debug_name() + " : \n");
+    } else {
+        loginfonofl("<NO GH -- for " + container->get_debug_name() + " >");
+        indent--;
+        return;
+    }
+    
+    if (GH->children ().size () == 0) {
+       loginfonofl ("<EMPTY>");
+       indent--;
+       return;
+    }
+    
+    for (auto& it : GH->children ()) {
+        CoreProcess* child = it.first;
+        for (int j = 0; j < indent; j++)
+            loginfonocr ("|\t");
+        loginfonocr (" + " + __to_string (i++) + " ");
+        FatProcess* child_fat = dynamic_cast<FatProcess*>(child);
+        if (child_fat){
+            dump_observer (child_fat, level);
+            if (child->get_process_type () != CONTAINER_T || indent == level - 1)
+                loginfonofl ("");
+        }
+        else
+            loginfonofl ("Not a FatProcess");
+    }
+
+    indent--;
+}
+
 GUIStructureHolder*
 GUIStructureObserver::find_holder (CoreProcess* container)
 {

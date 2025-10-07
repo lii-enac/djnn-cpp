@@ -20,6 +20,7 @@ class StructureObserver {
     virtual void remove_child_from_container (FatProcess* cont, CoreProcess* c)                                              = 0;
     virtual void swap_children (FatProcess* cont, int i, int j)                                                              = 0;
     virtual void set_child (FatProcess* cont, CoreProcess* child, int i)                                                     = 0;
+    virtual void dump_observer (FatProcess* cont, int level = 0)                                                             = 0;
 };
 
 extern djnnstl::vector<StructureObserver*> structure_observer_list;

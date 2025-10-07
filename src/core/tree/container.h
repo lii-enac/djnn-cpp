@@ -39,6 +39,7 @@ class Container : public FatProcess {
     void                   pick () override;
 #ifndef DJNN_NO_DEBUG
     void dump (int level = 0) override;
+    void dump_observer (int level = 0);
 #endif
     AbstractGShape* pick_analytical (PickAnalyticalContext& pac) override;
     void            impl_activate () override;
