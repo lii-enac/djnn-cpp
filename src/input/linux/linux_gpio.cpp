@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <stdexcept>
 #include <unistd.h>
+#include <glob.h>
 
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/utils/error.h"
@@ -28,23 +29,31 @@ using namespace djnnstl;
 
 namespace djnn {
 static int                 num_gpios = 0;
+static map<int, int> gpiochips;
 static map<int, GPIOLine*> gpio_lines;
 
 void
 p_init_gpios ()
 {
     int num = 0;
+    glob_t globlist;
+    if (glob("/sys/class/gpio/gpiochip*/ngpio", 0, NULL, &globlist)) {
+        fprintf (stderr, "djnn warning: no /sys/class/gpio/gpiochip*/ngpio \n");
+        return;
+    }
+
 
     /* iterate on all controllers to determine the total number of GPIOs */
-    while (1) {
-        char        filename[64];
+    int i=0;
+    while (globlist.gl_pathv[i]) {
+        const char* filename = globlist.gl_pathv[i];
         int         fd;
         char        buf[10];
         const char* p;
         int         numgpio = 0;
 
         /* attempt to read the information file for the next controller */
-        snprintf (filename, 64, "/sys/class/gpio/gpiochip%d/ngpio", num);
+        //fprintf (stderr, "djnn warning: examining %s\n", filename);
         fd = open (filename, O_RDONLY);
         if (fd < 0)
             break;
@@ -55,9 +64,28 @@ p_init_gpios ()
             numgpio = 10 * numgpio + *p - '0';
         close (fd);
 
+        auto beg = sizeof("/sys/class/gpio/gpiochip")-1;
+        auto substr = strstr(&filename[beg], "/");
+        if (substr==nullptr) {
+            fprintf (stderr, "djnn warning: could not extract gpiochip number %s\n", filename);
+            return;
+        }
+
+        int gpiochip = atoi(&filename[beg]);
+        if (gpiochip==-1) {
+            fprintf (stderr, "djnn warning: could not extract gpiochip number %s %s\n", filename, substr);
+            return;
+        }
+
+        //fprintf(stderr, "%s %d %s %s %d %s:%d\n", filename, beg, &filename[beg], substr, gpiochip, __FILE__, __LINE__);
+
+        gpiochips[gpiochip] = numgpio;
+
         /* update the total number of GPIOs */
         num += numgpio;
+        ++i;
     }
+    globfree(&globlist);
 
     num_gpios = num - 1;
     if (num_gpios < 0)
@@ -69,21 +97,32 @@ p_find_gpio (const string& path, direction_e dir)
 {
     try {
         string::size_type             sz;
-        size_t                        index = std::stoi (path, &sz);
-        map<int, GPIOLine*>::iterator it    = gpio_lines.find (index);
-        GPIOLine*                     line  = nullptr;
-        if (it != gpio_lines.end ()) {
-            line = it->second;
-        } else {
-            line = new GPIOLine (nullptr, "line" + djnnstl::to_string (index), index, dir);
-            line->activate ();
+        int                        index = std::stoi (path, &sz);
+
+        for(auto gpiochip_it: gpiochips) {
+            if (index > gpiochip_it.second) continue;
+
+            map<int, GPIOLine*>::iterator it    = gpio_lines.find (index);
+            GPIOLine*                     line  = nullptr;
+            if (it != gpio_lines.end ()) {
+                line = it->second;
+            } else {
+                int based_index = index + gpiochip_it.first;
+                //fprintf(stderr, "%d %s:%d\n", based_index, __FILE__, __LINE__);
+                line = new GPIOLine (nullptr, "line" + djnnstl::to_string (based_index), based_index, dir);
+                //fprintf(stderr, "%s %s:%d\n", line->get_debug_name().c_str(), __FILE__, __LINE__);
+                line->activate ();
+            }
+            //fprintf(stderr, "%s %s:%d\n", line->get_debug_name().c_str(), __FILE__, __LINE__);
+            if (path.length () > (sz + 1))
+                return line->find_child_impl (path.substr ((sz + 1)));
+            else
+                return line;
         }
-        if (path.length () > (sz + 1))
-            return line->find_child_impl (path.substr ((sz + 1)));
-        else
-            return line;
     } catch (std::invalid_argument& arg) {
         warning (nullptr, "invalid gpio path specification: " + path);
+    } catch (std::exception& e) {
+        warning (nullptr, "invalid gpio path specification: " + path + " " + e.what());
     }
     return nullptr;
 }
@@ -96,15 +135,13 @@ GPIOLine::GPIOLine (CoreProcess* parent, const string& name, int pin, direction_
       _action (nullptr),
       _c_action (nullptr)
 {
-    if (pin < 0 || pin > num_gpios)
-        error (this, "no gpio " + __to_string (pin));
+    // if (pin < 0 || pin > num_gpios)
+    //     error (this, "no gpio " + __to_string (pin));
     _value = new BoolProperty (this, "value", true);
 
     /* activate the GPIO interface */
     _fd = open ("/sys/class/gpio/export", O_WRONLY);
     char        buf[64];
-    const char* direction = _dir == IN ? "in" : "out";
-    const int   dirlen    = _dir == IN ? 2 : 3;
 
     if (_fd < 0)
         error (this, "unable to open gpio");
@@ -112,6 +149,8 @@ GPIOLine::GPIOLine (CoreProcess* parent, const string& name, int pin, direction_
     close (_fd);
 
     /* set it to the desired direction */
+    const char* direction = _dir == IN ? "in" : "out";
+    const int   dirlen    = _dir == IN ? 2 : 3;
     snprintf (buf, 64, "/sys/class/gpio/gpio%d/direction", pin);
     _fd = open (buf, O_WRONLY);
     if (_fd < 0) {
@@ -119,6 +158,16 @@ GPIOLine::GPIOLine (CoreProcess* parent, const string& name, int pin, direction_
     }
     write (_fd, direction, dirlen);
     close (_fd);
+
+    // edge
+    snprintf (buf, 64, "/sys/class/gpio/gpio%d/edge", pin);
+    _fd = open (buf, O_WRONLY);
+    if (_fd < 0) {
+        error (this, "cannot set edge of GPIO " + __to_string (pin));
+    }
+    write (_fd, "both", 4);
+    close (_fd);
+
 
     /* open the value file  */
     snprintf (buf, 64, "/sys/class/gpio/gpio%d/value", pin);
@@ -130,7 +179,8 @@ GPIOLine::GPIOLine (CoreProcess* parent, const string& name, int pin, direction_
         _iofd = new IOFD (nullptr, "gpiofd", _fd);
         _iofd->activate ();
         _action   = new GPIOLineReadAction (this, "read");
-        _c_action = new Coupling (_iofd->find_child_impl ("readable"), ACTIVATION, _action, ACTIVATION);
+        //_c_action = new Coupling (_iofd->find_child_impl ("readable"), ACTIVATION, _action, ACTIVATION);
+        _c_action = new Coupling (_iofd->find_child_impl ("except"), ACTIVATION, _action, ACTIVATION);
     } else {
         _action   = new GPIOLineWriteAction (this, "write");
         _c_action = new Coupling (_value, ACTIVATION, _action, ACTIVATION);
@@ -158,8 +208,12 @@ GPIOLine::read_value ()
 {
     char buf[10];
     lseek (_fd, 0, SEEK_SET);
-    if (read (_fd, buf, 10) > 0)
-        _value->set_value (buf[0] - '0', true);
+    //printf("*** read_value %d\n", _fd);
+    if (int n = read (_fd, buf, 10) > 0) {
+        auto v = buf[0] - '0';
+        //printf("*** %d %d\n", n, v);
+        _value->set_value (v, true);
+    }
 }
 
 void
