@@ -409,7 +409,6 @@ Container::dump (int level)
 void 
 Container::dump_observer (int level) 
 {
-    std::cerr << "Container::dump_observer" << std::endl;
     for (auto s : structure_observer_list) {
         s->dump_observer (this, level);
     }

@@ -19,12 +19,16 @@
 #include "core/tree/component.h"
 #include "core/tree/component_observer.h"
 #include "core/utils/algorithm.h"
+#include "core/tree/list.h"
 #include "display/abstract_display.h"
 #include "display/display-dev.h"
 #include "display/window.h"
 #include "gui/abstract_backend.h"
 #include "gui/backend.h"
 #include "gui/layer.h"
+#include "gui/shape/path.h"
+#include "gui/shape/poly.h"
+#include "gui/style/abstract_gradient.h"
 #include "gui/picking/analytical_picking_context.h"
 #include "core/utils/remotery.h"
 #include "utils/debug.h"
@@ -349,6 +353,26 @@ GUIStructureObserver::remove_container (FatProcess* container)
 void
 GUIStructureObserver::add_child_to_container (FatProcess* container, CoreProcess* child, int index)
 {
+    
+    // Quirk:
+    // We don't want to add lists that already belong to existing G_OBJs, such as:
+    // - the items of a Path
+    // - the points of a Poly
+    // - the transforms or stops of an AbstractGradient
+    // Since Path, Poly, and AbstractGradient are already G_OBJs,
+    // we only need to "register" the Path, Poly, or AbstractGradient itself,
+    // not their internal components.
+    AbstractList* ab_list = dynamic_cast<AbstractList*>(container);
+    if (ab_list) {
+        auto* parent_list = ab_list->get_parent();
+        if (parent_list && (
+            dynamic_cast<Path*>(parent_list) ||
+            dynamic_cast<Poly*>(parent_list) ||
+            dynamic_cast<AbstractGradient*>(parent_list))) {
+            return;
+        }
+    }
+
     switch (child->get_process_type ()) {
     case GOBJ_T: {
         // Ensure the container and its parents are registered
