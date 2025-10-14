@@ -18,14 +18,14 @@ pipeline {
         stage('Build macOS') {
             agent { label 'macos12' }
             environment {
-                CUSTOM_WORKSPACE = 'workspace/djnn-qt/djnn-cpp'
+                CUSTOM_WORKSPACE = '../djnn-qt/djnn-cpp'
             }
             steps {
                 dir(env.CUSTOM_WORKSPACE) {
                     cleanWs()
                     checkout([
                         $class: 'GitSCM',
-                        branches: [[name: '*/pipeline']], // <-- branch "pipeline"
+                        branches: [[name: '*/master']],
                         userRemoteConfigs: [[
                             url: env.DJNN_CPP_URL,          // externalized variable
                             credentialsId: env.GIT_CREDENTIAL_ID // externalized Jenkins credential ID
@@ -46,7 +46,7 @@ pipeline {
                     emailext(
                         to: "${env.EMAIL1}, ${env.EMAIL2}",
                         subject: "❌ macOS build failed - djnn-cpp #${currentBuild.number}",
-                        body: "The macOS build failed.\nDetails: ${env.BUILD_URL}"
+                        body: "The macOS build failed.\nDetails: ${env.BUILD_URL}\nError (last 100 lines):\n${currentBuild.rawBuild.getLog(100).join('\n')}"
                     )
                 }
             }
@@ -61,14 +61,14 @@ pipeline {
                 stage('Build Ubuntu') {
                     agent { label 'ubuntu' }
                     environment {
-                        CUSTOM_WORKSPACE = 'workspace/djnn-qt/djnn-cpp'
+                        CUSTOM_WORKSPACE = '../djnn-qt/djnn-cpp'
                     }
                     steps {
                         dir(env.CUSTOM_WORKSPACE) {
                             cleanWs()
                             checkout([
                                 $class: 'GitSCM',
-                                branches: [[name: '*/pipeline']],
+                                branches: [[name: '*/master']],
                                 userRemoteConfigs: [[
                                     url: env.DJNN_CPP_URL,
                                     credentialsId: env.GIT_CREDENTIAL_ID
@@ -83,7 +83,7 @@ pipeline {
                             emailext(
                                 to: "${env.EMAIL1}, ${env.EMAIL2}",
                                 subject: "❌ Ubuntu build failed - djnn-cpp #${currentBuild.number}",
-                                body: "The Ubuntu build failed.\nDetails: ${env.BUILD_URL}"
+                                body: "The Ubuntu build failed.\nDetails: ${env.BUILD_URL}\nError (last 100 lines):\n${currentBuild.rawBuild.getLog(100).join('\n')}"
                             )
                         }
                     }
@@ -92,22 +92,23 @@ pipeline {
                 stage('Build Windows') {
                     agent { label 'win10' }
                     environment {
-                        CUSTOM_WORKSPACE = 'workspace/djnn-qt/djnn-cpp'
+                        CUSTOM_WORKSPACE = '../djnn-qt/djnn-cpp'
                     }
                     steps {
                         dir(env.CUSTOM_WORKSPACE) {
                             cleanWs()
                             checkout([
                                 $class: 'GitSCM',
-                                branches: [[name: '*/pipeline']],
+                                branches: [[name: '*/master']],
                                 userRemoteConfigs: [[
                                     url: env.DJNN_CPP_URL,
                                     credentialsId: env.GIT_CREDENTIAL_ID
                                 ]]
                             ])
+                            writeFile file: 'config.mk', text: 'use_ivy := yes\r\n'
+
                             bat '''
-                                make config_qt
-                                echo use_ivy := yes > config.mk
+                                type config.mk
                                 make -j V=max
                             '''
                         }
@@ -117,7 +118,7 @@ pipeline {
                             emailext(
                                 to: "${env.EMAIL1}, ${env.EMAIL2}",
                                 subject: "❌ Windows build failed - djnn-cpp #${currentBuild.number}",
-                                body: "The Windows build failed.\nDetails: ${env.BUILD_URL}"
+                                body: "The Windows build failed.\nDetails: ${env.BUILD_URL}\nError (last 100 lines):\n${currentBuild.rawBuild.getLog(100).join('\n')}"
                             )
                         }
                     }
@@ -138,10 +139,17 @@ pipeline {
                 echo "⚠️ Unable to trigger smala: ${e.message}"
             }
 
+            try {
+                // Trigger djnn-cpp-test only if full pipeline succeeded
+                build job: 'djnn-cpp-test', wait: false
+            } catch (Exception e) {
+                echo "⚠️ Unable to trigger smala: ${e.message}"
+            }
+
             if (currentBuild.previousBuild?.result == 'FAILURE') {
                 emailext(
                     to: "${env.EMAIL1}, ${env.EMAIL2}",
-                    subject: "✅ Back to normal - djnn-cpp #${currentBuild.number}",
+                    subject: "✅ Pipeline back to normal - djnn-cpp #${currentBuild.number}",
                     body: """
 The build has recovered after a failure.
 
@@ -158,7 +166,7 @@ Details: ${env.BUILD_URL}
     failure {
         emailext(
             to: "${env.EMAIL1}, ${env.EMAIL2}",
-            subject: "❌ Build failed - djnn-cpp #${currentBuild.number}",
+            subject: "❌ Pipeline build failed - djnn-cpp #${currentBuild.number}",
             body: """
 The build has failed.
 
