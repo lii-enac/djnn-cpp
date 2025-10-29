@@ -47,7 +47,7 @@ class Regex : public FatProcess {
     virtual void serialize (const string& format) override;
 #endif
 
-    FatProcess* find_child_impl (const string&) override;
+    CoreProcess* find_child_impl (const string&) override;
     BoolProperty* matched() { return &_matched; }
 
   private:

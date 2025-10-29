@@ -295,7 +295,7 @@ Regex::~Regex ()
     }
 }
 
-FatProcess*
+CoreProcess*
 Regex::find_child_impl (const string& key)
 {
 
@@ -323,8 +323,9 @@ Regex::find_child_impl (const string& key)
 
     } catch (const std::invalid_argument& ia) {
         // std::cerr << "Regex - find_child - Invalid argument (not \"input\" or NAN): " << key << std::endl;
-        return nullptr;
+        //return nullptr;
     }
+    return FatProcess::find_child_impl (key);
 }
 
 void
