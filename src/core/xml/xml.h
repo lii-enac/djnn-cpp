@@ -20,6 +20,9 @@
 typedef char XML_Char; // FIXME should not be public, but avoid including expat.h (might be in xml-dev.h?)
 
 namespace djnn {
+
+extern int XML_verbose;
+
 typedef FatProcess* (*djn_XMLTagStartProc) (const char**, FatProcess*);
 typedef FatProcess* (*djn_XMLTagDataProc) (const char*, int, FatProcess*);
 typedef FatProcess* (*djn_XMLTagEndProc) (FatProcess*);

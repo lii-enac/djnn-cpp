@@ -40,6 +40,12 @@ namespace djnn {
 
 #if !defined(DJNN_NO_SERIALIZE)
 
+#ifndef DJNN_NO_DEBUG
+int XML_verbose = 1;
+#else
+int XML_verbose = 0;
+#endif
+
 using namespace djnnstl;
 
 map<const string, FatProcess*> _XML_loaded_map;
@@ -300,7 +306,9 @@ XML::djn_XMLHandleAttr (FatProcess** e, const char** attrs, djn_XMLSymLookupProc
         /*if no, keep iterating */
         lookup = va_arg (p, djn_XMLSymLookupProc);
     }
-
+    if (XML_verbose) {
+        fprintf(stderr, "could not handle XML attribute '%s'\n", *attrs);
+    }
     /* failure */
     va_end (p);
 
@@ -360,9 +368,9 @@ XML::djn__XMLFindTagHandler (const XML_Char* name)
             /* if found, get the associated parser data */
             p = it->second;
         } else {
-#ifdef DEBUG
-            fprintf (stderr, "ignoring XML tag '%s': unknown namespace '%s'\n", n + 1, name);
-#endif
+            if (XML_verbose) {
+                fprintf (stderr, "ignoring XML tag '%s': unknown namespace '%s'\n", n + 1, name);
+            }
             p = 0;
         }
         /* restore the tag name buffer, otherwise expat will stop working well */
