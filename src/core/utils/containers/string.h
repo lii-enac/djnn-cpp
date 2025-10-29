@@ -12,7 +12,7 @@ namespace djnnstl {
 using std::stof;
 using std::stoi;
 using std::string;
-using std::to_string;
+//using std::to_string;
 } // namespace djnnstl
 
 #elif DJNN_STL_EASTL

@@ -14,6 +14,13 @@
 
 #include <cstdint>
 
+#include "djnn_stl.h"
+#include "to_string.h"
+
+#if DJNN_STL_STD
+#include <sstream>
+#endif
+
 #include "utils-dev.h"
 
 #include "core/core-dev.h" // graph add/remove edge
@@ -25,6 +32,30 @@
 // #include <boost/core/demangle.hpp>
 #include <cxxabi.h> // needed for abi::__cxa_demangle
 #endif
+
+#if DJNN_STL_STD
+
+namespace djnnstl {
+
+// https://stackoverflow.com/a/16606128/2036022
+template <typename T>
+std::string to_string_with_precision(const T a_value, const int n = 6)
+{
+    std::ostringstream out;
+    out.precision(n);
+    out << std::fixed << a_value;
+    return std::move(out).str();
+}
+
+string
+to_string (double v)
+{
+    return to_string_with_precision (v,2);
+}
+
+}
+#endif
+
 
 namespace djnn {
 using namespace djnnstl;
