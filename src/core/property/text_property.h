@@ -84,6 +84,8 @@ class TextPropertyProxy : public AbstractTextProperty {
 djnnstl::string  toString (const AbstractSimpleProperty& x);
 djnnstl::string& toString (CoreProcess* p);
 
+#ifndef DJNN_C_API_GET_STRING_DEFINED
 djnnstl::string& getString (CoreProcess* p);
+#endif
 void             setString (CoreProcess* p, djnnstl::string& v);
 } // namespace djnn
