@@ -97,9 +97,12 @@ QtWindow::impl_activate ()
         if (hide_pointer)
             _qwidget->setCursor (Qt::BlankCursor);
 
-        QRect rect (_window->pos_x ()->get_value (), _window->pos_y ()->get_value (), _window->width ()->get_value (),
-                    _window->height ()->get_value ());
-        _qwidget->setGeometry (rect);
+        if (_window->pos_x ()->get_value () != -1 && _window->pos_y ()->get_value () != -1) {
+            _qwidget->move(_window->pos_x ()->get_value (), _window->pos_y ()->get_value ());
+        }
+        if (_window->width ()->get_value () != -1 && _window->height ()->get_value () != -1) {
+            _qwidget->resize(_window->width ()->get_value (), _window->height()->get_value ());
+        }
         _window->set_background_opacity_and_color ();
         _qwidget->setParent (0); // Create TopLevel-Widget
         _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());

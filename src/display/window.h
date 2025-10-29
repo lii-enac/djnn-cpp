@@ -81,55 +81,6 @@ class WinImpl {
 };
 
 class Window : public FatProcess {
-    class UndelayedSpike : public FatProcess {
-      public:
-        UndelayedSpike (Window* parent, const string& name)
-            : FatProcess (name) {
-            set_is_model (true);
-            finalize_construction (parent, name);
-        }
-        virtual ~UndelayedSpike () {}
-        void post_activate () override { post_activate_auto_deactivate (); }
-        void impl_activate () override;
-        void impl_deactivate () override {};
-    };
-
-    class ScreenshotAction : public Action {
-      public:
-        ScreenshotAction (Window* parent, const string& name)
-            : Action (parent, name) {}
-        void impl_activate () override { ((Window*)get_parent ())->perform_screenshot (); }
-    };
-    class OpacityAction : public Action {
-      public:
-        OpacityAction (Window* parent, const string& name)
-            : Action (parent, name) {}
-        void impl_activate () override { ((Window*)get_parent ())->set_opacity (); }
-    };
-    class BackgroundOpacityAction : public Action {
-      public:
-        BackgroundOpacityAction (Window* parent, const string& name)
-            : Action (parent, name) {}
-        void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
-    };
-    class BackgroundColorAction : public Action {
-      public:
-        BackgroundColorAction (Window* parent, const string& name)
-            : Action (parent, name) {}
-        void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
-    };
-    class GeometryAction : public Action {
-      public:
-        GeometryAction (Window* parent, const string& name)
-            : Action (parent, name) {}
-        void impl_activate () override { ((Window*)get_parent ())->update_geometry (); }
-    };
-    class MinimumSizeAction : public Action {
-      public:
-        MinimumSizeAction (Window* parent, const string& name)
-            : Action (parent, name) {}
-        void impl_activate () override { ((Window*)get_parent ())->set_minimum_size (); }
-    };
 
   public:
     Window (CoreProcess* parent, const string& name, const string& title, double x, double y, double w, double h);
@@ -226,6 +177,61 @@ class Window : public FatProcess {
   private:
     void            init_ui (const string& title, double x, double y, double w, double h);
     void            set_frame_to_component (FatProcess* c);
+
+
+  private:
+
+    private:
+    class UndelayedSpike : public FatProcess {
+      public:
+        UndelayedSpike (Window* parent, const string& name)
+            : FatProcess (name) {
+            set_is_model (true);
+            finalize_construction (parent, name);
+        }
+        virtual ~UndelayedSpike () {}
+        void post_activate () override { post_activate_auto_deactivate (); }
+        void impl_activate () override;
+        void impl_deactivate () override {};
+    };
+
+    class ScreenshotAction : public Action {
+      public:
+        ScreenshotAction (Window* parent, const string& name)
+            : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent ())->perform_screenshot (); }
+    };
+    class OpacityAction : public Action {
+      public:
+        OpacityAction (Window* parent, const string& name)
+            : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent ())->set_opacity (); }
+    };
+    class BackgroundOpacityAction : public Action {
+      public:
+        BackgroundOpacityAction (Window* parent, const string& name)
+            : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
+    };
+    class BackgroundColorAction : public Action {
+      public:
+        BackgroundColorAction (Window* parent, const string& name)
+            : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
+    };
+    class GeometryAction : public Action {
+      public:
+        GeometryAction (Window* parent, const string& name)
+            : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent ())->update_geometry (); }
+    };
+    class MinimumSizeAction : public Action {
+      public:
+        MinimumSizeAction (Window* parent, const string& name)
+            : Action (parent, name) {}
+        void impl_activate () override { ((Window*)get_parent ())->set_minimum_size (); }
+    };
+
     DoubleProperty* _pos_x;
     DoubleProperty* _pos_y;
     DoubleProperty *_w_dx, *_w_dy;

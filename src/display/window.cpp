@@ -188,7 +188,7 @@ Window::Window (CoreProcess* parent, const string& name, const string& title, do
 }
 
 Window::Window (CoreProcess* parent, const string& name, const string& title)
-: Window (parent, name, title, 0, 0, 600, 600)
+: Window (parent, name, title, -1, -1, -1, -1)
 {
 }
 
