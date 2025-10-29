@@ -23,6 +23,7 @@ class Coupling {
   public:
     // construction / destruction
     Coupling (CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag, bool immediate_propagation = false);
+    Coupling (CoreProcess* src, CoreProcess* dst) : Coupling (src, ACTIVATION, dst, ACTIVATION) {}
     Coupling (); // needed for pointer-less zombie initialization in Binding, Assignment, Connector
     ~Coupling ();
 
