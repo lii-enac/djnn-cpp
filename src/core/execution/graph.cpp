@@ -34,6 +34,7 @@ using djnnstl::endl;
 #include "core/utils/error.h"
 #include "core/utils/remotery.h"
 #include "core/utils/utils-dev.h"
+#include "core/utils/to_string.h"
 #include "exec_env/exec_env-dev.h"
 #include "graph.h"
 #include "utils/debug.h"
@@ -183,7 +184,7 @@ Graph::clear ()
 
 
 #ifndef DJNN_NO_DEBUG
-static string                      print_process_full_name (CoreProcess* p);
+static string                      print_process_full_name (const CoreProcess* p);
 #endif
 // -----------------------------------------------------------------------
 // Graph management
@@ -341,9 +342,9 @@ Graph::remove_output_node (CoreProcess* c)
 static Vertex*                     current_v;
 static map<Vertex*, list<Vertex*>> data_flow_paths_save;
 static vector<string>              data_flow_result;
-static string                      print_process_fileno (CoreProcess* p);
-// static string                      print_process_full_name (CoreProcess* p);
-static string                      print_process_debug_info (CoreProcess* p);
+static string                      print_process_fileno (const CoreProcess* p);
+//static string                      print_process_full_name (const CoreProcess* p);
+static string                      print_process_debug_info (const CoreProcess* p);
 static string                      extract_filename (const string& s);
 static string                      extract_code_from_file (const string& filepath, int lineno);
 
@@ -535,10 +536,11 @@ Graph::exec ()
             cerr << " ----------------------------------------- " << endl;
             int i = 0;
             for (auto v : _activation_triggers_to_sort) {
-                if (strcmp (_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION, print_process_fileno (v->get_process ()).c_str ()) == 0)
+                const auto * p = v->get_process ();
+                if (strcmp (_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION, print_process_fileno (p).c_str ()) == 0)
                     display_sequence_on_target_location = true;
                 if (display_sequence_on_target_location)
-                    cerr << i++ << " - triggers ------ " << print_process_full_name (v->get_process ()) << "\t\t" << print_process_debug_info (v->get_process ()) << endl;
+                    cerr << i++ << " - triggers ------ " << print_process_full_name (p) << "\t\t" << print_process_debug_info (p) << endl;
             }
             if (display_sequence_on_target_location)
                 cerr << " ----------------------------------------- " << endl;
@@ -982,10 +984,10 @@ extract_code_from_file (const string& filepath, int lineno)
 }
 
 static string
-print_process_full_name (CoreProcess* p)
+print_process_full_name (const CoreProcess* p)
 {
     string          postfix;
-    CoreAssignment* ca = dynamic_cast<CoreAssignment*> (p);
+    auto * ca = dynamic_cast<const CoreAssignment*> (p);
     if (ca != nullptr) {
         postfix = " src: " + ca->get_src ()->get_debug_name () + " dst: " + ca->get_dst ()->get_debug_name ();
     }
@@ -995,13 +997,13 @@ print_process_full_name (CoreProcess* p)
 }
 
 static string
-print_process_fileno (CoreProcess* p)
+print_process_fileno (const CoreProcess* p)
 {
     return extract_filename (p->debug_info ().filepath) + ":" + to_string (p->debug_info ().lineno);
 }
 
 static string
-print_process_debug_info (CoreProcess* p)
+print_process_debug_info (const CoreProcess* p)
 {
     return " ---- from " + print_process_fileno (p) + " ---- " + extract_code_from_file (p->debug_info ().filepath, p->debug_info ().lineno);
 }
