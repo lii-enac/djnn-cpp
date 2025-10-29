@@ -219,7 +219,7 @@ class CoreProcess {
     // debug stuff
   public:
 #ifndef DJNN_NO_DEBUG
-    FatProcess*   get_debug_parent ();
+    FatProcess*   get_debug_parent () const;
     void          set_debug_parent (CoreProcess* parent) { _debug_parent = parent; }
     const string& get_debug_name () const { return _debug_name; }
     void          set_debug_name (const string& n) { _debug_name = n; }
@@ -413,5 +413,7 @@ void remove_from_parentless_name (CoreProcess* child);
 
 void add_state_dependency (CoreProcess* parent, CoreProcess* p);
 void remove_state_dependency (CoreProcess* parent, CoreProcess* p);
+
+inline const CoreProcess::string& get_debug_name (const CoreProcess* p) { return p->get_debug_name(); }
 
 } // namespace djnn

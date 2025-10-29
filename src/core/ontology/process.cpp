@@ -267,7 +267,7 @@ CoreProcess::get_properties_name () const
 
 #ifndef DJNN_NO_DEBUG
 FatProcess*
-CoreProcess::get_debug_parent ()
+CoreProcess::get_debug_parent () const
 {
     return dynamic_cast<FatProcess*> (_debug_parent);
 }
