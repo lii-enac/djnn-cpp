@@ -62,7 +62,7 @@ LIBS += -Wl,-z,nodlopen -Wl,-z,noexecstack \
 -Wl,--as-needed -Wl,--no-copy-dt-needed-entries
 
 
-build_dir := build
+#build_dir := build
 
 remotery_cflags += -DRMT_ENABLED=1
 remotery_cflags += -DRMT_USE_OPENGL=1

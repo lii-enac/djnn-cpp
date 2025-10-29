@@ -28,7 +28,7 @@ physics := # set to ODE
 phidgets := # set to PHIDGETS
 
 
-build_dir := build
+#build_dir := build
 
 
 #devel

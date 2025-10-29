@@ -51,7 +51,11 @@ include project/config/config_qt.mk
 
 
 src_dir ?= src
-build_dir ?= build
+#build_dir ?= build/$(shell uname)-$(shell uname -m) # too costly!!
+ifndef build_dir
+build_dir := build/$(shell uname)-$(shell uname -m)
+endif
+
 display ?= QT #options: QT SDL
 graphics ?= QT #options: QT CAIRO GL
 

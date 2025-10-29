@@ -48,7 +48,7 @@ CFLAGS += -g
 #LDFLAGS += -fno-limit-debug-info -fstandalone-debug
 
 
-build_dir ?= build
+#build_dir ?= build
 
 remotery_cflags ?= -DRMT_ENABLED=0
 

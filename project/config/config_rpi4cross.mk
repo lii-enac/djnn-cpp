@@ -48,7 +48,7 @@ CFLAGS += -Wno-gnu #-null-pointer-arithmetic
 #LDFLAGS += -fno-limit-debug-info -fstandalone-debug
 
 
-build_dir := build
+#build_dir := build
 
 remotery_cflags += -DRMT_ENABLED=1
 remotery_cflags += -DRMT_USE_OPENGL=1
