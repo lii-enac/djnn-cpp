@@ -11,15 +11,15 @@ lib_pkgpath += $(qt_dir)/lib/pkgconfig
 # qt_dir = $(brew_prefix)/opt/qt
 # lib_pkgpath += $(qt_dir)/libexec/lib/pkgconfig
 
-moc := $(qt_dir)/bin/moc
+moc ?= $(qt_dir)/bin/moc
 endif
 
 ifeq ($(os),Linux)
 lib_pkg = Qt5OpenGL Qt5Gui
-#moc := moc
+moc ?= moc
 endif
 
 ifeq ($(os),MinGW)
 lib_pkg = Qt5OpenGL Qt5Core
-#moc := moc
+moc ?= moc
 endif

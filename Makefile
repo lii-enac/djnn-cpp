@@ -204,7 +204,7 @@ lib_suffix =.so
 DYNLIB ?= -shared
 YACC ?= bison -d -Wno-conflicts-sr -Wno-conflicts-rr
 thread = STD
-moc := moc
+#moc := moc
 compiler ?= gnu
 endif
 
@@ -225,7 +225,7 @@ endif
 ifeq ($(origin LEX), default)
 LEX := $(brew_prefix)/opt/flex/bin/flex
 endif
-moc :=  moc #/usr/local/opt/qt/bin/moc
+#moc :=  moc #/usr/local/opt/qt/bin/moc
 #boost name demangle
 #DJNN_CXXFLAGS += -I/usr/local/include
 compiler ?= llvm
@@ -240,7 +240,7 @@ CFLAGS += -D_USE_MATH_DEFINES # https://docs.microsoft.com/en-us/cpp/c-runtime-l
 lib_suffix =.dll
 DYNLIB ?= -shared
 YACC = bison -d -Wno-conflicts-sr -Wno-conflicts-rr
-moc := moc
+#moc := moc
 thread = STD
 compiler ?= gnu
 endif
@@ -1109,10 +1109,10 @@ pkglibdeps += udev1 rtmidi6
 pkglibdeps += expat1 curl4 evdev2 openal1
 #libboost-thread-dev 
 #libboost-fiber-dev
-ifeq ($(display),QT)
-	pkglibdeps += qt5opengl5
-	#pkgdeps += qt5-default #for ubuntu < 22.04
-endif
+# ifeq ($(display),QT)
+# 	pkglibdeps += qt5opengl5
+# 	#pkgdeps += qt5-default #for ubuntu < 22.04
+# endif
 ifeq ($(display),SDL)
 	ifeq ($(specialtarget),raspberry-ua-netinst)
 		# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
@@ -1147,9 +1147,9 @@ pkgdeps += g++
 pkglibdeps += eudev rtmidi
 pkglibdeps += curl libevdev expat openal-soft flex
 
-ifeq ($(display),QT)
-	pkglibdeps += qt5opengl5
-endif
+# ifeq ($(display),QT)
+# 	pkglibdeps += qt5opengl5
+# endif
 ifeq ($(display),SDL)
 	ifeq ($(specialtarget),raspberry-ua-netinst)
 		# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
@@ -1180,9 +1180,9 @@ pkgdeps += pkg-config
 pkgdeps += expat curl
 #pkgdeps += libusb #crazyflie
 pkgdeps += rtmidi
-ifeq ($(graphics),QT)
-	pkgdeps += qt5
-endif
+# ifeq ($(graphics),QT)
+# 	pkgdeps += qt5
+# endif
 ifeq ($(display),SDL)
 	#pkgdeps += sdl2 sdl2_image
 	pkgdeps += sdl3
