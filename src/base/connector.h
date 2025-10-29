@@ -139,7 +139,7 @@ class Connector : public FatProcess {
                CoreProcess* src, const string& sspec,
                CoreProcess* dst, const string& dspec,
                bool copy_on_activation = true)
-        : Connector (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), copy_on_activation) {
+        : Connector (parent, name, src->find_child (sspec), dst->find_child (dspec), copy_on_activation) {
     }
     CoreProcess* get_src () { return _assignment.get_src (); }
     CoreProcess* get_dst () { return _assignment.get_dst (); }
