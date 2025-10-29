@@ -261,7 +261,9 @@ AbstractGShape::add_style_class (const string& classname)
     if (id != -1)
         _classes.push_back (id);
     else {
-        warning (this, "Style " + classname + " not found");
+        if (XML_verbose) {
+            warning (this, "Style " + classname + " not found");
+        }
     }
 }
 

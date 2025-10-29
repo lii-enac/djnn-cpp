@@ -117,7 +117,9 @@ static map<string, djn_XMLAttrHandler> handlers = {
     {"onmouseover", {&Ignore}},
     {"color-interpolation", {&Ignore}},
     {"onfocusout", {&Ignore}},
-    {"xml:space", {&Ignore}}};
+    {"xml:space", {&Ignore}}
+};
+
 djn_XMLAttrHandler*
 SVGShapeAttrs_Hash::djn_SVGShapeAttrsLookup (const char* str, unsigned int len)
 {

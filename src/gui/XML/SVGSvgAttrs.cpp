@@ -30,15 +30,22 @@ static map<string, djn_XMLAttrHandler> handlers = {
     {"viewBox", {&IgnoreAttr}},
     {"contentStyleType", {&IgnoreAttr}},
     {"contentScriptType", {&IgnoreAttr}},
-    {"preserveAspectRatio", {&IgnoreAttr}}};
+    {"preserveAspectRatio", {&IgnoreAttr}},
+    {"version", {&IgnoreAttr}},
+    {"id", {&IgnoreAttr}},
+};
 
 djn_XMLAttrHandler*
 SVGSvgAttrs_Hash::djn_SVGSvgAttrsLookup (const char* str, unsigned int len)
 {
     map<string, djn_XMLAttrHandler>::iterator it;
     it = handlers.find (string (str));
-    if (it != handlers.end ())
+    if (it != handlers.end ()) {
+        if (XML_verbose) {
+            fprintf(stderr, "ignoring XML attribute '%s'\n", str);
+        }
         return &it->second;
+    }
     return 0;
 }
 
