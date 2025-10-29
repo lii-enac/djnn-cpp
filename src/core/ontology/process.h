@@ -97,6 +97,7 @@ class CoreProcess {
     virtual const couplings_t& get_activation_couplings () const { return default_couplings; }
     virtual const couplings_t& get_deactivation_couplings () const { return default_couplings; }
 
+    // FIXME rename to 'propagate_activation'
     void notify_activation ();   // just triggers coupled processes, regardless of status, does not change status
     void notify_deactivation (); // just triggers coupled processes, regardless of status, does not change status
 
