@@ -1098,7 +1098,9 @@ c_api_content_h += '}\n'
 
 #print (c_api_content)
 c_api_content = "// generated with gen_prop.py\n\n" + c_api_content
-update_if_new('../src/c_api/djnn_c_api.cpp', c_api_content)
+
+# DOESN'T WORK ANYMORE, HEAVILY HAND-WRITTEN
+#update_if_new('../src/c_api/djnn_c_api.cpp', c_api_content)
 
 preheader = "namespace djnn {\n"
 preheader += "class CoreProcess;\n"
@@ -1115,7 +1117,8 @@ for dc in dcs:
 preheader += "}\n"
 c_api_content_h = preheader + c_api_content_h
 
-update_if_new('../src/c_api/djnn_c_api.h', c_api_content_h)
+# DOESN'T WORK ANYMORE, HEAVILY HAND-WRITTEN
+#update_if_new('../src/c_api/djnn_c_api.h', c_api_content_h)
 
 js_api_content = ''
 
@@ -1194,7 +1197,9 @@ for dc in dcs:
 
 js_api_content = generated_mention_c_comment + "function djnn_init_js_api () {\n" + js_api_content + "}\n\n"
 #print(js_api_content)
-update_if_new('../src/c_api/djnn_js_api.js',js_api_content)
+
+# DOESN'T WORK ANYMORE, keep git quiet
+#update_if_new('../src/c_api/djnn_js_api.js',js_api_content)
 
 exported_functions = "['"+ "','".join(['_'+name for name in js_export]) + "']"
 update_if_new('../src/c_api/exported_functions.txt',exported_functions)
