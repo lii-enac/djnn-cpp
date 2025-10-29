@@ -606,7 +606,7 @@ ifneq ($(os), em)
 #$1_lib_soname := -Wl,-rpath,$$(build_dir)
 
 ifeq ($(linker), gnu)
-$1_lib_soname += -Wl,-rpath-link,$$(abspath $$(build_dir))/lib
+$1_lib_soname += -Wl,-rpath-link,$$(abspath $$(build_dir))/lib -Wl,-rpath,$$(abspath $$(build_dir))/lib
 ifeq (-DRMT_USE_OPENGL=1,$(filter -DRMT_USE_OPENGL=1,$(remotery_cflags)))
 $1_lib_soname += -Wl,-flat_namespace,-undefined,dynamic_lookup
 else
