@@ -29,12 +29,12 @@ namespace djnn {
 void
 AbstractGObj::create_Gobj_update_coupling (CoreProcess** prop, CouplingWithData** cprop)
 {
-    FatProcess* update = nullptr;
+    FatProcess* damaged = nullptr;
     if (find_layer ())
-        update = find_layer ()->damaged ();
+        damaged = find_layer ()->damaged ();
     else if (get_frame ())
-        update = get_frame ()->damaged ();
-    *cprop = new CouplingWithData (*prop, ACTIVATION, update, ACTIVATION);
+        damaged = get_frame ()->damaged ();
+    *cprop = new CouplingWithData (*prop, ACTIVATION, damaged, ACTIVATION);
     if (somehow_activating ()) {
         (*cprop)->enable ();
     } else
