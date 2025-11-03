@@ -138,8 +138,9 @@ Container::add_child (CoreProcess* child, const string& name)
     child->set_parent (this);
     add_symbol (name, child);
 
-    if (get_activation_state () == ACTIVATED && !child->is_model ()) {
-        child->activate ();
+    if (get_activation_state () == ACTIVATED) {
+        if (!child->is_model ())
+            child->activate ();
     } else if (child->get_activation_state () == ACTIVATED) {
         child->deactivate ();
     }
