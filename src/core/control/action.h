@@ -42,7 +42,7 @@ class Action : public FatProcess {
 
   protected:
     virtual bool pre_activate () override {
-        if (get_parent () != nullptr && !get_parent ()->somehow_activating ())
+        if (CoreProcess * p = get_parent (); p && !p->somehow_activating ())
             return false;
         set_activation_state (ACTIVATING);
         return true;
