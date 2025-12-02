@@ -26,6 +26,7 @@
 #include "identity.h"
 #include "scaling.h"
 #include "translation.h"
+#include "z_order.h"
 
 namespace djnn {
 class GradientTranslation : public AbstractTranslation {
