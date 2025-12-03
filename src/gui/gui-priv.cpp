@@ -301,10 +301,11 @@ GUIStructureObserver::ensure_container_registered (FatProcess* container)
         // The parent is now guaranteed to be present.
         switch (parent->get_process_type ()) {
         case Z_ORDERED_GROUP_T:
+        case PROCESS_COLLECTOR_T:
         case CONTAINER_T: {
             
             // Ensure that the child is added at the same original index it had in the parent.
-            Container* parent_container           = dynamic_cast<Container*> (parent);
+            AbstractContainer* parent_container           = dynamic_cast<AbstractContainer*> (parent);
             int        original_index_from_parent = 0;
             int        new_index                  = -1;
             for (auto& c : parent_container->children ()) {

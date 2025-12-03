@@ -22,6 +22,7 @@
 #include "core/property/int_property.h"
 #include "core/property/ref_property.h"
 #include "core/property/text_property.h"
+#include "core/tree/container.h"
 
 namespace djnn {
 
@@ -151,7 +152,7 @@ class CollectionSetStringValue : public AbstractCollectionSetValue {
     Coupling     _c_act_set_val;
 };
 
-class ProcessCollector : public FatProcess {
+class ProcessCollector : public AbstractContainer {
   private:
     class AddOneAction : public Action {
       public:
@@ -176,31 +177,35 @@ class ProcessCollector : public FatProcess {
     };
 
   public:
-    ProcessCollector (CoreProcess* parent, const string& name);
+    ProcessCollector (CoreProcess* parent, const string& name, bool activate_children=false);
     virtual ~ProcessCollector ();
     void                        impl_activate () override;
     void                        impl_deactivate () override;
     void                        add_one ();
     void                        add_one (CoreProcess* p);
+    //virtual void                add_child (CoreProcess* p, const djnnstl::string& name) override { add_one(p); }
     void                        remove_one ();
     void                        remove_one (CoreProcess* p);
     void                        remove_all ();
     CoreProcess*                find_child_impl (const string& path) override;
     CoreProcess*                find_child_impl (int index) override;
-    const vector<CoreProcess*>& get_list () { return _list; }
+    const vector<CoreProcess*>& get_list () const { return _list; }
+    const ordered_children_t&   children () const override { return get_list(); }
     process_type_e              get_process_type () const override { return PROCESS_COLLECTOR_T; }
 
   protected:
     void                 set_parent (CoreProcess* p) override;
+    vector<CoreProcess*> _list;
+    IntProperty          _size;
+
     Spike                _s_rm_all;
     RefProperty          _add;
     RefProperty          _remove;
-    IntProperty          _size;
-    vector<CoreProcess*> _list;
     AddOneAction         _add_one;
     RemoveOneAction      _rm_one;
     RemoveAllAction      _rm_all;
     Coupling             _c_add, _c_rm, _c_rm_all;
+    bool                 _activate_children;
 };
 
 typedef void (NativeCollectionCode) (CoreProcess*, djnnstl::vector<CoreProcess*>);

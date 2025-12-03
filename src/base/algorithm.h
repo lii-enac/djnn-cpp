@@ -84,7 +84,7 @@ class ListOperator : public FatProcess {
   private:
   protected:
     TextProperty             _spec;
-    Container*               _container;
+    AbstractContainer*       _container;
     UpdateListOperatorAction _update_list;
     SpecListOperatorAction   _spec_action;
     Coupling                 _c_spec_action;

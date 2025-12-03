@@ -161,7 +161,7 @@ ListOperator::ListOperator (CoreProcess* parent, const string& name, CoreProcess
       _c_spec_action (&_spec, ACTIVATION, &_spec_action, ACTIVATION, true)
 {
 
-    _container = djnn_dynamic_cast<Container*> (container);
+    _container = djnn_dynamic_cast<AbstractContainer*> (container);
     if (_container == nullptr)
         error (this, "Wrong argument: only containers can be used on List Operator");
     _c_update_list_action = new Coupling (container->find_child_impl ("size"), ACTIVATION, &_update_list, ACTIVATION);

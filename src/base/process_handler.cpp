@@ -61,18 +61,20 @@ ProcessDeleter::delete_one ()
     }
 }
 
-ProcessCollector::ProcessCollector (CoreProcess* parent, const string& name)
-    : FatProcess (name),
+ProcessCollector::ProcessCollector (CoreProcess* parent, const string& name, bool activate_children)
+    : AbstractContainer (parent, name),
+    
+      _size (this, "size", 0),
       _s_rm_all (this, "rm_all"),
       _add (this, "add", nullptr),
       _remove (this, "rm", nullptr),
-      _size (this, "size", 0),
       _add_one (this, "add_one_action"),
       _rm_one (this, "remove_one_action"),
       _rm_all (this, "remove_all_action"),
       _c_add (&_add, ACTIVATION, &_add_one, ACTIVATION),
       _c_rm (&_remove, ACTIVATION, &_rm_one, ACTIVATION),
-      _c_rm_all (&_s_rm_all, ACTIVATION, &_rm_all, ACTIVATION)
+      _c_rm_all (&_s_rm_all, ACTIVATION, &_rm_all, ACTIVATION),
+      _activate_children (activate_children)
 {
     graph_add_edge (&_add_one, &_size);
     graph_add_edge (&_rm_one, &_size);
@@ -114,6 +116,23 @@ ProcessCollector::impl_activate ()
     _c_add.enable ();
     _c_rm.enable ();
     _c_rm_all.enable ();
+
+    // Container* c = djnn_dynamic_cast<Container*> (get_parent ());
+    // if (c)
+    //     init_context (c->get_context ());
+
+    if (_activate_children) {
+        /* WARNING Here we don't use C++ iterator as we want to allow
+        * the dynamic modification of children list */
+        auto& _children = _list;
+        unsigned int i = 0;
+        while (i < _children.size ()) {
+            if (!_children[i]->is_model ()) {
+                _children[i]->activate ();
+            }
+            i++;
+        }
+    }
 }
 
 void
@@ -122,6 +141,17 @@ ProcessCollector::impl_deactivate ()
     _c_add.disable ();
     _c_rm.disable ();
     _c_rm_all.disable ();
+
+    if (_activate_children) {
+        auto& _children = _list;
+        for (auto it = _children.rbegin (); it != _children.rend (); ++it) {
+            auto& c = *it;
+    #ifdef DEBUG_DEACTIVATE
+            std::cerr << __FUNCTION__ << " name: " << c->get_debug_name () << std::endl;
+    #endif
+            c->deactivate ();
+        }
+    }
 }
 
 void
@@ -131,6 +161,14 @@ ProcessCollector::add_one ()
     if (to_add) {
         add_one (to_add);
     }
+    auto child = to_add;
+    if (_activate_children) {
+        if (get_activation_state () == ACTIVATED && !child->is_model ()) {
+            child->activate ();
+        } else if (child->get_activation_state () == ACTIVATED) {
+            child->deactivate ();
+        }
+    }
 }
 
 void
@@ -139,6 +177,14 @@ ProcessCollector::add_one (CoreProcess* p)
     if (p) {
         _list.push_back (p);
         _size.set_value ((int)_list.size (), true);
+    }
+    auto child = p;
+    if (_activate_children) {
+        if (get_activation_state () == ACTIVATED && !child->is_model ()) {
+            child->activate ();
+        } else if (child->get_activation_state () == ACTIVATED) {
+            child->deactivate ();
+        }
     }
 }
 

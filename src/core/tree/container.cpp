@@ -34,7 +34,8 @@
 namespace djnn {
 
 Container::Container (CoreProcess* parent, const string& name, bool is_model)
-    : FatProcess (name, is_model), _unaltered_children (nullptr)
+    : AbstractContainer (parent, name, is_model)
+    , _unaltered_children (nullptr)
 {
     if (parent) {
         set_state_dependency (parent->get_state_dependency ());

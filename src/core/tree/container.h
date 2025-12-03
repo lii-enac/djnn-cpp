@@ -18,14 +18,22 @@
 
 namespace djnn {
 
-class Container : public FatProcess {
+class AbstractContainer : public FatProcess {
+public:
+  typedef vector<CoreProcess*> ordered_children_t;
+  AbstractContainer (CoreProcess* parent, const string& name, bool is_model = false)
+  : FatProcess (name, is_model) {}
+  virtual process_type_e get_process_type () const override { return CONTAINER_T; }
+  virtual const ordered_children_t& children () const  = 0;
+};
 
-    typedef map<string, CoreProcess*> context_t;
+class Container : public AbstractContainer {
 
+    
   public:
-    typedef vector<CoreProcess*> ordered_children_t;
+    
     Container (CoreProcess* parent, const string& name, bool is_model = false);
-    virtual process_type_e get_process_type () const override { return CONTAINER_T; }
+    
     void                   push_back_child (CoreProcess* child);
     void                   add_child (CoreProcess* c, const string& name) override;
     void                   move_child (CoreProcess* child_to_move, child_position_e spec, CoreProcess* child = 0) override;
@@ -47,11 +55,8 @@ class Container : public FatProcess {
     void            print_children ();
     virtual void    clean_up_content ();
     virtual ~Container ();
-    const ordered_children_t& children () const { return _children; }
-    context_t&                get_context () { return _cur_context; }
-    void                      add_to_context (const string& k, CoreProcess* v);
-    CoreProcess*              get_from_context (const string& k);
-    void                      init_context (context_t& context);
+    const ordered_children_t& children () const override { return _children; }
+    
 
   protected:
     ordered_children_t  _children;
@@ -59,7 +64,13 @@ class Container : public FatProcess {
     bool                is_altered () const { return _unaltered_children != nullptr; } // has move_child been used on the container or not?
     void impl_clone_children (map<const CoreProcess*, CoreProcess*>& origs_clones, CoreProcess* parent_clone) const;
 
-
+protected:
+    typedef map<string, CoreProcess*> context_t;
+    void                      init_context (context_t& context);
     context_t _cur_context; // FIXME horrible: every single container has that, though it's only for font style !!!
+    context_t&                get_context () { return _cur_context; }
+public:
+    void                      add_to_context (const string& k, CoreProcess* v);
+    CoreProcess*              get_from_context (const string& k);
 };
 } // namespace djnn
