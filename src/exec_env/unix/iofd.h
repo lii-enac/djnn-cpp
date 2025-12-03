@@ -38,5 +38,7 @@ class IOFD : public FatProcess, public ExternalSource {
 
     int   _readfd;
     Spike _readable;
+    Spike _writable;
+    Spike _except;
 };
 } // namespace djnn

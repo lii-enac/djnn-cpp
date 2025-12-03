@@ -179,8 +179,8 @@ GPIOLine::GPIOLine (CoreProcess* parent, const string& name, int pin, direction_
         _iofd = new IOFD (nullptr, "gpiofd", _fd);
         _iofd->activate ();
         _action   = new GPIOLineReadAction (this, "read");
-        //_c_action = new Coupling (_iofd->find_child_impl ("readable"), ACTIVATION, _action, ACTIVATION);
-        _c_action = new Coupling (_iofd->find_child_impl ("except"), ACTIVATION, _action, ACTIVATION);
+        _c_action = new Coupling (_iofd->find_child_impl ("readable"), ACTIVATION, _action, ACTIVATION);
+        //_c_action = new Coupling (_iofd->find_child_impl ("except"), ACTIVATION, _action, ACTIVATION);
     } else {
         _action   = new GPIOLineWriteAction (this, "write");
         _c_action = new Coupling (_value, ACTIVATION, _action, ACTIVATION);
