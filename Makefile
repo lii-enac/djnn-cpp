@@ -34,8 +34,10 @@ help:
 	@echo "default: djnn ; all: djnn"
 	@echo "experiment make -j !!"
 
-config config.mk:
-# 	cp config.default.mk config.mk
+config: config.mk
+.PHONY: config
+
+config.mk:
 	@echo "\ndefault config : QT"
 	cp project/config/config_qt.mk config.mk
 
