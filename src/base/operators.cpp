@@ -36,8 +36,7 @@ init_binary_couplings (FatProcess& _left, FatProcess& _right, FatProcess& _resul
 void
 uninit_binary_couplings (FatProcess* this_, FatProcess& _left, FatProcess& _right, FatProcess& _result, Action& _action, Coupling& _c_left, Coupling& _c_right)
 {
-    if (this_->get_parent ())
-        remove_state_dependency (this_->get_parent (), &_action);
+    remove_state_dependency (this_->get_parent (), &_action);
     graph_remove_edge (&_action, &_result);
 }
 
@@ -51,8 +50,7 @@ init_unary_couplings (FatProcess& _input, FatProcess& _output, Action& _action, 
 void
 uninit_unary_couplings (FatProcess* this_, FatProcess& _input, FatProcess& _output, Action& _action, Coupling& _coupling)
 {
-    if (this_->get_parent ())
-        remove_state_dependency (this_->get_parent (), &_action);
+    remove_state_dependency (this_->get_parent (), &_action);
     graph_remove_edge (&_action, &_output);
 }
 

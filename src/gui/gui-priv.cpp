@@ -364,7 +364,7 @@ GUIStructureObserver::add_child_to_container (FatProcess* container, CoreProcess
     // not their internal components.
     AbstractList* ab_list = dynamic_cast<AbstractList*>(container);
     if (ab_list) {
-        auto* parent_list = ab_list->get_parent();
+        auto* parent_list = ab_list->get_parent ();
         if (parent_list && (
             dynamic_cast<Path*>(parent_list) ||
             dynamic_cast<Poly*>(parent_list) ||

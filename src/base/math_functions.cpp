@@ -108,9 +108,7 @@ BoundedValue::BoundedValue (CoreProcess* parent, const string& name, double min,
 
 BoundedValue::~BoundedValue ()
 {
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
     graph_remove_edge (&_action, &_result);
 }
 
@@ -118,9 +116,7 @@ void
 BoundedValue::set_parent (CoreProcess* parent)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
 
     add_state_dependency (parent, &_action);
 

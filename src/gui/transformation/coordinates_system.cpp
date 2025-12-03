@@ -76,9 +76,7 @@ ScreenToLocal::ScreenToLocal (CoreProcess* parent, const string& name, CoreProce
 ScreenToLocal::~ScreenToLocal ()
 {
 
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), _action);
-    }
+    remove_state_dependency (get_parent (), _action);
     graph_remove_edge (_action, _outY);
     graph_remove_edge (_action, _outX);
 
@@ -95,9 +93,7 @@ void
 ScreenToLocal::set_parent (CoreProcess* parent)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), _action);
-    }
+    remove_state_dependency (get_parent (), _action);
 
     add_state_dependency (parent, _action);
 
@@ -169,9 +165,7 @@ LocalToScreen::LocalToScreen (CoreProcess* parent, const string& name, CoreProce
 
 LocalToScreen::~LocalToScreen ()
 {
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), _action);
-    }
+    remove_state_dependency (get_parent (), _action);
     graph_remove_edge (_action, _outX);
     graph_remove_edge (_action, _outY);
     delete _cinY;
@@ -187,9 +181,7 @@ void
 LocalToScreen::set_parent (CoreProcess* parent)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), _action);
-    }
+    remove_state_dependency (get_parent (), _action);
 
     add_state_dependency (parent, _action);
 

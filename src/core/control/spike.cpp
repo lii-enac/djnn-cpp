@@ -21,11 +21,11 @@ namespace djnn {
 bool
 Spike::pre_activate ()
 {
-    if (get_parent () == 0 || get_parent ()->somehow_activating ()) {
-        set_activation_state (ACTIVATING);
-        return true;
+    if (CoreProcess * p = get_parent (); p && !p->somehow_activating ()) {
+        return false;
     }
-    return false;
+    set_activation_state (ACTIVATING);
+    return true;
 }
 
 void

@@ -97,9 +97,7 @@ DoubleFormatter::init (double initial, int decimal)
 
 DoubleFormatter::~DoubleFormatter ()
 {
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
     graph_remove_edge (&_action, &_output);
 }
 
@@ -107,9 +105,7 @@ void
 DoubleFormatter::set_parent (CoreProcess* parent)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
 
     add_state_dependency (parent, &_action);
 
@@ -283,9 +279,7 @@ Regex::Regex (CoreProcess* parent, const string& name, const string& reg)
 
 Regex::~Regex ()
 {
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_reg_action);
-    }
+    remove_state_dependency (get_parent (), &_reg_action);
     graph_remove_edge (&_reg_action, &_matched);
     graph_remove_edge (&_input, &_reg_action);
 

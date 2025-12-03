@@ -116,9 +116,7 @@ class TextBinaryOperator : public FatProcess {
   protected:
     void set_parent (CoreProcess* parent) override {
         // in case of re-parenting remove edge dependency in graph
-        if (get_parent ()) {
-            remove_state_dependency (get_parent (), &_action);
-        }
+        remove_state_dependency (get_parent (), &_action);
         add_state_dependency (parent, &_action);
         FatProcess::set_parent (parent);
     }

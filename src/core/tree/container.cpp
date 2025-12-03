@@ -451,7 +451,7 @@ Container::print_children ()
 #ifndef DJNN_NO_DEBUG
     loginfonofl (get_name () + "'s children:");
     for (auto c : _children) {
-        // loginfonofl (c->get_name (c->get_parent()));
+        // loginfonofl (c->get_name (c->get_parent ()));
         loginfonofl (c->get_debug_name ());
     }
     loginfonocr ("\n");

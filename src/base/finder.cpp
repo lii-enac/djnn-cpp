@@ -119,9 +119,7 @@ Finder::Finder (CoreProcess* parent, const string& name, CoreProcess* container,
 
 Finder::~Finder ()
 {
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
     graph_remove_edge (&_action, &_result);
     graph_remove_edge (&_action, &_found);
     graph_remove_edge (&_action, &_not_found);
@@ -131,9 +129,7 @@ void
 Finder::set_parent (CoreProcess* parent)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
 
     add_state_dependency (parent, &_action);
     FatProcess::set_parent (parent);

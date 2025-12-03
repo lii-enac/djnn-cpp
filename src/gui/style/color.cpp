@@ -111,9 +111,7 @@ RGBToLCHConverter::RGBToLCHConverter (CoreProcess* parent, const string& name)
 RGBToLCHConverter::~RGBToLCHConverter ()
 {
 
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), _action);
-    }
+    remove_state_dependency (get_parent (), _action);
 
     graph_remove_edge (_b, _action);
     graph_remove_edge (_g, _action);
@@ -135,9 +133,7 @@ void
 RGBToLCHConverter::set_parent (CoreProcess* parent)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), _action);
-    }
+    remove_state_dependency (get_parent (), _action);
 
     add_state_dependency (parent, _action);
 
@@ -243,9 +239,7 @@ void
 LCHToRGBConverter::set_parent (CoreProcess* parent)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), _action);
-    }
+    remove_state_dependency (get_parent (), _action);
 
     add_state_dependency (parent, _action);
 
@@ -254,9 +248,7 @@ LCHToRGBConverter::set_parent (CoreProcess* parent)
 
 LCHToRGBConverter::~LCHToRGBConverter ()
 {
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), _action);
-    }
+    remove_state_dependency (get_parent (), _action);
     graph_remove_edge (_h, _action);
     graph_remove_edge (_c, _action);
     graph_remove_edge (_l, _action);

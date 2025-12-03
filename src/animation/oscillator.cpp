@@ -55,9 +55,7 @@ Oscillator::Oscillator (CoreProcess* parent, const string& name)
 
 Oscillator::~Oscillator ()
 {
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
     graph_remove_edge (&_action, &_output);
 }
 
@@ -65,9 +63,7 @@ void
 Oscillator::set_parent (CoreProcess* parent)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
 
     add_state_dependency (parent, &_action);
     FatProcess::set_parent (parent);

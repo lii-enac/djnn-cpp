@@ -318,7 +318,7 @@ Window::UndelayedSpike::impl_activate ()
 // void
 // Window::UndelayedSpike::coupling_activation_hook ()
 // { //DBG;
-//   UpdateDrawing::instance ()->get_damaged ()->set_data(get_parent());
+//   UpdateDrawing::instance ()->get_damaged ()->set_data(get_parent ());
 //   notify_activation ();
 // }
 

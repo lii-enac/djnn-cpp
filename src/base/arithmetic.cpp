@@ -113,9 +113,7 @@ Incr::Incr (CoreProcess* parent, const string& name, bool isModel)
 
 Incr::~Incr ()
 {
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_state);
-    }
+    remove_state_dependency (get_parent (), &_state);
     graph_remove_edge (&_step, &_state);
     graph_remove_edge (this, &_state);
 }
@@ -124,9 +122,7 @@ void
 Incr::set_parent (CoreProcess* parent)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_state);
-    }
+    remove_state_dependency (get_parent (), &_state);
 
     add_state_dependency (parent, &_state);
     FatProcess::set_parent (parent);
@@ -200,9 +196,7 @@ OperationConnector::OperationConnector (CoreProcess* parent, const string& name,
 
 OperationConnector::~OperationConnector ()
 {
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
     graph_remove_edge (this, _dst);
     graph_remove_edge (&_delta, _dst);
 }
@@ -211,9 +205,7 @@ void
 OperationConnector::set_parent (CoreProcess* parent)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
 
     add_state_dependency (parent, &_action);
     FatProcess::set_parent (parent);
@@ -317,9 +309,7 @@ AdderAccumulator::AdderAccumulator (CoreProcess* parent, const string& name, dou
 
 AdderAccumulator::~AdderAccumulator ()
 {
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
     graph_remove_edge (&_action, &_result);
 }
 
@@ -327,9 +317,7 @@ void
 AdderAccumulator::set_parent (CoreProcess* parent)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_action);
-    }
+    remove_state_dependency (get_parent (), &_action);
 
     add_state_dependency (parent, &_action);
     FatProcess::set_parent (parent);

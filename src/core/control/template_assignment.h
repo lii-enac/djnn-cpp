@@ -147,17 +147,13 @@ class TAssignment : public FatProcess {
 
     virtual ~TAssignment () {
         graph_remove_edge (get_src (), get_dst ());
-        if (get_parent ()) {
-            remove_state_dependency (get_parent (), get_dst ());
-        }
+        remove_state_dependency (get_parent (), get_dst ());
         // delete _ttassignment;
     }
 
     void set_parent (CoreProcess* parent) override {
         /* in case of re-parenting remove edge dependency in graph */
-        if (get_parent ()) {
-            remove_state_dependency (get_parent (), get_dst ());
-        }
+        remove_state_dependency (get_parent (), get_dst ());
         add_state_dependency (parent, get_dst ());
         FatProcess::set_parent (parent);
     }

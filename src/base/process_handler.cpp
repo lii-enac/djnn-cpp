@@ -238,18 +238,14 @@ CollectionDeleter::CollectionDeleter (CoreProcess* parent, const string& name)
 
 CollectionDeleter::~CollectionDeleter ()
 {
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_del_action);
-    }
+    remove_state_dependency (get_parent (), &_del_action);
 }
 
 void
 CollectionDeleter::set_parent (CoreProcess* p)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_del_action);
-    }
+    remove_state_dependency (get_parent (), &_del_action);
 
     add_state_dependency (p, &_del_action);
     FatProcess::set_parent (p);
@@ -300,18 +296,14 @@ CollectionActivator::~CollectionActivator ()
 {
     graph_remove_edge (&_path, &_act_all);
     graph_remove_edge (&_activate, &_act_all);
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_act_all);
-    }
+    remove_state_dependency (get_parent (), &_act_all);
 }
 
 void
 CollectionActivator::set_parent (CoreProcess* p)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_act_all);
-    }
+    remove_state_dependency (get_parent (), &_act_all);
 
     add_state_dependency (p, &_act_all);
     FatProcess::set_parent (p);
@@ -357,18 +349,14 @@ AbstractCollectionSetValue::~AbstractCollectionSetValue ()
 {
     graph_remove_edge (&_collection, &_act_set_val);
     graph_remove_edge (&_path, &_act_set_val);
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_act_set_val);
-    }
+    remove_state_dependency (get_parent (), &_act_set_val);
 }
 
 void
 AbstractCollectionSetValue::set_parent (CoreProcess* p)
 {
     /* in case of re-parenting remove edge dependency in graph */
-    if (get_parent ()) {
-        remove_state_dependency (get_parent (), &_act_set_val);
-    }
+    remove_state_dependency (get_parent (), &_act_set_val);
 
     add_state_dependency (p, &_act_set_val);
     FatProcess::set_parent (p);
