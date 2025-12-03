@@ -483,6 +483,7 @@ endif
 
 
 djnn_libs ?= core exec_env base display comms gui input animation utils files audio
+#djnn_libs += c_api
 djnn_libs += $(djnn_libs_extra)
 #extra
 
