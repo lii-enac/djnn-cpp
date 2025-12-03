@@ -10,3 +10,5 @@
 /make2ninja.py
 /*.diff
 /MGL.gputrace
+/.cache
+/cosmo
