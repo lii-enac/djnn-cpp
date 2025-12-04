@@ -26,10 +26,9 @@ class Spike : public FatProcess {
     FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
-    bool pre_activate () override;
-    void post_activate () override;
     void impl_activate () override {};
     void impl_deactivate () override {};
+    void post_activate () override { post_activate_auto_deactivate (); }
 
 #ifndef DJNN_NO_SERIALIZE
     void serialize (const string& format) override;

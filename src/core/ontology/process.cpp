@@ -361,7 +361,6 @@ CoreProcess::pre_activate ()
     /* no activation if :
      * 1 - already activated
      * 2 - is activating
-     * 3 - the parent exists and is stopped
      */
 
     if (get_activation_state () != DEACTIVATED) {
@@ -375,13 +374,15 @@ bool
 FatProcess::pre_activate ()
 {
     /* no activation if :
-     * 1 - already activated
-     * 2 - is activating
      * 3 - the parent exists and is stopped
      */
-    if (get_parent () != nullptr && !get_parent ()->somehow_activating ()) {
+    if (CoreProcess * p = get_parent (); p && !p->somehow_activating ()) {
         return false;
     }
+
+    // no need to check all of the activations in the hierarchy of parents,
+    // since any activation/deactivation should have been up/downstreamed (?)
+    
     return CoreProcess::pre_activate ();
 }
 

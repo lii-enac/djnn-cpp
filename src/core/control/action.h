@@ -41,13 +41,7 @@ class Action : public FatProcess {
     void                   impl_deactivate () override {} // save from providing it in inherited actions
 
   protected:
-    virtual bool pre_activate () override {
-        if (CoreProcess * p = get_parent (); p && !p->somehow_activating ())
-            return false;
-        set_activation_state (ACTIVATING);
-        return true;
-    }
-    void post_activate () override {
+    virtual void post_activate () override {
         post_activate_auto_deactivate ();
     }
 };

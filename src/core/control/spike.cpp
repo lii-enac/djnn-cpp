@@ -18,22 +18,6 @@
 
 namespace djnn {
 
-bool
-Spike::pre_activate ()
-{
-    if (CoreProcess * p = get_parent (); p && !p->somehow_activating ()) {
-        return false;
-    }
-    set_activation_state (ACTIVATING);
-    return true;
-}
-
-void
-Spike::post_activate ()
-{
-    post_activate_auto_deactivate ();
-}
-
 #if !defined(DJNN_NO_SERIALIZE)
 void
 Spike::serialize (const string& format)
