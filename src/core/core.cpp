@@ -19,6 +19,7 @@
 
 // #include <locale.h>
 // #include "core/utils/error.h"
+#include "core/ontology/process.h"
 #include "core/execution/graph.h"
 
 // #include "utils/debug.h"

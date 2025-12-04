@@ -338,100 +338,6 @@ CoreProcess::find_child_impl (int /*index*/)
 // behavior: main activation API
 
 void
-CoreProcess::activate ()
-{
-    if (pre_activate ()) {
-        impl_activate ();
-        post_activate ();
-    }
-}
-
-void
-CoreProcess::deactivate ()
-{
-    if (pre_deactivate ()) {
-        impl_deactivate ();
-        post_deactivate ();
-    }
-}
-
-bool
-CoreProcess::pre_activate ()
-{
-    /* no activation if :
-     * 1 - already activated
-     * 2 - is activating
-     */
-
-    if (get_activation_state () != DEACTIVATED) {
-        return false;
-    }
-    set_activation_state (ACTIVATING);
-    return true;
-}
-
-bool
-FatProcess::pre_activate ()
-{
-    /* no activation if :
-     * 3 - the parent exists and is stopped
-     */
-    if (CoreProcess * p = get_parent (); p && !p->somehow_activating ()) {
-        return false;
-    }
-
-    // no need to check all of the activations in the hierarchy of parents,
-    // since any activation/deactivation should have been up/downstreamed (?)
-    
-    return CoreProcess::pre_activate ();
-}
-
-void
-CoreProcess::post_activate ()
-{
-    notify_activation ();
-    set_activation_state (ACTIVATED);
-}
-
-void
-CoreProcess::post_activate_auto_deactivate ()
-{
-    // TODO: inline function in process.h
-    CoreProcess::post_activate ();
-    deactivate ();
-}
-
-bool
-CoreProcess::pre_deactivate ()
-{
-    if (get_activation_state () != ACTIVATED) {
-        return false;
-    }
-    set_activation_state (DEACTIVATING);
-    return true;
-}
-
-void
-CoreProcess::post_deactivate ()
-{
-    notify_deactivation ();
-    set_activation_state (DEACTIVATED);
-    // set_activation_flag (NONE_ACTIVATION); // handled in Graph::exec ()
-}
-
-void
-CoreProcess::schedule_activation ()
-{
-    Graph::instance ().schedule_activation (this);
-}
-
-void
-CoreProcess::schedule_deletion ()
-{
-    Graph::instance ().schedule_deletion (this);
-}
-
-void
 CoreProcess::schedule_delete ()
 {
     warning (this, "'schedule_delete' is deprecated, please use 'schedule_deletion instead");
@@ -445,7 +351,8 @@ CoreProcess::state_dependency ()
     return get_state_dependency ();
 }
 
-static void
+//static
+void
 notify (const Process::couplings_t& couplings)
 {
     // optimizations for 0 and 1 coupling before protecting from auto disabling
@@ -478,32 +385,6 @@ notify (const Process::couplings_t& couplings)
     }
 }
 
-void
-CoreProcess::notify_activation ()
-{
-    notify (get_activation_couplings ());
-}
-
-void
-CoreProcess::notify_deactivation ()
-{
-    notify (get_deactivation_couplings ());
-}
-
-void
-CoreProcess::set_activation_flag (activation_flag_e VALUE)
-{
-    // only if flags are different
-    if (static_cast<activation_flag_e> (get_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT)) != VALUE) {
-#if !_EXEC_FULL_ORDERED_VERTICES
-        // if the process has vertex and has something to do // could be simplify ?
-        if (_vertex && (VALUE != NONE_ACTIVATION)) {
-            Graph::instance ().add_in_activation (_vertex);
-        }
-#endif
-        set_bitset (ACTIVATION_FLAG_MASK, ACTIVATION_FLAG_SHIFT, static_cast<unsigned int> (VALUE));
-    }
-}
 
 // coupling
 
@@ -535,13 +416,6 @@ CouplingProcess::remove_deactivation_coupling (Coupling* c)
         _deactivation_couplings.end ());
 }
 
-// pseudo, graph-less coupling for efficiency reasons in gui
-void
-FatProcess::notify_change (unsigned int notify_mask_)
-{
-    if (auto* p = get_parent ())
-        p->notify_change (notify_mask_);
-}
 
 // -----------------------------------------------------------------------
 // tree, component, symtable

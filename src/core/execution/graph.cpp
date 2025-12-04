@@ -36,6 +36,7 @@ using djnnstl::endl;
 #include "core/utils/utils-dev.h"
 #include "core/utils/to_string.h"
 #include "exec_env/exec_env-dev.h"
+#include "core/ontology/process.h"
 #include "graph.h"
 #include "utils/debug.h"
 

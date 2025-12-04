@@ -418,3 +418,6 @@ void remove_state_dependency (CoreProcess* parent, CoreProcess* p);
 inline const CoreProcess::string& get_debug_name (const CoreProcess* p) { return p->get_debug_name(); }
 
 } // namespace djnn
+
+#include "process_inline.hpp"
+
