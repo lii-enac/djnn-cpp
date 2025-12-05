@@ -13,6 +13,7 @@
  */
 
 #include "core/core-dev.h"
+#include "core/ontology/process.h"
 #include "core/execution/graph.h"
 #include "core/serializer/serializer.h"
 #include "core/utils/filesystem.h"
