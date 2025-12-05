@@ -76,6 +76,7 @@ AbstractBoolProperty::set_value (bool v, bool propagate)
     get_ref_value () = v;
     if (is_activable () && propagate) {
         notify_activation ();
+        notify_parent ();
         if (v)
             _true.notify_activation ();
         else
@@ -87,7 +88,6 @@ void
 AbstractBoolProperty::set_value (const string& v, bool propagate)
 {
     if (v.compare ("true") == 0) {
-        // get_ref_value() = true;
         set_value (true, propagate);
     } else if (v.compare ("false") == 0) {
         set_value (false, propagate);
