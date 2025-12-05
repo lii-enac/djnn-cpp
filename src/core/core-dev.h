@@ -14,7 +14,8 @@
 #pragma once
 
 #include "core/enums.h"
-#include "core/xml/xml-dev.h"
+#include "core/utils/containers/string.h"
+#include "core/xml/xml-dev.h" // make loadFromXml public
 
 namespace djnn {
 class CoreProcess;

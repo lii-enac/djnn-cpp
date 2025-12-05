@@ -115,10 +115,29 @@ graph_check_order (CoreProcess* p1, CoreProcess* p2)
     Graph::instance ().check_order (p1, p2);
 #endif
 }
+
 void
 graph_exec ()
 {
     Graph::instance ().exec ();
+}
+
+void
+graph_schedule_activation (CoreProcess* p)
+{
+    Graph::instance ().schedule_activation (p);
+}
+
+void
+graph_schedule_deletion (CoreProcess* p)
+{
+    Graph::instance ().schedule_deletion (p);
+}
+
+void
+graph_add_in_activation (Vertex* v)
+{
+    Graph::instance ().add_in_activation (v);
 }
 
 } // namespace djnn
