@@ -31,10 +31,10 @@ djnn_libs_extra :=
 # CFLAGS += -O0
 # CFLAGS += -O1 # recommended with sanitizer
 # CFLAGS += -O2
-CFLAGS += -O0
+# CFLAGS += -O0
 
 # debug, compile is slower with it
-CFLAGS += -g
+# CFLAGS += -g
 #CFLAGS += -fstandalone-debug
 
 # sanitizer

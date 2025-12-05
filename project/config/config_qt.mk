@@ -31,11 +31,10 @@ djnn_libs_extra ?=
 # CFLAGS += -O0
 # CFLAGS += -O1 # recommended with sanitizer
 # CFLAGS += -O2
-CFLAGS += -O0
 
 # debug, compile is slower with it
-CFLAGS += -g
-#CFLAGS += -fstandalone-debug
+# CFLAGS += -g
+# CFLAGS += -fstandalone-debug
 
 # sanitizer
 #CFLAGS += -fsanitize=address
@@ -46,6 +45,16 @@ CFLAGS += -g
 # CFLAGS += -Wno-gnu #-null-pointer-arithmetic
 #CFLAGS += -fno-limit-debug-info -fstandalone-debug
 #LDFLAGS += -fno-limit-debug-info -fstandalone-debug
+
+# Compiler Options Hardening Guide for C and C++
+# https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html
+# CFLAGS += -O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrough \
+# -Werror=format-security \
+# -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 \
+# -D_GLIBCXX_ASSERTIONS \
+# -fstrict-flex-arrays=3 \
+# -fstack-protector-strong \
+#-fstack-clash-protection
 
 
 #build_dir ?= build
