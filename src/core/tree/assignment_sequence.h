@@ -25,7 +25,7 @@ class AssignmentSequence : public Container {
     void                add_child (CoreProcess* c, const string& name) override;
     void                draw () override {}
     void                impl_activate () override;
-    void                post_activate () override;
+    void                post_activate () override { post_activate_auto_deactivate (); }
     void                impl_deactivate () override {}
     AssignmentSequence* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 

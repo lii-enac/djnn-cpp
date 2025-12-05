@@ -72,12 +72,6 @@ AssignmentSequence::add_child (CoreProcess* c, const string& name)
     add_symbol (name, c);
 }
 
-void
-AssignmentSequence::post_activate ()
-{
-    post_activate_auto_deactivate ();
-}
-
 AssignmentSequence::~AssignmentSequence ()
 {
     for (auto c : _children) {

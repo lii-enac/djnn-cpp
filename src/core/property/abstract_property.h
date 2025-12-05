@@ -39,9 +39,9 @@ class SuperAbstractProperty : public FatProcess {
     unsigned int get_notify_mask () const { return _notify_mask; }
 
   protected:
-    void         post_activate () override { post_activate_auto_deactivate (); }
     void         impl_activate () override {}
     void         impl_deactivate () override {}
+    void         post_activate () override { post_activate_auto_deactivate (); }
     unsigned int _notify_mask;
 };
 

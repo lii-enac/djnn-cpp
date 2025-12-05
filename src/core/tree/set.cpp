@@ -180,9 +180,4 @@ SetIterator::impl_activate ()
     notify_activation ();
 }
 
-void
-SetIterator::post_activate ()
-{
-    post_activate_auto_deactivate ();
-}
 } // namespace djnn

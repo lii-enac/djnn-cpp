@@ -41,8 +41,6 @@ class Action : public FatProcess {
     void                   impl_deactivate () override {} // save from providing it in inherited actions
 
   protected:
-    virtual void post_activate () override {
-        post_activate_auto_deactivate ();
-    }
+    virtual void post_activate () override { post_activate_auto_deactivate (); }
 };
 } // namespace djnn

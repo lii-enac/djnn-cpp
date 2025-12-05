@@ -316,11 +316,6 @@ ListIterator::impl_activate ()
     notify_activation ();
 }
 
-void
-ListIterator::post_activate ()
-{
-    post_activate_auto_deactivate ();
-}
 
 BidirectionalListIterator::IterAction::IterAction (CoreProcess* parent, const string& name, CoreProcess* list,
                                                    RefProperty* iter, IntProperty* index,

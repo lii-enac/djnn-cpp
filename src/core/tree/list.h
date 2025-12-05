@@ -72,7 +72,7 @@ class ListIterator : public FatProcess {
     virtual ~ListIterator () {}
     void impl_activate () override;
     void impl_deactivate () override {}
-    void post_activate () override;
+    void post_activate () override { post_activate_auto_deactivate (); }
 
   private:
     CoreProcess* _action;
