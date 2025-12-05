@@ -38,6 +38,12 @@
 // //#include <boost/type_index.hpp>
 // #endif
 
+// uncomment out the following while experminenting with the methods included in process_inline.hpp (see also process.h)
+// this will prevent constant recompiling of the entire lib
+// #define INLINE
+// #include "process_inline.hpp"
+// #undef INLINE
+
 namespace djnn {
 
 // -----------------------------------------------------------------------

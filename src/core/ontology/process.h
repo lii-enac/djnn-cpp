@@ -419,5 +419,8 @@ inline const CoreProcess::string& get_debug_name (const CoreProcess* p) { return
 
 } // namespace djnn
 
+// comment out the following while experminenting with the methods included in process_inline.hpp (see also process.cpp)
+// this will prevent constant recompiling of the entire lib
+#define INLINE inline
 #include "process_inline.hpp"
-
+#undef INLINE

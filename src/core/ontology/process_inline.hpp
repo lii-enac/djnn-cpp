@@ -1,9 +1,6 @@
 //#include "process.h"
 #include "core/execution/graph.h"
 
-// #define INLINE
-#define INLINE inline
-
 namespace djnn {
 
 // -----------------------------------------------------------------------
