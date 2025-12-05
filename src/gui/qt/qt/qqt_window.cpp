@@ -193,6 +193,8 @@ get_button (int n)
     return button_id;
 }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+
 static stylus_type
 get_stylus_type (int t)
 {
@@ -209,6 +211,27 @@ get_stylus_type (int t)
     }
     return type;
 }
+
+#else
+
+static stylus_type
+get_stylus_type (QPointingDevice::PointerType t)
+{
+    stylus_type type = STYLUS_PEN;
+    switch (t) {
+    case QPointingDevice::PointerType::Eraser:
+        type = STYLUS_ERASER;
+        break;
+    case QPointingDevice::PointerType::Pen:
+        type = STYLUS_PEN;
+        break;
+    default:
+        type = STYLUS_PEN;
+    }
+    return type;
+}
+
+#endif
 
 void
 MyQQWidget::mousePressEvent (QMouseEvent* event)
