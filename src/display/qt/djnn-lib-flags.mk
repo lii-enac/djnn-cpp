@@ -6,12 +6,14 @@ ifeq ($(os),Darwin)
 lib_pkg +=  Qt5OpenGL Qt5Gui
 qt_dir = $(brew_prefix)/opt/qt@5
 lib_pkgpath += $(qt_dir)/lib/pkgconfig
-#qt6 note:
-# lib_pkg +=  Qt6OpenGL Qt6Gui
+moc ?= $(qt_dir)/bin/moc
+
+#qt6 notes:
+# lib_pkg +=  Qt6OpenGL Qt6Gui Qt6Widgets
 # qt_dir = $(brew_prefix)/opt/qt
 # lib_pkgpath += $(qt_dir)/libexec/lib/pkgconfig
+# moc = # ?!?
 
-moc ?= $(qt_dir)/bin/moc
 endif
 
 ifeq ($(os),Linux)
