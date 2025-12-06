@@ -291,7 +291,7 @@ QtBackend::update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, Font
                 qfont.setStyle (fontStyleArray[i]);
         }
         if (fw) {
-            qfont.setWeight (fw->weight ()->get_value ());
+            qfont.setWeight ( (QFont::Weight) (fw->weight ()->get_value ()) );
         }
         QString      str (text->text ()->get_value ().c_str ());
         QFontMetrics fm (qfont);

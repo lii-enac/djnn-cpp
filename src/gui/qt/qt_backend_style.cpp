@@ -303,7 +303,7 @@ QtBackend::load_font_weight (FontWeight* fw)
         weight = cur_context->font.weight () - 10 < 0 ? 0 : cur_context->font.weight () - 10; /* lighter */
     if (weight == 100)
         weight = cur_context->font.weight () + 10 > 99 ? 99 : cur_context->font.weight () + 10; /* bolder */
-    cur_context->font.setWeight (weight);
+    cur_context->font.setWeight ((QFont::Weight) (weight));
     cur_context->update_relative_units ();
 }
 
