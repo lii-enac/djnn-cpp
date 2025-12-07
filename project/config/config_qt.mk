@@ -8,6 +8,7 @@ display ?= QT
 
 graphics ?= QT
 #options: QT CAIRO GL
+qt_version ?= 5
 
 #gl_context := legacy
 #gl_context := OSMesa

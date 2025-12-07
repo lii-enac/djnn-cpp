@@ -18,9 +18,14 @@ my_srcs := $(wildcard $(local_dir)/*.cpp)
 # this will change local_dir !
 include $(local_dir)/qt/djnn-lib-srcs.mk
 
+qt_gui_libs := Qt$(qt_version)OpenGL Qt$(qt_version)Gui
+ifeq ($(qt_version),6)
+qt_gui_libs += Qt$(qt_version)OpenGLWidgets
+endif
+
 $(patsubst %.cpp,$(build_dir)/%.o,$(my_srcs)) \
 $(build_dir)/$(local_dir)/qqt_window_moc.o \
-: DJNN_CXXFLAGS += $(shell env PKG_CONFIG_PATH=$(display_lib_pkgpath) pkg-config --cflags Qt$(qt_version)OpenGL Qt$(qt_version)Gui)
+: DJNN_CXXFLAGS += $(shell env PKG_CONFIG_PATH=$(display_lib_pkgpath) pkg-config --cflags $(qt_gui_libs))
 # qt6: add Qt$(qt_version)OpenGLWidgets
 
 
