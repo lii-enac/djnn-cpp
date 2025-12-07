@@ -51,6 +51,112 @@ using djnnstl::cerr;
 using djnnstl::cout;
 using djnnstl::endl;
 
+
+// helper functions
+
+static mouse_button
+get_button (int n)
+{
+    mouse_button button_id = BUTTON_LEFT;
+    switch (n) {
+    case Qt::LeftButton:
+        button_id = BUTTON_LEFT;
+        break;
+    case Qt::RightButton:
+        button_id = BUTTON_RIGHT;
+        break;
+    case Qt::MiddleButton:
+        button_id = BUTTON_MIDDLE;
+        break;
+    default:
+        button_id = BUTTON_LEFT;
+    }
+    return button_id;
+}
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+
+static stylus_type
+get_stylus_type (QPointingDevice::PointerType t)
+{
+    stylus_type type = STYLUS_PEN;
+    switch (t) {
+    case QPointingDevice::PointerType::Eraser:
+        type = STYLUS_ERASER;
+        break;
+    case QPointingDevice::PointerType::Pen:
+        type = STYLUS_PEN;
+        break;
+    default:
+        type = STYLUS_PEN;
+    }
+    return type;
+}
+
+template <typename X>
+QPointF
+get_position(const X* event)
+{
+    return event->position();
+}
+
+template <typename X>
+const X&
+get_position(const QPoint* event)
+{
+    return *event;
+}
+
+const QList<QTouchEvent::TouchPoint>&
+get_touch_points(const QTouchEvent* event)
+{
+    return event->points ();
+}
+
+#else
+
+static stylus_type
+get_stylus_type (int t)
+{
+    stylus_type type = STYLUS_PEN;
+    switch (t) {
+    case QTabletEvent::Eraser:
+        type = STYLUS_ERASER;
+        break;
+    case QTabletEvent::Pen:
+        type = STYLUS_PEN;
+        break;
+    default:
+        type = STYLUS_PEN;
+    }
+    return type;
+}
+
+
+
+
+template <typename X>
+const X&
+get_position(const X* event)
+{
+    return *event; //->position();
+}
+
+QPointF
+get_position(const QTouchEvent::TouchPoint* event)
+{
+    return event->pos();
+}
+
+const QList<QTouchEvent::TouchPoint>&
+get_touch_points(const QTouchEvent* event)
+{
+    return event->touchPoints ();
+}
+#endif
+
+
+
 bool
 MyQQWidget::event (QEvent* event)
 {
@@ -71,13 +177,19 @@ MyQQWidget::event (QEvent* event)
     case QEvent::TouchEnd: {
         // if(!_building)
         djnn::get_exclusive_access (DBG_GET);
-        QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent*> (event)->touchPoints ();
+        // const auto& touchPoints = static_cast<QTouchEvent*> (event)->touchPoints ();
+        // const auto& touchPoints = static_cast<QTouchEvent*> (event)->points ();
+        const auto& touchPoints = get_touch_points(static_cast<QTouchEvent*> (event));
 
         for (const auto& touchPoint : touchPoints) {
-            const int&    id       = touchPoint.id ();
-            const double& x        = touchPoint.pos ().x ();
-            const double& y        = touchPoint.pos ().y ();
-            const double& pressure = touchPoint.pressure ();
+            int    id       = touchPoint.id ();
+            //double x        = touchPoint.pos ().x ();
+            //double y        = touchPoint.pos ().y ();
+            //double x        = touchPoint.position ().x ();
+            //double y        = touchPoint.position ().y ();
+            double x = get_position (&touchPoint).x ();
+            double y = get_position (&touchPoint).y ();
+            double pressure = touchPoint.pressure ();
             switch (touchPoint.state ()) {
             case Qt::TouchPointStationary:
                 break;
@@ -173,71 +285,11 @@ MyQQWidget::event (QEvent* event)
     return exec_;
 }
 
-static mouse_button
-get_button (int n)
-{
-    mouse_button button_id = BUTTON_LEFT;
-    switch (n) {
-    case Qt::LeftButton:
-        button_id = BUTTON_LEFT;
-        break;
-    case Qt::RightButton:
-        button_id = BUTTON_RIGHT;
-        break;
-    case Qt::MiddleButton:
-        button_id = BUTTON_MIDDLE;
-        break;
-    default:
-        button_id = BUTTON_LEFT;
-    }
-    return button_id;
-}
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-
-static stylus_type
-get_stylus_type (int t)
-{
-    stylus_type type = STYLUS_PEN;
-    switch (t) {
-    case QTabletEvent::Eraser:
-        type = STYLUS_ERASER;
-        break;
-    case QTabletEvent::Pen:
-        type = STYLUS_PEN;
-        break;
-    default:
-        type = STYLUS_PEN;
-    }
-    return type;
-}
-
-#else
-
-static stylus_type
-get_stylus_type (QPointingDevice::PointerType t)
-{
-    stylus_type type = STYLUS_PEN;
-    switch (t) {
-    case QPointingDevice::PointerType::Eraser:
-        type = STYLUS_ERASER;
-        break;
-    case QPointingDevice::PointerType::Pen:
-        type = STYLUS_PEN;
-        break;
-    default:
-        type = STYLUS_PEN;
-    }
-    return type;
-}
-
-#endif
-
 void
 MyQQWidget::mousePressEvent (QMouseEvent* event)
 {
-    mouse_pos_x = event->x ();
-    mouse_pos_y = event->y ();
+    mouse_pos_x = get_position (event).x ();
+    mouse_pos_y = get_position (event).y ();
     mouse_pos_y -= 3; // QT bug??
 
     bool exec_ = _picking_view->genericMousePress (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
@@ -249,8 +301,8 @@ MyQQWidget::mousePressEvent (QMouseEvent* event)
 void
 MyQQWidget::mouseMoveEvent (QMouseEvent* event)
 {
-    mouse_pos_x = event->x ();
-    mouse_pos_y = event->y ();
+    mouse_pos_x = get_position (event).x ();
+    mouse_pos_y = get_position (event).y ();
     mouse_pos_y -= 3; // QT bug??
 
     bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y);
@@ -262,8 +314,8 @@ MyQQWidget::mouseMoveEvent (QMouseEvent* event)
 void
 MyQQWidget::mouseReleaseEvent (QMouseEvent* event)
 {
-    mouse_pos_x = event->x ();
-    mouse_pos_y = event->y ();
+    mouse_pos_x = get_position (event).x ();
+    mouse_pos_y = get_position (event).y ();
     mouse_pos_y -= 3; // QT bug??
 
     bool exec_ = _picking_view->genericMouseRelease (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
@@ -304,8 +356,8 @@ MyQQWidget::wheelEvent (QWheelEvent* event)
 void
 MyQQWidget::tabletEvent (QTabletEvent* event)
 {
-    auto tablet_pos_x = event->x ();
-    auto tablet_pos_y = event->y ();
+    auto tablet_pos_x = get_position (event).x ();
+    auto tablet_pos_y = get_position (event).y ();
     tablet_pos_y -= 3; // QT bug?? it is the same for stylus
     auto pressure = event->pressure ();
 
