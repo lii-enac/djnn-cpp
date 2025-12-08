@@ -124,6 +124,7 @@ MainLoop::impl_activate ()
     _is_stopping = true;
     launch_mutex_lock ();
     if (_another_source_wants_to_be_mainloop) {
+        //std::cerr << "another_source_wants_to_be_mainloop please stop" << " " << this << std::endl;
         please_stop ();
         join_own_thread ();
     }
@@ -139,30 +140,35 @@ djnn_atomic<bool>::atomic MainLoop::_is_stopping;
 void
 MainLoop::run ()
 {
-    {                                                  // scope for mutex
+    {   // scope for mutex
         std::unique_lock<std::mutex> l (cancel_mutex); // first lock, get it
         if (is_run_forever ()) {
             // std::cerr << ">> mainloop entering sleep forever" << __FL__;
-            cv.wait (l); // second lock, blocks until another thread calls pleaseStop
-                         // std::cerr << "<< mainloop leaving sleep forever" << __FL__;
+            cv.wait (l); // second lock, blocks until another thread calls please_stop
+            // std::cerr << "<< mainloop leaving sleep forever" << __FL__;
         } else {
-            // std::cerr << ">> mainloop entering sleep " << DBGVAR(_duration.count()) << __FL__;
-            cv.wait_for (l, std::chrono::milliseconds (_duration)); // second lock, blocks until another thread calls pleaseStop
-                                                                    // std::cerr << "<< mainloop exited sleep " << __FL__;
+            //std::cerr << ">> mainloop entering sleep " << DBGVAR(chrono::milliseconds(_duration).count()) << __FL__;
+            cv.wait_for (l, std::chrono::milliseconds (_duration)); // second lock, blocks until another thread calls please_stop
+            //std::cerr << "<< mainloop exited sleep " << __FL__;
         }
     }
-
     // fist tell all external sources to stop...
     for (auto es : _external_sources) {
+        //std::cerr << ">> please_stop " << es->get_name () << __FL__;
         es->please_stop ();
+        //std::cerr << "<< please_stop " << es->get_name () << __FL__;
     }
+
     // ...then join them
     for (auto es : _external_sources) {
         es->join ();
     }
 
-    if (_another_source_wants_to_be_mainloop)
+
+    if (_another_source_wants_to_be_mainloop) {
+        //std::cerr << "another_source_wants_to_be_mainloop please stop" << " " << this << std::endl;
         _another_source_wants_to_be_mainloop->please_stop ();
+    }
 }
 
 void
