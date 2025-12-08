@@ -1,3 +1,2 @@
 CompileFlags:
-  CompilationDatabase:
-    "build/compile_commands.json"
+  CompilationDatabase: "build/Darwin-arm64/compile_commands.json"
