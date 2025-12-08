@@ -8,6 +8,7 @@
 #include "core/property/text_property.h"
 #include "core/serializer/serializer.h"
 
+
 namespace djnn {
 
 template <typename T>
@@ -15,23 +16,28 @@ class TPrevious : public FatProcess {
   private:
     class PreviousAction : public Action {
       public:
-        PreviousAction (CoreProcess* parent, const string& name, TPrevious& np, const T& init_val)
+        PreviousAction (CoreProcess* parent, const string& name, TPrevious& prev, const T& init_val, bool diff_only=false)
             : Action (parent, name),
-              _np (np),
-              _prev (init_val) { finalize_construction (parent, name); }
+              _prev (prev),
+              _current_value (init_val),
+              _diff_only (diff_only) { finalize_construction (parent, name); }
         virtual ~PreviousAction () {}
-        void impl_activate () {
-            _np._output.set_value (_prev, true);
-            _prev = _np._input.get_value ();
+        void impl_activate () { // input has been activated with a new value
+          if (!_diff_only || (_current_value != _prev._input.get_value ()) ) {
+            _prev._output.set_value (_current_value, true); // set the output property with the previously stored "current" value
+            _current_value = _prev._input.get_value ();     // store the new value into current value
+          }
         }
 
       private:
-        TPrevious<T>& _np;
-        T             _prev;
+        TPrevious<T>& _prev;          // ref to the Process Previous
+        T             _current_value; // allow to store the new value (input) that will be copied into previous value (output)
+        bool          _diff_only;     // indicating if the output property (previous value) is set if the new value (input property) is the same
+
     };
 
   public:
-    TPrevious (CoreProcess* parent, const string& name, const T& i_val);
+    TPrevious (CoreProcess* parent, const string& name, const T& init_val, bool diff_only=false);
     virtual ~TPrevious () { uninit_unary_couplings (this, _input, _output, _action, _coupling); }
     void impl_activate () override {
         _coupling.enable ();
@@ -46,8 +52,8 @@ class TPrevious : public FatProcess {
 #ifndef DJNN_NO_SERIALIZE
     virtual void serialize (const string& format) override;
 #endif
-    typename PropertyTrait<T>::property_type _input;
-    typename PropertyTrait<T>::property_type _output;
+    typename PropertyTrait<T>::property_type _input;  // store the new value
+    typename PropertyTrait<T>::property_type _output; // store the previous value
     PreviousAction                           _action;
     Coupling                                 _coupling;
 };
@@ -66,15 +72,26 @@ typedef PreviousDouble             Previous;
 
 // inline
 template <typename T>
-TPrevious<T>::TPrevious (CoreProcess* parent, const string& name, const T& i_val)
+TPrevious<T>::TPrevious (CoreProcess* parent, const string& name, const T& init_val, bool diff_only)
     : FatProcess (name),
-      _input (this, "input", i_val),
-      _output (this, "output", i_val),
-      _action (this, "action", *this, i_val),
+      _input (this, "input", init_val),    // store the new value
+      _output (this, "output", init_val),  // store the previous value
+      _action (this, "action", *this, init_val, diff_only),
       _coupling (&_input, ACTIVATION, &_action, ACTIVATION) {
     init_unary_couplings (_input, _output, _action, _coupling);
     finalize_construction (parent, name);
 }
+
+template<>
+void
+TPrevious<double>::PreviousAction::impl_activate () // input has been activated with a new value
+{
+  if (!_diff_only || (abs (_prev._input.get_value () - _current_value) > 1e-9) ) {
+    _prev._output.set_value (_current_value, true); // set the output property with the previously stored "current" value
+    _current_value = _prev._input.get_value ();     // store the new value into current value
+  }
+}
+
 
 #ifndef DJNN_NO_SERIALIZE
 // inline
