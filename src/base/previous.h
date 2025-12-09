@@ -83,7 +83,7 @@ TPrevious<T>::TPrevious (CoreProcess* parent, const string& name, const T& init_
 }
 
 template<>
-void
+inline void
 TPrevious<double>::PreviousAction::impl_activate () // input has been activated with a new value
 {
   if (!_diff_only || (abs (_prev._input.get_value () - _current_value) > 1e-9) ) {
