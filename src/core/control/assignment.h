@@ -112,6 +112,7 @@ class CoreLazyAssignment : public AbstractCoreAssignment {
 };
 
 // Assignement follows the process/action model
+// well not really, since we want Assignment not only to be activated/enabled, but also that it perfoms the action ASAP
 class Assignment : public FatProcess {
     friend class AssignmentAction;
 
@@ -126,10 +127,13 @@ class Assignment : public FatProcess {
 
   public:
     Assignment (CoreProcess* parent, const string& name, CoreProcess* src, CoreProcess* dst, bool is_model = false)
-        : FatProcess (name, is_model), _src (src), _dst (dst), _action (this, "action"), _ttassignment (nullptr) // FIXME
-          ,
-          _propagate (true),
-          _lazy (false) {
+        : FatProcess (name, is_model)
+        , _src (src)
+        , _dst (dst)
+        , _action (this, "action")
+        , _ttassignment (nullptr) // FIXME
+        , _propagate (true)
+        , _lazy (false) {
         graph_add_edge (src, dst);
         finalize_construction (parent, name);
     }
@@ -140,20 +144,21 @@ class Assignment : public FatProcess {
         delete _ttassignment;
     }
 
-    void set_parent (CoreProcess* parent) override {
-        /* in case of re-parenting remove edge dependency in graph */
-        remove_state_dependency (get_parent (), get_dst ());
-        add_state_dependency (parent, get_dst ());
-        FatProcess::set_parent (parent);
-    }
-
-    Assignment* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     // for legacy reason, to get rid of?
     Assignment (CoreProcess* parent, const string& name,
                 CoreProcess* src, const string& sspec,
                 CoreProcess* dst, const string& dspec,
                 bool is_model = false)
         : Assignment (parent, name, src->find_child_impl (sspec), dst->find_child_impl (dspec), is_model) {
+    }
+
+    Assignment* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
+
+    void set_parent (CoreProcess* parent) override {
+        /* in case of re-parenting remove edge dependency in graph */
+        remove_state_dependency (get_parent (), get_dst ());
+        add_state_dependency (parent, get_dst ());
+        FatProcess::set_parent (parent);
     }
 
     void impl_activate () override { _action.activate (); }
