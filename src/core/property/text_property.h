@@ -45,7 +45,7 @@ class AbstractTextProperty : public AbstractSimpleProperty {
     void impl_activate () override;
     void impl_deactivate () override;
     void post_activate () override;
-    virtual bool may_graph_ignore_vertex () override;
+
 
   protected:
     virtual string&       get_ref_value ()       = 0;
