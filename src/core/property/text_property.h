@@ -40,6 +40,13 @@ class AbstractTextProperty : public AbstractSimpleProperty {
     string&       get_value () { return get_ref_value (); }
     const string& get_value () const { return get_ref_value (); }
 
+    void          update_is_empty ();
+    CoreProcess*  find_child_impl (const string& name) override;
+    void impl_activate () override;
+    void impl_deactivate () override;
+    void post_activate () override;
+    virtual bool may_graph_ignore_vertex () override;
+
   protected:
     virtual string&       get_ref_value ()       = 0;
     virtual const string& get_ref_value () const = 0;

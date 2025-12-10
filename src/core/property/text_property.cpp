@@ -16,6 +16,9 @@
 #include <stdexcept>
 
 #include "text_property.h"
+#include "bool_property.h"
+#include "core/control/action.h"
+#include "core/control/binding.h"
 
 #include "core/serializer/serializer.h"
 #include "core/utils/djnn_dynamic_cast.h"
@@ -122,6 +125,78 @@ AbstractTextProperty::set_value (CoreProcess* v, bool propagate)
 {
     warning (this, "undefined conversion from Process to Text");
 }
+
+
+using UpdateIsEmptyAction = ActionParentMethod<AbstractTextProperty, &AbstractTextProperty::update_is_empty>;
+
+
+CoreProcess*
+AbstractTextProperty::find_child_impl (const string& name)
+{
+    auto child = FatProcess::find_child_impl (name);
+    if (!child) {
+        if (name == "is_empty") {
+            child = new BoolProperty (this, "is_empty", get_value().empty());
+            auto* action = new UpdateIsEmptyAction (this, "action_is_empty");
+            //new Binding(this, "binding_is_empty", this, action);
+            new CoreBinding(this, "binding_is_empty", this, action);
+            //new CoreBinding(this, action);
+        }
+    }
+    return child;
+}
+
+void
+AbstractTextProperty::update_is_empty()
+{
+    dynamic_cast<BoolProperty*>(find_child_impl ("is_empty"))->set_value(get_value().empty(), true);
+}
+
+void
+AbstractTextProperty::impl_activate ()
+{
+    if (!children_empty ()) {
+        // if (auto * b = dynamic_cast<Binding*> (find_child_impl ("binding_is_empty"))) {
+        //     b->activate ();
+        // }
+        for (auto& sym: symtable ()) {
+            if (auto * b = dynamic_cast<CoreBinding*> (sym.second)) {
+                b->activate ();
+            }
+        }
+    }
+}
+
+void
+AbstractTextProperty::impl_deactivate ()
+{
+    if (!children_empty ()) {
+        // if (auto * b = dynamic_cast<Binding*> (find_child_impl ("binding_is_empty"))) {
+        //     b->deactivate ();
+        // }
+        for (auto& sym: symtable ()) {
+            if (auto * b = dynamic_cast<CoreBinding*> (sym.second)) {
+                b->deactivate ();
+            }
+        }
+    }
+}
+
+void
+AbstractTextProperty::post_activate ()
+{
+    if (children_empty ())
+        AbstractSimpleProperty::post_activate (); // should be auto_deactivate
+    else
+        FatProcess::post_activate (); // do what you need to do with children
+}
+
+bool
+AbstractTextProperty::may_graph_ignore_vertex ()
+{
+    return children_empty(); // returns true if there is no child
+}
+
 
 #ifndef DJNN_NO_DEBUG
 void
