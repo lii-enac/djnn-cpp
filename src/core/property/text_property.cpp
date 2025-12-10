@@ -191,11 +191,7 @@ AbstractTextProperty::post_activate ()
         FatProcess::post_activate (); // do what you need to do with children
 }
 
-bool
-AbstractTextProperty::may_graph_ignore_vertex ()
-{
-    return children_empty(); // returns true if there is no child
-}
+
 
 
 #ifndef DJNN_NO_DEBUG
