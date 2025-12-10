@@ -43,4 +43,17 @@ class Action : public FatProcess {
   protected:
     virtual void post_activate () override { post_activate_auto_deactivate (); }
 };
+
+
+template <typename PARENT, void (PARENT::*Method)()>
+class ActionParentMethod : public Action {
+  public:
+    ActionParentMethod (CoreProcess* parent, const djnnstl::string& name) : Action (parent, name) {
+      finalize_construction (parent, name);
+    }
+    void impl_activate () override { 
+        (dynamic_cast <PARENT*>(get_parent())->*Method)(); 
+    }
+};
+
 } // namespace djnn
