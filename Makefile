@@ -405,7 +405,9 @@ tidy: $(all_tidy)
 # ---------------------------------------
 # CFLAGS DJNN_CXXFLAGS
 
-DJNN_CXXFLAGS += -std=c++17
+cxx_version ?= 20
+
+DJNN_CXXFLAGS += -std=c++$(cxx_version)
 DJNN_CXXFLAGS += $(CFLAGS)
 
 # ---------------------------------------
