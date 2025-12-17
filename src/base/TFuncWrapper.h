@@ -33,6 +33,8 @@ wcontains.output =:> tp.input
 
 #include "core/property/property_trait.h"
 
+namespace djnn {
+
 // ============================================================
 //  function_traits (C++20)
 // ============================================================
@@ -238,6 +240,7 @@ void TFuncWrapper<FUNC>::do_action() {
   _output.set_value(call_func(), true);
 }
 
+}
 
 // c++23
 // #pragma once
@@ -248,6 +251,8 @@ void TFuncWrapper<FUNC>::do_action() {
 // #include <vector>
 // #include <string>
 // #include <functional>
+
+// namespace djnn {
 
 // // ============================================================
 // //  function_traits
@@ -448,4 +453,6 @@ void TFuncWrapper<FUNC>::do_action() {
 // template<typename FUNC>
 // void TFuncWrapper<FUNC>::do_action() {
 //   _output.set_value(call_func(), true);
+// }
+
 // }
