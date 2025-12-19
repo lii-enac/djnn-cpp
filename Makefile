@@ -42,6 +42,7 @@ config.mk:
 	cp project/config/config_qt.mk config.mk
 
 config_%:
+	@echo "\nreplacing config with" $@
 	cp project/config/$@.mk config.mk
 
 MAJOR = 1
