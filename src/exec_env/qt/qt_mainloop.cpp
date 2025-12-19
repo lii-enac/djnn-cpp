@@ -53,8 +53,8 @@ QtMainloop::QtMainloop (MainLoop* ml)
 
     _qevtdispatcher = QAbstractEventDispatcher::instance ();
     QObject::connect (_qevtdispatcher, &QAbstractEventDispatcher::aboutToBlock,
-                      [=] () { this->slot_for_about_to_block (); });
-    QObject::connect (_qevtdispatcher, &QAbstractEventDispatcher::awake, [=] () { this->slot_for_awake (); });
+                      [this] () { this->slot_for_about_to_block (); });
+    QObject::connect (_qevtdispatcher, &QAbstractEventDispatcher::awake, [this] () { this->slot_for_awake (); });
 }
 
 QtMainloop::~QtMainloop ()
