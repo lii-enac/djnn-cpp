@@ -92,7 +92,7 @@ pipeline {
                 stage('Build Windows') {
                     agent { label 'win10' }
                     environment {
-                        CUSTOM_WORKSPACE = '../djnn-qt/djnn-cpp'
+                        CUSTOM_WORKSPACE = '../djnn-qt-msys/djnn-cpp'
                     }
                     steps {
                         dir(env.CUSTOM_WORKSPACE) {
@@ -127,7 +127,7 @@ pipeline {
                 stage('Build Windows WSL') {
                     agent { label 'win10' } // On utilise le même agent Windows
                     environment {
-                        CUSTOM_WORKSPACE = '../djnn-qt/djnn-cpp'
+                        CUSTOM_WORKSPACE = '../djnn-qt-wsl/djnn-cpp'
                     }
                     steps {
                         dir(env.CUSTOM_WORKSPACE) {
