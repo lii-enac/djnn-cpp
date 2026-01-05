@@ -46,7 +46,7 @@ pipeline {
                     emailext(
                         to: "${env.EMAIL1}, ${env.EMAIL2}",
                         subject: "❌ macOS build failed - djnn-cpp #${currentBuild.number}",
-                        body: "The macOS build failed.\nDetails: ${env.BUILD_URL}\nError (last 100 lines):\n${currentBuild.rawBuild.getLog(100).join('\n')}"
+                        body: "The macOS build failed.\nDetails: ${env.BUILD_URL}\nError (last 300 lines):\n${currentBuild.rawBuild.getLog(300).join('\n')}"
                     )
                 }
             }
@@ -83,7 +83,7 @@ pipeline {
                             emailext(
                                 to: "${env.EMAIL1}, ${env.EMAIL2}",
                                 subject: "❌ Ubuntu build failed - djnn-cpp #${currentBuild.number}",
-                                body: "The Ubuntu build failed.\nDetails: ${env.BUILD_URL}\nError (last 100 lines):\n${currentBuild.rawBuild.getLog(100).join('\n')}"
+                                body: "The Ubuntu build failed.\nDetails: ${env.BUILD_URL}\nError (last 300 lines):\n${currentBuild.rawBuild.getLog(300).join('\n')}"
                             )
                         }
                     }
@@ -118,7 +118,45 @@ pipeline {
                             emailext(
                                 to: "${env.EMAIL1}, ${env.EMAIL2}",
                                 subject: "❌ Windows build failed - djnn-cpp #${currentBuild.number}",
-                                body: "The Windows build failed.\nDetails: ${env.BUILD_URL}\nError (last 100 lines):\n${currentBuild.rawBuild.getLog(100).join('\n')}"
+                                body: "The Windows build failed.\nDetails: ${env.BUILD_URL}\nError (last 300 lines):\n${currentBuild.rawBuild.getLog(300).join('\n')}"
+                            )
+                        }
+                    }
+                }
+
+                stage('Build Windows WSL') {
+                    agent { label 'win10' } // On utilise le même agent Windows
+                    environment {
+                        CUSTOM_WORKSPACE = '../djnn-qt/djnn-cpp'
+                    }
+                    steps {
+                        dir(env.CUSTOM_WORKSPACE) {
+                            cleanWs()
+                            checkout([
+                                $class: 'GitSCM', 
+                                branches: [[name: '*/master']], 
+                                userRemoteConfigs: [[url: env.DJNN_CPP_URL, 
+                                credentialsId: env.GIT_CREDENTIAL_ID
+                                ]]
+                            ])
+                            
+                            // Création du config.mk (format Linux pour WSL)
+                            writeFile file: 'config.mk', text: 'use_ivy := yes\n'
+
+                            // Utilisation de 'bat' pour appeler la commande 'wsl'
+                            // On passe les commandes via wsl --
+                            bat '''
+                                wsl -- echo "Starting WSL build in $(pwd)"
+                                wsl -- make -j8 V=max
+                            '''
+                        }
+                    }
+                    post {
+                        failure {
+                            emailext(
+                                to: "${env.EMAIL1}, ${env.EMAIL2}",
+                                subject: "❌ Windows WSL build failed - djnn-cpp #${currentBuild.number}",
+                                body: "The Windows WSL build failed.\nDetails: ${env.BUILD_URL}\nError (last 300 lines):\n${currentBuild.rawBuild.getLog(300).join('\n')}"
                             )
                         }
                     }
@@ -143,7 +181,7 @@ pipeline {
                 // Trigger djnn-cpp-test only if full pipeline succeeded
                 build job: 'djnn-cpp-test', wait: false
             } catch (Exception e) {
-                echo "⚠️ Unable to trigger smala: ${e.message}"
+                echo "⚠️ Unable to trigger djnn-cpp-test: ${e.message}"
             }
 
             if (currentBuild.previousBuild?.result == 'FAILURE') {
@@ -172,7 +210,7 @@ The build has failed.
 
 Details: ${env.BUILD_URL}
 
-Error (last 100 lines):
+Error (last 300 lines):
 ${currentBuild.rawBuild.getLog(100).join('\n')}
 
 """
