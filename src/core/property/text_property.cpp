@@ -87,7 +87,7 @@ AbstractTextProperty::get_double_value () const
         double r = stof (get_ref_value ());
         return r;
     } catch (const std::invalid_argument& ia) {
-        warning (nullptr, " - stof - undefined double value in text property");
+        warning (this, " - stof - undefined double value in text property");
         return 0;
     }
 }
