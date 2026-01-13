@@ -1,6 +1,15 @@
 #pragma once
 
+#if !defined(DJNN_NO_DEBUG)
 #include <iomanip>
+#include "core/utils/iostream.h"
+#include "core/utils/utils-dev.h"
+
+namespace djnn {
+djnnstl::string print_process_debug_info (const CoreProcess* p);
+}
+
+#endif
 
 namespace djnn {
 
@@ -52,8 +61,8 @@ CoreProcess::activate ()
                 << std::setw(15) << " (" + std::to_string(debug_index) + "," + std::to_string(debug_index_post) + ")" " act "
                 << std::setw(w) << hn.substr(0, w-3) + (hn.size()>(w-3)?"...":" ")
                 << std::setw(w) << tn.substr(0, w-3) + (tn.size()>(w-3)?"...":"")
-                << __FL__;
-                //<< std::endl;
+                //<< __FL__;
+                << std::endl;
             ++debug_index;
             }
         }
