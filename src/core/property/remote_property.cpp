@@ -74,6 +74,7 @@ AbstractRemoteProperty::set_value (const djnn::string& v, bool propagate)
     get_ref_value () = v;
     if (is_activable () && propagate) {
         notify_activation ();
+        //activate ();
         notify_parent ();
     }
 }
@@ -85,6 +86,7 @@ AbstractRemoteProperty::set_incoming_value (const djnn::string& v, bool propagat
     get_ref_value () = v;
     if (is_activable () && propagate) {
         notify_activation ();
+        //activate ();
         notify_parent ();
     }
 }

@@ -13,7 +13,7 @@
  *
  */
 
-#include <stdexcept>
+#include "core/utils/debug_prop.h"
 
 #include "text_property.h"
 #include "bool_property.h"
@@ -115,7 +115,9 @@ AbstractTextProperty::set_value (const string& v, bool propagate)
 {
     get_ref_value () = v;
     if (is_activable () && propagate) {
+        DBG_ACT_SEQ;
         notify_activation ();
+        //activate ();
         notify_parent ();
     }
 }

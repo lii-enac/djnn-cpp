@@ -241,7 +241,13 @@ get_hierarchy_name (const CoreProcess* cp, int up)
     if (!p)
         return FatProcess::default_name;
 #endif
-    string res;
+    string res = p->get_name ();
+#ifndef DJNN_NO_DEBUG
+    if (res.empty ())
+        res = p->get_debug_name ();
+#endif
+    p = p->get_parent ();
+    --up;
     while (up && p) {
         res = p->get_name () + "/" + res;
         p   = p->get_parent ();

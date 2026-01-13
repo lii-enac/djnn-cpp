@@ -14,6 +14,8 @@
  *
  */
 
+#include "core/utils/debug_prop.h"
+
 #include "abstract_property.h"
 #include "core/utils/error.h"
 #include "s_to_p.h"
@@ -33,7 +35,9 @@ class AbstractTemplateProperty : public SuperAbstractProperty {
     void                    my_set_value (const X& v, bool propagate) {
         get_ref_value () = v;
         if (is_activable () && propagate) {
+            DBG_ACT_SEQ;
             notify_activation ();
+            //activate ();
             notify_parent ();
         }
     }

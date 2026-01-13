@@ -41,6 +41,7 @@ extern int
     _DEBUG_SEE_ACTIVATION_SEQUENCE,
     _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US,
     _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED,
+    _DEBUG_SEE_ACTIVATION_SEQUENCE_2,
     _AUTHORIZE_CYCLE,
     _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT,
     _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY,
@@ -52,6 +53,21 @@ extern int
 extern const char* _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION;
 
 extern djnnstl::string _SVG_USER_CUSTOM_ATTRS;
+
+djnnstl::string
+print_process_full_name (const CoreProcess* p);
+
+djnnstl::string
+extract_filename (const djnnstl::string& s);
+
+djnnstl::string
+extract_code_from_file (const djnnstl::string& filepath, int lineno);
+
+djnnstl::string
+print_process_fileno (const CoreProcess* p);
+
+djnnstl::string
+print_process_debug_info (const CoreProcess* p);
 
 #endif
 } // namespace djnn

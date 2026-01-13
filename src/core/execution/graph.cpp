@@ -476,6 +476,9 @@ static int EXECUTION_ROUND = 0;
 void
 Graph::exec ()
 {
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        cerr << ">> graph exec" << endl;
+    }
 #ifndef DJNN_NO_DEBUG
     if (_display_info_once == false) {
         if (_DEBUG_ENABLE_STRESS_TEST == 1) {
@@ -598,7 +601,7 @@ Graph::exec ()
 
             if (!_sorted) {
 #ifndef DJNN_NO_DEBUG
-                if (_DEBUG_SEE_ACTIVATION_SEQUENCE && display_sequence_on_target_location) {
+                if ((_DEBUG_SEE_ACTIVATION_SEQUENCE || _DEBUG_SEE_ACTIVATION_SEQUENCE_2) && display_sequence_on_target_location) {
                     _sorted_break++;
                     cerr << "\033[1;33m"
                          << "--- break to sort #" << _sorted_break << "\033[0m" << endl;
@@ -648,7 +651,7 @@ Graph::exec ()
                 }
             }
 
-            if (_DEBUG_SEE_ACTIVATION_SEQUENCE) {
+            if (_DEBUG_SEE_ACTIVATION_SEQUENCE || _DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
                 if (p->get_activation_flag () != NONE_ACTIVATION) { // should be removed ??
                     begin_process_act = std::chrono::steady_clock::now ();
                     count_real_activation++;
@@ -656,7 +659,7 @@ Graph::exec ()
                     // why this process is in the list but his activation is now: none.
                     cerr << "\033[1;31m";
                     cerr << "djnn Warning - " << print_process_full_name (p) << " is in activation list but never activated " << endl;
-                    cerr << "\t\t you may have a probleme of simultaneous flux " << endl;
+                    cerr << "\t\t you may have a problem of simultaneous flow " << endl;
                     cerr << "\033[0m";
                 }
             }
@@ -799,6 +802,10 @@ Graph::exec ()
     cerr << "\033[0m" << endl;
 #endif
 #endif
+
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        cerr << "<< graph exec" << endl;
+    }
 
     rmt_EndCPUSample ();
 }

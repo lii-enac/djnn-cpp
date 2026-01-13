@@ -13,6 +13,8 @@
  *
  */
 
+#include "core/utils/debug_prop.h"
+
 #include "bool_property.h"
 
 #include "core/core-dev.h" // graph add/remove edge
@@ -21,6 +23,8 @@
 #include "core/utils/error.h"
 
 namespace djnn {
+
+using namespace djnnstl;
 
 bool
 getBool (CoreProcess* p)
@@ -75,7 +79,9 @@ AbstractBoolProperty::set_value (bool v, bool propagate)
 {
     get_ref_value () = v;
     if (is_activable () && propagate) {
+        DBG_ACT_SEQ;
         notify_activation ();
+        //activate ();
         notify_parent ();
         if (v)
             _true.notify_activation ();

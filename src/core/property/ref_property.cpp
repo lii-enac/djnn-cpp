@@ -14,6 +14,8 @@
 
 #include <cstdint>
 
+#include "core/utils/debug_prop.h"
+
 #include "ref_property.h"
 
 #include "core/serializer/serializer.h"
@@ -114,7 +116,9 @@ RefProperty::set_value (CoreProcess* v, bool propagate)
 {
     _value = v;
     if (is_activable () && propagate) {
+        DBG_ACT_SEQ;
         notify_activation ();
+        //activate ();
         notify_parent ();
     }
 

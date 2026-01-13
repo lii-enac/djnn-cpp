@@ -13,7 +13,7 @@
  *
  */
 
-#include <stdexcept>
+#include "core/utils/debug_prop.h"
 
 #include "int_property.h"
 
@@ -22,6 +22,8 @@
 #include "core/utils/error.h"
 
 namespace djnn {
+
+using namespace djnnstl;
 
 int
 getInt (CoreProcess* p)
@@ -56,7 +58,9 @@ AbstractIntProperty::set_value (int v, bool propagate)
 {
     get_ref_value () = v;
     if (is_activable () && propagate) {
+        DBG_ACT_SEQ;
         notify_activation ();
+        //activate ();
         notify_parent ();
     }
 }
