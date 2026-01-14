@@ -37,7 +37,7 @@ INLINE
 void
 CoreProcess::activate ()
 {
-    bool do_debug_log = _DEBUG_SEE_ACTIVATION_SEQUENCE_2 && debug_info ().lineno != 0;
+    bool do_debug_log = _DEBUG_SEE_ACTIVATION_SEQUENCE_2;// && debug_info ().lineno != 0;
     if (pre_activate ()) {
         extern int debug_index, debug_index_post;
         //int sav_debug_index = debug_index;
