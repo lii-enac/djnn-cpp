@@ -184,9 +184,6 @@ Graph::clear ()
 }
 
 
-#ifndef DJNN_NO_DEBUG
-static string                      print_process_full_name (const CoreProcess* p);
-#endif
 // -----------------------------------------------------------------------
 // Graph management
 
@@ -343,11 +340,6 @@ Graph::remove_output_node (CoreProcess* c)
 static Vertex*                     current_v;
 static map<Vertex*, list<Vertex*>> data_flow_paths_save;
 static vector<string>              data_flow_result;
-static string                      print_process_fileno (const CoreProcess* p);
-//static string                      print_process_full_name (const CoreProcess* p);
-static string                      print_process_debug_info (const CoreProcess* p);
-static string                      extract_filename (const string& s);
-static string                      extract_code_from_file (const string& filepath, int lineno);
 
 void
 print_data_flow_paths_save_single (Vertex* v, int index, Vertex* start_v)
@@ -966,58 +958,6 @@ Graph::reset_vertices_execution_round ()
     for (auto* v : _vertices) {
         v->set_execution_round (0);
     }
-}
-
-static string
-extract_filename (const string& s)
-{
-    std::string::size_type n;
-    n                = s.rfind ('/');
-    std::string sub1 = s.substr (n + 1);
-    // std::cout << sub1 << '\n';
-    return sub1;
-}
-
-static string
-extract_code_from_file (const string& filepath, int lineno)
-{
-    std::ifstream file (filepath); // ouverture du fichier
-    string        line;
-    int           current_line = 0;
-    while (getline (file, line)) {
-        current_line++;
-        if (current_line == lineno) {
-            line.erase (0, line.find_first_not_of (" \t"));
-            return line;
-        }
-    }
-    // si on n'a pas trouvé la ligne demandée
-    return " line not found in file ! ";
-}
-
-static string
-print_process_full_name (const CoreProcess* p)
-{
-    string          postfix;
-    auto * ca = dynamic_cast<const CoreAssignment*> (p);
-    if (ca != nullptr) {
-        postfix = " src: " + ca->get_src ()->get_debug_name () + " dst: " + ca->get_dst ()->get_debug_name ();
-    }
-    return cpp_demangle (typeid (*p).name ()) + "- (" +
-           (p && p->get_debug_parent () ? p->get_debug_parent ()->get_debug_name () + "/" : "") +
-           (p ? p->get_debug_name () : "") + ")" + postfix;
-}
-
-static string
-print_process_fileno (const CoreProcess* p)
-{
-    return extract_filename (p->debug_info ().filepath) + ":" + to_string (p->debug_info ().lineno);
-}
-
-static string
-print_process_debug_info (const CoreProcess* p)
-{
-    return " ---- from " + print_process_fileno (p) + " ---- " + extract_code_from_file (p->debug_info ().filepath, p->debug_info ().lineno);
 }
 
 void
