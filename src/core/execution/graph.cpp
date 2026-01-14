@@ -473,12 +473,16 @@ display_cycle_analysis_stack (map<Vertex*, int>& vertex_already_activated, int c
 // TODO: explain what EXECUTION_ROUND is
 static int EXECUTION_ROUND = 0;
 
+int debug_index, debug_index_post;
+
 void
 Graph::exec ()
 {
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
         cerr << ">> graph exec" << endl;
     }
+    debug_index = 0;
+    debug_index_post = -1;
 #ifndef DJNN_NO_DEBUG
     if (_display_info_once == false) {
         if (_DEBUG_ENABLE_STRESS_TEST == 1) {
