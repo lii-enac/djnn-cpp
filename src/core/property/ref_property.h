@@ -67,6 +67,10 @@ class RefProperty : public AbstractRefProperty {
   protected:
     CoreProcess* find_child_impl (const string& path) override;
 
+  protected:
+    virtual CoreProcess*& get_ref_value () { return _value; }
+    virtual CoreProcess* const & get_ref_value () const { return _value; }
+
   private:
     BoolProperty _is_null;
     CoreProcess* _value;

@@ -33,45 +33,16 @@ CoreProcess::activate ()
 
 #else
 
+extern void debug_activation_sequence_2(CoreProcess *p);
+
 INLINE
 void
 CoreProcess::activate ()
 {
-    bool do_debug_log = _DEBUG_SEE_ACTIVATION_SEQUENCE_2;// && debug_info ().lineno != 0;
     if (pre_activate ()) {
-        extern int debug_index, debug_index_post;
-        //int sav_debug_index = debug_index;
-        if (do_debug_log) {
-            auto const& src_code = print_process_debug_info (this);
-            auto const & hn = get_hierarchy_name (this);
-            if (!hn.empty()) {
-                const int ms = sizeof("move_x") - 1;
-                //std::cerr << hn << " "<< hn.size() << " " << ms << " " << hn.substr(0, ms-2) << std::endl;
-                if (hn.size()==ms) {
-                    if (hn.substr(0, ms-2) == "move")
-                        do_debug_log = false;
-                }
-            }
-            if (do_debug_log) {
-            auto const & tn = cpp_demangle (typeid (*this).name ());
-            size_t w = 50;
-            std::cerr 
-                << std::left
-                << std::setw(60) << src_code.substr(0,60)
-                << std::setw(15) << " (" + std::to_string(debug_index) + "," + std::to_string(debug_index_post) + ")" " act "
-                << std::setw(w) << hn.substr(0, w-3) + (hn.size()>(w-3)?"...":" ")
-                << std::setw(w) << tn.substr(0, w-3) + (tn.size()>(w-3)?"...":"")
-                //<< __FL__;
-                << std::endl;
-            ++debug_index;
-            }
-        }
+        debug_activation_sequence_2 (this);
         impl_activate ();
         post_activate ();
-        if (do_debug_log) {
-            //std::cerr << print_process_debug_info (this) << " (was " << sav_debug_index << ")" << std::endl;
-            ++debug_index_post;
-        }
     }
 }
 #endif

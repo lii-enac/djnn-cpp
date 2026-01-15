@@ -22,6 +22,8 @@
 #include "core/utils/error.h"
 #include "core/utils/to_string.h"
 
+#include "core/utils/debug_prop.h"
+
 namespace djnn {
 using namespace djnnstl;
 
@@ -70,8 +72,9 @@ AbstractRemoteProperty::set_value (bool v, bool propagate)
 void
 AbstractRemoteProperty::set_value (const djnn::string& v, bool propagate)
 {
-    _send            = true;
+    DBG_ACT_SEQ;
     get_ref_value () = v;
+    _send            = true;
     if (is_activable () && propagate) {
         notify_activation ();
         //activate ();

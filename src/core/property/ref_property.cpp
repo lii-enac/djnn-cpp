@@ -114,9 +114,10 @@ RefProperty::set_value (const string& v, bool propagate)
 void
 RefProperty::set_value (CoreProcess* v, bool propagate)
 {
-    _value = v;
+    DBG_ACT_SEQ;
+    get_ref_value () = v;
     if (is_activable () && propagate) {
-        DBG_ACT_SEQ;
+
         notify_activation ();
         //activate ();
         notify_parent ();

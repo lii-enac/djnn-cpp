@@ -5,6 +5,9 @@
 #include "core/ontology/process.h"
 #include "core/utils/to_string.h"
 
+#include "core/utils/utils-dev.h" // get_hierarchy_name
+#include "core/utils/iostream.h"
+
 namespace djnn {
 #ifndef DJNN_NO_DEBUG // still required to link smala programs
                       // DEBUG OPTIONS
@@ -15,6 +18,7 @@ int
     _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US = 1000,
     _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED  = 0,
     _DEBUG_SEE_ACTIVATION_SEQUENCE_2              = 0,
+    _DEBUG_SEE_PROP_SET_VALUE                     = 0,
     _AUTHORIZE_CYCLE                              = 0,
     _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT    = 0,
     _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY              = 0,
@@ -76,6 +80,81 @@ print_process_debug_info (const CoreProcess* p)
 {
     //return " ---- from " + print_process_fileno (p) + " ---- " + extract_code_from_file (p->debug_info ().filepath, p->debug_info ().lineno);
     return print_process_fileno (p) + ": " + extract_code_from_file (p->debug_info ().filepath, p->debug_info ().lineno);
+}
+
+void
+debug_activation_sequence_2 (CoreProcess *p)
+{
+    bool do_debug_log = _DEBUG_SEE_ACTIVATION_SEQUENCE_2;// && debug_info ().lineno != 0;
+    extern int debug_index, debug_index_post;
+    //int sav_debug_index = debug_index;
+    if (do_debug_log) {
+        auto const& src_code = print_process_debug_info (p);
+        auto const & hn = get_hierarchy_name (p);
+        if (!hn.empty()) {
+            const int ms = sizeof("move_x") - 1;
+            //std::cerr << hn << " "<< hn.size() << " " << ms << " " << hn.substr(0, ms-2) << std::endl;
+            if (hn.size()==ms) {
+                if (hn.substr(0, ms-2) == "move")
+                    do_debug_log = false;
+            }
+        }
+        if (do_debug_log) {
+        auto const & tn = cpp_demangle (typeid (*p).name ());
+        size_t w = 50;
+        std::cerr 
+            << std::left
+            << std::setw(60) << src_code.substr(0,60)
+            << std::setw(15) << " (" + std::to_string(debug_index) + "," + std::to_string(debug_index_post) + ")" " act "
+            << std::setw(w) << hn.substr(0, w-3) + (hn.size()>(w-3)?"...":" ")
+            << std::setw(w) << tn.substr(0, w-3) + (tn.size()>(w-3)?"...":"")
+            //<< __FL__;
+            << std::endl;
+        ++debug_index;
+        }
+    }
+    if (do_debug_log) {
+        //std::cerr << print_process_debug_info (this) << " (was " << sav_debug_index << ")" << std::endl;
+        ++debug_index_post;
+    }
+}
+
+void
+debug_prop_set_value (CoreProcess *p)
+{
+    bool do_debug_log = _DEBUG_SEE_PROP_SET_VALUE;// && debug_info ().lineno != 0;
+    extern int debug_index, debug_index_post;
+    //int sav_debug_index = debug_index;
+    if (do_debug_log) {
+        auto const& src_code = print_process_debug_info (p);
+        auto const & hn = get_hierarchy_name (p);
+        if (!hn.empty()) {
+            const int ms = sizeof("move_x") - 1;
+            //std::cerr << hn << " "<< hn.size() << " " << ms << " " << hn.substr(0, ms-2) << std::endl;
+            if (hn.size()==ms) {
+                if (hn.substr(0, ms-2) == "move")
+                    do_debug_log = false;
+            }
+        }
+        if (do_debug_log) {
+        auto const & tn = cpp_demangle (typeid (*p).name ());
+        size_t w = 50;
+        std::cerr 
+            << std::left
+            << std::setw(60) << src_code.substr(0,60)
+            << std::setw(15) << " (" + std::to_string(debug_index) + "," + std::to_string(debug_index_post) + ")" " sv "
+            << std::setw(w) << hn.substr(0, w-3) + (hn.size()>(w-3)?"...":" ")
+            //<< std::setw(w) << tn.substr(0, w-3) + (tn.size()>(w-3)?"...":"")
+            //<< __FL__;
+            //<< std::endl
+            ;
+        ++debug_index;
+        }
+    }
+    if (do_debug_log) {
+        //std::cerr << print_process_debug_info (this) << " (was " << sav_debug_index << ")" << std::endl;
+        ++debug_index_post;
+    }
 }
 
 #endif

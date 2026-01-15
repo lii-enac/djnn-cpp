@@ -42,6 +42,7 @@ extern int
     _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US,
     _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED,
     _DEBUG_SEE_ACTIVATION_SEQUENCE_2,
+    _DEBUG_SEE_PROP_SET_VALUE,
     _AUTHORIZE_CYCLE,
     _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT,
     _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY,
@@ -68,6 +69,9 @@ print_process_fileno (const CoreProcess* p);
 
 djnnstl::string
 print_process_debug_info (const CoreProcess* p);
+
+void
+debug_prop_set_value (CoreProcess *p);
 
 #endif
 } // namespace djnn

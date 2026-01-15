@@ -33,9 +33,9 @@ class AbstractTemplateProperty : public SuperAbstractProperty {
         : SuperAbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); }
     virtual property_type_e get_property_type () const override { return TemplatePropertyType<X>::type; }
     void                    my_set_value (const X& v, bool propagate) {
+        DBG_ACT_SEQ;
         get_ref_value () = v;
         if (is_activable () && propagate) {
-            DBG_ACT_SEQ;
             notify_activation ();
             //activate ();
             notify_parent ();

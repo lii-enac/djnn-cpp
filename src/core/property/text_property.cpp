@@ -113,9 +113,9 @@ AbstractTextProperty::set_value (bool v, bool propagate)
 void
 AbstractTextProperty::set_value (const string& v, bool propagate)
 {
+    DBG_ACT_SEQ;
     get_ref_value () = v;
     if (is_activable () && propagate) {
-        DBG_ACT_SEQ;
         notify_activation ();
         //activate ();
         notify_parent ();
