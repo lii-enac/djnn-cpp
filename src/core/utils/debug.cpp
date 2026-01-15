@@ -148,12 +148,12 @@ debug_prop_set_value (CoreProcess *p)
             //<< __FL__;
             //<< std::endl
             ;
-        ++debug_index;
+        //++debug_index;
         }
     }
     if (do_debug_log) {
         //std::cerr << print_process_debug_info (this) << " (was " << sav_debug_index << ")" << std::endl;
-        ++debug_index_post;
+        //++debug_index_post;
     }
 }
 
