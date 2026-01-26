@@ -361,6 +361,11 @@ MyQQWidget::tabletEvent (QTabletEvent* event)
     tablet_pos_y -= 3; // QT bug?? it is the same for stylus
     auto pressure = event->pressure ();
 
+    if (_STYLUS_EMULATE_MOUSE == 1) {
+        mouse_pos_x = tablet_pos_x;  // !! mouse_pos_x and mouse_pos_y are use in genericCheckShapeAfterDraw
+        mouse_pos_y = tablet_pos_y;
+    }
+
     // dbg
     // std::cerr << "x: " << tablet_pos_x << " - y: " << tablet_pos_y <<  " - pointer type: " << event->pointerType () << "- pressure: " << pressure << std::endl;
 
