@@ -7,6 +7,7 @@
 
 #include "core/utils/utils-dev.h" // get_hierarchy_name
 #include "core/utils/iostream.h"
+#include <iomanip>
 
 namespace djnn {
 #ifndef DJNN_NO_DEBUG // still required to link smala programs
