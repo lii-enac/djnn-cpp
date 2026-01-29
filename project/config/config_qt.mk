@@ -63,3 +63,5 @@ djnn_libs_extra ?=
 remotery_cflags ?= -DRMT_ENABLED=0
 
 keep_intermediate ?= yes
+
+# use_qopengl_widget := yes
