@@ -496,6 +496,7 @@ Graph::exec ()
 #endif
 
     // pre_execution : notify_activation *only once* per _scheduled_activations before real graph execution
+    rmt_BeginCPUSample (pre_execution, RMTSF_None);
     {
 #ifndef DJNN_NO_DEBUG
         // if (_DEBUG_SEE_ACTIVATION_SEQUENCE)
@@ -547,6 +548,7 @@ Graph::exec ()
         }
 #endif
     }
+    rmt_EndCPUSample ();
 
 #ifndef DJNN_NO_DEBUG
     size_t count_activation = 0;
@@ -573,6 +575,7 @@ Graph::exec ()
     _sorted     = false;
     bool is_end = false;
 
+    rmt_BeginCPUSample (execution, RMTSF_Aggregate);
     while (!is_end) {
         is_end = true;
 
@@ -699,15 +702,18 @@ Graph::exec ()
             is_end = false;
         }
     }
+    rmt_EndCPUSample ();
 
 // execute scheduled deletion of processes
 #ifndef DJNN_NO_DEBUG
     begin_delete = std::chrono::steady_clock::now ();
 #endif
 
+    rmt_BeginCPUSample (deletion, RMTSF_Aggregate);
     for (auto p : _scheduled_deletions)
         delete p;
     _scheduled_deletions.clear ();
+    rmt_EndCPUSample ();
 
 #ifndef DJNN_NO_DEBUG
     end_delete = std::chrono::steady_clock::now ();
@@ -718,6 +724,7 @@ Graph::exec ()
     begin_output = std::chrono::steady_clock::now ();
 #endif
 
+    rmt_BeginCPUSample (output, RMTSF_Aggregate);
     for (auto v : _output_nodes) {
         if (v->is_invalid ())
             continue;
@@ -725,6 +732,7 @@ Graph::exec ()
         p->trigger_activation_flag ();
         p->set_activation_flag (NONE_ACTIVATION);
     }
+    rmt_EndCPUSample ();
 
 #ifndef DJNN_NO_DEBUG
     end_output = std::chrono::steady_clock::now ();
@@ -814,7 +822,7 @@ Graph::sort (Vertex* v_root)
     if (_sorted)
         return;
 
-    rmt_BeginCPUSample (Graph_sort, RMTSF_Aggregate);
+    rmt_BeginCPUSample (sort, RMTSF_Aggregate);
 
 #if _DEBUG_SEE_GRAPH_INFO_PREF
     std::chrono::steady_clock::time_point begin_GRAPH_SORT = std::chrono::steady_clock::now ();
@@ -826,6 +834,7 @@ Graph::sort (Vertex* v_root)
     // if !_activation_triggers_to_sort is not empty
     // then this was triggered by an external source
     // otherwise this was triggered by an internal property
+    rmt_BeginCPUSample (traverse_depth_first, RMTSF_Aggregate);
     if (!_activation_triggers_to_sort.empty ()) {
         for (auto v : _activation_triggers_to_sort) {
             if (v->get_execution_round () < EXECUTION_ROUND)
@@ -833,18 +842,24 @@ Graph::sort (Vertex* v_root)
         }
     } else
         traverse_depth_first (v_root);
-
+    rmt_EndCPUSample ();
+    
+    //std::cerr << "__i:" << __i << " avoided over " << _ordered_vertices.size() << __FL__;
+    rmt_BeginCPUSample (actual_sort, RMTSF_Aggregate);
     std::sort (_ordered_vertices.begin (), _ordered_vertices.end (),
                [] (const Vertex* v1, const Vertex* v2) { return v1->get_order_stamp () > v2->get_order_stamp (); });
+    rmt_EndCPUSample ();
 
 #if !_EXEC_FULL_ORDERED_VERTICES
+    rmt_BeginCPUSample (actual_sort_full, RMTSF_Aggregate);
     // sorted_index
     int index = 0;
     for (auto v : _ordered_vertices)
         v->set_sorted_index (index++);
-
+    
     std::sort (_activation_deque.begin (), _activation_deque.end (),
                [] (const Vertex* v1, const Vertex* v2) { return v1->get_sorted_index () < v2->get_sorted_index (); });
+    rmt_EndCPUSample ();
 #endif
 
     _sorted = true;
