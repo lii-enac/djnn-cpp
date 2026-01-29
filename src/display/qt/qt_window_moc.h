@@ -20,9 +20,16 @@
 #include "display/qt/qt_window.h"
 #include "display/window.h"
 #include "exec_env/external_source.h"
-using QTWIDGET = QWidget;
-// #include <QtWidgets/QOpenGLWidget>
-// using QTWIDGET = QOpenGLWidget;
+
+//#define USE_QOPENGL_WIDGET 1
+
+#if USE_QOPENGL_WIDGET
+#include <QtWidgets/QOpenGLWidget>
+#define QTWIDGET QOpenGLWidget
+#else
+#define QTWIDGET QWidget
+#endif
+
 
 namespace djnn {
 
@@ -46,9 +53,9 @@ class MyQWidget : public QTWIDGET {
   protected:
     virtual bool event (QEvent* event) override;
     virtual void moveEvent (QMoveEvent* event) override;
-    virtual void resizeEvent (QResizeEvent* event) override;
     virtual void keyPressEvent (QKeyEvent* event) override;
     virtual void keyReleaseEvent (QKeyEvent* event) override;
+    virtual void resizeEvent (QResizeEvent* event) override;
     virtual void closeEvent (QCloseEvent* event) override;
 
     Window*           _window;
@@ -56,6 +63,7 @@ class MyQWidget : public QTWIDGET {
     int               mouse_pos_x, mouse_pos_y;
     bool              _updating;
     bool              _in_screenshot;
+    bool              _in_resize;
     std::atomic<bool> _building;
 };
 } // namespace djnn

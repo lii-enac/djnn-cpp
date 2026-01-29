@@ -1,6 +1,10 @@
 #lib_cppflags += -DDJNN_USE_QT_MAINLOOP=1
 lib_cppflags += -I$(src_dir)/.. # for moc
 
+ifeq ($(use_qopengl_widget),yes)
+lib_cflags += -DUSE_QOPENGL_WIDGET=1
+endif
+
 ifeq ($(os),Darwin)
 ifeq ($(qt_version),5)
 

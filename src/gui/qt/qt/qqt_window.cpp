@@ -13,19 +13,26 @@
  */
 
 #include <QEvent>
-#include <QOpenGLWidget>
 #include <QTouchEvent>
-#include <type_traits> // is_same
+
+#if USE_QOPENGL_WIDGET
+#include <QOpenGLWidget>
+//#include <type_traits> // is_same
+#endif
 
 #include "core/control/blank.h"
 #include "core/utils/iostream.h"
 #include "core/utils/remotery.h"
 #include "core/utils/utils-dev.h"
+
 #include "display/abstract_display.h"
+#include "display/background_color.h"
 #include "display/qt/qt_window.h"
+
 #include "exec_env/exec_env-dev.h"
 #include "exec_env/global_mutex.h"
 #include "exec_env/qt/qt_mainloop.h"
+
 #include "gui/backend.h"
 #include "gui/gui-dev.h"
 #include "gui/qt/qt_backend.h"
@@ -244,13 +251,14 @@ MyQQWidget::event (QEvent* event)
     case QEvent::MouseButtonRelease:
     case QEvent::Wheel:
     case QEvent::Paint:
-        // case QEvent::UpdateRequest:
-        if (!(_building)) // || event->spontaneous ())) // spontaneous: could be a screenshot request
+    // case QEvent::UpdateRequest:
+        //if (_in_resize) break;
+        if (!(_building || _in_resize)) // || event->spontaneous ())) // spontaneous: could be a screenshot request
             djnn::get_exclusive_access (DBG_GET);
         exec_ = MyQWidget::event (event);
         if (!_in_screenshot) //(!event->spontaneous ()) // spontaneous: could be a screenshot request )
             _window->refreshed ()->notify_activation ();
-        if (!(_building)) // || event->spontaneous ()))
+        if (!(_building || _in_resize)) // || event->spontaneous ()))
             djnn::release_exclusive_access (DBG_REL);
         // return exec_;
         break;
@@ -435,8 +443,19 @@ MyQQWidget::paintEvent (QPaintEvent* event)
     // glClear (GL_COLOR_BUFFER_BIT);
     QPainter painter (this);
     // if constexpr (QTWIGDET==QOpenGLWidget)
-    if constexpr (std::is_same<QTWIDGET, QOpenGLWidget> ())
-        painter.fillRect (0, 0, width (), height (), QColor (0, 0, 0));
+    //if constexpr (std::is_same<QTWIDGET, QOpenGLWidget> ()) {
+    #if USE_QOPENGL_WIDGET
+        painter.fillRect (0, 0, width (), height (), QColor (
+            //255, // for testing purpose
+            _window->background_color ()->r ()->get_value (),
+            _window->background_color ()->g ()->get_value (),
+            _window->background_color ()->b ()->get_value ()
+            //_window->background_opacity ()->get_value ()
+        ));
+    #endif
+    //}
+    
+    painter.setRenderHint(QPainter::Antialiasing);
 
     backend->set_painter (&painter);
     backend->set_picking_view (_picking_view);

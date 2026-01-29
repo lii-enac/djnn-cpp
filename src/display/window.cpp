@@ -312,7 +312,7 @@ Window::UndelayedSpike::impl_activate ()
 {
     // pass the frame pointer to UpdateDrawing before notifying synchronously
     UpdateDrawing::instance ()->get_damaged ()->set_data (get_parent ());
-    notify_activation ();
+    //notify_activation ();
 }
 
 // void

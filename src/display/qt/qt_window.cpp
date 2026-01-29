@@ -13,12 +13,15 @@
  *
  */
 
+#include <iostream>
+
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPixmap>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
-#include <iostream>
+#include <QOpenGLWidget>
+//#include <type_traits> // is_same
 
 #include "qt_window.h"
 
@@ -267,12 +270,21 @@ MyQWidget::event (QEvent* event)
     case QEvent::KeyPress:
     case QEvent::KeyRelease:
     case QEvent::Move:
-    case QEvent::Resize:
     case QEvent::Close:
         // case QEvent::Paint:
         if (!_building)
             djnn::get_exclusive_access (DBG_GET);
         exec_ = QTWIDGET::event (event); // should call our callback methods
+        if (!_building)
+            djnn::release_exclusive_access (DBG_REL);
+        break;
+    case QEvent::Resize:
+        if (!_building)
+            djnn::get_exclusive_access (DBG_GET);
+        _in_resize=true;
+        resizeEvent((QResizeEvent*)event);
+        _in_resize=false;
+        exec_ = true;
         if (!_building)
             djnn::release_exclusive_access (DBG_REL);
         break;
@@ -344,16 +356,22 @@ MyQWidget::moveEvent (QMoveEvent* event)
 void
 MyQWidget::resizeEvent (QResizeEvent* event)
 {
+
+    #if USE_QOPENGL_WIDGET
+        QOpenGLWidget::resizeEvent (event);
+    #endif
+
     if (_updating) {
         return;
     }
     _updating = true;
 
-    int h = event->size ().height ();
     int w = event->size ().width ();
-    _window->height ()->set_value (h, true);
+    int h = event->size ().height ();
+    
     _window->width ()->set_value (w, true);
-
+    _window->height ()->set_value (h, true);
+    
     _updating = false;
     GRAPH_EXEC;
 }

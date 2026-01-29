@@ -12,6 +12,8 @@
  *
  */
 
+#include <QSurfaceFormat>
+
 #include "gui/gui-priv.h"
 
 namespace djnn {
@@ -19,6 +21,10 @@ namespace djnn {
 void
 p_init_gui ()
 {
+
+    QSurfaceFormat fmt;
+    fmt.setSamples(4);
+    QSurfaceFormat::setDefaultFormat(fmt);
 }
 
 void
