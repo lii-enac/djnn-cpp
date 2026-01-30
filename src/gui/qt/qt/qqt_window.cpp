@@ -454,8 +454,6 @@ MyQQWidget::paintEvent (QPaintEvent* event)
         ));
     #endif
     //}
-    
-    painter.setRenderHint(QPainter::Antialiasing);
 
     backend->set_painter (&painter);
     backend->set_picking_view (_picking_view);
