@@ -471,7 +471,7 @@ void
 Graph::exec ()
 {
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
-        cerr << ">> graph exec" << endl;
+        cerr << endl << ">> graph exec" << endl;
     }
     debug_index = 0;
     debug_index_post = -1;
@@ -808,7 +808,7 @@ Graph::exec ()
 #endif
 
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
-        cerr << "<< graph exec" << endl;
+        cerr << "<< graph exec" << endl << endl;
     }
 
     rmt_EndCPUSample ();
