@@ -13,16 +13,23 @@
  *
  */
 
+# Overview
 
--- the djnn ontology
+`djnn` is a conceptual model of interaction, designed for the description and the programming of interactive systems ("interactive" e.g. with human users).
+`djnn-cpp` is C++ implementation of the `djnn` conceptual model.
+`smala` is a language on top of the `djnn` conceptual model.
+`smalac` is the compiler that transforms `smala` program into a set of c++ `djnn-cpp` calls, which in turn are compiled into an exececutable.
 
-djnn relies on "processes" and "couplings" (see src/core/ontology/).
+
+## The djnn ontology and conceptual model
+
+djnn relies on "processes" and "couplings" (see [core/ontology/process.h](../src/core/ontology/process.h)).
 
 Everything (but coupling) in djnn is a process: a property (e.g. int, double, text), a binding, a connector, a state-machine, a switch etc.
 Every process can be coupled to multiple processes through couplings.
 
 A process can be "activated" and "deactivated".
-A process "performs something" according to its nature whenever it is "de/activated": transmit de/activation (binding), transmit a value (connector), transitionning to another state (state-machine) etc.
+A process "performs something" according to its nature whenever it is "de/activated": transmit de/activation (binding), transmit a value (connector), transitioning to another state (state-machine) etc.
 
 A process has an activation state: ACTIVATED or DEACTIVATED.
 A coupling reacts according to a change of the activation state of its source process, and change the activation state of its destination process.
@@ -42,9 +49,9 @@ If a process has a parent and the parent is deactivated or deactivating, it cann
 If a process is activated it can be deactivated.
 
 
--- Some examples of important processes, already defined:
+### Some examples of important processes, already defined:
 
-A "property" (int, double, string, bool) holds a value (see src/core/property/).
+A "property" (int, double, string, bool) holds a value (see [core/property/int_property.h](../src/core/property/int_property.h).
 If a property is activable, it notifies its coupled processes each time its value is set.
 A property does not notify its coupled processes if it is not activable, i.e. if it has a parent and its parent is not activated.
 But its value can be set even if it is not activable (TBD:is it still true??)
@@ -52,8 +59,9 @@ A "refproperty" holds a reference to another property (like a pointer) and can b
 
 A "binding" builds a coupling between two processes (it's the instantiation of a coupling as (in the form of) a process).
 Each time the source is activated the destination is activated. (see src/core/control/)
-###This activation is immediate. TODO: define "immediate"
-###Maybe the notion of coupling is not necessary, and a CoreBinding is enough. A CoreBinding implements the crux of the binding, without the parent/child relationship.
+
+[//]: # This activation is immediate. TODO: define "immediate"
+[//]: # Maybe the notion of coupling is not necessary, and a CoreBinding is enough. A CoreBinding implements the crux of the binding, without the parent/child relationship.
 
 An "assignment" sets the value of a property to the value of another property. 
 An assignment is activated and performs the "set value" operation when its parent is activated (except explicitly stated as activable on-demand only through a coupling).
@@ -62,41 +70,41 @@ A "spike" propagates activation/deactivation, and acts as a 'hub' for other proc
 A spike is in the 'deactivated' or 'activating' state. When activated by an external signal, i.e. a coupling or an explicit activation, it notifies its activation to all of its coupled processes.
 Once this is done, a spike returns to the 'deactivated' state.
 
-An "action" implements a specific behavior associated to some type of processes, outside of the djnn core semantics (e.g. outside of normal activation, activation propagation etc)
+An "action" implements a specific behavior associated to some type of processes, outside the djnn core semantics (e.g. outside normal activation, activation propagation etc.)
 For example, there is a "plus" process to specify an addition: the associated action contains the code that actually implements the addition, in the host language (here c++).
 Once this is done, an action returns to the 'deactivated' state.
 
 A "connector" triggers a copy from its source property to the destination property each times the source property is updated. (see src/base)
-A first copy is made on activation. ###The copy is immediate.
+A first copy is made on activation. ///The copy is immediate.
 A connector is the primary means to implement a data-flow.
 
 A "component" is a process with a dynamic set of children that can be added or removed during execution, and with the same 'parent-children' semantics as processes with subprocesses.
 A component stores children with an (unordered) symbol table.
-## it should have been called a composite
-## components are the primary means of creating specific processes in smala applications.
+//it should have been called a composite
+//components are the primary means of creating specific processes in smala applications.
 
 As seen above, some process types are "auto deactivating" once activated (search "post_activate_auto_deactivate" in the code): spike, action, property, and iterators (list and set).
 For properties and spikes, this enables propagating activation regardless of previous activations.
 For action, this enables execution of the code associated to the action, as in a so-called callback.
 
 
--- djnn-cpp execution
+## djnn-cpp execution
 
 A djnn program is a graph of coupled processes.
 Every node in the graph is a process.
 Every edge in the graph is a coupling.
 
 
-Without optimisation concerns:
+### Without optimisation concerns:
 
 Execution is usually triggered by an 'external source': user events such as a mouse press, timers, availability of data from the network etc.
 The external source will typically set values of some properties, and activate them.
-The execution perfoms a topological sort of the processes based on the graph of processes/couplings, which results in an ordered vector of processes.
+The execution performs a topological sort of the processes based on the graph of processes/couplings, which results in an ordered vector of processes.
 The execution iterate through the vector of processes and activate/deactivate them, which will trigger some new de/activations and updates in subsequent processes in the vector.
-For graphical applications this will eventually activate a 'refresh' (not the exact word) process that will trigger a redraw of the screen.
+For graphical applications this will eventually activate a 'refresh' (not the exact word) process that will trigger a redrawing of the screen.
 
 
-Some optimisations:
+### Some optimisations:
 
 Our former implementation maintained the sorted vector of processes between execution cycles.
 The execution first determined if a sort of the processes is necessary, usually because couplings have been added (activation/deactivation do not change the order, nor deletion of coupling).
@@ -104,23 +112,25 @@ The sort test was performed after each process activation, to take into account 
 
 Our current implementation implements a lazy, partial sort algorithm: instead of sorting the whole graph, we only sort the set of the next activable processes.
 The execution maintains a set of processes to activate, initially set to the properties activated by the external source.
-The execution perfoms a topological sort of these processes based on the graph of processes/couplings which results in a vector of processes.
+The execution performs a topological sort of these processes based on the graph of processes/couplings which results in a vector of processes.
 The execution iterates through the vector of processes to activate, which will trigger some new de/activations and update of the set of processes to activate, until this set is empty.
-This optimization avoids long sorting operations and prevents user-perceived latency when creating new processes (e.g. after a press to select a graphical object).
+This optimisation avoids long sorting operations and prevents user-perceived latency when creating new processes (e.g. after a press to select a graphical object).
 ...at the expense of multiple, repetitive (e.g. each graph_exec) (but short) sorting operations.
 
 
--- Notes on the djnn-cpp implementation:
+## Notes on the djnn-cpp implementation
 
-Note: the smalac compiler turns smala code into c++ calls that build the process/coupling graph, hence this graph can be considered as a 'runnable' AST of a djnn program.
+Note: the smalac compiler turns smala code into c++ calls that build the process/coupling graph, hence this graph can be considered as a 'runable' AST of a djnn program.
 
 A djnn program starts by initing the various required submodules (core, exec_env, gui etc), launching external sources to listen to external events (timers, gui, network etc).
+
 It then creates all processes and couplings, which internally builds the graph.
+
 Once created, a graph_exec function can be called to 'execute' the graph once and exit.
-But in a typical interactive application (i.e that uses the gui module), the djnn programm activates a 'mainloop' (in src/exec_env), which will run a (sleeping) infinite loop.
+But in a typical interactive application (i.e. that uses the gui module), the djnn programm activates a 'mainloop' (in src/exec_env), which will run a (sleeping) infinite loop.
 This enables external sources to sleep and wake up when events arrive, fill some properties, and execute the graph as seen above.
 
-Each external source runs in its own thread so as to prevent blocking or active waiting due to non-cooperating external APIs.
+Each external source runs in its own thread to prevent blocking or active waiting due to non-cooperating external APIs.
 Triggering of the execution of the graph is protected with a condition variable + mutex.
 (Unfortunately, this "Big Kernel Lock" prevents parallelizing graph execution, but since the graph can change during execution, it would be difficult to parallelize it anyway, more work has to be done in this area).
 
@@ -134,12 +144,13 @@ impl_activate should be redefined by inheriting classes.
 pre_activate and post_activate have default implementations that set flags and test if the parent is activating etc.
 They can be redefined, but their implementation should be called by the redefinitions.
 
-parent/children relationships implement memory management: once a child, a process lifetime is handled by its parent.
-##Children are destroyed in the inverse order of appearance 
+Parent/children relationships implement memory management: once a child, a process lifetime is handled by its parent.
+
+// Children are destroyed in the inverse order of appearance 
 
 --
-###This implementation should be able to cope with cycles in the graph.
-#####To appear: A process "Watcher" waits for the incoming processes, when all of them had a chance to be activated the "Watcher" notifies all its subscribers. The "waiting" lasts only one execution cycle.
+///This implementation should be able to cope with cycles in the graph.
+///To appear: A process "Watcher" waits for the incoming processes, when all of them had a chance to be activated the "Watcher" notifies all its subscribers. The "waiting" lasts only one execution cycle.
 
 
 
