@@ -100,10 +100,10 @@ class QtVectorShapeToDraw {
     void                                                       draw ();
     int                                                        z_order () { return _z_order; }
     void                                                       add_item (AbstractGShape* shape, QtContext* context);
-    djnnstl::vector<djnnstl::pair<AbstractGShape*, QtContext>> shapes () { return _shapes; }
+    const djnnstl::vector<djnnstl::pair<AbstractGShape*, QtContext*>>& shapes () { return _shapes; }
 
   private:
-    djnnstl::vector<djnnstl::pair<AbstractGShape*, QtContext>> _shapes;
+    djnnstl::vector<djnnstl::pair<AbstractGShape*, QtContext*>> _shapes;
     int                                                        _z_order;
 };
 

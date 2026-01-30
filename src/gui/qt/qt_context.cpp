@@ -124,9 +124,10 @@ QtVectorShapeToDraw::~QtVectorShapeToDraw ()
 }
 
 void
-QtVectorShapeToDraw::add_item (AbstractGShape* shape, QtContext* context)
+QtVectorShapeToDraw::add_item(AbstractGShape* shape, QtContext* context)
 {
-    _shapes.push_back (pair (shape, QtContext (context)));
+    // emplace_back create the pair directly with the pointeurs as arguments
+    _shapes.emplace_back(shape, context);
 }
 
 void
