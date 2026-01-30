@@ -21,6 +21,9 @@
 #include <QtGui/QPen>
 #include <QtGui/QTransform>
 #include <utility>
+#include <memory>
+#include <QtGui/QFontMetrics>
+
 
 #include "core/tree/component_observer.h"
 #include "core/utils/containers.h"
@@ -47,6 +50,7 @@ class QtContext {
     QTransform   gradientTransform;
     QTransform   clipTransform;
     QFont        font;
+    std::unique_ptr<QFontMetrics> fontMetrics;  // need a Qfont to create so we just init a pointer 
     QPainterPath clip;
     double       factor[10];
     int          textAnchor;

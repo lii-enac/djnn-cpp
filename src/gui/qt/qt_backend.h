@@ -16,6 +16,7 @@
 #pragma once
 
 #include <QtGui/QPainterPath>
+#include <QtGui/QStaticText>
 #include <mutex> // std::once_flag
 
 #include "gui/abstract_backend.h"
@@ -26,6 +27,23 @@ class QWidget;
 class QPainter;
 
 namespace djnn {
+struct QtTextCache {
+    QStaticText staticText;    // Precomputed static text for fast drawing
+    string last_string_value;
+    bool textDirty = true;
+    bool metricsDirty = true;
+    int textWidth  = 0;        
+    int textHeight = 0;        
+    QFont lastFont;            // Last font used to compute metrics/static text
+};
+
+extern std::unordered_map<Text*, QtTextCache> _textCache;
+
+inline QtTextCache&
+qt_text_cache (Text* t)
+{
+    return _textCache[t]; // create at the same time if necessary
+}
 
 class QtContextManager;
 class QtBackend : public AbstractBackend {
@@ -214,7 +232,7 @@ class QtBackend : public AbstractBackend {
     void
     prepare_gradient (AbstractGradient* g);
     bool
-                   is_in_picking_view (AbstractGShape* s);
+    is_in_picking_view (AbstractGShape* s);
     QPainter*      _painter;
     QtPickingView* _picking_view;
     bool           _in_cache;

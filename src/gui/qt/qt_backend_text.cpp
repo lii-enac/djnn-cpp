@@ -46,6 +46,9 @@ extern int __nb_Drawing_object_picking;
 #endif
 
 namespace djnn {
+
+std::unordered_map<Text*, QtTextCache> _textCache;
+
 int
 QtBackend::draw_simple_text (SimpleText* t, QFontMetrics* fm, int posX, int posY)
 {
@@ -296,17 +299,17 @@ QtBackend::draw_text (Text* t)
     rmt_BeginCPUSample (draw_text, RMTSF_Aggregate);
     QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
 
+    rmt_BeginCPUSample (compute_or_manage_textcache, RMTSF_Aggregate);
     if (z_processing_step == 1) {
         add_shape (t, _context);
+        rmt_EndCPUSample ();
         return;
     }
+
     double x, y, dx, dy;
     int    dxU, dyU, width, height, encoding;
     string text;
     t->get_properties_values (x, y, dx, dy, dxU, dyU, width, height, encoding, text);
-
-    double dxfactor = _context->factor[dxU];
-    double dyfactor = _context->factor[dyU];
 
     if (dxU == DJN_PERCENT) {
         int v = DisplayBackend::instance ()->window ()->width ()->get_value ();
@@ -317,96 +320,134 @@ QtBackend::draw_text (Text* t)
         dy    = v * dy / 100;
     }
 
-    if (x == -1) {
+    if (x == -1)
         x = curTextX;
-    }
-    if (y == -1) {
+    if (y == -1)
         y = curTextY;
-    }
-    double  posX = x + (dx * dxfactor);
-    double  posY = y + (dy * dyfactor);
-    QPointF p (posX, posY);
-    QString s;
-    switch (encoding) {
-    case DJN_LATIN1:
-    case DJN_ASCII:
-        s = QString::fromLatin1 (text.c_str ());
-        break;
-    case DJN_UTF8:
-    default:
-        s = QString::fromUtf8 (text.c_str ());
+
+    const double posX0 = x + dx * _context->factor[dxU];
+    const double posY0 = y + dy * _context->factor[dyU];
+
+    QPointF pos (posX0, posY0);
+
+    // Cache backend Qt
+
+    QtTextCache& cache = qt_text_cache (t);
+
+    // QString (backend-only)
+
+    if (text != cache.last_string_value) {
+        cache.textDirty         = true;
+        cache.last_string_value = text;
     }
 
-    /* dummy value for width-height parameters because we do not manage
-     gradient for text object
-     */
+    if (cache.textDirty) {
+        switch (encoding) {
+        case DJN_LATIN1:
+        case DJN_ASCII:
+            cache.staticText = QStaticText(QString::fromLatin1(text.c_str()));
+            break;
+        default:
+            cache.staticText = QStaticText(QString::fromUtf8(text.c_str()));
+        }
+        cache.staticText.setTextFormat(Qt::PlainText);
+        cache.textDirty    = false;
+        cache.metricsDirty = true;
+    }
+
+    // Contexte graphique
+
     load_drawing_context (t, _context, x, y, 1, 1);
 
-    /* Qt draws text with the outline color
-     but we want it to use the fill color */
-    QPen& oldPen = _context->pen;
-    QPen  newPen (oldPen);
+    QPen newPen (_context->pen);
     newPen.setColor (_context->brush.color ());
-    if (_context->brush.style () == Qt::SolidPattern)
-        newPen.setStyle (Qt::SolidLine);
-    else
-        newPen.setStyle (Qt::NoPen);
-    _painter->setPen (newPen);
-    _painter->setFont (_context->font);
+    newPen.setStyle (_context->brush.style () == Qt::SolidPattern ? Qt::SolidLine : Qt::NoPen);
 
-    rmt_BeginCPUSample (qt_fontMetrics, RMTSF_Aggregate);
-    QFontMetrics fm = _painter->fontMetrics ();
-    rmt_EndCPUSample ();
-    rmt_BeginCPUSample (boundingRect, RMTSF_Aggregate);
-    QRect rect = fm.boundingRect (s);
-    rmt_EndCPUSample ();
+    if (_painter->pen () != newPen)
+        _painter->setPen (newPen);
 
-    /* hack to enable the use of a correct FontMetrics for future cursor positioning*/
-    rmt_BeginCPUSample (qt_get_font_metrics, RMTSF_Aggregate);
-    QFontMetrics* last_fm = (QFontMetrics*)t->get_font_metrics ();
-    rmt_EndCPUSample ();
-    delete last_fm;
-    t->set_font_metrics ((FontMetricsImpl*)(new QFontMetrics (fm)));
+    if (_painter->font () != _context->font)
+        _painter->setFont (_context->font);
 
-    /* applying alignment attribute */
+    // QFontMetrics (for each context)
+
+    if (!_context->fontMetrics || cache.lastFont != _context->font) {
+        _context->fontMetrics.reset (new QFontMetrics (_context->font));
+    }
+
+    // Invalidate text cache for metrics
+
+    if (cache.metricsDirty || cache.lastFont != _context->font) {
+        cache.staticText.prepare (QTransform (), _context->font);
+        cache.textWidth    = static_cast<int> (cache.staticText.size ().width ());
+        cache.textHeight   = static_cast<int> (cache.staticText.size ().height ());
+        cache.lastFont     = _context->font;
+        cache.metricsDirty = false;
+    }
+
+    const int textWidth  = cache.textWidth;
+    const int textHeight = cache.textHeight;
+
+    // Alignement
+
+    double posX = posX0;
+
     switch (_context->textAnchor) {
     case DJN_MIDDLE_ANCHOR:
-        posX = posX - (rect.width () / 2.0);
-        p.setX (posX);
+        posX -= textWidth * 0.5;
         break;
     case DJN_END_ANCHOR:
-        posX = posX - rect.width ();
-        p.setX (posX);
+        posX -= textWidth;
+        break;
+    default:
         break;
     }
 
-    rect.moveTo (posX, posY - rect.height ());
-    rmt_BeginCPUSample (qt_horizontalAdvance, RMTSF_Aggregate);
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-    curTextX = rect.x () + fm.width (s); // for qt 5.9
-#else
-    curTextX = rect.x () + fm.horizontalAdvance (s); // for qt 5.12
-#endif
-    rmt_EndCPUSample ();
-    curTextY = rect.y () + fm.height ();
+    pos.setX (posX);
 
-    rmt_BeginCPUSample (qt_drawText, RMTSF_Aggregate);
-    _painter->drawText (p, s);
+    QRect rect (
+        static_cast<int> (posX),
+        static_cast<int> (posY0 - textHeight),
+        textWidth,
+        textHeight);
+
+    // Curseur text
+
+    curTextX = rect.x () + textWidth;
+    curTextY = rect.y () + textHeight;
+
     rmt_EndCPUSample ();
+
+    // draw
+
+    rmt_BeginCPUSample (qt_draw_text, RMTSF_Aggregate);
+
+    // !! drawStaticText uses a top-left origin (unlike drawText which uses the baseline),
+    // so we subtract the font ascent to keep the same vertical positioning.
+    QFontMetrics& fm = *_context->fontMetrics;
+    QPointF drawPos = pos;
+    drawPos.setY (pos.y () - fm.ascent ());
+
+    _painter->drawStaticText (drawPos, cache.staticText);
+    rmt_EndCPUSample ();
+
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
-    /* Don't forget to reset the old pen color */
-    _painter->setPen (oldPen);
+    // Picking
 
+    rmt_BeginCPUSample (draw_text_picking, RMTSF_Aggregate);
     if (is_in_picking_view (t)) {
         load_pick_context (t, _context);
         _picking_view->painter ()->drawRect (rect);
+
 #if _DEBUG_SEE_GUI_INFO_PREF
         __nb_Drawing_object_picking++;
 #endif
     }
+    rmt_EndCPUSample ();
+
     rmt_EndCPUSample ();
 }
 

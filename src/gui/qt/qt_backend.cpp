@@ -318,6 +318,7 @@ QtBackend::delete_text_impl (Text* text)
     rmt_BeginCPUSample (delete_text_impl, RMTSF_Aggregate);
 
     delete (QFontMetrics*)text->get_font_metrics ();
+    _textCache.erase(text);
 
     rmt_EndCPUSample ();
 }
