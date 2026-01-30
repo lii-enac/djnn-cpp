@@ -24,7 +24,7 @@
 //#define USE_QOPENGL_WIDGET 1
 
 #if USE_QOPENGL_WIDGET
-#include <QtWidgets/QOpenGLWidget>
+#include <QOpenGLWidget>
 #define QTWIDGET QOpenGLWidget
 #else
 #define QTWIDGET QWidget
