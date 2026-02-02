@@ -127,19 +127,28 @@ QtBackend::draw_circle (Circle* s)
 {
     rmt_BeginCPUSample (draw_circle, RMTSF_Aggregate);
 
-    if (_painter == nullptr)
+    if (_painter == nullptr) {
+        rmt_EndCPUSample ();
         return;
-    double cx, cy, r;
+    }
 
-    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+    QtContext* _context = (z_processing_step == 2) ? cur_context : _context_manager->get_current ();
 
     if (z_processing_step == 1) {
         add_shape (s, _context);
+        rmt_EndCPUSample ();
         return;
     }
+
+    double cx, cy, r;
     s->get_properties_values (cx, cy, r);
-    QRectF rect (cx - r, cy - r, 2 * r, 2 * r);
-    load_drawing_context (s, _context, rect.x (), rect.y (), rect.width (), rect.height ());
+
+    const double d = 2 * r;
+    const double rx = cx - r;
+    const double ry = cy - r;
+    const QRectF rect (rx, ry, d, d);
+
+    load_drawing_context (s, _context, rx, ry, d, d);
     _painter->drawEllipse (rect);
 
 #if _DEBUG_SEE_GUI_INFO_PREF
