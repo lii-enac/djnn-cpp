@@ -291,29 +291,40 @@ QtBackend::draw_poly_point (double x, double y)
 {
     cur_poly << QPointF (x, y);
 }
+
 void
 QtBackend::draw_path (Path* p)
 {
     rmt_BeginCPUSample (draw_path, RMTSF_Aggregate);
-    QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
+    
+    QtContext* _context = (z_processing_step == 2) ? cur_context : _context_manager->get_current ();
+
     if (z_processing_step == 1) {
         add_shape (p, _context);
+        rmt_EndCPUSample ();
         return;
     }
+
     cur_path = QPainterPath ();
+    cur_path.setFillRule (_context->fillRule);
 
     // HACK: Prefer GUIStructureHolder::draw over container/list::draw.
     // Since the context remains the same for all items/points, we avoid unnecessary save/restore operations.
     // A simple for loop over all items/points is more efficient. 
-    for (auto& p : p->items ()->children ()) {
-        p->draw ();
+    for (auto& item : p->items ()->children ()) {
+        item->draw ();
     }
 
-    cur_path.setFillRule (_context->fillRule);
-    p->set_bounding_box (cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
-                         cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
-    load_drawing_context (p, _context, cur_path.boundingRect ().x (), cur_path.boundingRect ().y (),
-                          cur_path.boundingRect ().width (), cur_path.boundingRect ().height ());
+    // Calcul unique de la Bounding Box
+    const QRectF bBox = cur_path.boundingRect ();
+    const double bx = bBox.x ();
+    const double by = bBox.y ();
+    const double bw = bBox.width ();
+    const double bh = bBox.height ();
+
+    p->set_bounding_box (bx, by, bw, bh);
+    
+    load_drawing_context (p, _context, bx, by, bw, bh);
     _painter->drawPath (cur_path);
 
 #if _DEBUG_SEE_GUI_INFO_PREF
