@@ -19,6 +19,7 @@
 #include "abstract_property.h"
 #include "core/utils/error.h"
 #include "s_to_p.h"
+
 namespace djnn {
 
 template <typename X>
@@ -33,6 +34,7 @@ class AbstractTemplateProperty : public SuperAbstractProperty {
         : SuperAbstractProperty (parent, name, notify_mask) { finalize_construction (parent, name); }
     virtual property_type_e get_property_type () const override { return TemplatePropertyType<X>::type; }
     void                    my_set_value (const X& v, bool propagate) {
+        using namespace djnnstl;
         DBG_ACT_SEQ;
         get_ref_value () = v;
         if (is_activable () && propagate) {
