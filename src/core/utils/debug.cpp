@@ -53,9 +53,20 @@ extract_filename (const djnnstl::string& s)
     return sub1;
 }
 
+
+// this will grow memory !!!!
+// [filename][lineno] = line text
+static djnnstl::map<djnnstl::string,djnnstl::map<int,djnnstl::string>> _code_cache;
+
 djnnstl::string
 extract_code_from_file (const djnnstl::string& filepath, int lineno)
 {
+    try {
+        return _code_cache.at(filepath).at(lineno);
+    }
+    catch (std::out_of_range & e) {
+    }
+
     std::ifstream file (filepath); // ouverture du fichier
     djnnstl::string        line;
     int           current_line = 0;
@@ -63,11 +74,15 @@ extract_code_from_file (const djnnstl::string& filepath, int lineno)
         current_line++;
         if (current_line == lineno) {
             line.erase (0, line.find_first_not_of (" \t"));
+            _code_cache[filepath][lineno] = line;
             return line;
         }
     }
+    
     // si on n'a pas trouvé la ligne demandée
-    return " line not found in file ! ";
+    auto not_found_msg = " line not found in file ! ";
+    _code_cache[filepath][lineno] = not_found_msg;
+    return not_found_msg;
 }
 
 djnnstl::string
