@@ -102,7 +102,7 @@ QtPickingView::init ()
 
     rmt_BeginCPUSample (ColorPickingView_new, RMTSF_None);
     if (_image == nullptr)
-        _image = new QImage (w, h, QImage::Format_RGB32);
+        _image = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
     _painter = new QPainter (_image);
     /* no antialiasing in Color Picking otherwise it will modify a given color */
     _painter->setCompositionMode (QPainter::CompositionMode_Source);
