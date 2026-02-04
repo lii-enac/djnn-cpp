@@ -119,12 +119,14 @@ GUIStructureHolder::draw ()
     rmt_BeginCPUSample (guistructureholder_draw, RMTSF_Recursive); 
     ComponentObserver::instance ().start_draw ();   
     // if Layer and the correct frame
-    if (_content_process->get_process_type () == LAYER_T) {
-        Layer* l = dynamic_cast<Layer*> (_content_process);
+    const auto type = _content_process->get_process_type ();
+
+    if (type == LAYER_T) {
+        Layer* l = static_cast<Layer*> (_content_process);
         if (DisplayBackend::instance ()->window () == l->get_frame ()) {
             Backend::instance ()->draw_layer (l, _children);
         }
-    } else if (_content_process->get_process_type () == Z_ORDERED_GROUP_T) {
+    } else if (type == Z_ORDERED_GROUP_T) {
         _content_process->draw ();
     }
     // if other container
