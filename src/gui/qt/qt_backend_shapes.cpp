@@ -111,7 +111,7 @@ QtBackend::draw_z_ordered_group (ZOrderedGroup* g)
     z_processing_step = 2;
     for (auto v : shapes_vectors) {
         for (auto& item : v->shapes ()) {
-            cur_context = item.second;
+            cur_context = &item.second;
             item.first->draw ();
         }
         delete v;
