@@ -372,7 +372,8 @@ QtBackend::draw_text (Text* t)
     // QFontMetrics (for each context)
 
     if (!_context->fontMetrics || cache.lastFont != _context->font) {
-        _context->fontMetrics.reset (new QFontMetrics (_context->font));
+        delete _context->fontMetrics;
+        _context->fontMetrics = new QFontMetrics (_context->font);
     }
 
     // Invalidate text cache for metrics

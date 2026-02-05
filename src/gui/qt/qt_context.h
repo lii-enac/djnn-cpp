@@ -37,6 +37,8 @@ class QtContext {
   public:
     QtContext ();
     QtContext (QtContext* parent);
+    QtContext (const QtContext& other);
+    QtContext& operator= (const QtContext& other);
     virtual ~QtContext ();
     int z_order () { return _z_order; }
 
@@ -50,7 +52,7 @@ class QtContext {
     QTransform   gradientTransform;
     QTransform   clipTransform;
     QFont        font;
-    std::unique_ptr<QFontMetrics> fontMetrics;  // need a Qfont to create so we just init a pointer 
+    QFontMetrics* fontMetrics;  // need a Qfont to create so we just init a pointer 
     QPainterPath clip;
     double       factor[10];
     int          textAnchor;

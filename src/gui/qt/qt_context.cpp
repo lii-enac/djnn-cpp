@@ -60,46 +60,81 @@ QtContextManager::pop ()
 }
 
 QtContext::QtContext ()
-    : pen (QColor ("darkslategray"), 1, Qt::NoPen, Qt::FlatCap, Qt::MiterJoin), brush (QColor ("black"),
-                                                                                       Qt::SolidPattern),
-      matrix (), gradientTransform (), clipTransform (), font (), _pick_bitset (0b0101)
+    : DEFAULT_DPI_RES (96), alpha (1), fillRule (Qt::OddEvenFill),
+      pen (QBrush(QColor("darkslategray")), 1, Qt::NoPen), 
+      brush (QColor ("black"), Qt::SolidPattern),
+      fontMetrics (nullptr), _z_order (0), _pick_bitset (0b0101)
 {
-    alpha           = 1;
-    fillRule        = Qt::OddEvenFill;
-    textAnchor      = DJN_START_ANCHOR;
-    _z_order        = 0;
-    DEFAULT_DPI_RES = 96;
+    textAnchor = DJN_START_ANCHOR;
     for (int i = 0; i < 10; i++)
         factor[i] = 1.;
-    factor[DJN_IN] = DEFAULT_DPI_RES;             /* pixels by inch */
-    factor[DJN_CM] = DEFAULT_DPI_RES * 2.54;      /* pixels by cm */
-    factor[DJN_MM] = DEFAULT_DPI_RES * 25.4;      /* pixels by mm */
-    factor[DJN_PT] = DEFAULT_DPI_RES / 72;        /* pixels by point (given that 1pt = 1/72 inch) */
-    factor[DJN_PC] = (DEFAULT_DPI_RES / 72) * 12; /* pixels by pica (given that 1pc = 12pt) */
-                                                  // update_relative_units (); Fail at startup
+    factor[DJN_IN] = DEFAULT_DPI_RES;
+    factor[DJN_CM] = DEFAULT_DPI_RES * 2.54;
+    factor[DJN_MM] = DEFAULT_DPI_RES * 25.4;
+    factor[DJN_PT] = DEFAULT_DPI_RES / 72;
+    factor[DJN_PC] = (DEFAULT_DPI_RES / 72) * 12;
 }
 
-QtContext::QtContext (QtContext* p)
+QtContext::QtContext (const QtContext& p) : fontMetrics (nullptr)
 {
-    pen               = QPen (p->pen);
-    brush             = QBrush (p->brush);
-    matrix            = QMatrix4x4 (p->matrix);
-    gradientTransform = QTransform (p->gradientTransform);
-    clipTransform     = QTransform (p->clipTransform);
-    font              = QFont (p->font);
-    clip              = QPainterPath (p->clip);
-    alpha             = p->alpha;
-    fillRule          = p->fillRule;
-    textAnchor        = p->textAnchor;
-    _z_order          = p->_z_order;
-    _pick_bitset      = p->_pick_bitset;
-    DEFAULT_DPI_RES   = 96;
-    for (int i = 0; i < 10; i++)
-        factor[i] = p->factor[i];
+    *this       = p;
 }
 
-QtContext::~QtContext ()
+QtContext::QtContext (QtContext* p) : fontMetrics(nullptr)
 {
+    if (p) {
+        pen               = QPen (p->pen);
+        brush             = QBrush (p->brush);
+        matrix            = QMatrix4x4 (p->matrix);
+        gradientTransform = QTransform (p->gradientTransform);
+        clipTransform     = QTransform (p->clipTransform);
+        font              = QFont (p->font);
+        clip              = QPainterPath (p->clip);
+        alpha             = p->alpha;
+        fillRule          = p->fillRule;
+        textAnchor        = p->textAnchor;
+        _z_order          = p->_z_order;
+        _pick_bitset      = p->_pick_bitset;
+        DEFAULT_DPI_RES   = p->DEFAULT_DPI_RES;
+        for (int i = 0; i < 10; i++)
+            factor[i] = p->factor[i];
+        
+        if (p->fontMetrics) {
+            fontMetrics = new QFontMetrics (*p->fontMetrics);
+        }
+    }
+}
+
+QtContext& QtContext::operator= (const QtContext& p) {
+    if (this == &p) 
+        return *this;
+
+    delete fontMetrics;
+
+    DEFAULT_DPI_RES   = p.DEFAULT_DPI_RES;
+    alpha             = p.alpha;
+    fillRule          = p.fillRule;
+    pen               = p.pen;
+    brush             = p.brush;
+    matrix            = p.matrix;
+    gradientTransform = p.gradientTransform;
+    clipTransform     = p.clipTransform;
+    font              = p.font;
+    clip              = p.clip;
+    textAnchor        = p.textAnchor;
+    _z_order          = p._z_order;
+    _pick_bitset      = p._pick_bitset;
+    for (int i = 0; i < 10; i++) factor[i] = p.factor[i];
+
+    if (p.fontMetrics) {
+        fontMetrics = new QFontMetrics (*p.fontMetrics);
+    }
+
+    return *this;
+}
+
+QtContext::~QtContext () {
+    delete fontMetrics;
 }
 
 void
