@@ -299,66 +299,56 @@ QtBackend::draw_text (Text* t)
     rmt_BeginCPUSample (draw_text, RMTSF_Aggregate);
     QtContext* _context = z_processing_step == 2 ? cur_context : _context_manager->get_current ();
 
-    rmt_BeginCPUSample (compute_or_manage_textcache, RMTSF_Aggregate);
+    // Early exit for shape collection step
     if (z_processing_step == 1) {
         add_shape (t, _context);
         rmt_EndCPUSample ();
         return;
     }
 
+    rmt_BeginCPUSample (compute_or_manage_textcache, RMTSF_Aggregate);
+
     double x, y, dx, dy;
     int    dxU, dyU, width, height, encoding;
     string text;
     t->get_properties_values (x, y, dx, dy, dxU, dyU, width, height, encoding, text);
 
+    // 1. Load context first to ensure scaling factors and fonts are up to date
+    load_drawing_context (t, _context, x, y, 1, 1);
+
+    // Handle percentage units
     if (dxU == DJN_PERCENT) {
         int v = DisplayBackend::instance ()->window ()->width ()->get_value ();
-        dx    = v * dx / 100;
+        dx    = v * dx / 100.0;
     }
     if (dyU == DJN_PERCENT) {
         int v = DisplayBackend::instance ()->window ()->height ()->get_value ();
-        dy    = v * dy / 100;
+        dy    = v * dy / 100.0;
     }
 
-    if (x == -1)
-        x = curTextX;
-    if (y == -1)
-        y = curTextY;
+    // Handle relative positioning
+    if (x == -1) x = curTextX;
+    if (y == -1) y = curTextY;
 
+    // Calculate base position (Baseline)
     const double posX0 = x + dx * _context->factor[dxU];
     const double posY0 = y + dy * _context->factor[dyU];
 
-    QPointF pos (posX0, posY0);
-
-    // Cache backend Qt
-
+    // 2. Manage Qt Backend Cache
     QtTextCache& cache = qt_text_cache (t);
 
-    // QString (backend-only)
-
+    // Update QString if string content changed
     if (text != cache.last_string_value) {
         cache.textDirty         = true;
         cache.last_string_value = text;
-    }
-
-    if (cache.textDirty) {
-        switch (encoding) {
-        case DJN_LATIN1:
-        case DJN_ASCII:
-            cache.staticText = QStaticText(QString::fromLatin1(text.c_str()));
-            break;
-        default:
-            cache.staticText = QStaticText(QString::fromUtf8(text.c_str()));
-        }
+        QString s = (encoding == DJN_UTF8) ? QString::fromUtf8(text.c_str()) : QString::fromLatin1(text.c_str());
+        cache.staticText.setText(s);
         cache.staticText.setTextFormat(Qt::PlainText);
         cache.textDirty    = false;
         cache.metricsDirty = true;
     }
 
-    // Contexte graphique
-
-    load_drawing_context (t, _context, x, y, 1, 1);
-
+    // 3. Update Painter State
     QPen newPen (_context->pen);
     newPen.setColor (_context->brush.color ());
     newPen.setStyle (_context->brush.style () == Qt::SolidPattern ? Qt::SolidLine : Qt::NoPen);
@@ -369,30 +359,32 @@ QtBackend::draw_text (Text* t)
     if (_painter->font () != _context->font)
         _painter->setFont (_context->font);
 
-    // QFontMetrics (for each context)
-
+    // 4. Update FontMetrics (stored in context)
     if (!_context->fontMetrics || cache.lastFont != _context->font) {
         delete _context->fontMetrics;
         _context->fontMetrics = new QFontMetrics (_context->font);
     }
 
-    // Invalidate text cache for metrics
-
+    // 5. Update Text Metrics Cache
     if (cache.metricsDirty || cache.lastFont != _context->font) {
         cache.staticText.prepare (QTransform (), _context->font);
-        cache.textWidth    = static_cast<int> (cache.staticText.size ().width ());
-        cache.textHeight   = static_cast<int> (cache.staticText.size ().height ());
+
+        QFontMetrics* fm = _context->fontMetrics;
+        // Using boundingRect().width() to match previous visual behavior (pixel-perfect ink width)
+        cache.textWidth  = fm->boundingRect(cache.staticText.text()).width();
+        cache.textHeight = fm->height ();
+        cache.ascent     = fm->ascent ();
+
         cache.lastFont     = _context->font;
         cache.metricsDirty = false;
     }
 
-    const int textWidth  = cache.textWidth;
-    const int textHeight = cache.textHeight;
+    const double textWidth  = cache.textWidth;
+    const double textHeight = cache.textHeight;
+    const double ascent     = cache.ascent;
 
-    // Alignement
-
+    // 6. Alignment calculation
     double posX = posX0;
-
     switch (_context->textAnchor) {
     case DJN_MIDDLE_ANCHOR:
         posX -= textWidth * 0.5;
@@ -404,52 +396,37 @@ QtBackend::draw_text (Text* t)
         break;
     }
 
-    pos.setX (posX);
+    // Define the logical rectangle (Top-Left based) for picking and cursor tracking
+    QRectF rect (posX, posY0 - ascent, textWidth, textHeight);
 
-    QRect rect (
-        static_cast<int> (posX),
-        static_cast<int> (posY0 - textHeight),
-        textWidth,
-        textHeight);
+    // Update text cursor for subsequent drawing calls
+    curTextX = posX + textWidth;
+    curTextY = posY0; // Baseline remains the Y reference
 
-    // Curseur text
+    rmt_EndCPUSample (); // End compute_or_manage_textcache
 
-    curTextX = rect.x () + textWidth;
-    curTextY = rect.y () + textHeight;
-
-    rmt_EndCPUSample ();
-
-    // draw
-
+    // 7. Actual Drawing
     rmt_BeginCPUSample (qt_draw_text, RMTSF_Aggregate);
-
-    // !! drawStaticText uses a top-left origin (unlike drawText which uses the baseline),
-    // so we subtract the font ascent to keep the same vertical positioning.
-    QFontMetrics& fm = *_context->fontMetrics;
-    QPointF drawPos = pos;
-    drawPos.setY (pos.y () - fm.ascent ());
-
-    _painter->drawStaticText (drawPos, cache.staticText);
+    // drawStaticText uses Top-Left origin, so we subtract ascent from the baseline
+    _painter->drawStaticText (QPointF(posX, posY0 - ascent), cache.staticText);
     rmt_EndCPUSample ();
 
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object++;
 #endif
 
-    // Picking
-
+    // 8. Picking View
     rmt_BeginCPUSample (draw_text_picking, RMTSF_Aggregate);
     if (is_in_picking_view (t)) {
         load_pick_context (t, _context);
         _picking_view->painter ()->drawRect (rect);
-
 #if _DEBUG_SEE_GUI_INFO_PREF
         __nb_Drawing_object_picking++;
 #endif
     }
     rmt_EndCPUSample ();
 
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // End draw_text
 }
 
 double

@@ -27,14 +27,16 @@ class QWidget;
 class QPainter;
 
 namespace djnn {
-struct QtTextCache {
-    QStaticText staticText;    // Precomputed static text for fast drawing
-    string last_string_value;
-    bool textDirty = true;
-    bool metricsDirty = true;
-    int textWidth  = 0;        
-    int textHeight = 0;        
-    QFont lastFont;            // Last font used to compute metrics/static text
+struct QtTextCache
+{
+    QStaticText staticText; // Precomputed static text for fast drawing
+    string      last_string_value;
+    bool        textDirty    = true;
+    bool        metricsDirty = true;
+    double      textWidth    = 0;
+    double      textHeight   = 0;
+    double      ascent;
+    QFont       lastFont; // Last font used to compute metrics/static text
 };
 
 extern std::unordered_map<Text*, QtTextCache> _textCache;
