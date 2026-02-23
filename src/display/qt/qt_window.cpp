@@ -220,13 +220,29 @@ QtWindow::update_geometry ()
 void
 QtWindow::update_geometry_for_good ()
 {
+    // If the UI is currently being updated by the user (dragging), ignore incoming backend commands.
+    if (_qwidget->_updating_from_ui) return ;
+
     auto x = (int)_window->pos_x ()->get_value ();
     auto y = (int)_window->pos_y ()->get_value ();
     auto w = (int)_window->width ()->get_value ();
     auto h = (int)_window->height ()->get_value ();
 
-    // TODO macOS: should be done in GUI thread...
-    _qwidget->setGeometry (x, y, w, h);
+   /*  Optimization: Check if the window is already at the requested geometry.
+    * We compare against pos() (frame geometry) because move() targets the frame.
+    */
+    if (_qwidget->pos().x() == x && _qwidget->pos().y() == y &&
+        _qwidget->width() == w && _qwidget->height() == h) {
+        return;
+    }
+
+    _qwidget->_updating_from_backend_change = true;
+    /* On macOS, move() targets the top-left corner of the window decorations (title bar),
+     * while resize() targets the client area. This combination is more stable than setGeometry.
+     */
+    _qwidget->move(x, y);
+    _qwidget->resize(w, h);
+    _qwidget->_updating_from_backend_change = false;
 }
 
 void
@@ -242,7 +258,7 @@ QtWindow::set_minimum_size_for_good ()
 // MyQWidget
 
 MyQWidget::MyQWidget (Window* w, QtWindow* qtw)
-    : QTWIDGET (nullptr), _window (w), _qtwindow (qtw), mouse_pos_x (-1), mouse_pos_y (-1), _updating (false), _building (false)
+    : QTWIDGET (nullptr), _window (w), _qtwindow (qtw), mouse_pos_x (-1), mouse_pos_y (-1), _building (false), _updating_from_ui (false), _updating_from_backend_change (false)
 {
     setAttribute (Qt::WA_AcceptTouchEvents, true);
 
@@ -334,20 +350,26 @@ MyQWidget::keyReleaseEvent (QKeyEvent* event)
 void
 MyQWidget::moveEvent (QMoveEvent* event)
 {
-    if (_updating) {
-        return;
-    }
-    _updating = true;
+    // If the move was triggered by our own backend logic, ignore it to prevent infinite feedback loops.
+    if (_updating_from_backend_change) return;
 
-    const QPoint pos = event->pos ();
-    int          x   = pos.x ();
-    int          y   = pos.y ();
+    _updating_from_ui = true;
+
+    /* We use this->pos() instead of event->pos() because event->pos() can be ambiguous on some platforms 
+     * (referring to the client area). this->pos() is guaranteed to return the frame's top-left corner, 
+     * which remains consistent with the coordinates used by the move() method. 
+     */
+    const QPoint frame_pos = this->pos(); 
+    
+    int x = frame_pos.x ();
+    int y = frame_pos.y ();
+
     _window->pos_x ()->set_value (x, 1);
     _window->pos_y ()->set_value (y, 1);
 
     _window->hidpi_scale ()->set_value (devicePixelRatioF (), true);
 
-    _updating = false;
+    _updating_from_ui = false;
     // event synthesis on move paint ...
     QtMainloop::instance ().set_please_exec (true);
     // GRAPH_EXEC;
@@ -361,10 +383,8 @@ MyQWidget::resizeEvent (QResizeEvent* event)
         QOpenGLWidget::resizeEvent (event);
     #endif
 
-    if (_updating) {
-        return;
-    }
-    _updating = true;
+    if (_updating_from_backend_change) return;
+    _updating_from_ui = true;
 
     int w = event->size ().width ();
     int h = event->size ().height ();
@@ -372,7 +392,7 @@ MyQWidget::resizeEvent (QResizeEvent* event)
     _window->width ()->set_value (w, true);
     _window->height ()->set_value (h, true);
     
-    _updating = false;
+    _updating_from_ui = false;
     GRAPH_EXEC;
 }
 

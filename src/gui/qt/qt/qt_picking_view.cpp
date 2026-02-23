@@ -120,7 +120,8 @@ QtPickingView::display ()
     double h = _win->height ()->get_value ();
     double x = _win->pos_x ()->get_value ();
     double y = _win->pos_y ()->get_value ();
-    _pick_debug_win->setGeometry (x + w + 20, y, w, h);
+    _pick_debug_win->move(x + w + 20 , y);
+    _pick_debug_win->resize(w, h);
     _pick_debug_win->setPixmap (QPixmap::fromImage (*_image));
     _pick_debug_win->show ();
     _pick_debug_win->update ();

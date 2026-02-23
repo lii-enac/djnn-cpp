@@ -61,9 +61,12 @@ class MyQWidget : public QTWIDGET {
     Window*           _window;
     QtWindow*         _qtwindow;
     int               mouse_pos_x, mouse_pos_y;
-    bool              _updating;
     bool              _in_screenshot;
     bool              _in_resize;
     std::atomic<bool> _building;
+
+    public:
+    bool              _updating_from_ui;
+    bool              _updating_from_backend_change;
 };
 } // namespace djnn
