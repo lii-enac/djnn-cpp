@@ -1,22 +1,7 @@
-/*
- *  djnn v2
- *
- *  The copyright holders for the contents of this file are:
- *  Ecole Nationale de l'Aviation Civile, France (2018-2025)
- *  See file "license.terms" for the rights and conditions
- *  defined by copyright holders.
- *
- *
- *  Contributors:
- *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
- *      Stephane Conversy <stephane.conversy@enac.fr>
- *
- */
-
-# Overview
+# Overview and Explanation
 
 `djnn` is a conceptual model of interaction, designed for the description and the programming of interactive systems ("interactive" e.g. with human users).
-`djnn-cpp` is C++ implementation of the `djnn` conceptual model.
+`djnn-cpp` is a C++ implementation of the `djnn` conceptual model.
 `smala` is a language on top of the `djnn` conceptual model.
 `smalac` is the compiler that transforms `smala` program into a set of c++ `djnn-cpp` calls, which in turn are compiled into an exececutable.
 
@@ -28,12 +13,12 @@ djnn relies on "processes" and "couplings" (see [core/ontology/process.h](../src
 Everything (but coupling) in djnn is a process: a property (e.g. int, double, text), a binding, a connector, a state-machine, a switch etc.
 Every process can be coupled to multiple processes through couplings.
 
-A process can be "activated" and "deactivated".
+A process can be `activated` and `deactivated`.
 A process "performs something" according to its nature whenever it is "de/activated": transmit de/activation (binding), transmit a value (connector), transitioning to another state (state-machine) etc.
 
 A process has an activation state: ACTIVATED or DEACTIVATED.
 A coupling reacts according to a change of the activation state of its source process, and change the activation state of its destination process.
-There are four coupling modes: source{activation,deactivation} -> destination{activation,deactivation}.
+There are four combinations of coupling: `source{activation,deactivation} -> destination{activation,deactivation}`.
 
 A process can have subprocesses, with a parent-child relationship. 
 The activation of a process entails the activation of all of its children (that are not qualified as 'models').
@@ -51,39 +36,44 @@ If a process is activated it can be deactivated.
 
 ### Some examples of important processes, already defined:
 
-A "property" (int, double, string, bool) holds a value (see [core/property/int_property.h](../src/core/property/int_property.h).
+A `property` (int, double, string, bool) holds a value (see [core/property/int_property.h](../src/core/property/int_property.h).
 If a property is activable, it notifies its coupled processes each time its value is set.
 A property does not notify its coupled processes if it is not activable, i.e. if it has a parent and its parent is not activated.
 But its value can be set even if it is not activable (TBD:is it still true??)
-A "refproperty" holds a reference to another property (like a pointer) and can be dereferenced.
+A "refproperty" holds a reference to another process (like a pointer) and can be dereferenced to access the children of the said process.
 
-A "binding" builds a coupling between two processes (it's the instantiation of a coupling as (in the form of) a process).
+A `binding` builds a coupling between two processes (it's the instantiation of a coupling as (in the form of) a process).
 Each time the source is activated the destination is activated. (see src/core/control/)
 
 [//]: # This activation is immediate. TODO: define "immediate"
 [//]: # Maybe the notion of coupling is not necessary, and a CoreBinding is enough. A CoreBinding implements the crux of the binding, without the parent/child relationship.
 
-An "assignment" sets the value of a property to the value of another property. 
-An assignment is activated and performs the "set value" operation when its parent is activated (except explicitly stated as activable on-demand only through a coupling).
+An `assignment` sets the value of a property to the value of another property. 
+An assignment is activated and performs the "set value" operation only once, when its parent is activated (except explicitly stated as activable on-demand only through a coupling).
 
-A "spike" propagates activation/deactivation, and acts as a 'hub' for other processes.
+A `spike` propagates activation/deactivation, and acts as a 'hub' for other processes.
 A spike is in the 'deactivated' or 'activating' state. When activated by an external signal, i.e. a coupling or an explicit activation, it notifies its activation to all of its coupled processes.
 Once this is done, a spike returns to the 'deactivated' state.
 
-An "action" implements a specific behavior associated to some type of processes, outside the djnn core semantics (e.g. outside normal activation, activation propagation etc.)
+An `action` implements a specific behavior associated to some type of processes, outside the djnn core semantics (e.g. outside normal activation, activation propagation etc.)
 For example, there is a "plus" process to specify an addition: the associated action contains the code that actually implements the addition, in the host language (here c++).
 Once this is done, an action returns to the 'deactivated' state.
 
-A "connector" triggers a copy from its source property to the destination property each times the source property is updated. (see src/base)
-A first copy is made on activation. ///The copy is immediate.
+A `connector` triggers a copy from its source property to the destination property each time the source property is updated (see src/base), as opposed to the "assignment" that sets the value only once.
+The connector can optionally perform a copy on activation.
 A connector is the primary means to implement a data-flow.
+A connector is implemented with a binding that triggers an assignment each time the source changes.
 
-A "component" is a process with a dynamic set of children that can be added or removed during execution, and with the same 'parent-children' semantics as processes with subprocesses.
+A `component` is a process with a dynamic set of children that can be added or removed during execution, and with the same 'parent-children' semantics as processes with subprocesses.
 A component stores children with an (unordered) symbol table.
-//it should have been called a composite
-//components are the primary means of creating specific processes in smala applications.
+Components are the primary means of creating bespoke processes in smala applications.
+//it should have been called a `composite`
 
-As seen above, some process types are "auto deactivating" once activated (search "post_activate_auto_deactivate" in the code): spike, action, property, and iterators (list and set).
+A `switch` is a process with children, among which only one child is activated.
+
+An `FSM` (Finite State Machine) is like a switch, but with transitions that enable to switch between states.
+
+As seen above, some process types are "auto deactivating" once activated (search `post_activate_auto_deactivate` in the code): spike, action, property, and iterators (list and set).
 For properties and spikes, this enables propagating activation regardless of previous activations.
 For action, this enables execution of the code associated to the action, as in a so-called callback.
 
@@ -120,7 +110,7 @@ This optimisation avoids long sorting operations and prevents user-perceived lat
 
 ## Notes on the djnn-cpp implementation
 
-Note: the smalac compiler turns smala code into c++ calls that build the process/coupling graph, hence this graph can be considered as a 'runable' AST of a djnn program.
+Note: the `smalac` compiler turns smala code into c++ calls that build the process/coupling graph, hence this graph can be considered as a 'runable' AST of a djnn program.
 
 A djnn program starts by initing the various required submodules (core, exec_env, gui etc), launching external sources to listen to external events (timers, gui, network etc).
 
@@ -135,11 +125,13 @@ Triggering of the execution of the graph is protected with a condition variable 
 (Unfortunately, this "Big Kernel Lock" prevents parallelizing graph execution, but since the graph can change during execution, it would be difficult to parallelize it anyway, more work has to be done in this area).
 
 The public API of the Process class is activate() and deactivate(), and cannot be redefined by inheriting classes.
-activate() is as follows:
+`activate()` is as follows:
+```
 if (pre_activate()) {
     impl_activate()
     post_activate()
 }
+```
 impl_activate should be redefined by inheriting classes.
 pre_activate and post_activate have default implementations that set flags and test if the parent is activating etc.
 They can be redefined, but their implementation should be called by the redefinitions.
