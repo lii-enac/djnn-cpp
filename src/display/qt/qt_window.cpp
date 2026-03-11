@@ -200,7 +200,9 @@ QtWindow::set_background_opacity_and_color (double opacity, int r, int g, int b,
     QString str = QString ("background-color: rgba(%1, %2, %3, %4)").arg (QString::number (r), QString::number (g), QString::number (b), QString::number (opacity));
     _qwidget->setStyleSheet (str);
 
-    _qwidget->show (); // if we want it interactive but not advise
+    // !!! Enable this line to make the window background color interactive; 
+    // however, this is discouraged—especially with multiple windows—as it may lead to deadlocks or wait locks.
+    //_qwidget->show ();
 }
 
 void
