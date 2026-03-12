@@ -106,7 +106,7 @@ QtWindow::impl_activate ()
         if (_window->width ()->get_value () != -1 && _window->height ()->get_value () != -1) {
             _qwidget->resize(_window->width ()->get_value (), _window->height()->get_value ());
         }
-        _window->set_background_opacity_and_color ();
+        _window->set_background_transparency_and_color ();
         _qwidget->setParent (0); // Create TopLevel-Widget
         _qwidget->setWindowTitle (_window->title ()->get_value ().c_str ());
         _qwidget->set_building (true);
@@ -184,25 +184,30 @@ QtWindow::set_opacity (double opacity)
 }
 
 void
-QtWindow::set_background_opacity_and_color (double opacity, int r, int g, int b, bool isFrameless)
+QtWindow::set_background_transparency_and_color (bool isTransparent, int r, int g, int b, bool isFrameless)
 {
-    opacity = opacity * 255;
+    // Note: If is_transparent is true, the color parameter is ignored 
+    // and isFrameless is automatically set to true.
+
+    if (isTransparent) {
+        isFrameless = true ;
+    }
 
     if (isFrameless)
         _qwidget->setWindowFlags (Qt::Widget | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     else
         _qwidget->setWindowFlags (Qt::Widget);
 
-#ifdef _WIN32
-    if (opacity < 255)
+    if (isTransparent) {
+        // set fulltransparency 
         _qwidget->setAttribute (Qt::WA_TranslucentBackground, true);
-#endif
-    QString str = QString ("background-color: rgba(%1, %2, %3, %4)").arg (QString::number (r), QString::number (g), QString::number (b), QString::number (opacity));
-    _qwidget->setStyleSheet (str);
-
-    // !!! Enable this line to make the window background color interactive; 
-    // however, this is discouraged—especially with multiple windows—as it may lead to deadlocks or wait locks.
-    //_qwidget->show ();
+    }
+    else {
+        // or set plain color
+        QString str = QString("background-color: rgb(%1, %2, %3); border: none;")
+                      .arg(r).arg(g).arg(b); 
+        _qwidget->setStyleSheet(str);
+    }
 }
 
 void

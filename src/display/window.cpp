@@ -145,9 +145,9 @@ Window::init_ui (const string& title, double x, double y, double w, double h)
 
     _frameless = new BoolProperty (this, "frameless", false);
 
-    _background_opacity        = new DoubleProperty (this, "background_opacity", 1);
-    _background_opacity_action = new BackgroundOpacityAction (this, "background_opacity_action");
-    _c_background_opacity      = new Coupling (_background_opacity, ACTIVATION, _background_opacity_action, ACTIVATION);
+    _background_isTransparent        = new BoolProperty (this, "background_isTransparent", false); // init at FALSE
+    _background_isTransparent_action = new BackgroundIsTransparentAction (this, "background_isTransparent_action");
+    _c_background_isTransparent      = new Coupling (_background_isTransparent, ACTIVATION, _background_isTransparent_action, ACTIVATION);
 
     _background_color           = new BackgroundColor (this, "background_color");
     _background_color_action    = new BackgroundColorAction (this, "background_color_action");
@@ -173,7 +173,7 @@ Window::init_ui (const string& title, double x, double y, double w, double h)
     _c_damaged_update_drawing_damaged->disable ();
     _c_screenshot->disable ();
     _c_opacity->disable ();
-    _c_background_opacity->disable ();
+    _c_background_isTransparent->disable ();
     _c_background_color_toValue->disable ();
     _c_background_color_toRGB->disable ();
 }
@@ -205,7 +205,7 @@ Window::impl_activate ()
     _c_damaged_update_drawing_damaged->enable ();
     _c_screenshot->enable ();
     _c_opacity->enable ();
-    _c_background_opacity->enable ();
+    _c_background_isTransparent->enable ();
     _c_background_color_toValue->enable ();
     _c_background_color_toRGB->enable ();
     _c_min_width->enable ();
@@ -222,7 +222,7 @@ Window::impl_deactivate ()
     _c_damaged_update_drawing_damaged->disable ();
     _c_screenshot->disable ();
     _c_opacity->disable ();
-    _c_background_opacity->disable ();
+    _c_background_isTransparent->disable ();
     _c_background_color_toValue->disable ();
     _c_background_color_toRGB->disable ();
     _c_min_width->disable ();
@@ -247,9 +247,9 @@ Window::~Window ()
 
     delete _frameless;
 
-    delete _c_background_opacity;
-    delete _background_opacity_action;
-    delete _background_opacity;
+    delete _c_background_isTransparent;
+    delete _background_isTransparent_action;
+    delete _background_isTransparent;
 
     delete _c_background_color_toValue;
     delete _c_background_color_toRGB;
@@ -335,10 +335,10 @@ Window::set_opacity ()
 }
 
 void
-Window::set_background_opacity_and_color ()
+Window::set_background_transparency_and_color ()
 {
-    _win_impl->set_background_opacity_and_color (
-        _background_opacity->get_value (),
+    _win_impl->set_background_transparency_and_color (
+        _background_isTransparent->get_value (),
         _background_color->r ()->get_value (),
         _background_color->g ()->get_value (),
         _background_color->b ()->get_value (),

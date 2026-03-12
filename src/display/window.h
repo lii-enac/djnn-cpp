@@ -72,7 +72,7 @@ class WinImpl {
     void         set_picking_view (Picking* p) { _picking_view = p; };
     virtual void perform_screenshot (const djnnstl::string& path) {}
     virtual void set_opacity (double opacity) {}
-    virtual void set_background_opacity_and_color (double is_opaque, int r, int g, int b, bool isFrameless = false) {}
+    virtual void set_background_transparency_and_color (bool isTransparent, int r, int g, int b, bool isFrameless = false) {}
     virtual void set_minimum_size (int w, int h) {}
     virtual void update_geometry () {}
 
@@ -166,11 +166,11 @@ class Window : public FatProcess {
     DoubleProperty* opacity () { return _opacity; }
     void            set_opacity ();
 
-    DoubleProperty*  background_opacity () { return _background_opacity; }
+    BoolProperty*  background_isTransparent () { return _background_isTransparent; }
     BackgroundColor* background_color () { return _background_color; }
     BoolProperty*    frameless () { return _frameless; }
     BackgroundRect*  background_rect () { return _background_rect; }
-    void             set_background_opacity_and_color ();
+    void             set_background_transparency_and_color ();
     void             set_minimum_size ();
     void             update_geometry ();
 
@@ -207,17 +207,17 @@ class Window : public FatProcess {
             : Action (parent, name) {}
         void impl_activate () override { ((Window*)get_parent ())->set_opacity (); }
     };
-    class BackgroundOpacityAction : public Action {
+    class BackgroundIsTransparentAction : public Action {
       public:
-        BackgroundOpacityAction (Window* parent, const string& name)
+        BackgroundIsTransparentAction (Window* parent, const string& name)
             : Action (parent, name) {}
-        void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
+        void impl_activate () override { ((Window*)get_parent ())->set_background_transparency_and_color (); }
     };
     class BackgroundColorAction : public Action {
       public:
         BackgroundColorAction (Window* parent, const string& name)
             : Action (parent, name) {}
-        void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
+        void impl_activate () override { ((Window*)get_parent ())->set_background_transparency_and_color (); }
     };
     class GeometryAction : public Action {
       public:
@@ -303,9 +303,9 @@ class Window : public FatProcess {
     // Note: could it be interactive ? not sure ?
     BoolProperty* _frameless;
 
-    DoubleProperty*          _background_opacity;
-    BackgroundOpacityAction* _background_opacity_action;
-    Coupling*                _c_background_opacity;
+    BoolProperty*          _background_isTransparent;
+    BackgroundIsTransparentAction* _background_isTransparent_action;
+    Coupling*                _c_background_isTransparent;
 
     BackgroundColor*       _background_color;
     BackgroundColorAction* _background_color_action;

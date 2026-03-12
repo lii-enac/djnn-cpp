@@ -36,7 +36,7 @@ class QtWindow : public WinImpl {
 
     virtual void perform_screenshot (const djnnstl::string& path) override;
     virtual void set_opacity (double opacity) override;
-    virtual void set_background_opacity_and_color (double is_opaque, int r, int g, int b, bool isFrameless = false) override;
+    virtual void set_background_transparency_and_color (bool isTransparent, int r, int g, int b, bool isFrameless = false) override;
     virtual void set_minimum_size (int w, int h) override;
     virtual void set_minimum_size_for_good ();
     virtual void update_geometry () override;
