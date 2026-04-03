@@ -183,6 +183,7 @@ class ProcessCollector : public AbstractContainer {
     void                        impl_deactivate () override;
     void                        add_one ();
     void                        add_one (CoreProcess* p);
+    void                        insert_one (CoreProcess* p, size_t insert_index);
     //virtual void                add_child (CoreProcess* p, const djnnstl::string& name) override { add_one(p); }
     void                        remove_one ();
     void                        remove_one (CoreProcess* p);

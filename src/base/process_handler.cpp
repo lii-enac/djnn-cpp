@@ -188,6 +188,27 @@ ProcessCollector::add_one (CoreProcess* p)
     }
 }
 
+
+void
+ProcessCollector::insert_one (CoreProcess* p, size_t insert_index)
+{
+    if (p) {
+        if (insert_index > _list.size ()) {
+            insert_index = _list.size();
+        }
+        _list.insert (_list.begin() + insert_index, p);
+        _size.set_value ((int)_list.size (), true);
+    }
+    auto child = p;
+    if (_activate_children) {
+        if (get_activation_state () == ACTIVATED && !child->is_model ()) {
+            child->activate ();
+        } else if (child->get_activation_state () == ACTIVATED) {
+            child->deactivate ();
+        }
+    }
+}
+
 void
 ProcessCollector::remove_one ()
 {
