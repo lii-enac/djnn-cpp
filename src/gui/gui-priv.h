@@ -55,9 +55,9 @@ class GUIStructureObserver : public StructureObserver {
     void                ensure_component_has_correct_index_in_GH_container (FatProcess* container);
     void                remove_container (FatProcess* container) override;
     void                add_child_to_container (FatProcess* container, CoreProcess* child, int index) override;
-    void                add_child_at (FatProcess* container, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index) override;
-    void                move_child_to (FatProcess* container, CoreProcess* c, int neighbour_index, child_position_e spec, int new_index) override;
-    void                remove_child_from_container (FatProcess* container, CoreProcess* c) override;
+    void                add_child_at (FatProcess* container, CoreProcess* child, int neighbour_index, child_position_e spec, int new_index) override;
+    void                move_child_to (FatProcess* container, CoreProcess* child, int neighbour_index, child_position_e spec, int new_index) override;
+    void                remove_child_from_container (FatProcess* container, CoreProcess* child) override;
     void                swap_children (FatProcess* container, int i, int j) override;
     void                set_child (FatProcess* container, CoreProcess* child, int i) override;
     void                dump_observer (FatProcess* container, int level = 0) override;

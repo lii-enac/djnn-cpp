@@ -220,7 +220,12 @@ GUIStructureObserver::ensure_component_has_correct_index_in_GH_container (FatPro
     if (parent_container == nullptr)
         return;
 
-    GUIStructureHolder* container_GH = _structure_map[parent_container];
+    structures_t::iterator it_container = _structure_map.find (container);
+    if (it_container == _structure_map.end ()) {
+        return;
+    }
+
+    GUIStructureHolder* container_GH = it_container->second;
     GUIStructureHolder* child_GH;
     CoreProcess* process_child;
     if (container_GH) {
@@ -268,6 +273,8 @@ GUIStructureObserver::ensure_component_has_correct_index_in_GH_container (FatPro
 void
 GUIStructureObserver::ensure_container_registered (FatProcess* container)
 {
+    if (!container)
+        return;
     // If the container is already present, do nothing.
     if (_structure_map.find (container) != _structure_map.end ())
         return;
@@ -306,7 +313,7 @@ GUIStructureObserver::ensure_container_registered (FatProcess* container)
             // This should not happen and shouldn't even be possible: a child should always be present in its own parent!
             // However, this highlights a bug related to LinearGradient loading in gui/groups — for example: the JLV clock.
             // if (new_index == -1) {
-            //   djnn__warning (nullptr, " Container " + container->get_debug_name () + " has not been found in its parent !");
+            //    djnn__warning (nullptr, " Container " + container->get_debug_name () + " has not been found in its parent " + parent->get_debug_name () + " !");
             // }
             _structure_map[parent]->insert_gui_child (holder, new_index);
             break;
@@ -443,8 +450,8 @@ GUIStructureObserver::add_child_at (FatProcess* container, CoreProcess* child, i
     case LAYER_T: {
         structures_t::iterator it_child = _structure_map.find (child);
         if (it_child != _structure_map.end ()) {
-            GUIStructureHolder* GH = _structure_map[child];
-            if (GH && it_container != _structure_map.end ())
+            GUIStructureHolder* GH = it_child->second;
+            if (it_container != _structure_map.end ())
                 it_container->second->add_gui_child_at (GH, neighbour_index, spec, new_index);
         }
         break;
@@ -489,8 +496,8 @@ GUIStructureObserver::move_child_to (FatProcess* container, CoreProcess* child, 
     case LAYER_T: {
         structures_t::iterator it_child = _structure_map.find (child);
         if (it_child != _structure_map.end ()) {
-            GUIStructureHolder* GH = _structure_map[child];
-            if (GH && it_container != _structure_map.end ())
+            GUIStructureHolder* GH = it_child->second;
+            if (it_container != _structure_map.end ())
                 it_container->second->move_child_to (GH, neighbour_index, spec, new_index);
         }
         break;
@@ -519,12 +526,11 @@ GUIStructureObserver::remove_child_from_container (FatProcess* container, CorePr
         case LAYER_T: {
             structures_t::iterator it_child = _structure_map.find (child);
             if (it_child != _structure_map.end ()) {
-                GUIStructureHolder* GH = _structure_map[child];
-                if (GH)
-                    it_container->second->remove_gui_child (GH);
+                GUIStructureHolder* GH = it_child->second;
+                it_container->second->remove_gui_child (GH);
             }
-            break;
         }
+            break;
         default:
             break;
         }
