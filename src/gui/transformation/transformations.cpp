@@ -33,10 +33,7 @@
 // #include <array>
 #include <cmath>
 
-#include "core/utils/iostream.h"
 
-using djnnstl::cerr;
-using djnnstl::endl;
 
 namespace djnn {
 AbstractTransformation::AbstractTransformation (CoreProcess* parent, const string& name)
@@ -131,7 +128,7 @@ GradientTranslation::GradientTranslation (CoreProcess* parent, const string& nam
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient* grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-        cerr << "Parent of gradient translation must be <LinearGradient|RadialGradient>\n";
+        error (this, "Parent of gradient translation must be <LinearGradient|RadialGradient>");
         return;
     }
     grad->transforms ()->add_child (this, "");
@@ -228,7 +225,7 @@ GradientRotation::GradientRotation (CoreProcess* parent, const string& name, dou
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient* grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-        cerr << "Parent of gradient rotation must be <LinearGradient|RadialGradient>\n";
+        error (this, "Parent of gradient rotation must be <LinearGradient|RadialGradient>");
         return;
     }
     grad->transforms ()->add_child (this, "");
@@ -317,7 +314,7 @@ GradientScaling::GradientScaling (CoreProcess* parent, const string& name, doubl
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient* grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-        cerr << "Parent of gradient scaling must be <LinearGradient|RadialGradient>\n";
+        error (this, "Parent of gradient scaling must be <LinearGradient|RadialGradient>");
         return;
     }
     grad->transforms ()->add_child (this, "");
@@ -394,7 +391,7 @@ GradientSkewX::GradientSkewX (CoreProcess* parent, const string& name, double a)
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient* grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-        cerr << "Parent of gradient skewX must be <LinearGradient|RadialGradient>\n";
+        error (this, "Parent of gradient skewX must be <LinearGradient|RadialGradient>");
         return;
     }
     grad->transforms ()->add_child (this, "");
@@ -471,7 +468,7 @@ GradientSkewY::GradientSkewY (CoreProcess* parent, const string& name, double a)
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient* grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-        cerr << "Parent of gradient skewY must be <LinearGradient|RadialGradient>\n";
+        error (this, "Parent of gradient skewY must be <LinearGradient|RadialGradient>");
         return;
     }
     grad->transforms ()->add_child (this, "");
@@ -556,7 +553,7 @@ AbstractHomography::rightTranslate2d (double dx, double dy)
     get_properties_values (old_m11, old_m12, old_m13, old_m14, old_m21, old_m22, old_m23, old_m24, old_m31, old_m32, old_m33, old_m34, old_m41, old_m42, old_m43, old_m44);
     double new_m14, new_m24;
     switch (state2d) {
-    case APPLY_SHEAR | APPLY_SCALE | APPLY_TRANSLATE:
+    case APPLY_SHEAR | APPLY_SCALE | APPLY_TRANSLATE: // [sco] WTF?!
         new_m14 = dx * old_m11 + dy * old_m12 + old_m14;
         new_m24 = dx * old_m21 + dy * old_m22 + old_m24;
         m14 ()->set_value (new_m14, false);
@@ -627,7 +624,7 @@ AbstractHomography::rightTranslate2d (double dx, double dy)
         }
         break;
     default:
-        cerr << "AbstractHomography::rightTranslate2d -> missing case in a switch " << state2d << endl;
+        error (this, "AbstractHomography::rightTranslate2d -> missing case in a switch " + djnnstl::to_string (state2d));
         // cannot reach
         break;
     }
@@ -732,7 +729,7 @@ AbstractHomography::rightScale2d (double sx, double sy)
         }
         break;
     default:
-        cerr << "AbstractHomography::rightScale2d -> missing case in a switch " << state2d << endl;
+        error (this, "AbstractHomography::rightScale2d -> missing case in a switch " + djnnstl::to_string (state2d));
         // cannot reach
         break;
     }
@@ -857,7 +854,7 @@ AbstractHomography::leftScale2d (double sx, double sy)
         }
         break;
     default:
-        cerr << "AbstractHomography::leftScale2d -> missing case in a switch " << state2d << endl;
+        error (this, "AbstractHomography::leftScale2d -> missing case in a switch " + djnnstl::to_string (state2d));
         // cannot reach
         break;
     }
@@ -1182,7 +1179,7 @@ AbstractHomography::rightSkew2d (double dax_in_degrees, double day_in_degrees)
         }
         return;
     default:
-        cerr << "AbstractHomography::rightSkew2d -> missing case in a switch " << state2d << endl;
+        error (this, "AbstractHomography::rightSkew2d -> missing case in a switch " + djnnstl::to_string (state2d));
         // cannot reach
         break;
     }
@@ -1282,7 +1279,7 @@ AbstractHomography::leftSkew2d (double dax_in_degrees, double day_in_degrees)
         }
         return;
     default:
-        cerr << "AbstractHomography::leftSkew2d -> missing case in a switch " << state2d << endl;
+        error (this, "AbstractHomography::leftSkew2d -> missing case in a switch " + djnnstl::to_string (state2d));
         // cannot reach
         break;
     }
@@ -2209,7 +2206,7 @@ GradientHomography::GradientHomography (CoreProcess* parent, const string& name,
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient* grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-        cerr << "Parent of gradient homography must be <LinearGradient|RadialGradient>\n";
+        error (this, "Parent of gradient homography must be <LinearGradient|RadialGradient>");
         return;
     }
     grad->transforms ()->add_child (this, "");
@@ -2248,7 +2245,7 @@ SimpleGradientTransform::SimpleGradientTransform (CoreProcess* parent, const str
     /* if not cloning we test parent with dynamic_cast */
     AbstractGradient* grad = dynamic_cast<AbstractGradient*> (parent);
     if (grad == nullptr) {
-        cerr << "Parent of simple gradient transform must be <LinearGradient|RadialGradient>\n";
+        error (this, "Parent of simple gradient transform must be <LinearGradient|RadialGradient>");
         return;
     }
     grad->transforms ()->add_child (this, "");
