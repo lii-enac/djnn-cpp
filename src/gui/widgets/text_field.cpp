@@ -17,6 +17,7 @@
 #include "core/utils/error.h"
 #include "display/abstract_display.h" // DisplayBackend::instance
 #include "display/display-dev.h"      // DisplayBackend::instance
+#include "display/window.h"
 #include "gui/abstract_backend.h"
 #include "gui/backend.h"
 #include "gui/shape/sdf.h"

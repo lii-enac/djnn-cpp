@@ -11,6 +11,7 @@
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  */
 
+#include "display/window.h"
 #include "gui/widgets/text_edit_common.h"
 
 namespace djnn {

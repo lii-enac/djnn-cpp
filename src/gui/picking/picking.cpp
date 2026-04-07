@@ -18,12 +18,14 @@
 #include <assert.h>
 
 #include "color_picking.h"
-#include "core/core-dev.h"
+#include "core/tree/list.h"
 #include "core/utils/error.h"
 #include "core/utils/ext/remotery/Remotery.h"
 #include "core/utils/to_string.h"
 #include "display/ui.h"
 #include "gui/transformation/homography.h"
+
+
 namespace djnn {
 extern int            mouse_tracking; // in display
 extern FatProcess*    GenericMouse;   // in gui
