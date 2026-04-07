@@ -32,6 +32,7 @@ class SDLWindow : public WinImpl {
   public:
     SDLWindow (Window* win, const djnnstl::string& title, double x, double y, double w, double h);
     virtual ~SDLWindow ();
+    djnn::Window* djnn_window () { return _window; }
     SDL_Window* sdl_window () { return _sdl_window; }
     void        set_cursor (const djnnstl::string& path, int hotX, int hotY) override;
     void        set_cursor (int cursor_shape) override {} // TODO
@@ -52,7 +53,7 @@ class SDLWindow : public WinImpl {
     virtual void update_geometry_for_good ();
 
   protected:
-    djnn::Window* _window;
+    djnn::Window* _window; // FIXME should be _djnn_window
     SDL_Window*   _sdl_window;
     SDL_Cursor*   _cursor;
     SDL_Surface*  _cursor_surface;

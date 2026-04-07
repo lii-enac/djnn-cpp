@@ -13,6 +13,8 @@
  *
  */
 
+#include <assert.h>
+
 #include <SDL3/SDL_video.h>
 
 // #include "sdl_mainloop.h"
@@ -144,6 +146,7 @@ SDLWindow::redraw ()
 bool
 SDLWindow::handle_event (SDL_Event& e)
 {
+    rmt_BeginCPUSample (sdlwin_handle_event, RMTSF_Root);
     // std::cerr << e.type << __FL__;
     bool exec = false;
     switch (e.type) {
@@ -170,7 +173,16 @@ SDLWindow::handle_event (SDL_Event& e)
         switch (e.user.code) {
         case user_event_awake: {
             // std::cerr << "sdl window wakeup" << __FL__;
-            rmt_BeginCPUSample (trigger_redraw, RMTSF_Aggregate);
+            if (!strcmp((const char*)e.user.data1, "update")) {
+                rmt_BeginCPUSample (update, RMTSF_None);
+            }
+            else if (!strcmp((const char*)e.user.data1, "timer")) {
+                rmt_BeginCPUSample (timer, RMTSF_None);
+            }
+            else if (!strcmp((const char*)e.user.data1, "please_stop")) {
+                rmt_BeginCPUSample (please_stop, RMTSF_None);
+            }
+            else assert(0);
             trigger_redraw ();
             rmt_EndCPUSample ();
             exec = true;
@@ -188,7 +200,9 @@ SDLWindow::handle_event (SDL_Event& e)
     //    switch (e.window.event) {
     case SDL_EVENT_WINDOW_SHOWN:
     case SDL_EVENT_WINDOW_EXPOSED: {
+        rmt_BeginCPUSample (window_exposed, RMTSF_None);
         trigger_redraw ();
+        rmt_EndCPUSample ();
         exec = true;
         break;
     }
@@ -237,6 +251,7 @@ SDLWindow::handle_event (SDL_Event& e)
     }
     //}
     //}
+    rmt_EndCPUSample ();
     return exec;
 }
 

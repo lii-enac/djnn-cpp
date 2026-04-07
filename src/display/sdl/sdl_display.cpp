@@ -44,6 +44,7 @@ p_init_display ()
         fprintf (stderr, "SDL: %s %s:%d\n", SDL_GetError (), __FILE__, __LINE__);
         exit (1);
     }
+    SDL_free (displayids);
 
     //std::cout << "SDL Display: " << mode->refresh_rate << "hz " << mode->w << "x" << mode->h << __FL__;
 }

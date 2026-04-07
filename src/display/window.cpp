@@ -14,6 +14,8 @@
  *
  */
 
+#include <assert.h>
+
 #include "window.h"
 
 #include "background_color.h"
@@ -44,24 +46,30 @@ Window::init_ui (const string& title, double x, double y, double w, double h)
     _width             = new DoubleProperty (this, "width", w);
     _height            = new DoubleProperty (this, "height", h);
     _title             = new TextProperty (this, "title", title);
-    _key_pressed       = new IntProperty (this, "key-pressed", 0);
-    _key_released      = new IntProperty (this, "key-released", 0);
-    _key_pressed_text  = new TextProperty (this, "key-pressed_text", "");
-    _key_released_text = new TextProperty (this, "key-released_text", "");
+    
     _hidpi_scale       = new DoubleProperty (this, "hidpi_scale", 1);
     _mspf              = new DoubleProperty (this, "mspf", 1);
     _close             = new Spike (nullptr, "close");
     add_symbol ("close", _close);
-    _press                 = new Spike (nullptr, "press");
-    _release               = new Spike (nullptr, "release");
-    _move                  = new Spike (nullptr, "move");
-    _wheel                 = new Spike (nullptr, "wheel");
-    _stylus_pen            = new Spike (nullptr, "pen");
-    _stylus_pen_press      = new Spike (nullptr, "press");
-    _stylus_pen_release    = new Spike (nullptr, "release");
-    _stylus_pen_move       = new Spike (nullptr, "move");
-    _stylus_eraser         = new Spike (nullptr, "eraser");
-    _stylus_eraser_press   = new Spike (nullptr, "press");
+
+    _key_pressed       = new IntProperty (this, "key-pressed", 0);
+    _key_released      = new IntProperty (this, "key-released", 0);
+    _key_pressed_text  = new TextProperty (this, "key-pressed_text", "");
+    _key_released_text = new TextProperty (this, "key-released_text", "");
+
+#if 1
+    _ui = new UI(this, nullptr);
+#else
+    _press   = new Spike (nullptr, "press");
+    _release = new Spike (nullptr, "release");
+    _move    = new Spike (nullptr, "move");
+    _wheel   = new Spike (nullptr, "wheel");
+    _stylus_pen = new Spike (nullptr, "pen");
+    _stylus_pen_press = new Spike (nullptr, "press");
+    _stylus_pen_release = new Spike (nullptr, "release");
+    _stylus_pen_move = new Spike (nullptr, "move");
+    _stylus_eraser = new Spike (nullptr, "eraser");
+    _stylus_eraser_press = new Spike (nullptr, "press");
     _stylus_eraser_release = new Spike (nullptr, "release");
     _stylus_eraser_move    = new Spike (nullptr, "move");
     _touches               = new List (this, "touches");
@@ -126,6 +134,16 @@ Window::init_ui (const string& title, double x, double y, double w, double h)
     add_symbol ("wheel", _wheel);
     add_symbol ("pen", _stylus_pen);
     add_symbol ("eraser", _stylus_eraser);
+#endif
+
+    add_symbol ("press", press());
+    add_symbol ("move", move());
+    add_symbol ("release", release());
+    add_symbol ("wheel", wheel());
+    add_symbol ("pen", stylus_pen());
+    add_symbol ("eraser", stylus_eraser());
+    wheel()->add_symbol ("dx", _ui->wheel_dx());
+    wheel()->add_symbol ("dy", _ui->wheel_dy());
 
     _damaged                          = new UndelayedSpike (this, "damaged"); // UndelayedSpike _damaged, connected to UpdateDrawing::damaged, the frame pointer is passed with the action
     FatProcess* update                = UpdateDrawing::instance ()->get_damaged ();
@@ -179,8 +197,10 @@ Window::init_ui (const string& title, double x, double y, double w, double h)
 }
 
 Window::Window (CoreProcess* parent, const string& name, const string& title, double x, double y, double w, double h)
-    : FatProcess (name),
-      _refresh (false), _holder (nullptr)
+    : FatProcess (name)
+    , PickUI (false)
+    , _refresh (false)
+    , _holder (nullptr)
 {
     init_ui (title, x, y, w, h);
     _display = new RefProperty (this, "display", nullptr);
@@ -282,11 +302,14 @@ Window::~Window ()
     delete _title;
     delete _hidpi_scale;
     delete _mspf;
+    delete _close;
+
     delete _key_pressed;
     delete _key_released;
     delete _key_pressed_text;
     delete _key_released_text;
-    delete _close;
+
+#if 0
     delete _press;
     delete _release;
     delete _move;
@@ -302,10 +325,43 @@ Window::~Window ()
     delete _w_dy;
     delete _w_x;
     delete _w_y;
+#endif
+
+    //delete _ui;
+
     delete _display;
 
     delete _win_impl;
 }
+
+#if 0
+CoreProcess*
+Window::find_child_impl (const string& path)
+{
+    // looking for ui interface
+    if (_ui) {
+        CoreProcess* process = FatProcess::find_child_impl (path);
+        if (process != nullptr)
+            return process;
+    }
+
+    // looking for something else
+    size_t found = path.find_first_of ('/');
+    string key   = path;
+    if (found != string::npos) {
+        key = path.substr (0, found);
+    }
+    /*  "press", "release", "move", "enter", "leave", "touches" */
+    for (auto& event : __ui_interface) {
+        if (key == event) {
+            assert(!_ui);
+            _ui = new UI (this, nullptr);
+            break;
+        }
+    }
+    return FatProcess::find_child_impl (path);
+}
+#endif
 
 void
 Window::UndelayedSpike::impl_activate ()

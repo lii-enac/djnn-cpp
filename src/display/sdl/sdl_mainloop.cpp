@@ -122,7 +122,7 @@ SDLMainloop::sdl_run_coop ()
 }
 
 void
-SDLMainloop::wakeup (SDLWindow* requestingWin)
+SDLMainloop::wakeup (SDLWindow* requestingWin, const char* caller)
 {
     // if (_wakeup_already_triggered) return;
     // DBG;
@@ -130,6 +130,7 @@ SDLMainloop::wakeup (SDLWindow* requestingWin)
     SDL_Event e;
     e.type      = SDL_EVENT_USER;
     e.user.code = SDLWindow::user_event_awake;
+    e.user.data1 = (void*)caller;
     if (requestingWin)
         e.window.windowID = SDL_GetWindowID (requestingWin->sdl_window ());
     SDL_PushEvent (&e);
@@ -142,7 +143,7 @@ SDLMainloop::please_stop ()
     // djnn::get_exclusive_access (DBG_GET);
     ExternalSource::please_stop ();
     // djnn::release_exclusive_access (DBG_REL);
-    wakeup (nullptr); // wakeup
+    wakeup (nullptr, "please_stop"); // wakeup
 }
 
 void

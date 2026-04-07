@@ -24,8 +24,7 @@ class PickUI {
     PickUI (bool cache)
         : _ui (nullptr), _cache (cache) {}
     ~PickUI () {
-        if (_ui)
-            delete _ui;
+      delete _ui;
     }
     bool         cache () const { return _cache; }
     void         cache (bool cache) { _cache = cache; }

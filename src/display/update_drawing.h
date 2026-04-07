@@ -85,7 +85,7 @@ class UpdateDrawing : public FatProcess {
     FatProcess*      get_redraw () { return _redraw_action; }
 
   private:
-    UpdateDrawing (const UpdateDrawing&)                   = delete;
+    UpdateDrawing         (const UpdateDrawing&) = delete;
     UpdateDrawing&        operator= (const UpdateDrawing&) = delete;
     static UpdateDrawing* _instance;
     vector<Window*>       _win_list;

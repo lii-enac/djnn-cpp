@@ -20,6 +20,8 @@
 #include "core/property/int_property_fwd.h"
 #include "core/property/ref_property.h"
 #include "core/tree/component.h"
+#include "core/tree/list.h"
+#include "display/pickui.h"
 
 namespace djnn {
 // class IntProperty;
@@ -80,7 +82,56 @@ class WinImpl {
     Picking* _picking_view;
 };
 
-class Window : public FatProcess {
+class Window : public FatProcess, public PickUI {
+    // class UndelayedSpike : public FatProcess {
+    //   public:
+    //     UndelayedSpike (Window* parent, const string& name)
+    //         : FatProcess (name) {
+    //         set_is_model (true);
+    //         finalize_construction (parent, name);
+    //     }
+    //     virtual ~UndelayedSpike () {}
+    //     void post_activate () override { post_activate_auto_deactivate (); }
+    //     void impl_activate () override;
+    //     void impl_deactivate () override {};
+    // };
+
+    // class ScreenshotAction : public Action {
+    //   public:
+    //     ScreenshotAction (Window* parent, const string& name)
+    //         : Action (parent, name) {}
+    //     void impl_activate () override { ((Window*)get_parent ())->perform_screenshot (); }
+    // };
+    // class OpacityAction : public Action {
+    //   public:
+    //     OpacityAction (Window* parent, const string& name)
+    //         : Action (parent, name) {}
+    //     void impl_activate () override { ((Window*)get_parent ())->set_opacity (); }
+    // };
+    // class BackgroundOpacityAction : public Action {
+    //   public:
+    //     BackgroundOpacityAction (Window* parent, const string& name)
+    //         : Action (parent, name) {}
+    //     void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
+    // };
+    // class BackgroundColorAction : public Action {
+    //   public:
+    //     BackgroundColorAction (Window* parent, const string& name)
+    //         : Action (parent, name) {}
+    //     void impl_activate () override { ((Window*)get_parent ())->set_background_opacity_and_color (); }
+    // };
+    // class GeometryAction : public Action {
+    //   public:
+    //     GeometryAction (Window* parent, const string& name)
+    //         : Action (parent, name) {}
+    //     void impl_activate () override { ((Window*)get_parent ())->update_geometry (); }
+    // };
+    // class MinimumSizeAction : public Action {
+    //   public:
+    //     MinimumSizeAction (Window* parent, const string& name)
+    //         : Action (parent, name) {}
+    //     void impl_activate () override { ((Window*)get_parent ())->set_minimum_size (); }
+    // };
 
   public:
     Window (CoreProcess* parent, const string& name, const string& title, double x, double y, double w, double h);
@@ -94,6 +145,8 @@ class Window : public FatProcess {
     void     impl_deactivate () override;
     Picking* picking_view () { return _win_impl->picking_view (); }
     void     set_picking_view (Picking* p) { _win_impl->set_picking_view (p); }
+    //CoreProcess* find_child_impl (const string& name) override;
+    void         set_mouse_local_coords (double x, double y, bool is_move) override {};
 
     DoubleProperty* pos_x () { return _pos_x; }
     DoubleProperty* pos_y () { return _pos_y; }
@@ -102,10 +155,6 @@ class Window : public FatProcess {
     IntProperty*    min_width () { return _min_width; }
     IntProperty*    min_height () { return _min_height; }
     TextProperty*   title () { return _title; }
-    IntProperty*    key_pressed () { return _key_pressed; }
-    IntProperty*    key_released () { return _key_released; }
-    TextProperty*   key_pressed_text () { return _key_pressed_text; }
-    TextProperty*   key_released_text () { return _key_released_text; }
     DoubleProperty* hidpi_scale () { return _hidpi_scale; }
     DoubleProperty* mspf () { return _mspf; }
     FatProcess*     close () { return _close; }
@@ -113,41 +162,40 @@ class Window : public FatProcess {
     void            set_refresh (bool r) { _refresh = r; }
     bool            refresh () { return _refresh; }
 
-    FatProcess*     press () { return _press; }
-    FatProcess*     move () { return _move; }
-    FatProcess*     release () { return _release; }
-    FatProcess*     wheel () { return _wheel; }
-    FatProcess*     touches () { return _touches; }
-    DoubleProperty* press_x () { return _press_x; }
-    DoubleProperty* press_y () { return _press_y; }
-    DoubleProperty* move_x () { return _move_x; }
-    DoubleProperty* move_y () { return _move_y; }
-    DoubleProperty* release_x () { return _release_x; }
-    DoubleProperty* release_y () { return _release_y; }
-    DoubleProperty* wheel_dx () { return _w_dx; }
-    DoubleProperty* wheel_dy () { return _w_dy; }
-    DoubleProperty* wheel_x () { return _w_x; }
-    DoubleProperty* wheel_y () { return _w_y; }
-    FatProcess*     stylus_pen_press () { return _stylus_pen_press; };
-    DoubleProperty* stylus_pen_press_x () { return _stylus_pen_press_x; };
-    DoubleProperty* stylus_pen_press_y () { return _stylus_pen_press_y; };
-    FatProcess*     stylus_pen_move () { return _stylus_pen_move; };
-    DoubleProperty* stylus_pen_move_x () { return _stylus_pen_move_x; };
-    DoubleProperty* stylus_pen_move_y () { return _stylus_pen_move_y; };
-    FatProcess*     stylus_pen_release () { return _stylus_pen_release; };
-    DoubleProperty* stylus_pen_release_x () { return _stylus_pen_release_x; };
-    DoubleProperty* stylus_pen_release_y () { return _stylus_pen_release_y; };
-    DoubleProperty* stylus_pen_pressure () { return _stylus_pen_pressure; };
-    FatProcess*     stylus_eraser_press () { return _stylus_eraser_press; };
-    DoubleProperty* stylus_eraser_press_x () { return _stylus_eraser_press_x; };
-    DoubleProperty* stylus_eraser_press_y () { return _stylus_eraser_press_y; };
-    FatProcess*     stylus_eraser_move () { return _stylus_eraser_move; };
-    DoubleProperty* stylus_eraser_move_x () { return _stylus_eraser_move_x; };
-    DoubleProperty* stylus_eraser_move_y () { return _stylus_eraser_move_y; };
-    FatProcess*     stylus_eraser_release () { return _stylus_eraser_release; };
-    DoubleProperty* stylus_eraser_release_x () { return _stylus_eraser_release_x; };
-    DoubleProperty* stylus_eraser_release_y () { return _stylus_eraser_release_y; };
-    DoubleProperty* stylus_eraser_pressure () { return _stylus_eraser_pressure; };
+#define EVENT(ev, type, parent) \
+    FatProcess*     ev () { return _ui->ev (); }
+#include "ui_event/ui_event_parent.h"
+#include "ui_event/ui_event.h"
+
+#undef EVENT
+
+#define EVENT(ev, type, parent) \
+    public: \
+      DoubleProperty* ev##_x () { return _ui->ev##_x (); } \
+      DoubleProperty* ev##_y () { return _ui->ev##_y (); } \
+      /*DoubleProperty* ev##_x ();*/ \
+      /*DoubleProperty* ev##_y ();*/
+#include "ui_event/ui_event_xy.h"
+#include "ui_event/ui_event_xy_local.h"
+#undef EVENT
+
+#define EVENT(ev, type, parent) \
+  public: \
+    type*     ev () { return _ui->ev(); } \
+    /*type*     ev ();*/
+
+  EVENT(wheel_dx, DoubleProperty, parent)
+  EVENT(wheel_dy, DoubleProperty, parent)
+  EVENT(stylus_pen_pressure, DoubleProperty, parent)
+  EVENT(stylus_eraser_pressure, DoubleProperty, parent)
+
+#undef EVENT
+
+    IntProperty*    key_pressed () { return _key_pressed; }
+    IntProperty*    key_released () { return _key_released; }
+    TextProperty*   key_pressed_text () { return _key_pressed_text; }
+    TextProperty*   key_released_text () { return _key_released_text; }
+
     CoreProcess*    get_display () { return _display->get_value (); }
     void            init_display (FatProcess* conn) { _display->set_value (conn, false); }
     void            set_frame ();
@@ -234,8 +282,8 @@ class Window : public FatProcess {
 
     DoubleProperty* _pos_x;
     DoubleProperty* _pos_y;
-    DoubleProperty *_w_dx, *_w_dy;
-    DoubleProperty *_w_x, *_w_y;
+    // DoubleProperty *_w_dx, *_w_dy;
+    // DoubleProperty *_w_x, *_w_y;
     DoubleProperty* _width;
     DoubleProperty* _height;
     TextProperty*   _title;
@@ -243,6 +291,8 @@ class Window : public FatProcess {
     DoubleProperty* _mspf;
     RefProperty*    _display;
     FatProcess*     _close;
+
+    #if 0
     FatProcess*     _press;
     FatProcess*     _move;
     FatProcess*     _release;
@@ -279,10 +329,13 @@ class Window : public FatProcess {
     DoubleProperty* _stylus_eraser_release_x;
     DoubleProperty* _stylus_eraser_release_y;
     DoubleProperty* _stylus_eraser_pressure;
+    #endif
+
     TextProperty*   _key_pressed_text;
     IntProperty*    _key_pressed;
     TextProperty*   _key_released_text;
     IntProperty*    _key_released;
+
     WinImpl*        _win_impl;
     UndelayedSpike* _damaged;
     Coupling*       _c_damaged_update_drawing_damaged;

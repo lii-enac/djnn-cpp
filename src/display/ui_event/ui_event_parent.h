@@ -1,0 +1,7 @@
+EVENT(mouse, Component, parent)
+EVENT(left, Component, parent)
+EVENT(right, Component, parent)
+EVENT(middle, Component, parent)
+EVENT(touches, List, parent)
+EVENT(stylus_pen, Spike, parent)
+EVENT(stylus_eraser, Spike, parent)

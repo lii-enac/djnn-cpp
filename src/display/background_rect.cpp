@@ -12,9 +12,12 @@
  *
  */
 
+#include <assert.h>
+
 #include "background_rect.h"
 
 #include "core/core-dev.h" // graph add/remove edge
+#include "display/window.h"
 
 namespace djnn {
 
@@ -47,11 +50,13 @@ BackgroundRect::find_child_impl (const string& path)
         key = path.substr (0, found);
     }
     /*  "press", "release", "move", "enter", "leave", "touches" */
-    for (auto& event : __ui_interface) {
-        if (key == event) {
+    // for (auto& event : __ui_interface) {
+    //    if (key == event) {
+    if (const auto& event = __ui_interface.find(key) != __ui_interface.end()) {
+            assert(!_ui);
             _ui = new UI (this, get_frame ());
-            break;
-        }
+        //     break;
+        // }
     }
     return FatProcess::find_child_impl (path);
 }

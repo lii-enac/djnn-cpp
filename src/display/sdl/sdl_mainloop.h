@@ -35,7 +35,8 @@ class SDLMainloop : public ExternalSource {
 
     // ExternalSource
     virtual void please_stop () override;
-    virtual void wakeup (SDLWindow* requestingWin);
+  
+    virtual void wakeup (SDLWindow* requestingWin, const char* caller);
 
     void sdl_run_coop ();
 

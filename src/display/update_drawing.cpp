@@ -33,7 +33,7 @@ UpdateDrawing::init ()
     // in smala that would be:
 
     // UndelayedSpike _damaged
-    // Bool _auto_refresh (true) // true by default, when set will enable or disable the coupling between damaged and draw_sync to offer client-provided, specific redraw policy
+    // Bool _auto_refresh (true) // true by default, when set will enable or disable the coupling between _damaged and _draw_sync to offer client-provided, specific redraw policy
     // Action _update_auto_refresh_action (_c_redraw_when_damaged.en/disable) //
     // Spike _draw_sync      // external API to allow clients to directly trigger draw
     // Action _redraw_action // actual redraw action, output at the end of the activation vector

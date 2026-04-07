@@ -15,6 +15,7 @@
 
 #include <float.h>
 #include <math.h>
+#include <assert.h>
 
 #include "abstract_gshape.h"
 
@@ -156,18 +157,20 @@ Touch::set_touch_local_coords (PickUI* p, double x, double y, bool is_move)
 
     /* 2 - common mouse + touch on the PickUI interface */
     if (!is_move) {
-        s->ui ()->local_press_x ()->set_value (loc_x, true);
-        s->ui ()->local_press_y ()->set_value (loc_y, true);
+        s->ui ()->press_local_x ()->set_value (loc_x, true);
+        s->ui ()->press_local_y ()->set_value (loc_y, true);
     }
 
     /* we choose to set/init move even on press */
-    s->ui ()->local_move_x ()->set_value (loc_x, true);
-    s->ui ()->local_move_y ()->set_value (loc_y, true);
+    s->ui ()->move_local_x ()->set_value (loc_x, true);
+    s->ui ()->move_local_y ()->set_value (loc_y, true);
 }
 
 void
 AbstractGShape::init_ui ()
 {
+    //assert(!_ui);
+    if (!_ui)
     _ui = new UI (this, get_frame ());
 
     if (!_inverted_matrix) {
@@ -215,11 +218,15 @@ AbstractGShape::find_child_impl (const string& path)
         _c_z_prop = new CouplingWithData (&_z, ACTIVATION, update, ACTIVATION);
     } else {
         /*  "press", "release", "move", "enter", "leave", "touches", "pen", "eraser" */
-        for (auto& event : __ui_interface) {
-            if (key == event) {
-                init_ui ();
-                break;
-            }
+        // for (auto& event : __ui_interface) {
+        //     if (key == event) {
+        //         init_ui ();
+        //         break;
+        //     }
+        // }
+        if (const auto& event = __ui_interface.find(key) != __ui_interface.end()) {
+            init_ui ();
+        //     break;
         }
     }
     return FatProcess::find_child_impl (path);
@@ -303,22 +310,26 @@ AbstractGShape::set_mouse_local_coords (double x, double y, bool is_move)
     /* 1 - mouse */
     /* it's a press */
     if (!is_move) {
-        this->ui ()->mouse_local_press_x ()->set_value (loc_x, true);
-        this->ui ()->mouse_local_press_y ()->set_value (loc_y, true);
+        this->ui ()->mouse_press_local_x ()->set_value (loc_x, true);
+        this->ui ()->mouse_press_local_y ()->set_value (loc_y, true);
+        this->ui ()->mouse_release_local_x ()->set_value (loc_x, true); // FIXME could be a press
+        this->ui ()->mouse_release_local_y ()->set_value (loc_y, true);
     }
     /* we choose to set/init move even on press */
-    this->ui ()->mouse_local_move_x ()->set_value (loc_x, true);
-    this->ui ()->mouse_local_move_y ()->set_value (loc_y, true);
+    this->ui ()->mouse_move_local_x ()->set_value (loc_x, true);
+    this->ui ()->mouse_move_local_y ()->set_value (loc_y, true);
 
     /* 2 - common mouse + touch */
     if (!is_move) {
-        this->ui ()->local_press_x ()->set_value (loc_x, true);
-        this->ui ()->local_press_y ()->set_value (loc_y, true);
+        this->ui ()->press_local_x ()->set_value (loc_x, true);
+        this->ui ()->press_local_y ()->set_value (loc_y, true);
+        this->ui ()->release_local_x ()->set_value (loc_x, true); // FIXME could be a press
+        this->ui ()->release_local_y ()->set_value (loc_y, true);
     }
 
     /* we choose to set/init move even on press */
-    this->ui ()->local_move_x ()->set_value (loc_x, true);
-    this->ui ()->local_move_y ()->set_value (loc_y, true);
+    this->ui ()->move_local_x ()->set_value (loc_x, true);
+    this->ui ()->move_local_y ()->set_value (loc_y, true);
 }
 
 void
@@ -362,9 +373,9 @@ AbstractGShape::pick_analytical (PickAnalyticalContext& pac)
     // fast culling with bounding box
     double x, y, w, h;
     get_bounding_box (x, y, w, h);
-    if (!((x - pac.half_outline_width) <= pac.x &&
+    if (!(pac.x >= (x - pac.half_outline_width) &&
           pac.x <= (x + w + pac.half_outline_width * 2) &&
-          (y - pac.half_outline_width) <= pac.y &&
+          pac.y >= (y - pac.half_outline_width) &&
           pac.y <= (y + h + pac.half_outline_width * 2)))
         return nullptr;
 

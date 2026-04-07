@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/property/double_property.h"
-#include "core/tree/structure_observer.h"
+#include "core/control/action.h"
 #include "gui/gui-priv.h"
 #include "gui/shape/abstract_gshape.h"
 
