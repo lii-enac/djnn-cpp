@@ -445,7 +445,7 @@ DJNN_CXXFLAGS_PCH_INC += -I$(dir $(pch_dst)) -include $(notdir $(pch_file)) -Win
 # Both GCC and Clang appear to expand -pthread to define _REENTRANT on their own
 # DJNN_CXXFLAGS_PCH_DEF += -D_REENTRANT
 ifeq ($(display),SDL)
-DJNN_CXXFLAGS_PCH_DEF += -Dmain=SDL_main
+DJNN_CXXFLAGS += -D_REENTRANT
 endif
 endif
 
