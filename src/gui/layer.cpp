@@ -79,7 +79,8 @@ Layer::impl_activate ()
     }
     Container::impl_activate ();
     UpdateDrawing::instance ()->add_window_for_refresh (_frame);
-    UpdateDrawing::instance ()->get_redraw ()->activate ();
+    if (_auto_redisplay.get_value())
+        UpdateDrawing::instance ()->get_redraw ()->activate ();
 }
 
 void
@@ -111,7 +112,8 @@ Layer::set_invalid_cache (bool v)
     _invalid_cache = v;
     if (_frame) {
         UpdateDrawing::instance ()->add_window_for_refresh (_frame);
-        UpdateDrawing::instance ()->get_redraw ()->activate ();
+        if (_auto_redisplay.get_value())
+            UpdateDrawing::instance ()->get_redraw ()->activate ();
     }
 }
 
