@@ -343,7 +343,7 @@ endif
 
 # compiler-specific options
 
-ifeq ($(compiler),gcc)
+ifeq ($(compiler),gnu)
 #CFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 endif
 
@@ -359,7 +359,7 @@ ifeq ($(linker),mold)
 # DJNN_CXXFLAGS += -fPIC
 # LDFLAGS += -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/
 # LDFLAGS += -dylib -lc++ -lc
-ifeq ($(compiler),gcc)
+ifeq ($(compiler),gnu)
 CXXLD ?= $(CXX) --use-ld=mold
 endif
 ifeq ($(compiler),llvm)
