@@ -54,7 +54,7 @@ AbstractBoolProperty::AbstractBoolProperty (CoreProcess* parent, const string& n
 {
     graph_add_edge (this, &_true);
     graph_add_edge (this, &_false);
-};
+}
 
 AbstractBoolProperty::~AbstractBoolProperty ()
 {
