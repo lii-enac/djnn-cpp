@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/property/double_property.h"
-#include "core/tree/structure_observer.h"
 #include "gui/gui-priv.h"
 #include "gui/shape/abstract_gshape.h"
 
@@ -17,11 +16,13 @@ class PolyPoint : public AbstractGObj {
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override;
     PolyPoint*              impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
-    // notify polygon ( (grand-grand-)parent polygon-list-point)
-    void notify_change (unsigned int nm) override {
-        _damaged |= nm;
-        get_parent ()->get_parent ()->notify_change (nm);
-    }
+
+    // useless?
+    // notify polygon ( (grand-)parent: polygon-list-point)
+    // void notify_change (unsigned int nm) override {
+    //     _damaged |= nm;
+    //     get_parent ()->get_parent ()->notify_change (nm);
+    // }
 
   protected:
     struct raw_props_t {

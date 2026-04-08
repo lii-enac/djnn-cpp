@@ -16,11 +16,13 @@ class PathPoint : public AbstractGObj {
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*)find_child_impl ("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override = 0;
-    // notify polygon ( (grand-grand-)parent polygon-list-point)
-    void notify_change (unsigned int nm) override {
-        _damaged |= nm;
-        get_parent ()->get_parent ()->notify_change (nm);
-    }
+
+    // useless?
+    // notify polygon ( (grand-)parent: polygon-list-point)
+    // void notify_change (unsigned int nm) override {
+    //     _damaged |= nm;
+    //     get_parent ()->get_parent ()->notify_change (nm);
+    // }
 
   protected:
     struct raw_props_t {
@@ -157,7 +159,6 @@ class Path : public AbstractGShape {
     void   draw () override;
     void   get_bounding_box (double& x, double& y, double& w, double& h) const override;
     double sdf (double x, double y) const override;
-    // Path* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     Path* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
     void  set_bounding_box (double x, double y, double w, double h);
     void  invalidate_bounding_box () { _bbw->set_value (-1, true); }
