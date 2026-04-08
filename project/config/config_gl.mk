@@ -6,8 +6,8 @@ display := SDL
 #options SDL with kmsdrm: ubuntu SDL2 is not compiled with kmsdrm enabled, compile it with the option 
 #see how to recompile SDL2 with this option in the file tools/raspberry-ua-netinst.md
 
-graphics := GL
-#options: QT CAIRO GL
+graphics := SDLGPU
+#options: QT CAIRO GL SDLGPU
 
 gl_context := legacy
 #gl_context := OSMesa

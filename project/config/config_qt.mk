@@ -7,7 +7,7 @@ display ?= QT
 #see how to recompile SDL2 with this option in the file tools/raspberry-ua-netinst.md
 
 graphics ?= QT
-#options: QT CAIRO GL
+#options: QT CAIRO GL SDLGPU
 qt_version ?= 5
 
 #gl_context := legacy
