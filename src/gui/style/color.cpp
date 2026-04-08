@@ -283,26 +283,22 @@ LCHToRGBConverter::impl_deactivate ()
 
 AbstractColor::AbstractColor (CoreProcess* parent, const string& name, int r, int g, int b)
     : AbstractStyle (parent, name),
-      raw_props{.r = r, .g = g, .b = b},
+      raw_props{.r = r, .g = g, .b = b, .value = ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff)},
       _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
       _toValue (this, "toValue"),
       _toRGB (this, "toRGB"),
       _is_updating (false)
 {
-    raw_props.value = ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 }
 
 AbstractColor::AbstractColor (CoreProcess* parent, const string& name, int v)
     : AbstractStyle (parent, name),
+      raw_props{.r = (v >> 16) & 0xFF, .g = (v >> 8) & 0xFF, .b = v & 0xFF, .value = v},
       _cr (nullptr), _cg (nullptr), _cb (nullptr), _cv (nullptr), _c_rv (nullptr), _c_gv (nullptr), _c_bv (nullptr), _c_vrgb (nullptr),
       _toValue (this, "toValue"),
       _toRGB (this, "toRGB"),
       _is_updating (false)
 {
-    raw_props.r     = (v >> 16) & 0xFF;
-    raw_props.g     = (v >> 8) & 0xFF;
-    raw_props.b     = v & 0xFF;
-    raw_props.value = v;
 }
 
 AbstractColor::~AbstractColor ()
