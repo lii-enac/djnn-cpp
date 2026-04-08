@@ -73,13 +73,16 @@ class ExternalSource::Impl
     }
 
     void
-    start ()
+    start (const string& name)
     {
 #if DJNN_USE_STD_THREAD
         if (_thread.joinable ())
             _thread.detach ();
 #endif
 
+#if DJNN_USE_SDL_THREAD
+        const string n = string("djnn ") + name;
+#endif
         _thread =
 
 #if DJNN_USE_BOOST_THREAD || DJNN_USE_BOOST_FIBER || DJNN_USE_STD_THREAD
@@ -100,7 +103,7 @@ class ExternalSource::Impl
 #endif
 #endif
 #if DJNN_USE_SDL_THREAD
-        SDL_CreateThread (SDL_ThreadFunction, "djnn thread", _es);
+        SDL_CreateThread (SDL_ThreadFunction, n.c_str (), _es);
 #endif
     }
 
@@ -254,7 +257,7 @@ ExternalSource::should_i_stop () const
 void
 ExternalSource::start_thread ()
 {
-    _impl->start ();
+    _impl->start (_name);
 }
 
 void

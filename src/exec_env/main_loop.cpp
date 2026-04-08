@@ -221,7 +221,7 @@ MainLoop::run_in_own_thread ()
 #endif
 
 #if DJNN_USE_SDL_THREAD
-    own_thread = SDL_CreateThread (SDL_ThreadFunction, "djnn thread", this); // FIXME: leak
+    own_thread = SDL_CreateThread (SDL_ThreadFunction, "djnn mainloop", this); // FIXME: leak
 #endif
 }
 
