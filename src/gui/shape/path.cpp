@@ -354,16 +354,16 @@ PathPoint::find_child_impl (const string& name)
 
     CouplingWithData** coupling;
     double*            rawp;
-    int                notify_mask = notify_none;
+    int                notify_mask = notify_damaged_geometry;
 
     if (name == "x") {
         coupling    = &_cx;
         rawp        = &raw_props.x;
-        notify_mask = notify_damaged_geometry;
+        //notify_mask = notify_damaged_geometry;
     } else if (name == "y") {
         coupling    = &_cy;
         rawp        = &raw_props.y;
-        notify_mask = notify_damaged_geometry;
+        //notify_mask = notify_damaged_geometry;
     } else
         return nullptr;
 
@@ -519,24 +519,20 @@ PathQuadratic::find_child_impl (const string& name)
 
     CouplingWithData** coupling;
     double*            rawp;
-    int                notify_mask = notify_none;
+    int                notify_mask = notify_damaged_geometry;
 
     if (name == "x1") {
         coupling    = &_cx1;
         rawp        = &raw_props.x1;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "y1") {
         coupling    = &_cy1;
         rawp        = &raw_props.y1;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "x") {
         coupling    = &_cx;
         rawp        = &raw_props.x;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "y") {
         coupling    = &_cy;
         rawp        = &raw_props.y;
-        notify_mask = notify_damaged_geometry;
     } else
         return nullptr;
 
@@ -660,32 +656,26 @@ PathCubic::find_child_impl (const string& name)
 
     CouplingWithData** coupling;
     double*            rawp;
-    int                notify_mask = notify_none;
+    int                notify_mask = notify_damaged_geometry;
 
     if (name == "x1") {
         coupling    = &_cx1;
         rawp        = &raw_props.x1;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "y1") {
         coupling    = &_cy1;
         rawp        = &raw_props.y1;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "x2") {
         coupling    = &_cx2;
         rawp        = &raw_props.x2;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "y2") {
         coupling    = &_cy2;
         rawp        = &raw_props.y2;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "x") {
         coupling    = &_cx;
         rawp        = &raw_props.x;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "y") {
         coupling    = &_cy;
         rawp        = &raw_props.y;
-        notify_mask = notify_damaged_geometry;
     } else
         return nullptr;
 
@@ -819,36 +809,29 @@ PathArc::find_child_impl (const string& name)
 
     CouplingWithData** coupling;
     double*            rawp;
-    int                notify_mask = notify_none;
+    int                notify_mask = notify_damaged_geometry;
 
     if (name == "rotx") {
         coupling    = &_crotx;
         rawp        = &raw_props.rotx;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "fl") {
         coupling    = &_cfl;
         rawp        = &raw_props.fl;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "swfl") {
         coupling    = &_cswfl;
         rawp        = &raw_props.swfl;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "rx") {
         coupling    = &_crx;
         rawp        = &raw_props.rx;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "ry") {
         coupling    = &_cry;
         rawp        = &raw_props.ry;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "x") {
         coupling    = &_cx;
         rawp        = &raw_props.x;
-        notify_mask = notify_damaged_geometry;
     } else if (name == "y") {
         coupling    = &_cy;
         rawp        = &raw_props.y;
-        notify_mask = notify_damaged_geometry;
     } else
         return nullptr;
 
