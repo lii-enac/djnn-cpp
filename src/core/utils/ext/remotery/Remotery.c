@@ -6350,8 +6350,10 @@ static void rmtGetThreadNameFallback(char* out_thread_name, rmtU32 thread_name_s
 {
     // In cases where we can't get a thread name from the OS
     out_thread_name[0] = 0;
-    strncat_s(out_thread_name, thread_name_size, "Thread", 6);
-    itoahex_s(out_thread_name + 6, thread_name_size - 6, AtomicAddS32(&g_Remotery->countThreads, 1));
+    const char default_name[] = "_thread";
+    int index = sizeof(default_name) - 1;
+    strncat_s(out_thread_name, thread_name_size, default_name, index);
+    itoahex_s(out_thread_name + index, thread_name_size - index, AtomicAddS32(&g_Remotery->countThreads, 1));
 }
 
 static double saturate(double v)
