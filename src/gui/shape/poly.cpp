@@ -186,7 +186,18 @@ Poly::draw ()
 void
 Poly::get_bounding_box (double& x, double& y, double& w, double& h) const
 {
+    // warning : does not work until the path is drawn
+    // also, if a point in the path is modified, bbox is not recomputed until the path is drawn again
+    // if (is_bounding_box_valid ()) {
+    x = _bbx->get_double_value ();
+    y = _bby->get_double_value ();
+    w = _bbw->get_double_value ();
+    h = _bbh->get_double_value ();
+    //} else {
     UNIMPL;
+    // should be computed for picking...
+    // for (auto p: _items->children ()) {
+    //}
 }
 
 double
