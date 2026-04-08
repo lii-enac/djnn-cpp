@@ -33,6 +33,16 @@ lib_ldflags += -lwinmm -lWs2_32
 endif
 endif
 
+ifeq ($(use_tracy),yes)
+# brew install tracy, no need to build it, but we need the sources with the same version number
+tracy_path ?= /Users/conversy/recherche/istar/code/misc/tracy-0.13.1
+lib_srcs += $(tracy_path)/public/TracyClient.cpp
+DJNN_CXXFLAGS += -DTRACY_ENABLE -I$(tracy_path)/public
+$(build_dir)/$(tracy_path)/public/TracyClient.o: DJNN_CXXFLAGS += -Wno-unused-function -Wno-deprecated-declarations -Wno-c11-extensions -Wno-missing-field-initializers
+else
+DJNN_CXXFLAGS += -I$(local_dir)/utils/ext/tracy
+endif
+
 #ifeq ($(os),Darwin)
 #lib_pkgpath += $(brew_prefix)/opt/expat/lib/pkgconfig
 #lib_pkgpath += $(brew_prefix)/opt/curl/lib/pkgconfig
