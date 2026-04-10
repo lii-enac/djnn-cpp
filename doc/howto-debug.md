@@ -1,6 +1,11 @@
 # How to debug djnn-cpp applications
 
-set to 1 those variables in your code:
+## in cpp
+
+To use a debugger and breakpoints: do not forget to setup `config.mk` with `-g` and `-O0`, and even `use_pch := no` to keep names
+
+
+To see the activation sequence, set to 1 these variables in your code:
 ```
 _DEBUG_SEE_ACTIVATION_SEQUENCE_2 = 1
 _DEBUG_SEE_PROP_SET_VALUE = 1
