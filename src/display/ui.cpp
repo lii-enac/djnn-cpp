@@ -93,10 +93,11 @@ EVENT(stylus_eraser_pressure, DoubleProperty, parent)
 #include "ui_event/ui_event_parent.h"
 #undef EVENT
 
-#define EVENT(ev, type, parent) \
-    _##ev = new type(_##parent, #ev);
+#define EVENT(ev, type, parent) _##ev = new type(_##parent, #ev);
+#define EVENT2(ev, type, parent, name) _##ev = new type(_##parent, #name);
 #include "ui_event/ui_event.h"
 #undef EVENT
+#undef EVENT2
 
 // #define EVENT(ev, type, parent)
 //     _##ev = new type(_##parent, #ev, 0); 
@@ -281,6 +282,9 @@ UI::~UI ()
 #define EVENT(ev, type, parent) \
     if (_##ev && _##parent) _##parent->remove_child(_##ev); \
     delete _##ev;
+#define EVENT2(ev, type, parent, name) \
+    if (_##ev && _##parent) _##parent->remove_child(_##ev); \
+    delete _##ev;
 EVENT(wheel_dx, DoubleProperty, wheel)
 EVENT(wheel_dy, DoubleProperty, wheel)
 EVENT(stylus_pen_pressure, DoubleProperty, parent)
@@ -288,6 +292,7 @@ EVENT(stylus_eraser_pressure, DoubleProperty, parent)
 #include "ui_event/ui_event.h"
 #include "ui_event/ui_event_parent.h"
 #undef EVENT
+#undef EVENT2
 
     delete cpick;
     _parent->remove_child (pickable);

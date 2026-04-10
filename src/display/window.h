@@ -164,25 +164,24 @@ class Window : public FatProcess, public PickUI {
 
 #define EVENT(ev, type, parent) \
     FatProcess*     ev () { return _ui->ev (); }
+#define EVENT2(ev, type, parent, name) \
+    FatProcess*     ev () { return _ui->ev (); }
 #include "ui_event/ui_event_parent.h"
 #include "ui_event/ui_event.h"
-
 #undef EVENT
+#undef EVENT2
 
 #define EVENT(ev, type, parent) \
     public: \
       DoubleProperty* ev##_x () { return _ui->ev##_x (); } \
-      DoubleProperty* ev##_y () { return _ui->ev##_y (); } \
-      /*DoubleProperty* ev##_x ();*/ \
-      /*DoubleProperty* ev##_y ();*/
+      DoubleProperty* ev##_y () { return _ui->ev##_y (); }
 #include "ui_event/ui_event_xy.h"
 #include "ui_event/ui_event_xy_local.h"
 #undef EVENT
 
 #define EVENT(ev, type, parent) \
   public: \
-    type*     ev () { return _ui->ev(); } \
-    /*type*     ev ();*/
+    type*     ev () { return _ui->ev(); }
 
   EVENT(wheel_dx, DoubleProperty, parent)
   EVENT(wheel_dy, DoubleProperty, parent)

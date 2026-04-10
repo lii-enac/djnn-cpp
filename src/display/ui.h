@@ -38,7 +38,7 @@ class UI {
 
     CoreProcess*       get_parent () { return _parent; }
     const CoreProcess* get_parent () const { return _parent; }
-    CoreProcess*       find_child_impl (const djnnstl::string& path);
+    //CoreProcess*       find_child_impl (const djnnstl::string& path);
 
   private:
     CoreProcess*      _parent;
@@ -49,20 +49,23 @@ class UI {
 #define EVENT(ev, type, parent) \
   public: \
     type*     ev () { return _##ev; } \
-    /*type*     ev ();*/ \
+  private: \
+    type*     _##ev;
+#define EVENT2(ev, type, parent, name) \
+  public: \
+    type*     ev () { return _##ev; } \
   private: \
     type*     _##ev;
 #include "ui_event/ui_event_parent.h"
 #include "ui_event/ui_event.h"
 #undef EVENT
+#undef EVENT2
 
 
 #define EVENT(ev, type, parent) \
     public: \
       DoubleProperty* ev##_x () { return _##ev##_x; } \
       DoubleProperty* ev##_y () { return _##ev##_y; } \
-      /*DoubleProperty* ev##_x ();*/ \
-      /*DoubleProperty* ev##_y ();*/ \
     private: \
       DoubleProperty* _##ev##_x; \
       DoubleProperty* _##ev##_y;
@@ -74,7 +77,6 @@ class UI {
 #define EVENT(ev, type, parent) \
   public: \
     type*     ev () { return _##ev; } \
-    /*type*     ev ();*/ \
   private: \
     type*     _##ev;
 
