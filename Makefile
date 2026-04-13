@@ -611,15 +611,22 @@ ifneq ($(os), em)
 #$1_lib_soname := -Wl,-soname,$$($1_libname)
 #$1_lib_soname := -Wl,-rpath,$$(build_dir)
 
-ifeq ($(linker), gnu)
-$1_lib_soname += -Wl,-rpath-link,$$(abspath $$(build_dir))/lib -Wl,-rpath,$$(abspath $$(build_dir))/lib
+# ifeq ($(linker), gnu)
+# $1_lib_soname += -Wl,-rpath-link,$$(abspath $$(build_dir))/lib -Wl,-rpath,$$(abspath $$(build_dir))/lib
 ifeq (-DRMT_USE_OPENGL=1,$(filter -DRMT_USE_OPENGL=1,$(remotery_cflags)))
 $1_lib_soname += -Wl,-flat_namespace,-undefined,dynamic_lookup
 else
 $1_lib_soname += -Wl,--no-undefined
 endif
-endif
+#endif
 
+ifeq ($(linker), gnu)
+$1_lib_soname += \
+	-Wl,--no-undefined \
+	-Wl,-rpath=$$(abspath $$(build_dir))/lib \
+	-Wl,-rpath-link,$$(abspath $$(build_dir))/lib
+
+endif
 ifeq ($(linker), llvm)
 $1_lib_soname := -Wl,-install_name,$$(abspath $$(build_dir))/lib/$$($1_libname) -Wl,-current_version,1.0.0 -Wl,-compatibility_version,1.0.0 
 #$1_lib_soname :=
@@ -644,10 +651,10 @@ CXXLD ?= $$(CXX)
 $$($1_lib): $$($1_objs)
 	@mkdir -p $$(dir $$@)
 ifeq ($$V,max)
-	$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_djnn_deps) $$($1_lib_soname) $(lib_soname)
+	$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname) $$($1_lib_djnn_deps) $(lib_soname)
 else
 	@$(call rule_message,linking,$$(stylized_target))
-	@$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_djnn_deps) $$($1_lib_soname) $(lib_soname)
+	@$$(CXXLD) $(DYNLIB) -o $$@ $$($1_objs) $$(LDFLAGS) $$($1_lib_soname) $$($1_lib_djnn_deps) $(lib_soname)
 endif
 
 $$($1_lib_static): $$($1_objs)
