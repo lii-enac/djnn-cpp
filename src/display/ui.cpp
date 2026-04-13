@@ -291,8 +291,8 @@ UI::~UI ()
     delete _##ev;
 EVENT(wheel_dx, DoubleProperty, wheel)
 EVENT(wheel_dy, DoubleProperty, wheel)
-EVENT(stylus_pen_pressure, DoubleProperty, parent)
-EVENT(stylus_eraser_pressure, DoubleProperty, parent)
+EVENT(stylus_pen_pressure, DoubleProperty, stylus_pen)
+EVENT(stylus_eraser_pressure, DoubleProperty, stylus_eraser)
 #include "ui_event/ui_event.h"
 #include "ui_event/ui_event_parent.h"
 #undef EVENT
