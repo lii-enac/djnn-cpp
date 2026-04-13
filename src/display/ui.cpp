@@ -90,8 +90,12 @@ EVENT(stylus_eraser_pressure, DoubleProperty, parent)
 #define EVENT(ev, type, parent) \
     _##ev = new type(_##parent, #ev); \
     _##ev->set_activation_state (ACTIVATED);
+#define EVENT2(ev, type, parent, name) \
+    _##ev = new type(_##parent, #name); \
+    _##ev->set_activation_state (ACTIVATED);
 #include "ui_event/ui_event_parent.h"
 #undef EVENT
+#undef EVENT2
 
 #define EVENT(ev, type, parent) _##ev = new type(_##parent, #ev);
 #define EVENT2(ev, type, parent, name) _##ev = new type(_##parent, #name);
@@ -108,10 +112,10 @@ EVENT(stylus_eraser_pressure, DoubleProperty, parent)
     _wheel_dx = new DoubleProperty(_wheel, "dx", 0);
     _wheel_dy = new DoubleProperty(_wheel, "dy", 0);
     
-#define EVENT(ev, type, parent) \
-    _##ev = new type(_##parent, #ev, 0); 
-EVENT(stylus_pen_pressure, DoubleProperty, parent)
-EVENT(stylus_eraser_pressure, DoubleProperty, parent)
+#define EVENT(ev, type, parent, name) \
+    _##ev = new type(_##parent, #name, 1.); 
+EVENT(stylus_pen_pressure, DoubleProperty, stylus_pen, pressure)
+EVENT(stylus_eraser_pressure, DoubleProperty, stylus_eraser, pressure)
 #undef EVENT
 
     // make sure enter events are processed before leave events
