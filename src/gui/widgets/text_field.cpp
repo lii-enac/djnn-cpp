@@ -530,8 +530,10 @@ TextField::add_str (const string& str)
         return;
     string        cur_text = _line.get_content ();
     const string& cpy      = str;
-    if (has_selection ())
+    if (has_selection ()) {
         del_selection ();
+        cur_text = _line.get_content ();
+    }
 
     if (_index_x == cur_text.length ()) {
         cur_text.append (cpy);
