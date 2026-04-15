@@ -240,6 +240,7 @@ ifeq ($(os),MinGW)
 CFLAGS += -fPIC
 CFLAGS += -D_USE_MATH_DEFINES # https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=vs-2019
 #DJNN_CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
+LDFLAGS += -lole32 -lshell32 -luuid
 lib_suffix =.dll
 DYNLIB ?= -shared
 YACC = bison -d -Wno-conflicts-sr -Wno-conflicts-rr
