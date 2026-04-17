@@ -294,6 +294,19 @@ MyQQWidget::event (QEvent* event)
 }
 
 void
+MyQQWidget::mouseDoubleClickEvent (QMouseEvent* event)
+{
+    mouse_pos_x = get_position (event).x ();
+    mouse_pos_y = get_position (event).y ();
+    mouse_pos_y -= 3; // QT bug??
+
+    bool exec_ = _picking_view->genericMouseDoubleClick (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
+    if (exec_) {
+        GRAPH_EXEC;
+    }
+}
+
+void
 MyQQWidget::mousePressEvent (QMouseEvent* event)
 {
     mouse_pos_x = get_position (event).x ();

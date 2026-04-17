@@ -622,6 +622,7 @@ GUIMouseButton::GUIMouseButton (CoreProcess* parent, const string& name)
 {
     _press   = new Spike (this, "press");
     _release = new Spike (this, "release");
+    _double_click = new Spike (this, "double_click");
     finalize_construction (parent, name);
 }
 

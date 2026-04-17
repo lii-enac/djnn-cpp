@@ -37,6 +37,7 @@ class Picking {
     void common_press_setting (double x, double y, PickUI* s);
     void common_press_notify (PickUI* s);
 
+    bool genericMouseDoubleClick (double x, double y, mouse_button button);
     bool genericMousePress (double x, double y, mouse_button button);
     bool genericMouseMove (double x, double y);
     bool genericMouseRelease (double x, double y, mouse_button button);

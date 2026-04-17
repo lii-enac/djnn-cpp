@@ -1055,4 +1055,58 @@ Picking::genericMouseWheel (double x, double y, double cursorx, double cursory)
     return exec_;
 }
 
+bool
+Picking::genericMouseDoubleClick (double x, double y, mouse_button button)
+{
+    // Note:
+    // No need to manually handle x, y, enter, leave, or press events for double‑click,
+    // since Qt automatically generates and emits the corresponding press event.
+    bool exec_      = false;
+
+    /* shape */
+    PickUI* s = this->pick (x, y);
+    // std::cerr << s << " " << typeid(s).name() << std::endl;
+    if (s != nullptr && check_for_ui (s)) {
+        s->ui ()->double_click ()->schedule_activation ();
+        exec_ = true;
+    }
+
+    /* button */
+    switch (button) {
+    case BUTTON_LEFT:
+        ((GUIMouse*)GenericMouse)->left ()->double_click ()->schedule_activation ();
+        // if (s != nullptr && check_for_ui (s)) {
+        //     s->ui ()->left_double_click ()->schedule_activation ();
+        // }
+        break;
+    case BUTTON_RIGHT:
+        ((GUIMouse*)GenericMouse)->right ()->double_click ()->schedule_activation ();
+        // if (s != nullptr && check_for_ui (s)) {
+        //     s->ui ()->right_double_click()->schedule_activation ();
+        // }
+        break;
+    case BUTTON_MIDDLE:
+        ((GUIMouse*)GenericMouse)->middle ()->double_click ()->schedule_activation ();
+        // if (s != nullptr && check_for_ui (s)) {
+        //     s->ui ()->middle_double_click ()->schedule_activation ();
+        // }
+        break;
+    default:
+        ((GUIMouse*)GenericMouse)->left ()->double_click ()->schedule_activation ();
+    }
+    if (((GUIMouse*)GenericMouse)->left ()->double_click ()->has_coupling () /*|| ((GUIMouse*)GenericMouse)->right ()->double_click ()->has_coupling () || ((GUIMouse*)GenericMouse)->middle ()->double_click ()->has_coupling ()*/ ) {
+        exec_ = true;
+    }
+
+    /* windows event schedule event After shape event*/
+    // Not sure it’s a good idea !!
+    // if (_win->double_click ()->has_coupling ()) {
+    //     _win->double_click ()->schedule_activation ();
+    //     exec_ = true;
+    // }
+
+    return exec_;
+}
+
+
 } /* namespace djnn */

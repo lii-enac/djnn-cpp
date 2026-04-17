@@ -47,6 +47,7 @@ class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
     }
 
     virtual bool event (QEvent* event) override;
+    virtual void mouseDoubleClickEvent (QMouseEvent* event) override;
     virtual void mouseReleaseEvent (QMouseEvent* event) override;
     virtual void mousePressEvent (QMouseEvent* event) override;
     virtual void mouseMoveEvent (QMouseEvent* event) override;

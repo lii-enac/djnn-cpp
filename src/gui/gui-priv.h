@@ -76,14 +76,16 @@ class GUIMouseButton : public FatProcess {
     ~GUIMouseButton () {
         delete _press;
         delete _release;
+        delete _double_click;
     }
     FatProcess* press () { return _press; }
     FatProcess* release () { return _release; }
+    FatProcess* double_click () { return _double_click; }
     void        impl_activate () {}
     void        impl_deactivate () {}
 
   private:
-    FatProcess *_press, *_release;
+    FatProcess *_press, *_release, *_double_click;
 };
 
 class GUIMouse : public FatProcess {

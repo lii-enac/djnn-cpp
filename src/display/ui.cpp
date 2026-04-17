@@ -28,7 +28,7 @@
 
 
 namespace djnn {
-//const djnnstl::vector<djnnstl::string> __ui_interface = {"pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse", "wheel", "pen", "eraser"};
+//const djnnstl::vector<djnnstl::string> __ui_interface = {"pickable", "press", "release", "left", "right", "middle", "move", "enter", "leave", "touches", "mouse", "wheel", "pen", "eraser", "double_click"};
 
 const djnnstl::map<djnnstl::string, bool> __ui_interface = {
     {"pickable", true},
@@ -44,7 +44,8 @@ const djnnstl::map<djnnstl::string, bool> __ui_interface = {
     {"mouse", true},
     {"wheel", true},
     {"pen", true},
-    {"eraser", true}
+    {"eraser", true},
+    {"double_click", true}
     };
 
 
