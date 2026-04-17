@@ -44,13 +44,13 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
       _clear (this, "clear"), _validate (this, "validate"),
       _on_enable_edit (this, "on_enable_edit"), _on_disable_edit (this, "on_disable_edit"),
       _on_press (this, "on_press_action"), _on_release (this, "on_release_action"),
-      _on_move (this, "on_move_action"), _key_pressed (this, "key_pressed_action"),
+      _on_move (this, "on_move_action"), _on_double_click (this, "on_double_click_action"), _key_pressed (this, "key_pressed_action"),
       _key_released (this, "key_released_action"), _on_str_input (this, "on_str_input_action"),
       _on_clear (this, "on_clear"),
       _c_key_press (&_key_code_pressed, ACTIVATION, &_key_pressed, ACTIVATION),
       _c_key_release (&_key_code_released, ACTIVATION, &_key_released, ACTIVATION),
       _c_str_input (&_str_input, ACTIVATION, &_on_str_input, ACTIVATION),
-      _c_press (), _c_release (), _c_move (),
+      _c_press (), _c_release (), _c_move (), _c_double_click (),
       _c_x (&_x, ACTIVATION, nullptr, ACTIVATION),
       _c_y (&_y, ACTIVATION, nullptr, ACTIVATION),
       _c_enable_edit (&_enable_edit, ACTIVATION, &_on_enable_edit, ACTIVATION),
@@ -68,6 +68,7 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
     graph_add_edge (&_on_press, &_ordering_node);
     graph_add_edge (&_on_release, &_ordering_node);
     graph_add_edge (&_on_move, &_ordering_node);
+    graph_add_edge (&_on_double_click, &_ordering_node);
     graph_add_edge (&_key_pressed, &_ordering_node);
     graph_add_edge (&_key_released, &_ordering_node);
 
@@ -83,19 +84,20 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
 
 TextField::~TextField ()
 {
-    graph_remove_edge (&_on_str_input, &_ordering_node);
-    graph_remove_edge (&_on_press, &_ordering_node);
-    graph_remove_edge (&_on_release, &_ordering_node);
-    graph_remove_edge (&_on_move, &_ordering_node);
-    graph_remove_edge (&_key_pressed, &_ordering_node);
-    graph_remove_edge (&_key_released, &_ordering_node);
-
-    graph_remove_edge (&_ordering_node, &_cursor_start_x);
-    graph_remove_edge (&_ordering_node, &_cursor_end_x);
-    graph_remove_edge (&_ordering_node, &_cursor_start_y);
-    graph_remove_edge (&_ordering_node, &_cursor_end_y);
-    graph_remove_edge (&_ordering_node, &_content_changed);
     graph_remove_edge (&_ordering_node, &_validate);
+    graph_remove_edge (&_ordering_node, &_content_changed);
+    graph_remove_edge (&_ordering_node, &_cursor_end_y);
+    graph_remove_edge (&_ordering_node, &_cursor_start_y);
+    graph_remove_edge (&_ordering_node, &_cursor_end_x);
+    graph_remove_edge (&_ordering_node, &_cursor_start_x);
+
+    graph_remove_edge (&_key_released, &_ordering_node);
+    graph_remove_edge (&_key_pressed, &_ordering_node);
+    graph_remove_edge (&_on_double_click, &_ordering_node);
+    graph_remove_edge (&_on_move, &_ordering_node);
+    graph_remove_edge (&_on_release, &_ordering_node);
+    graph_remove_edge (&_on_press, &_ordering_node);
+    graph_remove_edge (&_on_str_input, &_ordering_node);
 }
 
 void
@@ -112,7 +114,8 @@ TextField::impl_activate ()
                      &_on_release, ACTIVATION, false);
     _c_move.init (get_frame ()->find_child ("move"), ACTIVATION, &_on_move,
                   ACTIVATION, false);
-
+    _c_double_click.init (this->find_child ("double_click"), ACTIVATION, &_on_double_click,
+                   ACTIVATION, false);
     _c_x.set_dst (get_frame ()->damaged ());
     _c_y.set_dst (get_frame ()->damaged ());
     _c_x.enable ();
@@ -127,11 +130,13 @@ TextField::impl_activate ()
         _c_key_press.disable ();
         _c_release.disable ();
         _c_move.disable ();
+        _c_double_click.disable ();
     } else {
         _c_str_input.enable ();
         _c_key_press.enable ();
         _c_release.enable ();
         _c_move.enable ();
+        _c_double_click.enable ();
     }
 
     _line.activate ();
@@ -148,6 +153,7 @@ TextField::impl_deactivate ()
     _c_press.disable ();
     _c_release.disable ();
     _c_move.disable ();
+    _c_double_click.disable ();
     _c_str_input.disable ();
     _c_enable_edit.disable ();
     _c_disable_edit.disable ();
@@ -163,11 +169,13 @@ TextField::set_editable (bool v)
         _c_key_press.enable ();
         _c_release.enable ();
         _c_move.enable ();
+        _c_double_click.enable ();
     } else {
         _c_str_input.disable ();
         _c_key_press.disable ();
         _c_release.disable ();
         _c_move.disable ();
+        _c_double_click.disable ();
         _offset = 0;
     }
     _edit_enabled.set_value (v, true);
@@ -281,6 +289,14 @@ TextField::mouse_move ()
     int                  y     = (int)local.second - this->y ();
     update_index_from_xy (x, y);
     _end_sel_x = _index_x;
+    update_cursor ();
+}
+
+void
+TextField::mouse_double_click ()
+{
+    _start_sel_x = 0;
+    _end_sel_x = _index_x = _line.get_content ().length ();
     update_cursor ();
 }
 
