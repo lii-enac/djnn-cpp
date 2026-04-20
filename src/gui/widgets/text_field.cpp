@@ -171,6 +171,11 @@ TextField::set_editable (bool v)
         _c_move.enable ();
         _c_double_click.enable ();
     } else {
+        //clear the selection when disabling editing
+        if (has_selection ()) {
+            _start_sel_x = _end_sel_x = 0;
+            update_cursor ();
+        }
         _c_str_input.disable ();
         _c_key_press.disable ();
         _c_release.disable ();
