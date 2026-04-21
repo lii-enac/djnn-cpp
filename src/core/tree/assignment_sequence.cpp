@@ -55,28 +55,26 @@ AssignmentSequence::impl_activate ()
 }
 
 void
-AssignmentSequence::add_child (CoreProcess* c, const string& name)
+AssignmentSequence::add_child (CoreProcess* child, const string& name)
 {
-    if (c == nullptr)
+    if (child == nullptr)
         return;
-    Assignment* a = dynamic_cast<Assignment*> (c);
-    if (a != nullptr) {
+    if (Assignment* a = dynamic_cast<Assignment*> (child)) {
         graph_add_edge (this, a->get_dst ());
     }
-    Container::push_back_child (c);
+    Container::push_back_child (child);
     /* WARNING should we authorize multiple parenthood? */
-    if (c->get_parent () != nullptr && c->get_parent () != this) {
-        c->get_parent ()->remove_child (c);
+    if (CoreProcess * p = child->get_parent (); p != nullptr && p != this) {
+        p->remove_child (child);
     }
-    c->set_parent (this);
-    add_symbol (name, c);
+    child->set_parent (this);
+    add_symbol (name, child);
 }
 
 AssignmentSequence::~AssignmentSequence ()
 {
     for (auto c : _children) {
-        Assignment* a = dynamic_cast<Assignment*> (c);
-        if (a != nullptr) {
+        if (Assignment* a = dynamic_cast<Assignment*> (c)) {
             graph_remove_edge (this, a->get_dst ());
         }
     }

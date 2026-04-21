@@ -130,8 +130,8 @@ Container::add_child (CoreProcess* child, const string& name)
     push_back_child (child);
 
     /* WARNING should we authorize multiple parenthood? */
-    if (child->get_parent () != nullptr && child->get_parent () != this) {
-        child->get_parent ()->remove_child (child);
+    if (CoreProcess * p = child->get_parent (); p != nullptr && p != this) {
+        p->remove_child (child);
     }
     remove_from_parentless_name (child);
 
