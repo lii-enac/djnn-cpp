@@ -14,6 +14,7 @@
 
 #include <QEvent>
 #include <QTouchEvent>
+#include <chrono>
 
 #if USE_QOPENGL_WIDGET
 #include <QOpenGLWidget>
@@ -293,18 +294,7 @@ MyQQWidget::event (QEvent* event)
     return exec_;
 }
 
-void
-MyQQWidget::mouseDoubleClickEvent (QMouseEvent* event)
-{
-    mouse_pos_x = get_position (event).x ();
-    mouse_pos_y = get_position (event).y ();
-    mouse_pos_y -= 3; // QT bug??
-
-    bool exec_ = _picking_view->genericMouseDoubleClick (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
-    if (exec_) {
-        GRAPH_EXEC;
-    }
-}
+static std::chrono::steady_clock::time_point __lastClickTime;
 
 void
 MyQQWidget::mousePressEvent (QMouseEvent* event)
@@ -313,7 +303,20 @@ MyQQWidget::mousePressEvent (QMouseEvent* event)
     mouse_pos_y = get_position (event).y ();
     mouse_pos_y -= 3; // QT bug??
 
-    bool exec_ = _picking_view->genericMousePress (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
+    bool exec_;
+
+    auto now = std::chrono::steady_clock::now();
+    auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - __lastClickTime).count();
+
+    // must be generated before the press
+    if (delta < _doubleClickIntervalMs && delta > 0) {  // Avoid false positives when delta = 0
+            exec_ = _picking_view->genericMouseDoubleClick (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
+            __lastClickTime = {};  // Reset to avoid triple-clicks
+    } else 
+        __lastClickTime = now;
+
+    exec_ = _picking_view->genericMousePress (mouse_pos_x, mouse_pos_y, get_button (event->button ()));
+
     if (exec_) {
         GRAPH_EXEC;
     }

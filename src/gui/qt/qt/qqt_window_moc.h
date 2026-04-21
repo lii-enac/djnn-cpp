@@ -36,7 +36,7 @@ class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
 
   public:
     MyQQWidget (Window* w, QtWindow* qtw)
-        : MyQWidget (w, qtw) {
+        : MyQWidget (w, qtw), _doubleClickIntervalMs (200) {
         setAttribute (Qt::WA_AcceptTouchEvents, true);
         _picking_view = new QtPickingView (w, this);
         //_picking_view = new AnalyticalPicking (w);
@@ -47,7 +47,6 @@ class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
     }
 
     virtual bool event (QEvent* event) override;
-    virtual void mouseDoubleClickEvent (QMouseEvent* event) override;
     virtual void mouseReleaseEvent (QMouseEvent* event) override;
     virtual void mousePressEvent (QMouseEvent* event) override;
     virtual void mouseMoveEvent (QMouseEvent* event) override;
@@ -59,5 +58,8 @@ class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
 
     QtPickingView* _picking_view;
     // AnalyticalPicking *_picking_view;
+  
+  private:
+    unsigned int _doubleClickIntervalMs;
 };
 } // namespace djnn
