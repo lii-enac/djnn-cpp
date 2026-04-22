@@ -134,11 +134,11 @@ const int
     _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY              = 0,
     _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL  = 0,
     _ENABLE_TOUCHES                               = 0,
-    _DEBUG_ENABLE_STRESS_TEST                     = 0;
+    _DEBUG_ENABLE_STRESS_TEST                     = 0,
     _STYLUS_EMULATE_MOUSE                         = 0;
 
-const char *_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION = "";
+extern const char *_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION;
 
-djnnstl::string> _SVG_USER_CUSTOM_ATTRS = "";
+extern djnnstl::string _SVG_USER_CUSTOM_ATTRS;
 #endif
 } // namespace djnn

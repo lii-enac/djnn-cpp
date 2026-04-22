@@ -254,12 +254,14 @@ Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
         // Ensure that 'vs' is properly removed from _activation_deque.
         //
         // To verify, you can run:
+#if !DJNN_NO_DEBUG
         for (auto& v : _activation_deque) {
             if (v == vs) {
                 cerr << endl << endl << "WARNING graph_exec: 'vs' is still present in _activation_deque - " << print_process_full_name(p_src) << endl << endl;
                 // Optionally, complete with: print_process_full_name(p_src);
             }
         }
+#endif
         //
         // If there can be multiple occurrences:
         // _activation_deque.erase(
@@ -282,12 +284,14 @@ Graph::remove_edge (CoreProcess* p_src, CoreProcess* p_dst)
         // Ensure that 'vd' is properly removed from _activation_deque.
         //
         // To verify, you can run:
+#if !DJNN_NO_DEBUG
         for (auto& v : _activation_deque) {
             if (v == vd) {
                 cerr << endl << endl << "WARNING graph_exec: 'vd' is still present in _activation_deque - " << print_process_full_name(p_dst) << endl << endl;
                 // Optionally, complete with: print_process_full_name(p_dst);
             }
         }
+#endif
         //
         // If there can be multiple occurrences:
         // _activation_deque.erase(

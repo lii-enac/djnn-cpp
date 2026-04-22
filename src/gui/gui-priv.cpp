@@ -556,6 +556,8 @@ GUIStructureObserver::set_child (FatProcess* container, CoreProcess* child, int 
     container->update_drawing ();
 }
 
+#ifndef DJNN_NO_DEBUG
+
 extern int indent;
 void                
 GUIStructureObserver::dump_observer (FatProcess* container, int level) 
@@ -607,6 +609,7 @@ GUIStructureObserver::dump_observer (FatProcess* container, int level)
 
     indent--;
 }
+#endif
 
 GUIStructureHolder*
 GUIStructureObserver::find_holder (CoreProcess* container)

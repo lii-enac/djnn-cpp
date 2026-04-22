@@ -58,6 +58,13 @@ to_string (double v)
 
 
 namespace djnn {
+
+#if defined(DJNN_NO_DEBUG)
+const char *_DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION = "";
+djnnstl::string _SVG_USER_CUSTOM_ATTRS = "";
+#endif
+
+
 using namespace djnnstl;
 
 string
