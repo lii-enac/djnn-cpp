@@ -364,7 +364,9 @@ ifeq ($(compiler),gnu)
 CXXLD ?= $(CXX) --use-ld=mold
 endif
 ifeq ($(compiler),llvm)
-CXXLD ?= $(CXX) -fuse-ld=mold
+# does not work on macOS: https://github.com/rui314/mold/issues/1171#issuecomment-2019350145
+mold_path := $(shell which mold)
+CXXLD ?= $(CXX) -fuse-ld=$(mold_path)
 endif
 endif
 
@@ -609,17 +611,11 @@ endif
 endif
 
 ifneq ($(os), em)
-#$1_lib_soname := -Wl,-soname,$$($1_libname)
-#$1_lib_soname := -Wl,-rpath,$$(build_dir)
-
-# ifeq ($(linker), gnu)
-# $1_lib_soname += -Wl,-rpath-link,$$(abspath $$(build_dir))/lib -Wl,-rpath,$$(abspath $$(build_dir))/lib
 ifeq (-DRMT_USE_OPENGL=1,$(filter -DRMT_USE_OPENGL=1,$(remotery_cflags)))
 $1_lib_soname += -Wl,-flat_namespace,-undefined,dynamic_lookup
 else
 $1_lib_soname += -Wl,--no-undefined
 endif
-#endif
 
 ifeq ($(linker), gnu)
 $1_lib_soname += \
@@ -682,6 +678,9 @@ $1: $$($1_lib)
 
 $1_clean:
 	rm -f $$($1_objs)
+
+$1_clean_lib:
+	rm -f $$($1_lib)
 
 $1_dbg:
 #	@echo $$($1)
