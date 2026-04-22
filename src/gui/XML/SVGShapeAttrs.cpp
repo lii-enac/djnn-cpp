@@ -40,6 +40,7 @@ static string djn_ParseURL (const char*);
 static int Ignore (FatProcess**, const char*);
 static int ParseId (FatProcess**, const char*);
 static int ParseClass (FatProcess**, const char*);
+static int ParseDisplay (FatProcess**, const char*);
 static int ParseStroke (FatProcess**, const char*);
 static int ParseFill (FatProcess**, const char*);
 static int ParseFillRule (FatProcess**, const char*);
@@ -76,7 +77,7 @@ static map<string, djn_XMLAttrHandler> handlers = {
     {"stroke-dashoffset", {&ParseStrokeDashOffset}},
     {"mask", {&Ignore}},
     {"requiredFeatures", {&Ignore}},
-    {"display", {&Ignore}},
+    {"display", {&ParseDisplay}},
     {"requiredExtensions", {&Ignore}},
     {"stroke-linecap", {&ParseLineCap}},
     {"stroke-linejoin", {&ParseLineJoin}},
@@ -144,6 +145,23 @@ ParseId (FatProcess** e, const char* v)
     djn_GraphicalShapeArgs.id = v;
     return 1;
 }
+
+static int
+ParseDisplay (FatProcess** e, const char* v)
+{
+    unsigned r, g, b;
+
+    if (!*e)
+        *e = new SVGHolder (nullptr, "SVGHolder");
+
+    bool none = false;
+    if (strncmp (v, "none", 4) == 0) {
+        none = true;
+    }
+    new Display (*e, "display", !none);
+    return 1;
+}
+
 
 static int
 ParseStroke (FatProcess** e, const char* v)

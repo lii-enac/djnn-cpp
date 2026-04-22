@@ -131,8 +131,13 @@ GUIStructureHolder::draw ()
     }
     // if other container
     else {
+        try {
         for (auto& p : _children) {
+            //std::cerr << p.first->get_debug_name () << std::endl;
             p.first->draw ();
+        }}
+        catch(int i) {
+            if (i!=122) throw i;
         }
     }
     ComponentObserver::instance ().end_draw ();

@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include "display.h"
 #include "color.h"
 #include "dash.h"
 #include "fill_rule.h"

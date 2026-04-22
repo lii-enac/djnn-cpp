@@ -21,7 +21,6 @@ copyright = """/*
  *  !! this file has been automatically generated - do NOT modify !!
  *
  */
-
 """
 
 generated_mention_c_comment = """/* generated with gen_prop.py */
@@ -39,8 +38,7 @@ using djnnstl::vector;
 
 %(INCLUDES)s
 
-namespace djnn
-{
+namespace djnn {
   class %(CLASS)s : public %(INHERITS)s
   {
   public:
@@ -81,106 +79,105 @@ def_string = """
 %(INCLUDES)s
 #include "%(CLASS_LOWER)s.h"
 
-namespace djnn
+namespace djnn {
+%(CLASS)s::%(CLASS)s (CoreProcess* parent, const string& name, %(DECL_PROPS_CALL_DEF)s)
+    : %(INHERITS)s (parent, name%(FOLLOW_PARENT_PROPS_CALL)s),
+      raw_props{%(RAW_PROPS_INIT)s},
+      %(COUPLINGS_INIT)s
 {
-  %(CLASS)s::%(CLASS)s (CoreProcess* parent, const string& name, %(DECL_PROPS_CALL_DEF)s) :
-    %(INHERITS)s (parent, name%(FOLLOW_PARENT_PROPS_CALL)s),
-    raw_props{%(RAW_PROPS_INIT)s},
-    %(COUPLINGS_INIT)s
-  {
-    %(SET_ORIGIN)s
-    %(FINALIZE_CONSTRUCTION)s
-  }
+  %(SET_ORIGIN)s
+  %(FINALIZE_CONSTRUCTION)s
+}
 
-  %(CLASS)s::~%(CLASS)s ()
-  {
+%(CLASS)s::~%(CLASS)s ()
+{
     %(COUPLINGS_REMOVE_EDGE)s;
-    %(DELETE_COUPLINGS)s;
+  %(DELETE_COUPLINGS)s;
 
-    /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
-    if (children_size () > %(ORIGIN_IN_SYMTABLE)s) {
-      symtable_t::iterator it;
+  /* origin_x and origin_y are always in _symtable for AbstractGShape */ 
+  if (children_size () > %(ORIGIN_IN_SYMTABLE)s) {
+    symtable_t::iterator it;
 
-      %(DELETE_DYN_PROPS)s
-    }
+    %(DELETE_DYN_PROPS)s
   }
- 
-  CoreProcess*
-  %(CLASS)s::find_child_impl (const string& name)
-  {
-    auto * res = %(INHERITS)s::find_child_impl(name);
-    if (res) return res;
+}
 
-    bool prop_Double=false, prop_Int=false, prop_Text=false, prop_Textp=false;
-    Coupling ** coupling = nullptr;
-    double* rawp_Double = nullptr;
-    int* rawp_Int = nullptr;
-    typedef string text;
-    text* rawp_Text = nullptr;
-    typedef string* textp;
-    textp* rawp_Textp = nullptr;
-    int notify_mask = notify_none;
-    %(CREATE_PROPERTIES)s
-    return nullptr;
+CoreProcess*
+%(CLASS)s::find_child_impl (const string& name)
+{
+  auto * res = %(INHERITS)s::find_child_impl(name);
+  if (res) return res;
 
-    if(prop_Double) {
-      DoublePropertyProxy* prop = nullptr; // do not cache
-      res = create_GObj_prop(&prop, coupling, rawp_Double, name, notify_mask);
-    }
-    else if(prop_Int) {
-      IntPropertyProxy* prop = nullptr; // do not cache
-      res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
-    }
-    else if(prop_Text) {
-      TextPropertyProxy* prop = nullptr; // do not cache
-      res = create_GObj_prop(&prop, coupling, rawp_Text, name, notify_mask);
-    }
-    else if(prop_Textp) {
-      TextPropertyProxy* prop = nullptr; // do not cache
-      res = create_GObj_prop(&prop, coupling, rawp_Textp, name, notify_mask);
-    }
+  bool prop_Double=false, prop_Int=false, prop_Text=false, prop_Textp=false;
+  Coupling ** coupling = nullptr;
+  double* rawp_Double = nullptr;
+  int* rawp_Int = nullptr;
+  typedef string text;
+  text* rawp_Text = nullptr;
+  typedef string* textp;
+  textp* rawp_Textp = nullptr;
+  int notify_mask = notify_none;
+  %(CREATE_PROPERTIES)s
+  return nullptr;
 
-    return res;
+  if(prop_Double) {
+    DoublePropertyProxy* prop = nullptr; // do not cache
+    res = create_GObj_prop(&prop, coupling, rawp_Double, name, notify_mask);
+  }
+  else if(prop_Int) {
+    IntPropertyProxy* prop = nullptr; // do not cache
+    res = create_GObj_prop(&prop, coupling, rawp_Int, name, notify_mask);
+  }
+  else if(prop_Text) {
+    TextPropertyProxy* prop = nullptr; // do not cache
+    res = create_GObj_prop(&prop, coupling, rawp_Text, name, notify_mask);
+  }
+  else if(prop_Textp) {
+    TextPropertyProxy* prop = nullptr; // do not cache
+    res = create_GObj_prop(&prop, coupling, rawp_Textp, name, notify_mask);
   }
 
-  const vector<string>&
-  %(CLASS)s::get_properties_name () const
-  {
-    static const vector<string> res = {
-    %(PUSHBACK_DYN_PROPS)s
-    };
-    return res;
+  return res;
+}
+
+const vector<string>&
+%(CLASS)s::get_properties_name () const
+{
+  static const vector<string> res = {
+  %(PUSHBACK_DYN_PROPS)s
+  };
+  return res;
+}
+
+void
+%(CLASS)s::get_properties_values (%(DECL_PROPS_REF_CALL)s)
+{
+  %(DEF_PROPS_REF_SET)s;
+  %(GET_PROPS_FROM_PARENT)s
+}
+
+void
+%(CLASS)s::impl_activate ()
+{
+  %(INHERITS)s::impl_activate ();
+  auto _frame = get_frame ();
+  if (_frame) {
+    %(DEF_COUPLINGS_ENABLE)s;
   }
+  else
+    djnn_warning (nullptr, "%(CLASS)s::impl_activate () - Unable to find frame\\n\\n");
+}
 
-  void
-  %(CLASS)s::get_properties_values (%(DECL_PROPS_REF_CALL)s)
-  {
-    %(DEF_PROPS_REF_SET)s;
-    %(GET_PROPS_FROM_PARENT)s
-  }
+void
+%(CLASS)s::impl_deactivate ()
+{
+  %(DEF_COUPLINGS_DISABLE)s;
+  %(INHERITS)s::impl_deactivate ();
+}
 
-  void
-  %(CLASS)s::impl_activate ()
-  {
-    %(INHERITS)s::impl_activate ();
-    auto _frame = get_frame ();
-    if (_frame) {
-      %(DEF_COUPLINGS_ENABLE)s;
-    }
-    else
-      djnn_warning (nullptr, "%(CLASS)s::impl_activate () - Unable to find frame\\n\\n");
-  }
+%(DEF_DRAW)s
 
-  void
-  %(CLASS)s::impl_deactivate ()
-  {
-    %(DEF_COUPLINGS_DISABLE)s;
-    %(INHERITS)s::impl_deactivate ();
-  }
-
-  %(DEF_DRAW)s
-
-  %(DEF_CLONE)s
+%(DEF_CLONE)s
 
 } /* namespace djnn */
 """
@@ -415,14 +412,14 @@ def gen_prop(dc, finalize_construction=True):
             'PROP_DAMAGE': prop.damage
             }
         # print(d)
-        PROP_GETTERS += "\t\t"+getter_string % d + "\n"
+        PROP_GETTERS += "\t"+getter_string % d + "\n"
         CREATE_PROPERTIES += get_or_create_property_string % d
 
     # print (CREATE_PROPERTIES)
 
     DECL_PROPS_CALL_DEF = ', '.join([p.as_cpp_type_str_for_function_signature() + ' ' + p.name for p in all_props])
   
-    RAW_PROPS_INIT = ', '.join(['.' + p.name + '=' + p.name for p in dc.props])
+    RAW_PROPS_INIT = ', '.join(['.' + p.name + ' = ' + p.name for p in dc.props])
     # print (RAW_PROPS_INIT)
     join_str = '\n\t\t'
     COUPLINGS_INIT = (', ').join(['_c' + p.name + ' (nullptr)' for p in dc.props])
@@ -450,10 +447,10 @@ def gen_prop(dc, finalize_construction=True):
     #DEF_COUPLINGS_DISABLE = (';'+join_str).join([ 'if(_c' + p.name + ') _c'+p.name+'->disable ()' for p in dc.props])
     DEF_COUPLINGS_DISABLE = (';'+join_str).join([ 'disable(_c'+p.name+')' for p in dc.props])
     COUPLINGS_REMOVE_EDGE = ''
-    if(dc.remove_edge):
-      COUPLINGS_REMOVE_EDGE = (';'+join_str).join([ 'remove_edge (_c'+p.name+')' for p in dc.props])
-    else:
-      COUPLINGS_REMOVE_EDGE = (';'+join_str).join([ "remove_edge (_c"+p.name+")" for p in dc.props])
+    #if(dc.remove_edge):
+    COUPLINGS_REMOVE_EDGE = (';'+join_str).join([ 'remove_edge (_c'+p.name+')' for p in dc.props])
+    #else:
+    #  COUPLINGS_REMOVE_EDGE = (';'+join_str).join([ 'remove_edge (_c'+p.name+')' for p in dc.props])
     RAW_PROP_PARAMS = ', '.join(['raw_props.' + p.name for p in dc.props])
     # print (RAW_PROP_PARAMS)
 
@@ -624,6 +621,11 @@ dcs.append(dc)
 
 dc = DjnnClass("AbstractOpacity", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
 dc.props.append(Prop('a', 'double', None, "style"))
+dc.includes += '#include "gui/style/abstract_style.h"\n'
+dcs.append(dc)
+
+dc = DjnnClass("AbstractDisplayStyle", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
+dc.props.append(Prop('d', 'int', None, "style"))
 dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 

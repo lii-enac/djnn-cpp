@@ -2,6 +2,7 @@
 
 namespace djnn {
 class AbstractStyle;
+class Display;
 class StyleSheet;
 class FillColor;
 class OutlineColor;

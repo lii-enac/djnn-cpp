@@ -37,6 +37,26 @@ AbstractStyle::~AbstractStyle ()
 {
 }
 
+
+Display::Display (CoreProcess* parent, const string& name, int d)
+: AbstractDisplayStyle(parent, name, d)
+{
+    finalize_construction (parent, name); 
+}
+
+void
+Display::draw ()
+{
+    auto _frame = get_frame ();
+    if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
+        //Backend::instance ()->load_fill_color (this);
+        if (d()->get_value ()==0)
+            throw 122;
+    }
+}
+
+
+
 void
 FillColor::draw ()
 {

@@ -2,7 +2,8 @@
 
 # howTo
 # cd tools
-# ./format_clang.sh ../src/core 
+# ./format_clang.sh ../src/core
+# for i in `find ../src -type d -name "gen" | xargs echo`; do ./format_clang.sh $i; done
 
 # Utiliser le premier argument comme répertoire. Si aucun argument n'est fourni, utiliser le répertoire courant.
 dir=${1:-.}
