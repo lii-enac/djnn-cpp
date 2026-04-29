@@ -10,6 +10,12 @@
 #include <iomanip>
 
 namespace djnn {
+
+int 
+    _ENABLE_TOUCHES                               = 0,
+    _STYLUS_EMULATE_MOUSE                         = 0;
+
+
 #ifndef DJNN_NO_DEBUG // still required to link smala programs
                       // DEBUG OPTIONS
 int
@@ -24,9 +30,7 @@ int
     _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT    = 0,
     _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY              = 0,
     _DEBUG_SEE_COMPONENTS_DESTRUCTION_INFO_LEVEL  = 0,
-    _ENABLE_TOUCHES                               = 0,
-    _DEBUG_ENABLE_STRESS_TEST                     = 0,
-    _STYLUS_EMULATE_MOUSE                         = 0;
+    _DEBUG_ENABLE_STRESS_TEST                     = 0;
 
 const char* _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_LOCATION = "";
 
