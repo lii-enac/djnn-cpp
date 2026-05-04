@@ -90,6 +90,7 @@ class Graph {
     void remove_edge (CoreProcess* src, CoreProcess* dst);
     void add_output_node (CoreProcess* c);
     void remove_output_node (CoreProcess* c);
+    void reset_vertices_execution_round ();
 
     // activation management during exec
     void add_in_activation (Vertex* v);
@@ -110,7 +111,6 @@ class Graph {
     void                      print_activation () const;
     void                      print_full_vertex (Vertex* v) { v->print_full_vertex (); }
     void                      print_order (CoreProcess* p1, CoreProcess* p2);
-    void                      reset_vertices_execution_round ();
 #endif
 
 #if _DEBUG_ENABLE_CHECK_ORDER

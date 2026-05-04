@@ -40,11 +40,14 @@ using djnnstl::endl;
 #include "graph.h"
 #include "utils/debug.h"
 
+// TODO: explain what EXECUTION_ROUND is
+static int EXECUTION_ROUND = 0;
+static int  graph_counter_act  = 0;
+
 #ifndef DJNN_NO_DEBUG
 #include "core/control/assignment.h"
 #include "core/utils/utils-dev.h"
 
-static int  graph_counter_act  = 0;
 static bool _display_info_once = false;
 
 #if _DEBUG_GRAPH_INSERT_TIME
@@ -464,22 +467,20 @@ Graph::clear_activation ()
 #ifndef DJNN_NO_DEBUG
 void
 display_cycle_analysis_stack (map<Vertex*, int>& vertex_already_activated, int count_activation, Vertex* v);
+int debug_index, debug_index_post;
 #endif
 
-// TODO: explain what EXECUTION_ROUND is
-static int EXECUTION_ROUND = 0;
-
-int debug_index, debug_index_post;
 
 void
 Graph::exec ()
 {
+#ifndef DJNN_NO_DEBUG
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
         cerr << endl << ">> graph exec" << endl;
     }
     debug_index = 0;
     debug_index_post = -1;
-#ifndef DJNN_NO_DEBUG
+
     if (_display_info_once == false) {
         if (_DEBUG_ENABLE_STRESS_TEST == 1) {
             std::cerr << "STRESS_TEST MODE ENABLED : shuffle" << std::endl;
@@ -554,7 +555,16 @@ Graph::exec ()
     }
     rmt_EndCPUSample ();
 
-#ifndef DJNN_NO_DEBUG
+#ifdef DJNN_NO_DEBUG
+    graph_counter_act++;
+    if (graph_counter_act == 0) {
+        // reset to 0
+        reset_vertices_execution_round ();
+        // and start at 1
+        graph_counter_act++;
+    }
+    EXECUTION_ROUND = graph_counter_act;
+#else // == #ifndef DJNN_NO_DEBUG
     size_t count_activation = 0;
 
     int count_real_activation = 0;
@@ -927,7 +937,13 @@ Graph::traverse_depth_first (Vertex* v)
 
     v->set_execution_round (EXECUTION_ROUND);
 
-#ifndef DJNN_NO_DEBUG
+#ifdef DJNN_NO_DEBUG
+    for (auto* v2 : v->get_edges ()) {
+        if (v2->get_execution_round () < EXECUTION_ROUND) {
+            traverse_depth_first (v2);
+        }
+    }
+#else //== #ifndef DJNN_NO_DEBUG
     if (_DEBUG_ENABLE_STRESS_TEST == 0) {
         for (auto* v2 : v->get_edges ()) {
             if (v2->get_execution_round () < EXECUTION_ROUND) {
@@ -969,8 +985,6 @@ Graph::traverse_depth_first (Vertex* v)
 // -----------------------------------------------------------------------
 // Vertex and Graph debug
 
-#ifndef DJNN_NO_DEBUG
-
 void
 Graph::reset_vertices_execution_round ()
 {
@@ -978,6 +992,8 @@ Graph::reset_vertices_execution_round ()
         v->set_execution_round (0);
     }
 }
+
+#ifndef DJNN_NO_DEBUG
 
 void
 Vertex::print_vertex () const
