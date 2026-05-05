@@ -96,8 +96,10 @@ void DJNN_DEBUG_PRINT (const char* fmt);
 /*
   diplayed infos (PURPLE, RED and GREEN) :
   - display order in which component are created or destroyed between to call of utils/display_creation_stats () function
+
+  IMPORTANT Note: due to compilation constraints, this option is declared directly in process.h
 */
-#define _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 0
+//#define _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 0 // in process.h 
 
 /*
   Choose if you want to use OLD/NEW Grapth::exec

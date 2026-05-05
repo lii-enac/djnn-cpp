@@ -20,6 +20,12 @@
 #include "core/utils/containers.h"
 #include "enums.h"
 
+/*
+  diplayed infos (PURPLE, RED and GREEN) :
+  - display order in which component are created or destroyed between to call of utils/display_creation_stats () function
+*/
+#define _DEBUG_SEE_CREATION_DESTRUCTION_ORDER 0
+
 namespace djnn {
 
 class Coupling;
@@ -258,7 +264,7 @@ class CoreProcess {
     pair<int, int> __nb_activation;
 #endif
 #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-    list<pair<CoreProcess*, long int>>::iterator __position_in_creation;
+    list<djnnstl::pair<CoreProcess*, long int>>::iterator __position_in_creation;
 #endif
 };
 
@@ -370,7 +376,7 @@ class DelegatingProcess {
 };
 
 #if _DEBUG_SEE_CREATION_DESTRUCTION_ORDER
-extern list<pair<CoreProcess*, long int>> __dbg_creation_stat_order;
+extern djnnstl::list<djnnstl::pair<CoreProcess*, long int>> __dbg_creation_stat_order;
 #endif
 
 // to be removed
