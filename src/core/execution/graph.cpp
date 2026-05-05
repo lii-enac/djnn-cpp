@@ -924,28 +924,24 @@ Graph::traverse_depth_first (Vertex* v)
     // skip invalid vertex
     // FIXME: we should not use this code anymore - check with coverage result
     if (v->is_invalid ()) {
+#ifndef DJNN_NO_DEBUG
         warning (v->get_process (), "useful code after all!!! Graph::traverse_depth_first - _vertex is invalid - CHECK THE ORDER OF DELETE\n");
+#endif
         // v->set_execution_round (EXECUTION_ROUND);
         // return;
     }
 
-    if ((v->get_process ()->get_process_type () == PROPERTY_T)) {
-        // don't put a property in the _vertices since there is no action in properties
-    } else {
-        _ordered_vertices.push_back (v); // put anything else
+    // don't put properties in the _vertices since there is no action in properties
+    if ((v->get_process ()->get_process_type () != PROPERTY_T)) {
+        _ordered_vertices.push_back (v);
     }
 
     v->set_execution_round (EXECUTION_ROUND);
 
-#ifdef DJNN_NO_DEBUG
-    for (auto* v2 : v->get_edges ()) {
-        if (v2->get_execution_round () < EXECUTION_ROUND) {
-            traverse_depth_first (v2);
-        }
-    }
-#else //== #ifndef DJNN_NO_DEBUG
+    const auto& edges = v->get_edges();
+#ifndef DJNN_NO_DEBUG
     if (_DEBUG_ENABLE_STRESS_TEST == 0) {
-        for (auto* v2 : v->get_edges ()) {
+        for (auto* v2 : edges) {
             if (v2->get_execution_round () < EXECUTION_ROUND) {
                 traverse_depth_first (v2);
             }
@@ -975,6 +971,12 @@ Graph::traverse_depth_first (Vertex* v)
             if (v2->get_execution_round () < EXECUTION_ROUND) {
                 traverse_depth_first (v2);
             }
+        }
+    }
+#else
+    for (auto* v2 : edges) {
+        if (v2->get_execution_round () < EXECUTION_ROUND) {
+            traverse_depth_first (v2);
         }
     }
 #endif
