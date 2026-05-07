@@ -30,10 +30,10 @@ void
 AbstractGObj::create_Gobj_update_coupling (CoreProcess** prop, CouplingWithData** cprop)
 {
     FatProcess* damaged = nullptr;
-    if (find_layer ())
-        damaged = find_layer ()->damaged ();
-    else if (get_frame ())
-        damaged = get_frame ()->damaged ();
+    if (_layer)
+        damaged = _layer->damaged ();
+    else if (_frame)
+        damaged = _frame->damaged ();
     *cprop = new CouplingWithData (*prop, ACTIVATION, damaged, ACTIVATION);
     if (somehow_activating ()) {
         (*cprop)->enable ();
@@ -177,10 +177,23 @@ find_frame_debug (CoreProcess* obj)
     return frame;
 }
 
-void
-AbstractGObj::update_frame_if_necessary ()
+Layer*
+find_layer (CoreProcess* obj)
 {
-    auto _frame = get_frame ();
+    FatProcess* p = obj->get_parent ();
+    while (p != nullptr) {
+        if (p->get_process_type () == LAYER_T) {
+            return dynamic_cast<Layer*> (p);
+        } else {
+            p = p->get_parent ();
+        }
+    }
+    return nullptr;
+}
+
+void
+AbstractGObj::update_frame_and_layer_if_necessary ()
+{
     if (_frame == nullptr || _frame->somehow_activating ()) {
         Window* frame = find_frame (this);
 
@@ -192,13 +205,23 @@ AbstractGObj::update_frame_if_necessary ()
 
         AbstractGObj::set_frame (frame);
     }
+    if (_layer == nullptr || _layer->somehow_activating ()) {
+        Layer* layer = find_layer (this);
+
+        if (!layer) {
+            // A GOBJ does not necessarily draw itself inside a layer, unlike a Window which is ‘mandatory
+            return;
+        }
+
+        AbstractGObj::set_layer (layer);
+    }
 }
 
 void
 AbstractGObj::update_drawing ()
 {
-    if (find_layer ()) {
-        find_layer ()->damaged ()->activate ();
+    if (_layer) {
+        _layer->damaged ()->activate ();
     } else if (_frame)
         _frame->damaged ()->activate ();
 }
@@ -206,10 +229,9 @@ AbstractGObj::update_drawing ()
 void
 AbstractGObj::impl_activate ()
 {
-    update_frame_if_necessary ();
-    _frame = get_frame ();
-    if (find_layer ()) {
-        find_layer ()->set_invalid_cache (true);
+    update_frame_and_layer_if_necessary ();
+    if (_layer) {
+        _layer->set_invalid_cache (true);
     } else if (_frame) {
         UpdateDrawing::instance ()->add_window_for_refresh (_frame);
         UpdateDrawing::instance ()->get_redraw ()->activate ();
@@ -221,9 +243,8 @@ AbstractGObj::impl_activate ()
 void
 AbstractGObj::impl_deactivate ()
 {
-    auto _frame = get_frame ();
-    if (find_layer ()) {
-        find_layer ()->set_invalid_cache (true);
+    if (_layer) {
+        _layer->set_invalid_cache (true);
     } else if (_frame) {
         UpdateDrawing::instance ()->add_window_for_refresh (_frame);
         UpdateDrawing::instance ()->get_redraw ()->activate ();
@@ -231,19 +252,7 @@ AbstractGObj::impl_deactivate ()
     }
     Backend::instance ()->deactivate_gobj (this);
     _frame = nullptr;
+    _layer = nullptr;
 }
 
-Layer*
-AbstractGObj::find_layer ()
-{
-    FatProcess* p = get_parent ();
-    while (p != nullptr) {
-        if (p->get_process_type () == LAYER_T) {
-            return dynamic_cast<Layer*> (p);
-        } else {
-            p = p->get_parent ();
-        }
-    }
-    return nullptr;
-}
 } // namespace djnn

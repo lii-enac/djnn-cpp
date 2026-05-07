@@ -211,10 +211,10 @@ AbstractGShape::find_child_impl (const string& path)
         _inverted_matrix->set_activation_state (ACTIVATED);
     } else if (_c_z_prop == nullptr && (key.compare ("z") == 0)) {
         FatProcess* update = nullptr;
-        if (find_layer ())
-            update = find_layer ()->damaged ();
-        else if (get_frame ())
-            update = get_frame ()->damaged ();
+        if (_layer)
+            update = _layer->damaged ();
+        else if (_frame)
+            update = _frame->damaged ();
         _c_z_prop = new CouplingWithData (&_z, ACTIVATION, update, ACTIVATION);
     } else {
         /*  "press", "release", "move", "enter", "leave", "touches", "pen", "eraser" */
@@ -254,7 +254,6 @@ void
 AbstractGShape::impl_activate ()
 {
     AbstractGObj::impl_activate ();
-    auto _frame = get_frame ();
     if (_c_z_prop != nullptr)
         enable (_c_z_prop, _frame->damaged ());
     if (_ui)
@@ -292,7 +291,6 @@ void
 AbstractGShape::pick ()
 {
     // std::cerr << this << " " << __FUNCTION__ << " " << __FILE__ << " " << __LINE__ <<  std::endl;
-    auto _frame = get_frame ();
     if (somehow_activating () && is_pickable (this) && DisplayBackend::instance ()->window () == _frame) {
         Backend::instance ()->pick_gshape (this);
     }

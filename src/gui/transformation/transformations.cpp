@@ -1422,8 +1422,7 @@ AbstractHomography::Left_Skew_Y_ByAction::impl_activate ()
 void
 AbstractHomography::init_rightTranslateBy ()
 {
-    auto         _frame     = get_frame ();
-    CoreProcess* damaged    = find_layer () ? find_layer ()->damaged () : (_frame ? _frame->damaged () : nullptr);
+    CoreProcess* damaged    = _layer ? _layer->damaged () : (_frame ? _frame->damaged () : nullptr);
     _rightTranslateBy_spike = new Spike (this, "rightTranslateBy");
     _rightTranslateBy_dx    = new DoubleProperty (nullptr, "dx", 0);
     _rightTranslateBy_dy    = new DoubleProperty (nullptr, "dy", 0);
@@ -1448,8 +1447,7 @@ AbstractHomography::init_rightTranslateBy ()
 void
 AbstractHomography::init_leftTranslateBy ()
 {
-    auto         _frame    = get_frame ();
-    CoreProcess* damaged   = find_layer () ? find_layer ()->damaged () : (_frame ? _frame->damaged () : nullptr);
+    CoreProcess* damaged   = _layer ? _layer->damaged () : (_frame ? _frame->damaged () : nullptr);
     _leftTranslateBy_spike = new Spike (this, "leftTranslateBy");
     _leftTranslateBy_dx    = new DoubleProperty (nullptr, "dx", 0);
     _leftTranslateBy_dy    = new DoubleProperty (nullptr, "dy", 0);
@@ -1473,9 +1471,8 @@ AbstractHomography::init_leftTranslateBy ()
 
 void
 AbstractHomography::init_rightScaleBy ()
-{
-    auto         _frame  = get_frame ();
-    CoreProcess* damaged = find_layer () ? find_layer ()->damaged () : (_frame ? _frame->damaged () : nullptr);
+{    
+    CoreProcess* damaged    = _layer ? _layer->damaged () : (_frame ? _frame->damaged () : nullptr);
     _rightScaleBy_spike  = new Spike (this, "rightScaleBy");
     _rightScaleBy_cx     = new DoubleProperty (nullptr, "cx", 0);
     _rightScaleBy_cy     = new DoubleProperty (nullptr, "cy", 0);
@@ -1512,8 +1509,7 @@ AbstractHomography::init_rightScaleBy ()
 void
 AbstractHomography::init_leftScaleBy ()
 {
-    auto         _frame  = get_frame ();
-    CoreProcess* damaged = find_layer () ? find_layer ()->damaged () : (_frame ? _frame->damaged () : nullptr);
+    CoreProcess* damaged    = _layer ? _layer->damaged () : (_frame ? _frame->damaged () : nullptr);
     _leftScaleBy_spike   = new Spike (this, "leftScaleBy");
     _leftScaleBy_cx      = new DoubleProperty (nullptr, "cx", 0);
     _leftScaleBy_cy      = new DoubleProperty (nullptr, "cy", 0);
@@ -1550,9 +1546,8 @@ AbstractHomography::init_leftScaleBy ()
 
 void
 AbstractHomography::init_rightRotateBy ()
-{
-    auto         _frame  = get_frame ();
-    CoreProcess* damaged = find_layer () ? find_layer ()->damaged () : (_frame ? _frame->damaged () : nullptr);
+{    
+    CoreProcess* damaged    = _layer ? _layer->damaged () : (_frame ? _frame->damaged () : nullptr);
     _rightRotateBy_spike = new Spike (this, "rightRotateBy");
     _rightRotateBy_cx    = new DoubleProperty (nullptr, "cx", 0);
     _rightRotateBy_cy    = new DoubleProperty (nullptr, "cy", 0);
@@ -1582,9 +1577,8 @@ AbstractHomography::init_rightRotateBy ()
 
 void
 AbstractHomography::init_leftRotateBy ()
-{
-    auto         _frame  = get_frame ();
-    CoreProcess* damaged = find_layer () ? find_layer ()->damaged () : (_frame ? _frame->damaged () : nullptr);
+{    
+    CoreProcess* damaged    = _layer ? _layer->damaged () : (_frame ? _frame->damaged () : nullptr);
     _leftRotateBy_spike  = new Spike (this, "leftRotateBy");
     _leftRotateBy_cx     = new DoubleProperty (nullptr, "cx", 0);
     _leftRotateBy_cy     = new DoubleProperty (nullptr, "cy", 0);
@@ -1612,8 +1606,7 @@ AbstractHomography::init_leftRotateBy ()
 void
 AbstractHomography::init_rightSkewXBy ()
 {
-    auto         _frame   = get_frame ();
-    CoreProcess* damaged  = find_layer () ? find_layer ()->damaged () : (_frame ? _frame->damaged () : nullptr);
+    CoreProcess* damaged  = _layer ? _layer->damaged () : (_frame ? _frame->damaged () : nullptr);
     _rightSkew_X_By_spike = new Spike (this, "rightSkewXBy");
     _rightSkew_X_By_cx    = new DoubleProperty (nullptr, "cx", 0);
     _rightSkew_X_By_cy    = new DoubleProperty (nullptr, "cy", 0);
@@ -1639,9 +1632,8 @@ AbstractHomography::init_rightSkewXBy ()
 
 void
 AbstractHomography::init_leftSkewXBy ()
-{
-    auto         _frame  = get_frame ();
-    CoreProcess* damaged = find_layer () ? find_layer ()->damaged () : (_frame ? _frame->damaged () : nullptr);
+{    
+    CoreProcess* damaged    = _layer ? _layer->damaged () : (_frame ? _frame->damaged () : nullptr);
     _leftSkew_X_By_spike = new Spike (this, "leftSkewXBy");
     _leftSkew_X_By_cx    = new DoubleProperty (nullptr, "cx", 0);
     _leftSkew_X_By_cy    = new DoubleProperty (nullptr, "cy", 0);
@@ -1668,8 +1660,7 @@ AbstractHomography::init_leftSkewXBy ()
 void
 AbstractHomography::init_rightSkewYBy ()
 {
-    auto         _frame   = get_frame ();
-    CoreProcess* damaged  = find_layer () ? find_layer ()->damaged () : (_frame ? _frame->damaged () : nullptr);
+    CoreProcess* damaged  = _layer ? _layer->damaged () : (_frame ? _frame->damaged () : nullptr);
     _rightSkew_Y_By_spike = new Spike (this, "rightSkewYBy");
     _rightSkew_Y_By_cx    = new DoubleProperty (nullptr, "cx", 0);
     _rightSkew_Y_By_cy    = new DoubleProperty (nullptr, "cy", 0);
@@ -1695,9 +1686,8 @@ AbstractHomography::init_rightSkewYBy ()
 
 void
 AbstractHomography::init_leftSkewYBy ()
-{
-    auto         _frame  = get_frame ();
-    CoreProcess* damaged = find_layer () ? find_layer ()->damaged () : (_frame ? _frame->damaged () : nullptr);
+{    
+    CoreProcess* damaged    = _layer ? _layer->damaged () : (_frame ? _frame->damaged () : nullptr);
     _leftSkew_Y_By_spike = new Spike (this, "leftSkewYBy");
     _leftSkew_Y_By_cx    = new DoubleProperty (nullptr, "cx", 0);
     _leftSkew_Y_By_cy    = new DoubleProperty (nullptr, "cy", 0);
@@ -2020,9 +2010,8 @@ void
 AbstractHomography::impl_activate ()
 {
     AbstractPropHomography::impl_activate ();
-
-    auto         _frame  = get_frame ();
-    CoreProcess* damaged = find_layer () ? find_layer ()->damaged () : (_frame ? _frame->damaged () : nullptr);
+    
+    CoreProcess* damaged    = _layer ? _layer->damaged () : (_frame ? _frame->damaged () : nullptr);
     if (_rightTranslateBy_action) {
         enable (_rightTranslateBy_dx_coupling, damaged);
         enable (_rightTranslateBy_dy_coupling, damaged);

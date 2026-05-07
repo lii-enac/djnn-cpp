@@ -39,14 +39,15 @@ class AbstractGObjImpl {
 class AbstractGObj : public FatProcess {
   public:
     AbstractGObj (CoreProcess* parent, const string& name)
-        : FatProcess (name), _frame (nullptr), _damaged (notify_none), _impl (nullptr) {
+        : FatProcess (name), _frame (nullptr), _layer (nullptr), _damaged (notify_none), _impl (nullptr) {
         // if (!gui_initialized) warning (this, "Module GUI not initialized");
     }
     virtual ~AbstractGObj () {};
     virtual process_type_e get_process_type () const override { return GOBJ_T; }
     Window*&               get_frame () { return _frame; }
     void                   set_frame (Window*& frame) { _frame = frame; }
-    Layer*                 find_layer ();
+    Layer*&                get_layer () { return _layer; }
+    void                   set_layer (Layer*& layer) { _layer = layer; }
     // std::weak_ptr<Window>
     // auto frame () { return &*AbstractGObj::_frame.lock (); }
     void update_drawing () override;
@@ -75,8 +76,9 @@ class AbstractGObj : public FatProcess {
     void impl_clone_properties (CoreProcess* clone, map<const CoreProcess*, CoreProcess*>& origs_clones) const;
 
   protected:
-    void    update_frame_if_necessary ();
+    void    update_frame_and_layer_if_necessary ();
     Window* _frame;
+    Layer*  _layer;
     // std::weak_ptr<Window> _frame;
     unsigned int      _damaged;
     AbstractGObjImpl* _impl;
