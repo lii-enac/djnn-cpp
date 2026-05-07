@@ -488,8 +488,9 @@ GUIStructureObserver::move_child_to (FatProcess* container, CoreProcess* child, 
     structures_t::iterator it_container = _structure_map.find (container);
     switch (child->get_process_type ()) {
     case GOBJ_T:
-        if (it_container != _structure_map.end ())
+        if (it_container != _structure_map.end ()) {
             it_container->second->move_child_to (child, neighbour_index, spec, new_index);
+        }
         break;
     case WINDOW_T: {
         Window* w = dynamic_cast<Window*> (child);
@@ -507,11 +508,29 @@ GUIStructureObserver::move_child_to (FatProcess* container, CoreProcess* child, 
         }
         break;
     }
-
     default:
         break;
     }
-    container->update_drawing ();
+
+    switch (child->get_process_type ()) {
+    case GOBJ_T:
+    case CONTAINER_T:
+    case LAYER_T:
+        child->update_drawing ();
+        break;
+    case WINDOW_T:
+        container->update_drawing ();
+        break;
+    case FSM_T: {
+        DelegatingProcess* delegate_process = dynamic_cast<DelegatingProcess*> (child);
+        if (delegate_process) {
+            auto* delegate = delegate_process->get_delegate ();
+            delegate->update_drawing ();
+        }
+    }
+    default:
+        break;
+    }
 }
 
 void
@@ -539,8 +558,27 @@ GUIStructureObserver::remove_child_from_container (FatProcess* container, CorePr
         default:
             break;
         }
+
+        switch (child->get_process_type ()) {
+        case GOBJ_T:
+        case CONTAINER_T:
+        case LAYER_T:
+            child->update_drawing ();
+            break;
+        case WINDOW_T:
+            container->update_drawing ();
+            break;
+        case FSM_T: {
+            DelegatingProcess* delegate_process = dynamic_cast<DelegatingProcess*> (child);
+            if (delegate_process) {
+                auto* delegate = delegate_process->get_delegate ();
+                delegate->update_drawing ();
+            }
+        }
+        default:
+            break;
+        }
     }
-    container->update_drawing ();
 }
 
 void
