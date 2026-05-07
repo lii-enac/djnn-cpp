@@ -16,6 +16,7 @@
 
 #include "abstract_gobj.h"
 
+#include "core/utils/remotery.h"
 #include "abstract_backend.h"
 #include "backend.h"
 #include "core/utils/error.h"
@@ -220,10 +221,12 @@ AbstractGObj::update_frame_and_layer_if_necessary ()
 void
 AbstractGObj::update_drawing ()
 {
+    rmt_BeginCPUSample (abstractGobj_update_drawing, RMTSF_Aggregate);
     if (_layer) {
         _layer->damaged ()->activate ();
     } else if (_frame)
         _frame->damaged ()->activate ();
+    rmt_EndCPUSample ();
 }
 
 void
