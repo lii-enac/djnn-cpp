@@ -433,7 +433,7 @@ GUIStructureObserver::add_child_to_container (FatProcess* container, CoreProcess
 
     // print_structure_map ();
 
-    container->update_drawing ();
+    // container->update_drawing (); // Normally, this isn’t required when adding G_OBJ, as abstract_gobj calls frame|layer damaged upon activation.
 }
 
 void
@@ -465,7 +465,7 @@ GUIStructureObserver::add_child_at (FatProcess* container, CoreProcess* child, i
     default:
         break;
     }
-    container->update_drawing ();
+    // container->update_drawing ();  // Normally, this isn’t required when adding G_OBJ, as abstract_gobj calls frame|layer damaged upon activation.
 }
 
 void
