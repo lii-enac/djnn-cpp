@@ -309,9 +309,11 @@ Container::update_drawing ()
     if (somehow_deactivating ())
         return;
 
+    rmt_BeginCPUSample (Container_update_drawing, RMTSF_Aggregate);
     for (auto c : _children) {
         c->update_drawing ();
     }
+    rmt_EndCPUSample ();
 }
 
 void
