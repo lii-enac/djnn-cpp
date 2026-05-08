@@ -8,6 +8,7 @@ In `smala`'s or your application's `config.mk`, add `-g` to `SMAFLAGS` to genera
 
 To use a debugger and breakpoints:
 - in `djnn-cpp`'s `config.mk`, add `-g` and `-O0` to `CFLAGS`
+- in `.vscode/settings.json`, change `build_dir` according to your platform 
 - set `use_pch := no` to keep some name information (if the debugger  complains with `summary unavailable` when browsing structures).
 - if you want to break into generated `.cpp` files from `.sma` files, do *not* add `-g` to `SMAFLAGS` (as adding `-g` will change the `#line` directives and prevent the debugger to find the correct line of `cpp` ,source code). Unfortunately this temporarily breaks the correct display of the line number from the compiler when a specific smala line is erroneous...
 
