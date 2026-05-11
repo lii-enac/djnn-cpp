@@ -538,6 +538,26 @@ GUIStructureObserver::remove_child_from_container (FatProcess* container, CorePr
 {
     structures_t::iterator it_container = _structure_map.find (container);
     if (it_container != _structure_map.end ()) {
+        switch (child->get_process_type ()) {
+        case GOBJ_T:
+        case CONTAINER_T:
+        case LAYER_T:
+            child->update_drawing ();
+            break;
+        case WINDOW_T:
+            container->update_drawing ();
+            break;
+        case FSM_T: {
+            DelegatingProcess* delegate_process = dynamic_cast<DelegatingProcess*> (child);
+            if (delegate_process) {
+                auto* delegate = delegate_process->get_delegate ();
+                if (delegate != nullptr)
+                    delegate->update_drawing ();
+            }
+        }
+        default:
+            break;
+        }
 
         switch (child->get_process_type ()) {
         case GOBJ_T:
@@ -555,26 +575,6 @@ GUIStructureObserver::remove_child_from_container (FatProcess* container, CorePr
             }
         }
             break;
-        default:
-            break;
-        }
-
-        switch (child->get_process_type ()) {
-        case GOBJ_T:
-        case CONTAINER_T:
-        case LAYER_T:
-            child->update_drawing ();
-            break;
-        case WINDOW_T:
-            container->update_drawing ();
-            break;
-        case FSM_T: {
-            DelegatingProcess* delegate_process = dynamic_cast<DelegatingProcess*> (child);
-            if (delegate_process) {
-                auto* delegate = delegate_process->get_delegate ();
-                delegate->update_drawing ();
-            }
-        }
         default:
             break;
         }
