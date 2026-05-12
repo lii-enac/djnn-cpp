@@ -326,7 +326,7 @@ GUIStructureObserver::ensure_container_registered (FatProcess* container)
         case LAYER_T: // These are made for GUI, so they will contain GOBJ
         case GOBJ_T:  // such as items for Path or Poly
         case DEFS_T:  // made for SVG definition
-        case FSM_T:   // FSM states are containers, but with FSM_T parents, and they have to be added.
+        case DELEGATING_T:   // FSM states are containers, but with DELEGATING_T parents, and they have to be added.
             _structure_map[parent]->append_gui_child (holder);
             break;
         default: {
@@ -407,7 +407,7 @@ GUIStructureObserver::add_child_to_container (FatProcess* container, CoreProcess
     }
 
     case CONTAINER_T:
-    case FSM_T:
+    case DELEGATING_T:
     case LAYER_T: {
         auto it_child = _structure_map.find (child);
         if (it_child != _structure_map.end () && it_child->second) {
@@ -451,7 +451,7 @@ GUIStructureObserver::add_child_at (FatProcess* container, CoreProcess* child, i
         break;
     }
     case CONTAINER_T:
-    case FSM_T:
+    case DELEGATING_T:
     case LAYER_T: {
         structures_t::iterator it_child = _structure_map.find (child);
         if (it_child != _structure_map.end ()) {
@@ -498,7 +498,7 @@ GUIStructureObserver::move_child_to (FatProcess* container, CoreProcess* child, 
         break;
     }
     case CONTAINER_T:
-    case FSM_T:
+    case DELEGATING_T:
     case LAYER_T: {
         structures_t::iterator it_child = _structure_map.find (child);
         if (it_child != _structure_map.end ()) {
@@ -521,7 +521,7 @@ GUIStructureObserver::move_child_to (FatProcess* container, CoreProcess* child, 
     case WINDOW_T:
         container->update_drawing ();
         break;
-    case FSM_T: {
+    case DELEGATING_T: {
         DelegatingProcess* delegate_process = dynamic_cast<DelegatingProcess*> (child);
         if (delegate_process) {
             auto* delegate = delegate_process->get_delegate ();
@@ -547,7 +547,7 @@ GUIStructureObserver::remove_child_from_container (FatProcess* container, CorePr
         case WINDOW_T:
             container->update_drawing ();
             break;
-        case FSM_T: {
+        case DELEGATING_T: {
             DelegatingProcess* delegate_process = dynamic_cast<DelegatingProcess*> (child);
             if (delegate_process) {
                 auto* delegate = delegate_process->get_delegate ();
@@ -566,7 +566,7 @@ GUIStructureObserver::remove_child_from_container (FatProcess* container, CorePr
         case WINDOW_T:
             break;
         case CONTAINER_T:
-        case FSM_T:
+        case DELEGATING_T:
         case LAYER_T: {
             structures_t::iterator it_child = _structure_map.find (child);
             if (it_child != _structure_map.end ()) {

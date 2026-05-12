@@ -39,6 +39,7 @@ class Switch : public Container, public DelegatingProcess {
     // virtual process_type_e get_process_type () const override { return SWITCH_T; }
     void               impl_activate () override;
     void               impl_deactivate () override;
+    virtual process_type_e get_process_type () const override { return DELEGATING_T; }
     void               draw () override;
     void               pick () override;
     AbstractGShape*    pick_analytical (PickAnalyticalContext& pac) override;

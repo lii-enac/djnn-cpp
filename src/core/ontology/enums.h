@@ -11,7 +11,7 @@ enum
         NATIVE_ACTION_T,
         NATIVE_COLLECTION_ACTION_T,
         CONTAINER_T,
-        FSM_T,
+        DELEGATING_T,
         WINDOW_T,
         GOBJ_T,
         WORLD_T,

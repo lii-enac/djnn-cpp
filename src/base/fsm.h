@@ -108,7 +108,7 @@ class FSM : public FatProcess, public DelegatingProcess {
     FSM (CoreProcess* parent, const string& name);
     void                   impl_activate () override;
     void                   impl_deactivate () override;
-    virtual process_type_e get_process_type () const override { return FSM_T; }
+    virtual process_type_e get_process_type () const override { return DELEGATING_T; }
     void                   update_state (FSMState* s, const string& name) {
         _cur_state = s;
         _fsm_state.set_value (name, true);
@@ -153,7 +153,7 @@ class FSM : public FatProcess, public DelegatingProcess {
 #ifdef DJNN_NO_DYNAMIC_CAST
 template <>
 inline FSM* djnn_dynamic_cast (CoreProcess* p) {
-    if (p->get_process_type () == FSM_T) {
+    if (p->get_process_type () == DELEGATING_T) {
         return static_cast<FSM*> (p);
     }
     return nullptr;
@@ -162,7 +162,7 @@ inline FSM* djnn_dynamic_cast (CoreProcess* p) {
 /*
 template <> inline FSMState* djnn_dynamic_cast(CoreProcess* p)
 {
-  if(p->get_process_type() == FSM_T) {
+  if(p->get_process_type() == DELEGATING_T) {
     return static_cast<FSM*>(p);
   }
   return nullptr;
