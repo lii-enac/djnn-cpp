@@ -526,6 +526,7 @@ static
 bool
 starts_with(const string& str, const string& prefix)
 {
+    // return key.starts_with(prefix); // c++20 
     return str.rfind(prefix, 0) == 0;
 }
 
@@ -540,26 +541,28 @@ FatProcess::find_child_impl (const string& key)
         return this;
     }
 
-    if (key.length () >= 2 && key[0] == '.' && key[1] == '.') {
+    if (starts_with(key, "..")) {
         if (auto * p = get_parent ()) {
-            if (key.length () >= 3) {
-                if (key[2] == '/') {
-                    return p->find_child_impl (key.substr (3));
-                } else return nullptr;
-            } else return p;
+            if (starts_with (key, "..//")) {
+                return p->find_child_impl (key.substr (2));
+            }
+            if (starts_with (key, "../")) {
+                return p->find_child_impl (key.substr (3));
+            }
+            if (key== "..") {
+                return p;
+            }
         }
-        else
-            return nullptr;
     }
 
-    if (key.length () >= 1 && key[0] == '.') {
+    if (starts_with(key, ".")) {
         if (starts_with(key, ".//")) {
             return find_child_impl (key.substr (1));
         }
         if (starts_with(key,"./")) {
             return find_child_impl (key.substr (2));
         }
-        if (starts_with(key, ".")) {
+        if (key == ".") {
             return this;
         }
     }
@@ -584,8 +587,7 @@ FatProcess::find_child_impl (const string& key)
     }
 
     /* special case find anywhere - using find_child ("//johndoe") */
-    // FIXME: improved with c++20 if (key.starts_with("//")
-    if (key.length () >= 2 && key[0] == '/' && key[1] == '/') { // '//': wherever it is
+    if (starts_with(key, "//")) { // '//': wherever it is
         size_t pos = key.substr(2).find_first_of ('/');
         if (pos == string::npos) {
             // if this is the end of the path, we search in our own children
