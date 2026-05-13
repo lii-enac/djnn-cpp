@@ -295,7 +295,7 @@ CoreProcess::set_vertex (Vertex* v)
 CoreProcess*
 CoreProcess::find_child (const string& path)
 {
-    auto* found = find_child_impl (path);
+    auto * found = find_optional_child (path);
 #ifndef DJNN_NO_DEBUG
     if (!found) {
         if (Context::instance ()->line () > 0)
@@ -307,10 +307,47 @@ CoreProcess::find_child (const string& path)
     return found;
 }
 
+
+// find with xpath
+// by contrast with true xpath, this version only returns one compatible child, not a list of children [TODO]
+
 CoreProcess*
 CoreProcess::find_optional_child (const string& path)
 {
-    return find_child_impl (path);
+    if (path.empty ()) {
+        return this;
+    }
+
+    auto * from = this;
+
+    // should we start from root? '/' and '//'
+    if (path.length () >= 1 && path[0] == '/') { // '/': from root
+        auto* current_cpnt   = this;
+        auto* current_parent = current_cpnt->get_parent ();
+        while (current_parent != nullptr) {
+            current_cpnt   = current_parent;
+            current_parent = current_cpnt->get_parent ();
+        }
+        // DEBUG
+        // std::cout << "root found: " << current_cpnt->_name << endl;
+        from = current_cpnt;
+    }
+
+    // should we retry in every children? '//'
+    if (path.length () >= 2 && path[0] == '/' && path[1] == '/') { // '//......'
+        // '//' means both 'change to root' and 'retry' in our children
+        // here we still pass '//.....' to find_child_impl so our children know they should retry with all of their children
+        // only find_optional_child handles 'root' change. find_child_impl is only concerned with '//' as retry
+        return from->find_child_impl (path);
+    }
+
+    // is it root only? // '/' and not '//'
+    if (path.length () >= 1 && path[0] == '/') { 
+        return from->find_child_impl (path.substr(1));
+    }
+
+    // not root neither '//' 
+    return from->find_child_impl (path);
 }
 
 CoreProcess*
@@ -483,6 +520,16 @@ FatProcess::remove_child (const string& name)
     remove_symbol (name);
 }
 
+
+inline
+static
+bool
+starts_with(const string& str, const string& prefix)
+{
+    return str.rfind(prefix, 0) == 0;
+}
+
+
 CoreProcess*
 FatProcess::find_child_impl (const string& key)
 {
@@ -493,55 +540,97 @@ FatProcess::find_child_impl (const string& key)
         return this;
     }
 
+    if (key.length () >= 2 && key[0] == '.' && key[1] == '.') {
+        if (auto * p = get_parent ()) {
+            if (key.length () >= 3) {
+                if (key[2] == '/') {
+                    return p->find_child_impl (key.substr (3));
+                } else return nullptr;
+            } else return p;
+        }
+        else
+            return nullptr;
+    }
+
+    if (key.length () >= 1 && key[0] == '.') {
+        if (starts_with(key, ".//")) {
+            return find_child_impl (key.substr (1));
+        }
+        if (starts_with(key,"./")) {
+            return find_child_impl (key.substr (2));
+        }
+        if (starts_with(key, ".")) {
+            return this;
+        }
+    }
+
     /* special case find '*' */
     if (key[0] == '*') {
-        auto* found = find_child_impl (key.substr (2)); // without "/*""
-        if (!found) {
-            /* we iterate in depth on each child and stop on the first 'key' found*/
-            auto it = symtable ().begin ();
+        CoreProcess * found = nullptr;
+        /* iterate depth-first on each child and stop on the first 'key' found */
+        auto it = symtable ().begin ();
+        if (key.size()>=3 && key[1]=='/') {
             while (it != symtable ().end ()) {
-                found = it->second->find_child_impl (key); // with "/*""
-                // if (found) return found;
+                found = it->second->find_child_impl (key.substr(2)); // with "*/""
                 if (found)
                     break;
                 ++it;
             }
+        } else {
+            // no child in path, take the first that comes (?)
+            found = it->second;
         }
         return found;
     }
 
-    /* special case find from root - using find_child ("//johndoe") */
+    /* special case find anywhere - using find_child ("//johndoe") */
     // FIXME: improved with c++20 if (key.starts_with("//")
-    if (key.length () >= 2 && key[0] == '/' && key[1] == '/') {
-        FatProcess* current_cpnt   = this;
-        FatProcess* current_parent = current_cpnt->get_parent ();
-        while (current_parent != nullptr) {
-            current_cpnt   = current_parent;
-            current_parent = current_cpnt->get_parent ();
+    if (key.length () >= 2 && key[0] == '/' && key[1] == '/') { // '//': wherever it is
+        size_t pos = key.substr(2).find_first_of ('/');
+        if (pos == string::npos) {
+            // if this is the end of the path, we search in our own children
+            auto * found =  find_child_impl (key.substr(2));
+            if (found) return found;
         }
-        // DEBUG
-        // std::cout << "root found: " << current_cpnt->_name << endl;
-        return current_cpnt->find_child_impl (key.substr (2));
+        else {
+            string newKey = key.substr (2, pos);
+            string path   = key.substr (2 + pos + 1);
+            if (newKey != "*") { // regular name or . or ..: handled in find_child_impl
+                auto * found = find_child_impl(newKey);
+                if (found)
+                    return found->find_child_impl(path);
+            }
+            else { // "*": this means that we must try until we find something ok in our children
+                // try to find in our children, with no '*'
+                for (auto it: _symtable) {
+                    auto * found = it.second->find_child_impl(path);
+                    if (found)
+                        return found;
+                }
+            }
+        }
+        // nothing has been found directly, since we are in "//", try again with our children and the full path
+        for (auto it: _symtable) {
+            auto * found = it.second->find_child_impl(key);
+            if (found)
+                return found;
+        }
+        return nullptr;
     }
 
     size_t found = key.find_first_of ('/');
     if (found != string::npos) {
         string newKey = key.substr (0, found);
         string path   = key.substr (found + 1);
-        if (newKey[0] == '.' && newKey[1] == '.') {
-            if (get_parent ()) {
-                return get_parent ()->find_child_impl (path);
-            } else {
-                return nullptr;
-            }
-        }
         symtable_t::iterator it = find_child_iterator (newKey);
         if (it != children_end ()) {
-            return (it->second)->find_child_impl (path);
+            if (path.length() > 1 && path[0] == '/') {
+                return (it->second)->find_child_impl (key.substr (found)); // "toto//titi"
+            } else {
+                return (it->second)->find_child_impl (path);
+            }
         }
     }
-    if (key[0] == '.' && key[1] == '.')
-        return get_parent ();
 
     symtable_t::iterator it = find_child_iterator (key);
     if (it != children_end ()) {
