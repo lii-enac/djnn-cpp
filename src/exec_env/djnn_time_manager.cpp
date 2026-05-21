@@ -16,6 +16,8 @@
 #include <condition_variable>
 #include <mutex>
 
+#include "core/utils/remotery.h"
+
 #include "djnn_time_manager.h"
 
 #include "core/core-dev.h" // graph add/remove edge
@@ -160,6 +162,8 @@ DjnnTimeManager::run ()
         djnn::get_exclusive_access (DBG_GET);
         if (should_i_stop ())
             break;
+        
+        rmt_ScopedCPUSample(external_source_time, 0);
 
         update_ref_now (); // set the default 'now' -- FIXME useless in a time manager external source?
         djnn_internal::Time::time_point now = djnn_internal::Time::time_point_cast (get_ref_now ());

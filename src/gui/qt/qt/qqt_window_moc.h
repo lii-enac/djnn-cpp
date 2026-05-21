@@ -36,7 +36,7 @@ class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
 
   public:
     MyQQWidget (Window* w, QtWindow* qtw)
-        : MyQWidget (w, qtw), _doubleClickIntervalMs (200) {
+        : MyQWidget (w, qtw), _doubleClickIntervalMs (200), _qwidget_event_call_level(0) {
         setAttribute (Qt::WA_AcceptTouchEvents, true);
         _picking_view = new QtPickingView (w, this);
         //_picking_view = new AnalyticalPicking (w);
@@ -61,5 +61,6 @@ class MyQQWidget : public MyQWidget //, protected QOpenGLFunctions
   
   private:
     unsigned int _doubleClickIntervalMs;
+    int _qwidget_event_call_level;
 };
 } // namespace djnn

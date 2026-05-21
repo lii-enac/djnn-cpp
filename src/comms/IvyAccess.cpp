@@ -16,6 +16,11 @@
 #include <regex>
 #include <unistd.h>
 
+#include "ivy.h"     //TODO add Ivy/ after confinement
+#include "ivyloop.h" //TODO add Ivy/ after confinement
+
+#include "core/utils/remotery.h"
+
 #include "IvyAccess.h"
 
 #include "core/core-dev.h" // graph exec
@@ -23,8 +28,6 @@
 #include "core/utils/iostream.h"
 #include "core/utils/to_string.h"
 #include "exec_env/main_loop.h"
-#include "ivy.h"     //TODO add Ivy/ after confinement
-#include "ivyloop.h" //TODO add Ivy/ after confinement
 #include "utils/debug.h"
 
 // using djnnstl::cout;
@@ -149,8 +152,10 @@ static void
 _on_ivy_message (IvyClientPtr app, void* user_data, int argc, char** argv)
 {
     djnn::IvyAccess::msg_callback_user_data* mcud = reinterpret_cast<djnn::IvyAccess::msg_callback_user_data*> (user_data);
-
     djnn::IvyAccess* access = mcud->access; // reinterpret_cast<djnn::IvyAccess*>(user_data);
+    
+    rmt_ScopedCPUSample(external_source_ivy_message, 0);
+
     if (STOP_IVY)
         return;
 
@@ -223,9 +228,10 @@ _on_ivy_die (IvyClientPtr app, void* user_data, int event)
         djnn::release_exclusive_access (DBG_GET);
         return;
     }
-
+    rmt_BeginCPUSample(external_source_ivy_die, 0);
     access->get_die ().activate (); // notify _die has been receiveds
     GRAPH_EXEC;
+    rmt_EndCPUSample();
 
     djnn::release_exclusive_access (DBG_GET);
 }
@@ -236,7 +242,7 @@ _on_ivy_arriving_leaving_agent (IvyClientPtr app, void* user_data, IvyApplicatio
     djnn::IvyAccess* access = reinterpret_cast<djnn::IvyAccess*> (user_data);
 
     djnn::get_exclusive_access (DBG_GET);
-
+    //rmt_ScopedCPUSample(external_source_ivy_arrleav_agent, 0);
     if (STOP_IVY) {
         djnn::release_exclusive_access (DBG_GET);
         return;
@@ -468,8 +474,10 @@ _before_select (void* data)
         return;
     }
     djnn::get_exclusive_access (DBG_GET);
-    if (access->should_i_stop ())
+    rmt_ScopedCPUSample(external_source_ivy_before_select, 0);
+    if (access->should_i_stop ()) {
         return;
+    }
     GRAPH_EXEC;
     djnn::release_exclusive_access (DBG_REL);
 }

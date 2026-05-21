@@ -12,6 +12,8 @@
  *
  */
 
+#include "core/utils/remotery.h"
+
 #include "native_async_action.h"
 
 #include "core/core-dev.h" // graph add/remove edge
@@ -66,12 +68,16 @@ NativeAsyncAction::run ()
 {
     // this is executed in its own thread
 
+    rmt_BeginCPUSample(external_source_native_async_action, 0);
     NativeAction::impl_activate (); // execute the action
+    
 
     djnn::get_exclusive_access (DBG_GET);
     _end.schedule_activation ();
     GRAPH_EXEC;
     djnn::release_exclusive_access (DBG_REL);
+
+    rmt_EndCPUSample();
 }
 
 } // namespace djnn

@@ -157,7 +157,9 @@ SDLMainloop::sdl_run ()
         SDL_WaitEvent (&e); // blocking call
         // std::cerr << "<< SDL_WaitEvent " << __FL__;
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
+        rmt_BeginCPUSample(external_source_gui, 0);
         handle_events (e);
+        rmt_EndCPUSample();
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     }
 

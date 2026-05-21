@@ -12,6 +12,8 @@
  *
  */
 
+#include "core/utils/remotery.h"
+
 #include "iofd.h"
 
 #include "core/core-dev.h" // graph add/remove edge
@@ -87,8 +89,10 @@ IOFD::run ()
         }
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         if (!should_i_stop ()) {
+            rmt_BeginCPUSample(external_source_iofd, 0);
             _readable.activate (); // propagating
             GRAPH_EXEC;            // executing
+            rmt_EndCPUSample();
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     }

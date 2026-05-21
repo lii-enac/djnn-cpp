@@ -178,6 +178,11 @@ MyQQWidget::event (QEvent* event)
     // if(!_building)
     // djnn::get_exclusive_access (DBG_GET);
 
+    if (!_qwidget_event_call_level) {
+        rmt_BeginCPUSample(external_source_gui, 0);
+    }
+    ++_qwidget_event_call_level;
+
     bool exec_ = false;
     switch (event->type ()) {
     case QEvent::TouchBegin:
@@ -291,6 +296,12 @@ MyQQWidget::event (QEvent* event)
     if (exec_)
         event->accept ();
     // cerr << "<< " << __PRETTY_FUNCTION__ << " " << event->type () << endl;
+
+    --_qwidget_event_call_level;
+    if (!_qwidget_event_call_level) {
+        rmt_EndCPUSample();
+    }
+    
     return exec_;
 }
 
