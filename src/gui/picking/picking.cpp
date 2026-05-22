@@ -228,6 +228,12 @@ Picking::genericMousePress (double x, double y, mouse_button button)
     _mouse_released = false;
     bool exec_      = false;
 
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     /* windows setting */
     _win->press_x ()->set_value (x, true);
     _win->press_y ()->set_value (y, true);
@@ -297,12 +303,24 @@ Picking::genericMousePress (double x, double y, mouse_button button)
         exec_ = true;
     }
 
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     return exec_;
 }
 
 bool
 Picking::genericTouchPress (double x, double y, int id, float pressure)
 {
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     if (!gc_touches.empty ()) {
         // std::cout << "Press detected, clearing all touches..." << std::endl;
         for (const auto& touch : gc_touches) {
@@ -343,12 +361,25 @@ Picking::genericTouchPress (double x, double y, int id, float pressure)
         s->ui ()->touches ()->add_child (t, djnnstl::to_string (id));
         t->enter ();
     }
+
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     return true;
 }
 
 bool
 Picking::genericTabletPress (double x, double y, stylus_type stylus_type, mouse_button button, double pressure)
 {
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     _mouse_released = false;
     bool exec_      = false;
 
@@ -417,12 +448,24 @@ Picking::genericTabletPress (double x, double y, stylus_type stylus_type, mouse_
         exec_ = true;
     }
 
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     return exec_;
 }
 
 bool
 Picking::genericMouseMove (double x, double y)
 {
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     rmt_BeginCPUSample (genericMouseMove, RMTSF_Aggregate);
     bool exec_ = false;
 
@@ -547,12 +590,25 @@ Picking::genericMouseMove (double x, double y)
     }
     rmt_EndCPUSample ();
     rmt_EndCPUSample ();
+
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     return exec_;
 }
 
 bool
 Picking::genericTouchMove (double x, double y, int id, float pressure)
 {
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     djnnstl::map<int, Touch*>::iterator it = _active_touches.find (id);
     Touch*                              t;
     /* touch exist */
@@ -611,12 +667,23 @@ Picking::genericTouchMove (double x, double y, int id, float pressure)
         genericTouchPress (x, y, id, pressure);
     }
 
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     return true;
 }
 
 bool
 Picking::genericTabletMove (double x, double y, stylus_type stylus_type, double pressure)
 {
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
 
     rmt_BeginCPUSample (genericTabletMove, RMTSF_Aggregate);
     bool exec_ = false;
@@ -740,12 +807,24 @@ Picking::genericTabletMove (double x, double y, stylus_type stylus_type, double 
     rmt_EndCPUSample ();
     rmt_EndCPUSample ();
 
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     return exec_;
 }
 
 bool
 Picking::genericMouseRelease (double x, double y, mouse_button button)
 {
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     _mouse_released = true;
     bool exec_      = false;
 
@@ -823,12 +902,23 @@ Picking::genericMouseRelease (double x, double y, mouse_button button)
         exec_ = true;
     }
 
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     return exec_;
 }
 
 bool
 Picking::genericTouchRelease (double x, double y, int id, float pressure)
 {
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
 
     PickUI*                             s  = this->pick (x, y);
     djnnstl::map<int, Touch*>::iterator it = _active_touches.find (id);
@@ -886,12 +976,23 @@ Picking::genericTouchRelease (double x, double y, int id, float pressure)
     /* reset _hovered_shape */
     _hovered_shape = nullptr;
 
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     return true;
 }
 
 bool
 Picking::genericTabletRelease (double x, double y, stylus_type stylus_type, mouse_button button, double pressure)
 {
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
 
     _mouse_released = true;
     bool exec_      = false;
@@ -972,12 +1073,24 @@ Picking::genericTabletRelease (double x, double y, stylus_type stylus_type, mous
         }
     }
 
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     return exec_;
 }
 
 bool
 Picking::genericMouseWheel (double x, double y, double cursorx, double cursory)
 {
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     bool exec_ = false;
 
     /* window setting */
@@ -1052,12 +1165,25 @@ Picking::genericMouseWheel (double x, double y, double cursorx, double cursory)
             exec_ = true;
         }
     }
+
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     return exec_;
 }
 
 bool
 Picking::genericMouseDoubleClick (double x, double y, mouse_button button)
 {
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
+
     // Note:
     // No need to manually handle x, y, enter, leave, or press events for double‑click,
     // since Qt automatically generates and emits the corresponding press event.
@@ -1104,6 +1230,12 @@ Picking::genericMouseDoubleClick (double x, double y, mouse_button button)
     //     _win->double_click ()->schedule_activation ();
     //     exec_ = true;
     // }
+
+    #ifndef DJNN_NO_DEBUG
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+        std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
+    }
+    #endif
 
     return exec_;
 }
