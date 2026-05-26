@@ -181,6 +181,7 @@ class ProcessCollector : public AbstractContainer {
     virtual ~ProcessCollector ();
     void                        impl_activate () override;
     void                        impl_deactivate () override;
+    bool                        contains (CoreProcess* p) const;
     void                        add_one ();
     void                        add_one (CoreProcess* p);
     void                        insert_one (CoreProcess* p, size_t insert_index);

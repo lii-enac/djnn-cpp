@@ -21,6 +21,8 @@
 #include "core/utils/djnn_dynamic_cast.h"
 #include "core/utils/error.h"
 #include "core/utils/utils-dev.h"
+#include <algorithm>
+
 
 namespace djnn {
 ProcessDeleter::ProcessDeleter (CoreProcess* parent, const string& name)
@@ -153,6 +155,16 @@ ProcessCollector::impl_deactivate ()
         }
     }
 }
+
+
+bool
+ProcessCollector::contains (CoreProcess* p) const
+{
+    if (!p) return false;
+    // return std::ranges::contains(_list, p);  // C++ 20
+    return std::find(_list.begin(), _list.end(), p) != _list.end();
+}
+
 
 void
 ProcessCollector::add_one ()
