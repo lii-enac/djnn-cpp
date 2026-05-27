@@ -526,7 +526,8 @@ GUIStructureObserver::move_child_to (FatProcess* container, CoreProcess* child, 
         DelegatingProcess* delegate_process = dynamic_cast<DelegatingProcess*> (child);
         if (delegate_process) {
             auto* delegate = delegate_process->get_delegate ();
-            delegate->update_drawing ();
+            if (delegate)
+                delegate->update_drawing ();
         }
     }
     default:
@@ -552,7 +553,7 @@ GUIStructureObserver::remove_child_from_container (FatProcess* container, CorePr
             DelegatingProcess* delegate_process = dynamic_cast<DelegatingProcess*> (child);
             if (delegate_process) {
                 auto* delegate = delegate_process->get_delegate ();
-                if (delegate != nullptr)
+                if (delegate)
                     delegate->update_drawing ();
             }
         }
