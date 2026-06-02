@@ -30,6 +30,7 @@ namespace djnn {
 class Display : public AbstractDisplayStyle {
   public:
     Display (CoreProcess* parent, const string& name, int d);
-    void                  draw () override;
+    void     draw () override;
+    Display* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 } // namespace djnn

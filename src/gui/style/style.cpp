@@ -55,6 +55,15 @@ Display::draw ()
     }
 }
 
+Display*
+Display::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
+{
+    auto res           = new Display (nullptr, name, raw_props.d);
+    origs_clones[this] = res;
+    impl_clone_properties (res, origs_clones);
+    return res;
+}
+
 
 
 void
