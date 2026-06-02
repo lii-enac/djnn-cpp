@@ -149,8 +149,6 @@ ParseId (FatProcess** e, const char* v)
 static int
 ParseDisplay (FatProcess** e, const char* v)
 {
-    unsigned r, g, b;
-
     if (!*e)
         *e = new SVGHolder (nullptr, "SVGHolder");
 
