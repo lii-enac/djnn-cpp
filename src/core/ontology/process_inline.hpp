@@ -77,14 +77,22 @@ CoreProcess::pre_activate ()
 
 INLINE
 bool
+ChildProcess::parent_somehow_deactivating () const
+{
+    if (auto * p = get_parent (); p)
+        return p->somehow_deactivating ();
+    else
+        return false;
+}
+
+INLINE
+bool
 FatProcess::pre_activate ()
 {
     /* no activation if :
      * 4 - the parent exists and is stopped
      */
-    if (CoreProcess * p = get_parent (); p && p->somehow_deactivating ()) {
-        return false;
-    }
+    if (parent_somehow_deactivating ()) return false;
 
     // no need to check all of the activations in the hierarchy of parents,
     // since any activation/deactivation should have been up/downstreamed (?)

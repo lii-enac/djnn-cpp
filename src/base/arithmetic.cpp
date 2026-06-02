@@ -138,9 +138,7 @@ Incr::pre_activate ()
      * the usual condition that the process cannot be activated if it is already
      * active.
      */
-    if (CoreProcess * p = get_parent (); p && p->somehow_deactivating ()) {
-        return false;
-    }
+    if (parent_somehow_deactivating ()) return false;
     if (!is_activated ())
         set_activation_state (ACTIVATING);
     return true;

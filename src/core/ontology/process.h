@@ -310,6 +310,7 @@ class ChildProcess : public CouplingProcess {
 
   protected:
     void         finalize_construction (CoreProcess* parent, const string& name, CoreProcess* state = nullptr) override;
+    bool         parent_somehow_deactivating () const;
     FatProcess*  _parent;
     CoreProcess* _state_dependency;
 };

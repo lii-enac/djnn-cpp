@@ -329,7 +329,7 @@ BidirectionalListIterator::IterAction::IterAction (CoreProcess* parent, const st
 void
 BidirectionalListIterator::IterAction::impl_activate ()
 {
-    if (get_parent ()->somehow_deactivating ())
+    if (parent_somehow_deactivating ())
         return;
     int index = _index->get_value ();
     if (_forward) {
@@ -354,7 +354,7 @@ BidirectionalListIterator::ResetAction::ResetAction (CoreProcess* parent, const 
 void
 BidirectionalListIterator::ResetAction::impl_activate ()
 {
-    if (get_parent ()->somehow_deactivating ())
+    if (parent_somehow_deactivating ())
         return;
     _index->set_value (1, true);
 }

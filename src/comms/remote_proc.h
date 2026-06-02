@@ -54,9 +54,7 @@ class RemoteProc : public FatProcess {
         void         impl_activate () override;
         void         impl_deactivate () override;
         virtual bool pre_activate () override {
-            if (CoreProcess * p = get_parent (); p && p->somehow_deactivating ()) {
-                return false;
-            }
+            if (parent_somehow_deactivating ()) return false;
             set_activation_state (ACTIVATING);
             return true;
         }
