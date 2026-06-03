@@ -218,6 +218,12 @@ AbstractGObj::update_frame_and_layer_if_necessary ()
     }
 }
 
+CoreProcess*
+AbstractGObj::get_layer_or_frame_damaged()
+{
+    return _layer ? static_cast<CoreProcess*>(_layer->damaged ()) : (_frame ? static_cast<CoreProcess*>(_frame->damaged ()) : nullptr);
+}
+
 void
 AbstractGObj::update_drawing ()
 {

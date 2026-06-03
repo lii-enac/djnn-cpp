@@ -77,6 +77,7 @@ class AbstractGObj : public FatProcess {
 
   protected:
     void    update_frame_and_layer_if_necessary ();
+    CoreProcess * get_layer_or_frame_damaged ();
     Window* _frame;
     Layer*  _layer;
     // std::weak_ptr<Window> _frame;
