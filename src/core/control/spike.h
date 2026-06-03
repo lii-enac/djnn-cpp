@@ -23,7 +23,7 @@ class Spike : public FatProcess {
     Spike (CoreProcess* parent, const string& name, bool model = true)
         : FatProcess (name, model) { finalize_construction (parent, name); };
     virtual ~Spike () {};
-    FatProcess* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
+    Spike* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     void impl_activate () override {}

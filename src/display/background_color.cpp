@@ -111,7 +111,7 @@ BackgroundColor::update_hex_from_rvb ()
 void
 BackgroundColor::create_Gobj_update_coupling (CoreProcess** prop, CouplingWithData** cprop)
 {
-    FatProcess* update = nullptr;
+    CoreProcess* update = nullptr;
     // if (find_layer ()) update = find_layer()->damaged ();
     // else
     if (get_frame ())

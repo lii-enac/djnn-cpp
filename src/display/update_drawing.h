@@ -81,8 +81,8 @@ class UpdateDrawing : public FatProcess {
     void             remove_window_for_refresh (Window* w);
     vector<Window*>& get_windows_for_refresh () { return _win_list; };
     void             clear_windows_for_refresh () { _win_list.clear (); }
-    FatProcess*      get_damaged () { return _damaged; }
-    FatProcess*      get_redraw () { return _redraw_action; }
+    UndelayedSpike*  get_damaged () { return _damaged; }
+    Action*          get_redraw () { return _redraw_action; }
 
   private:
     UpdateDrawing         (const UpdateDrawing&) = delete;

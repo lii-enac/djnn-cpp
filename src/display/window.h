@@ -198,7 +198,7 @@ class Window : public FatProcess, public PickUI {
     CoreProcess*    get_display () { return _display->get_value (); }
     void            init_display (FatProcess* conn) { _display->set_value (conn, false); }
     void            set_frame ();
-    FatProcess*     damaged () { return _damaged; }
+    auto*           damaged () { return _damaged; }
     FatProcess*     holder () { return _holder; }
     void            set_holder (FatProcess* p) { _holder = p; }
     void            set_cursor (const string& path, int hotX, int hotY) { _win_impl->set_cursor (path, hotX, hotY); }

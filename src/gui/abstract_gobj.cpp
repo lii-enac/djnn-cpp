@@ -30,7 +30,7 @@ namespace djnn {
 void
 AbstractGObj::create_Gobj_update_coupling (CoreProcess** prop, CouplingWithData** cprop)
 {
-    FatProcess* damaged = nullptr;
+    CoreProcess* damaged = nullptr;
     if (_layer)
         damaged = _layer->damaged ();
     else if (_frame)

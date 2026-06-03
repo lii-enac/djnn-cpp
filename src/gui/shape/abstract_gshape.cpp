@@ -210,7 +210,7 @@ AbstractGShape::find_child_impl (const string& path)
         _inverted_matrix = new Homography (this, "inverted_matrix");
         _inverted_matrix->set_activation_state (ACTIVATED);
     } else if (_c_z_prop == nullptr && (key.compare ("z") == 0)) {
-        FatProcess* update = nullptr;
+        CoreProcess* update = nullptr;
         if (_layer)
             update = _layer->damaged ();
         else if (_frame)

@@ -78,7 +78,7 @@ EVENT(stylus_eraser_pressure, DoubleProperty, parent)
     // cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION, nullptr);
     // if (f != nullptr)
     //   cpick->enable (f);
-    FatProcess* update = f;
+    CoreProcess* update = f;
     if (update)
         update = dynamic_cast<Window*> (f)->damaged ();
     cpick = new CouplingWithData (pickable, ACTIVATION, update, ACTIVATION);

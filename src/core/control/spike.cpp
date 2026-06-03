@@ -32,7 +32,7 @@ Spike::serialize (const string& format)
 }
 #endif
 
-FatProcess*
+Spike*
 Spike::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
     auto res           = new Spike (nullptr, name);

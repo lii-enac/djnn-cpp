@@ -32,7 +32,7 @@ Blank::serialize (const string& format)
 }
 #endif
 
-FatProcess*
+Blank*
 Blank::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
     auto res           = new Blank (nullptr, name);
