@@ -26,7 +26,7 @@ Binding::set_parent (CoreProcess* parent)
     if (dst)
         add_state_dependency (parent, dst);
 
-    FatProcess::set_parent (parent);
+    ChildProcess::set_parent (parent);
 }
 
 Binding::~Binding ()

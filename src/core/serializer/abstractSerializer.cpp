@@ -131,7 +131,7 @@ path_compute (FatProcess* from, CoreProcess* to,
                 buf += "/";
             else
                 insert_slash = 1;
-            auto*  pt = dynamic_cast<FatProcess*> (pc->t);
+            auto* pt = dynamic_cast<ChildProcess*> (pc->t);
             string name;
             if (pt)
                 name = pt->get_name ();

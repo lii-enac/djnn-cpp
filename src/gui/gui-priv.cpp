@@ -668,9 +668,9 @@ GUIStructureObserver::find_holder (CoreProcess* container)
 GUIMouseButton::GUIMouseButton (CoreProcess* parent, const string& name)
     : FatProcess (name)
 {
-    _press   = new Spike (this, "press");
-    _release = new Spike (this, "release");
-    _double_click = new Spike (this, "double_click");
+    _press   = new FatSpike (this, "press");
+    _release = new FatSpike (this, "release");
+    _double_click = new FatSpike (this, "double_click");
     finalize_construction (parent, name);
 }
 
@@ -680,8 +680,8 @@ GUIMouse::GUIMouse (CoreProcess* parent, const string& name)
     _left   = new GUIMouseButton (this, "left");
     _right  = new GUIMouseButton (this, "right");
     _middle = new GUIMouseButton (this, "middle");
-    _move   = new Spike (this, "move");
-    _wheel  = new Spike (this, "wheel");
+    _move   = new FatSpike (this, "move");
+    _wheel  = new FatSpike (this, "wheel");
     _pos_x  = new DoubleProperty (this, "x", 0);
     _pos_y  = new DoubleProperty (this, "y", 0);
     _dx     = new DoubleProperty (nullptr, "dx", 0); // TODO: not plug !?

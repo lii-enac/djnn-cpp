@@ -22,6 +22,7 @@
 #include "counter.h"
 #include "deref.h"
 #include "dictionary.h"
+#include "fat_spike.h"
 #include "finder.h"
 #include "fsm.h"
 #include "geometry.h"

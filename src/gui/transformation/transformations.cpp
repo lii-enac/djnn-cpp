@@ -17,9 +17,9 @@
 
 #include "gui/transformation/transformations.h"
 
-#include "core/control/spike.h"
 #include "core/core-dev.h" // graph add/remove edge
 #include "core/tree/list.h"
+#include "base/fat_spike.h"
 #include "display/abstract_display.h"
 #include "display/display-dev.h" // DisplayBackend
 #include "display/window.h"
@@ -33,7 +33,7 @@
 // #include <array>
 #include <cmath>
 
-
+#define Spike FatSpike
 
 namespace djnn {
 AbstractTransformation::AbstractTransformation (CoreProcess* parent, const string& name)
@@ -1548,7 +1548,7 @@ void
 AbstractHomography::init_rightRotateBy ()
 {    
     CoreProcess* damaged    = get_layer_or_frame_damaged ();
-    _rightRotateBy_spike = new Spike (this, "rightRotateBy");
+    _rightRotateBy_spike = new FatSpike (this, "rightRotateBy");
     _rightRotateBy_cx    = new DoubleProperty (nullptr, "cx", 0);
     _rightRotateBy_cy    = new DoubleProperty (nullptr, "cy", 0);
     _rightRotateBy_da    = new DoubleProperty (nullptr, "da", 0);

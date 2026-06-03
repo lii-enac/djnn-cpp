@@ -4,6 +4,9 @@
 #include "core/control/action.h"
 #include "gen/abstract_prop_homography.h"
 
+#include "base/fat_spike.h"
+#define Spike FatSpike
+
 namespace djnn {
 class AbstractHomography : public AbstractPropHomography {
     /*** private Class rightTranslateBy Actions ***/
@@ -308,3 +311,5 @@ class AbstractHomography : public AbstractPropHomography {
     void init_leftSkewYBy ();
 };
 } // namespace djnn
+
+#undef Spike 

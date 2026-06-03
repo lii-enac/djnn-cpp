@@ -65,14 +65,14 @@ class CoreBinding : public CoreProcess {
 #endif
 };
 
-// we could have used virtual inheritance, but thus forces qualification of activate(): too cumbersome
+// we could have used virtual inheritance, but this forces qualification of activate(): too cumbersome
 // use composition instead, simpler, but we loose a few bytes
 
-class Binding : public FatProcess //, virtual CoreBinding
+class Binding : public ChildProcess //, virtual CoreBinding // FIXME should not pe a FatProcess, since a binding should have no child
 {
   public:
     Binding (CoreProcess* parent, const string& name, CoreProcess* src, activation_flag_e src_flag, CoreProcess* dst, activation_flag_e dst_flag)
-        : FatProcess (name),
+        : ChildProcess (name),
           _b (src, src_flag, dst, dst_flag) {
         finalize_construction (parent, name);
     }

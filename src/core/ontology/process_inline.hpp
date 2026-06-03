@@ -87,7 +87,7 @@ ChildProcess::parent_somehow_deactivating () const
 
 INLINE
 bool
-FatProcess::pre_activate ()
+ChildProcess::pre_activate ()
 {
     /* no activation if :
      * 4 - the parent exists and is stopped

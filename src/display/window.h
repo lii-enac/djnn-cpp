@@ -21,6 +21,7 @@
 #include "core/property/ref_property.h"
 #include "core/tree/component.h"
 #include "core/tree/list.h"
+#include "base/fat_spike.h"
 #include "display/pickui.h"
 
 namespace djnn {
@@ -29,7 +30,7 @@ class DoubleProperty;
 class TextProperty;
 class BoolProperty;
 class RefProperty;
-class Spike;
+class FatSpike;
 class Blank;
 class BackgroundColor;
 class BackgroundRect;
@@ -163,9 +164,9 @@ class Window : public FatProcess, public PickUI {
     bool            refresh () { return _refresh; }
 
 #define EVENT(ev, type, parent) \
-    FatProcess*     ev () { return _ui->ev (); }
+    auto*     ev () { return _ui->ev (); }
 #define EVENT2(ev, type, parent, name) \
-    FatProcess*     ev () { return _ui->ev (); }
+    auto*     ev () { return _ui->ev (); }
 #include "ui_event/ui_event_parent.h"
 #include "ui_event/ui_event.h"
 #undef EVENT
@@ -229,10 +230,10 @@ class Window : public FatProcess, public PickUI {
   private:
 
     private:
-    class UndelayedSpike : public FatProcess {
+    class UndelayedSpike : public ChildProcess {
       public:
         UndelayedSpike (Window* parent, const string& name)
-            : FatProcess (name) {
+            : ChildProcess (name) {
             set_is_model (true);
             finalize_construction (parent, name);
         }

@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "core/control/spike.h"
+#include "base/fat_spike.h"
 #include "core/property/double_property.h"
 #include "core/tree/structure_observer.h"
 #include "core/xml/xml.h"
@@ -112,7 +112,7 @@ class GUIMouse : public FatProcess {
 
   private:
     GUIMouseButton *_left, *_right, *_middle;
-    Spike *         _move, *_wheel;
+    FatSpike       *_move, *_wheel;
     DoubleProperty *_pos_x, *_pos_y, *_dx, *_dy;
 };
 

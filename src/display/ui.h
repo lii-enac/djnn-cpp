@@ -21,6 +21,8 @@
 #include "core/property/int_property.h"
 #include "core/utils/containers/string.h"
 
+#include "base/fat_spike.h"
+
 namespace djnn {
 
 //extern const djnnstl::vector<djnnstl::string> __ui_interface;

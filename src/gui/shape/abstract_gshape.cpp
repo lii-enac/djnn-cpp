@@ -19,12 +19,12 @@
 
 #include "abstract_gshape.h"
 
-#include "core/control/spike.h"
 #include "core/tree/component_observer.h"
 #include "core/tree/list.h"
 #include "core/tree/set.h"
 #include "core/utils/error.h"
 #include "core/utils/iostream.h"
+#include "base/fat_spike.h"
 #include "display/abstract_display.h"
 #include "display/ui.h"
 #include "display/update_drawing.h"
@@ -89,14 +89,14 @@ Touch::init_touch (int id, double init_x, double init_y, double init_pressure)
     _local_move_y = new DoubleProperty (nullptr, "local_move_y", 0);
     _pressure     = new DoubleProperty (this, "pressure", init_pressure);
     _id           = new IntProperty (this, "id", id);
-    _move         = new Spike (this, "move");
+    _move         = new FatSpike (this, "move");
     _move->add_symbol ("x", _move_x);
     _move->add_symbol ("y", _move_y);
     _move->add_symbol ("local_x", _local_move_x);
     _move->add_symbol ("local_y", _local_move_y);
-    _enter      = new Spike (this, "enter");
-    _leave      = new Spike (this, "leave");
-    _release    = new Spike (this, "release");
+    _enter      = new FatSpike (this, "enter");
+    _leave      = new FatSpike (this, "leave");
+    _release    = new FatSpike (this, "release");
     _last_shape = new RefProperty (this, "last_shape", nullptr);
 }
 

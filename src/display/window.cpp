@@ -49,7 +49,7 @@ Window::init_ui (const string& title, double x, double y, double w, double h)
     
     _hidpi_scale       = new DoubleProperty (this, "hidpi_scale", 1);
     _mspf              = new DoubleProperty (this, "mspf", 1);
-    _close             = new Spike (nullptr, "close");
+    _close             = new FatSpike (nullptr, "close");
     add_symbol ("close", _close);
 
     _key_pressed       = new IntProperty (this, "key-pressed", 0);

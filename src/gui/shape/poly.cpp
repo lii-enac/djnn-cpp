@@ -135,7 +135,7 @@ Poly::Poly (CoreProcess* parent, const string& name, int closed)
     : AbstractGShape (parent, name), _closed (closed)
 {
     _points       = new List (this, "points");
-    _bounding_box = new Blank (this, "bounding_box");
+    _bounding_box = new Component (this, "bounding_box");
     _bbx          = new DoubleProperty (nullptr, "bbx", 0);
     _bby          = new DoubleProperty (nullptr, "bby", 0);
     _bbw          = new DoubleProperty (nullptr, "bbw", 0);

@@ -21,11 +21,11 @@
 
 namespace djnn {
 
-class Action : public FatProcess {
+class Action : public ChildProcess {
   public:
     Action (CoreProcess* parent, const string& n, bool model = false)
-        : // ChildProcess (model)
-          FatProcess (n, model) {
+        : ChildProcess (n, model) { // nope: inheriting sub-Actions may have children
+          //FatProcess (n, model) {
         /* note:
          * finalize_constructor for action
          * they add a symbol process but do not appear in the _children of its parent

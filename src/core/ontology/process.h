@@ -78,7 +78,9 @@ class CoreProcess {
     CoreProcess*          find_optional_child (const string&); // child might not exist, no warning in debug mode
     static CoreProcess*   find_child (CoreProcess* p, const string& path) { return nullptr; }
     virtual const string& find_child_name (const CoreProcess* child) const { return default_name; } // WARNING : low efficiency function cause by linear search. use with care !
-
+    virtual CoreProcess*  find_in_my_children_deep(const string&) { return nullptr; }
+    virtual CoreProcess*  find_in_my_children_shallow(const string&) { return nullptr; }
+  
     // utils
     virtual void         set_data (CoreProcess* data) {}
     virtual CoreProcess* get_data () { return nullptr; }
@@ -300,13 +302,25 @@ class CouplingProcess : public CoreProcess {
 
 class ChildProcess : public CouplingProcess {
   public:
-    ChildProcess (bool model = false);
+    ChildProcess (const string& name, bool model = false);
     virtual void      set_parent (CoreProcess* p) override;
     FatProcess*       get_parent () override { return _parent; }
     const FatProcess* get_parent () const override { return _parent; }
 
     virtual CoreProcess* get_state_dependency () override { return _state_dependency; } // for control flow change and execution scheduling
     virtual void         set_state_dependency (CoreProcess* s) override { _state_dependency = s; }
+
+    const string& get_name () const;
+    public:
+    virtual CoreProcess* find_child_impl (const string&) override;
+    // virtual CoreProcess* find_child (int /*index*/) override { return nullptr; }
+    static CoreProcess* find_child_impl (CoreProcess* p, const string& path);
+
+    void add_child (CoreProcess* child, const string& name) override; // useless message
+    void add_symbol (const string& name, CoreProcess* c) override; // useless message
+
+  protected:
+    virtual bool pre_activate () override;
 
   protected:
     void         finalize_construction (CoreProcess* parent, const string& name, CoreProcess* state = nullptr) override;
@@ -327,6 +341,8 @@ class FatProcess : public ChildProcess {
     virtual void          remove_child (const string& name) override;
     friend void           merge_children (CoreProcess* p1, const string& sy1, CoreProcess* p2, const string& sy2); // strange, only used in gradient...
     virtual const string& find_child_name (const CoreProcess* child) const override;                               // WARNING : low efficiency function caused by linear search. use with care !
+    virtual CoreProcess*  find_in_my_children_deep(const string&) override;
+    virtual CoreProcess*  find_in_my_children_shallow(const string&) override;
 
     // symbol and children-related methods only used in FatProcess
     // symtable_t::iterator find_child_iterator (const string& name) { return _symtable.find (name); }
@@ -344,16 +360,12 @@ class FatProcess : public ChildProcess {
     virtual void add_symbol (const string& name, CoreProcess* c) override;
     void         remove_symbol (const string& name);
 
-  protected:
-    virtual bool pre_activate () override;
+  public:
+    // virtual CoreProcess* find_child_impl (const string&) override;
+    // // virtual CoreProcess* find_child (int /*index*/) override { return nullptr; }
+    // static CoreProcess* find_child_impl (CoreProcess* p, const string& path);
 
   public:
-    virtual CoreProcess* find_child_impl (const string&) override;
-    // virtual CoreProcess* find_child (int /*index*/) override { return nullptr; }
-    static CoreProcess* find_child_impl (CoreProcess* p, const string& path);
-
-  public:
-    const string& get_name () const;
 
 #ifndef DJNN_NO_DEBUG
     virtual void dump (int level = 0) override;
@@ -411,12 +423,12 @@ void alias (CoreProcess* parent, const CoreProcess::string& name, CoreProcess* f
 void merge_children (CoreProcess* parent1, const CoreProcess::string& sy1, CoreProcess* parent2, const CoreProcess::string& sy2);
 
 // internal c-like API
-inline FatProcess* find (FatProcess* p) {
+inline CoreProcess* find (CoreProcess* p) {
     return p;
 } // helper for smalac
-inline FatProcess* find (CoreProcess* p) {
-    return dynamic_cast<FatProcess*> (p);
-} // helper for smalac
+// inline CoreProcess* find (CoreProcess* p) {
+//     return dynamic_cast<CoreProcess*> (p);
+// } // helper for smalac
 void remove_from_parentless_name (CoreProcess* child);
 
 void add_state_dependency (CoreProcess* parent, CoreProcess* p);

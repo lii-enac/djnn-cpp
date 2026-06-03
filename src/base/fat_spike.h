@@ -18,12 +18,12 @@
 
 namespace djnn {
 
-class Spike : public ChildProcess {
+class FatSpike : public FatProcess {
   public:
-    Spike (CoreProcess* parent, const string& name, bool model = true) // by default, model = true hence a spike does NOT activate upon its parent activation
-        : ChildProcess (name, model) { finalize_construction (parent, name); };
-    virtual ~Spike () {};
-    Spike* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
+    FatSpike (CoreProcess* parent, const string& name, bool model = true) // by default, model = true hence a spike does NOT activate upon its parent activation
+        : FatProcess (name, model) { finalize_construction (parent, name); };
+    virtual ~FatSpike ();
+    FatSpike* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   protected:
     void impl_activate () override {}

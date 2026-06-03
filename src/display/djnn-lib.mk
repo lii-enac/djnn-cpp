@@ -1,5 +1,5 @@
 local_dir = $(src_dir)/display
-lib_djnn_deps = exec_env core
+lib_djnn_deps = base exec_env core
 lib_srcs += $(wildcard $(local_dir)/*.cpp)
 
 ifeq ($(display),DRM)

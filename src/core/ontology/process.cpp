@@ -209,15 +209,20 @@ CouplingProcess::~CouplingProcess ()
     }
 }
 
-FatProcess::FatProcess (const string& name, bool model)
-    : ChildProcess (model),
-      _data (nullptr)
+ChildProcess::ChildProcess (const string& name, bool model)
+: CouplingProcess (model), _parent (nullptr), _state_dependency (nullptr)
 {
 #ifndef DJNN_NO_DEBUG
     if (name != "") {
         set_debug_name (name);
     }
 #endif
+}
+
+FatProcess::FatProcess (const string& name, bool model)
+    : ChildProcess (name, model),
+      _data (nullptr)
+{
 }
 
 // -----------------------------------------------------------------------
@@ -462,11 +467,6 @@ CouplingProcess::remove_deactivation_coupling (Coupling* c)
 // -----------------------------------------------------------------------
 // tree, component, symtable
 
-ChildProcess::ChildProcess (bool model)
-: CouplingProcess (model), _parent (nullptr), _state_dependency (nullptr)
-{
-}
-
 void
 ChildProcess::set_parent (CoreProcess* parent)
 {
@@ -486,6 +486,18 @@ ChildProcess::set_parent (CoreProcess* parent)
 #if !DJNN_NO_DEBUG
     set_debug_parent (parent);
 #endif
+}
+
+void
+ChildProcess::add_child (CoreProcess* child, const string& name)
+{
+    djnn_error(this, "ChildProcess::add_child is useless since core some classes inherit from ChildProcess instead of FatProcess (e.g. use base/FatSpike instead of core/Spike)");
+}
+
+void
+ChildProcess::add_symbol (const string& name, CoreProcess* c)
+{
+    djnn_error(this, "ChildProcess::add_symbol is useless since some core classes inherit from ChildProcess instead of FatProcess (e.g. use base/FatSpike instead of core/Spike)");
 }
 
 void
@@ -531,7 +543,7 @@ starts_with(const string& str, const string& prefix)
 
 
 CoreProcess*
-FatProcess::find_child_impl (const string& key)
+ChildProcess::find_child_impl (const string& key)
 {
     // DEBUG
     // std::cout << "key: " << key << endl;
@@ -603,37 +615,46 @@ FatProcess::find_child_impl (const string& key)
             }
             else { // "*": this means that we must try until we find something ok in our children
                 // try to find in our children, with no '*'
-                for (auto it: _symtable) {
-                    auto * found = it.second->find_child_impl(path);
-                    if (found)
-                        return found;
+                if (auto found = find_in_my_children_deep(path)) {
+                    return found;
                 }
             }
         }
-        // nothing has been found directly, since we are in "//", try again with our children and the full path
-        for (auto it: _symtable) {
-            auto * found = it.second->find_child_impl(key);
-            if (found)
-                return found;
-        }
-        return nullptr;
+        // nothing has been found directly. Since we are in "//", try again with our children and the full path
+        return find_in_my_children_deep (key);
     }
 
-    size_t found = key.find_first_of ('/');
-    if (found != string::npos) {
-        string newKey = key.substr (0, found);
-        string path   = key.substr (found + 1);
-        symtable_t::iterator it = find_child_iterator (newKey);
-        if (it != children_end ()) {
+    size_t slash_pos = key.find_first_of ('/');
+    if (slash_pos != string::npos) {
+        string newKey = key.substr (0, slash_pos);
+        string path   = key.substr (slash_pos + 1);
+        if (auto * child = find_in_my_children_shallow (newKey)) {
             if (path.length() > 1 && path[0] == '/') {
-                return (it->second)->find_child_impl (key.substr (found)); // "toto//titi"
+                return child->find_child_impl (key.substr (slash_pos)); // "toto//titi"
             } else {
-                return (it->second)->find_child_impl (path);
+                return child->find_child_impl (path);
             }
         }
     }
 
-    symtable_t::iterator it = find_child_iterator (key);
+    return find_in_my_children_shallow (key);
+}
+
+CoreProcess*
+FatProcess::find_in_my_children_deep(const string& name)
+{
+    for (auto it: _symtable) {
+        auto * found = it.second->find_child_impl(name);
+        if (found)
+            return found;
+    }
+    return nullptr;
+}
+
+CoreProcess*
+FatProcess::find_in_my_children_shallow(const string& name)
+{
+    symtable_t::iterator it = find_child_iterator (name);
     if (it != children_end ()) {
         return it->second;
     }
@@ -642,7 +663,7 @@ FatProcess::find_child_impl (const string& key)
 }
 
 CoreProcess*
-FatProcess::find_child_impl (CoreProcess* p, const string& path)
+ChildProcess::find_child_impl (CoreProcess* p, const string& path)
 {
     if (p == nullptr) {
         return URI::find_by_uri (path);
@@ -713,7 +734,7 @@ FatProcess::remove_symbol (const string& name)
 }
 
 const string&
-FatProcess::get_name () const
+ChildProcess::get_name () const
 {
     return (_parent ? _parent->find_child_name (this) : parentless_names[this].first);
 }
