@@ -15,23 +15,28 @@
 #include "gui/shape/shapes.h"
 
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <map>
 #include <string>
 
-using namespace std;
+//using namespace std;
+using std::cout;
+using std::endl;
 using namespace djnn;
+using namespace djnnstl;
 
 
-// c++ -o build/size -std=c++14 -Isrc -Ibuild -DDJNN_NO_DEBUG tools/size.cpp && build/size
+// c++ -o build/size -std=c++20 -Isrc -Ibuild -DDJNN_NO_DEBUG tools/size.cpp && build/size
 
-#define PSIZE(type) cout << #type ": \t" << sizeof(type) << " " << "bytes" << endl; 
+#define PSIZE(type) cout << #type "\t" << std::right << std::setw(4) << sizeof(type) << " " << "bytes" << endl; 
 
 int
 main(int argc, char* argv[])
 {
 	PSIZE(unsigned int);
 	PSIZE(unsigned long);
+	PSIZE(float);
 	PSIZE(double);
 	PSIZE(void*);
 	PSIZE(string);
@@ -42,6 +47,7 @@ main(int argc, char* argv[])
 
 	PSIZE(CoreProcess);
 	PSIZE(CouplingProcess);
+	PSIZE(ChildProcess);
 	PSIZE(FatProcess);
 	cout << endl;
 
@@ -49,12 +55,15 @@ main(int argc, char* argv[])
 	PSIZE(Vertex);
 	cout << endl;
 
-	PSIZE(IntProperty);
-	PSIZE(Component);
-	cout << endl;
-
+	PSIZE(Spike);
+	//PSIZE(FatSpike);
 	PSIZE(CoreBinding);
 	PSIZE(Binding);
+	cout << endl;
+
+	//PSIZE(SuperAbstractProperty);
+	PSIZE(IntProperty);
+	PSIZE(Component);
 	cout << endl;
 
 	PSIZE(Action);
@@ -77,6 +86,8 @@ main(int argc, char* argv[])
 	cout << endl;
 
 	PSIZE(Rectangle);
+	PSIZE(Path);
+	PSIZE(Text);
 
 	return 0;
 }
