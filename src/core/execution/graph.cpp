@@ -627,6 +627,7 @@ Graph::exec ()
 
             if (v->is_invalid ())
                 continue;
+
             auto* p = v->get_process ();
 
 #ifndef DJNN_NO_DEBUG

@@ -328,7 +328,7 @@ FSM::add_transition (FSMTransition* tr)
         graph_remove_edge (_transitions.at (p - 1)->transition_action (), &_post_trigger);
     }
     graph_add_edge (tr->transition_action (), &_post_trigger);
-};
+}
 
 void
 FSM::set_parent (CoreProcess* parent)

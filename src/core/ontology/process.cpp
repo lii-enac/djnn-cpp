@@ -135,8 +135,7 @@ long int                           __dbg_creation_num = 0;       // NOLINT (cppc
 CoreProcess::CoreProcess (bool model)
     : _vertex (nullptr), _bitset (0)
 #ifndef DJNN_NO_DEBUG
-      ,
-      _debug_parent (nullptr), _debug_name (default_name)
+    , _debug_parent (nullptr), _debug_name (default_name)
 #endif
 {
     set_is_model (model);
@@ -697,7 +696,7 @@ FatProcess::add_symbol (const string& name, CoreProcess* c)
 
     // see note from ChildProcess::set_parent
     // remove c from parentless_names if necessarry
-    // if c is here, now, he's should have a parent
+    // if c is here, now, it should have a parent
     remove_from_parentless_name (c);
 
     _symtable[name] = c;
