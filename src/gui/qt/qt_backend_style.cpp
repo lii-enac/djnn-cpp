@@ -169,7 +169,19 @@ QtBackend::load_outline_width (OutlineWidth* ow)
 {
     double w;
     ow->get_properties_values (w);
-    _context_manager->get_current ()->pen.setWidthF (w);
+    QtContext* cur_context = _context_manager->get_current ();
+
+    // https://doc.qt.io/ void QPen::setWidthF(qreal width)
+    // A line width of zero indicates a cosmetic pen. This means that the pen width is always drawn one pixel wide, independent of the transformation set on the painter.
+    if (w < 0.01) {
+        if (w < 0) {
+            djnn_warning (ow, "Outline width can't be negative");
+        }
+        cur_context->pen.setWidthF (0.01);
+    }
+    else {
+        cur_context->pen.setWidthF (w);
+    }
 }
 
 void
