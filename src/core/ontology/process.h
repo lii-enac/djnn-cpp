@@ -393,8 +393,8 @@ extern djnnstl::list<djnnstl::pair<CoreProcess*, long int>> __dbg_creation_stat_
 #endif
 
 // to be removed
-using FatChildProcess = CoreProcess;
-using ParentProcess   = CoreProcess;
+// using FatChildProcess = CoreProcess;
+// using ParentProcess   = CoreProcess;
 
 // --- public c-like API
 
@@ -440,6 +440,6 @@ inline const CoreProcess::string& get_debug_name (const CoreProcess* p) { return
 
 // comment out the following while experminenting with the methods included in process_inline.hpp (see also process.cpp)
 // this will prevent constant recompiling of the entire lib
-#define INLINE inline
-#include "process_inline.hpp"
-#undef INLINE
+// #define INLINE inline
+// #include "process_inline.hpp"
+// #undef INLINE
