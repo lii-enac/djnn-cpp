@@ -24,9 +24,43 @@
 
 namespace djnn {
 
+FatNativeAction::FatNativeAction (CoreProcess* parent, const string& name, NativeCode* action, void* data,
+                            bool isModel)
+    : FatAction (parent, name), _data (data), _action (action), _activation_source (nullptr)
+{
+    set_is_model (isModel);
+    finalize_construction (parent, name);
+}
+
+FatNativeAction::~FatNativeAction ()
+{
+}
+
+void
+FatNativeAction::impl_activate ()
+{
+    (_action) (this);
+}
+
+void*
+FatNativeAction::data ()
+{
+    return _data;
+}
+
+void*
+get_fat_native_user_data (CoreProcess* native_action)
+{
+    auto* na = djnn_dynamic_cast<FatNativeAction*> (native_action);
+    if (na == nullptr)
+        return nullptr;
+    return na->data ();
+    // return native_action->data ();
+}
+
 NativeAsyncAction::NativeAsyncAction (CoreProcess* parent, const CoreProcess::string& name, NativeCode action, void* data,
                                       bool isModel)
-    : NativeAction (parent, name, action, data, isModel),
+    : FatNativeAction (parent, name, action, data, isModel),
       ExternalSource (name),
       _end (this, "end"),
       _restart (this, "restart"),
@@ -69,7 +103,7 @@ NativeAsyncAction::run ()
     // this is executed in its own thread
 
     rmt_BeginCPUSample(external_source_native_async_action, 0);
-    NativeAction::impl_activate (); // execute the action
+    FatNativeAction::impl_activate (); // execute the action
     
 
     djnn::get_exclusive_access (DBG_GET);

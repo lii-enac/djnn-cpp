@@ -15,16 +15,36 @@
 
 #pragma once
 
-#include "core/control/action.h"
+//#include "core/control/action.h"
 #include "core/control/blank.h"
 #include "core/control/native_action.h"
 #include "core/control/spike.h"
 #include "core/ontology/process.h"
 #include "exec_env/external_source.h"
+#include "base/fat_action.h"
 
 namespace djnn {
 
-class NativeAsyncAction : public NativeAction, public ExternalSource {
+class FatNativeAction : public FatAction {
+public:
+  FatNativeAction (CoreProcess* parent, const string& name, NativeCode* action, void* data, bool isModel);
+  virtual ~FatNativeAction ();
+  virtual process_type_e get_process_type () const override { return NATIVE_ACTION_T; }
+  void                   impl_activate () override;
+  void*                  data ();
+
+  virtual void         set_activation_source (CoreProcess* src) override { _activation_source = src; }
+  virtual CoreProcess* get_activation_source () override { return _activation_source; }
+
+protected:
+  void*        _data;
+  NativeCode*  _action;
+  CoreProcess* _activation_source;
+};
+void* get_fat_native_user_data (CoreProcess* native_action);
+
+
+class NativeAsyncAction : public FatNativeAction, public ExternalSource {
   public:
     NativeAsyncAction (CoreProcess* parent, const CoreProcess::string& name, NativeCode action, void* data, bool isModel);
     virtual ~NativeAsyncAction ();
