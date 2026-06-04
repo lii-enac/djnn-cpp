@@ -24,7 +24,7 @@
 #include "core/utils/to_string.h"
 #include "display/ui.h"
 #include "gui/transformation/homography.h"
-
+#include "core/utils/iostream.h"
 
 namespace djnn {
 extern int            mouse_tracking; // in display
