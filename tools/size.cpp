@@ -1,26 +1,11 @@
-#include "core/ontology/process.h"
-#include "core/ontology/coupling.h"
-#include "core/execution/graph.h"
+#include "core/core.h"
+#include "base/base.h"
+#include "gui/gui.h"
 
-#include "core/property/int_property.h"
-#include "core/tree/component.h"
-#include "core/control/action.h"
-#include "core/control/assignment.h"
-#include "core/control/binding.h"
-
-#include "base/arithmetic.h"
-#include "base/connector.h"
-#include "base/fsm.h"
-
-#include "gui/shape/shapes.h"
 
 #include <iostream>
 #include <iomanip>
-#include <vector>
-#include <map>
-#include <string>
 
-//using namespace std;
 using std::cout;
 using std::endl;
 using namespace djnn;
@@ -56,17 +41,23 @@ main(int argc, char* argv[])
 	cout << endl;
 
 	PSIZE(Spike);
-	//PSIZE(FatSpike);
+	PSIZE(FatSpike);
 	PSIZE(CoreBinding);
 	PSIZE(Binding);
 	cout << endl;
 
 	//PSIZE(SuperAbstractProperty);
 	PSIZE(IntProperty);
+	PSIZE(TextProperty);
 	PSIZE(Component);
 	cout << endl;
 
 	PSIZE(Action);
+	PSIZE(NativeAction);
+	PSIZE(NativeExpressionAction);
+	PSIZE(FatAction);
+	PSIZE(FatNativeAction);
+
 	cout << endl;
 
 	PSIZE(CoreAssignment);
