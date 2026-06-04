@@ -8,14 +8,23 @@
 namespace djnn {
 class List;
 
-class PathPoint : public AbstractGObj {
+class SubPath : public AbstractGObj {
   public:
-    PathPoint (CoreProcess* parent, const string& name, double x, double y);
-    virtual ~PathPoint ();
+    SubPath (CoreProcess* parent, const string& name) : AbstractGObj(parent, name) {}
+    virtual void            get_bounding_box (double& x, double& y, double& w, double& h) const { x=-1; y=-1; w=-1; h=-1; }
+    void                    draw () override = 0;
+    double                  sdf (double px, double py) const { return INFINITY; }
+    //virtual void get_xy(double & x, double & y) const = 0;
+};
+
+class SubPathWithSingleCoord : public SubPath {
+  public:
+    SubPathWithSingleCoord (CoreProcess* parent, const string& name, double x, double y);
+    virtual ~SubPathWithSingleCoord ();
     virtual CoreProcess*    find_child_impl (const string&) override;
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*)find_child_impl ("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
-    void                    draw () override = 0;
+    //void get_xy(double & x, double & y) const override { x=raw_props.x; y = raw_props.y; }
 
     // useless?
     // notify polygon ( (grand-)parent: polygon-list-point)
@@ -34,23 +43,26 @@ class PathPoint : public AbstractGObj {
     void              impl_deactivate () override;
 };
 
-class PathMove : public PathPoint {
+class PathMove : public SubPathWithSingleCoord {
   public:
     PathMove (CoreProcess* parent, const string& name, double x, double y)
-        : PathPoint (parent, name, x, y) {}
+        : SubPathWithSingleCoord (parent, name, x, y) {}
     void      draw () override;
+    void      get_bounding_box (double& x, double& y, double& w, double& h) const override { x=raw_props.x; y=raw_props.y; w=0; h=0;}
     PathMove* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
-class PathLine : public PathPoint {
+class PathLine : public SubPathWithSingleCoord {
   public:
     PathLine (CoreProcess* parent, const string& name, double x, double y)
-        : PathPoint (parent, name, x, y) {}
+        : SubPathWithSingleCoord (parent, name, x, y) {}
     void      draw () override;
+    void      get_bounding_box (double& x, double& y, double& w, double& h) const override { x=0; y=0; w=raw_props.x; h=raw_props.y; }
+    double    sdf (double px, double py) const;
     PathLine* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
-class PathQuadratic : public AbstractGObj {
+class PathQuadratic : public SubPath {
   public:
     PathQuadratic (CoreProcess* parent, const string& name, double x1, double y1, double x, double y);
     virtual ~PathQuadratic ();
@@ -60,6 +72,9 @@ class PathQuadratic : public AbstractGObj {
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*)find_child_impl ("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override;
+    void                    get_bounding_box (double& x, double& y, double& w, double& h) const override;
+    double                  sdf (double px, double py) const;
+    //void get_xy(double & x, double & y) const override { x=raw_props.x; y = raw_props.y; }
     PathQuadratic*          impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
@@ -72,7 +87,7 @@ class PathQuadratic : public AbstractGObj {
     void              impl_deactivate () override;
 };
 
-class PathCubic : public AbstractGObj {
+class PathCubic : public SubPath {
   public:
     PathCubic (CoreProcess* parent, const string& name, double x1, double y1, double x2, double y2, double x, double y);
     virtual ~PathCubic ();
@@ -84,6 +99,9 @@ class PathCubic : public AbstractGObj {
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*)find_child_impl ("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override;
+    void                    get_bounding_box (double& x, double& y, double& w, double& h) const override;
+    double                  sdf (double px, double py) const;
+    //void get_xy(double & x, double & y) const override { x=raw_props.x; y = raw_props.y; }
     PathCubic*              impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
@@ -96,7 +114,7 @@ class PathCubic : public AbstractGObj {
     void              impl_deactivate () override;
 };
 
-class PathArc : public AbstractGObj {
+class PathArc : public SubPath {
   public:
     PathArc (CoreProcess* parent, const string& name, double rx, double ry, double rotx, double fl, double swfl, double x,
              double y);
@@ -110,6 +128,9 @@ class PathArc : public AbstractGObj {
     AbstractDoubleProperty* x () { return (AbstractDoubleProperty*)find_child_impl ("x"); }
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override;
+    void                    get_bounding_box (double& x_, double& y_, double& w_, double& h_) const override;
+    double                  sdf (double px, double py) const;
+    //void get_xy(double & x, double & y) const override { x=raw_props.x; y = raw_props.y; }
     PathArc*                impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
   private:
@@ -122,7 +143,7 @@ class PathArc : public AbstractGObj {
     void              impl_deactivate () override;
 };
 
-class PathClosure : public AbstractGObj {
+class PathClosure : public SubPath {
   public:
     PathClosure (CoreProcess* parent, const string& name);
     virtual ~PathClosure () {}

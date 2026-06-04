@@ -24,11 +24,11 @@ class PolyPoint : public AbstractGObj {
     //     get_parent ()->get_parent ()->notify_change (nm);
     // }
 
-  protected:
     struct raw_props_t {
         double x, y;
     };
     raw_props_t       raw_props;
+  protected:
     CouplingWithData *_cx, *_cy;
     void              impl_activate () override;
     void              impl_deactivate () override;

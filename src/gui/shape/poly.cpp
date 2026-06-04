@@ -189,22 +189,38 @@ Poly::get_bounding_box (double& x, double& y, double& w, double& h) const
     // warning : does not work until the path is drawn
     // also, if a point in the path is modified, bbox is not recomputed until the path is drawn again
     // if (is_bounding_box_valid ()) {
-    x = _bbx->get_double_value ();
-    y = _bby->get_double_value ();
-    w = _bbw->get_double_value ();
-    h = _bbh->get_double_value ();
+    // x = _bbx->get_double_value ();
+    // y = _bby->get_double_value ();
+    // w = _bbw->get_double_value ();
+    // h = _bbh->get_double_value ();
     //} else {
-    UNIMPL;
+    //UNIMPL;
     // should be computed for picking...
-    // for (auto p: _items->children ()) {
-    //}
+    x=y=w=h=-1;
+    for (auto p: _points->children ()) {
+        auto point = dynamic_cast<PolyPoint*>(p);
+        if (point) {
+            if (point->raw_props.x<x) x=point->raw_props.x;
+            if (point->raw_props.y<y) y=point->raw_props.y;
+            if (point->raw_props.x>(x+w)) w=point->raw_props.x-x;
+            if (point->raw_props.y>(y+h)) h=point->raw_props.y-y;
+        } else {
+            error(this, "Poly child is not a PolyPoint");
+        }
+    }
 }
 
 double
 Poly::sdf (double x, double y) const
 {
-    UNIMPL;
-    return 0;
+    vector<vec2> points;
+    for (auto p: _points->children ()) {
+        auto point = dynamic_cast<PolyPoint*>(p);
+        if (point) {
+            points.push_back(vec2(point->raw_props.x, point->raw_props.y));
+        }
+    }
+    return SDF_polygon(points.data(), points.size(), vec2(x,y));
 }
 
 void

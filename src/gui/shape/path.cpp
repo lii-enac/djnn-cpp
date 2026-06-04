@@ -305,8 +305,8 @@ error:
     return 0;
 }
 
-PathPoint::PathPoint (CoreProcess* parent, const string& name, double x, double y)
-    : AbstractGObj (parent, name),
+SubPathWithSingleCoord::SubPathWithSingleCoord (CoreProcess* parent, const string& name, double x, double y)
+    : SubPath (parent, name),
       raw_props{.x = x, .y = y},
       _cx (nullptr), _cy (nullptr)
 {
@@ -324,7 +324,7 @@ PathPoint::PathPoint (CoreProcess* parent, const string& name, double x, double 
     parent->add_symbol (name, this);
 }
 
-PathPoint::~PathPoint ()
+SubPathWithSingleCoord::~SubPathWithSingleCoord ()
 {
     remove_edge (_cx);
     remove_edge (_cy);
@@ -346,7 +346,7 @@ PathPoint::~PathPoint ()
 }
 
 CoreProcess*
-PathPoint::find_child_impl (const string& name)
+SubPathWithSingleCoord::find_child_impl (const string& name)
 {
     auto* res = AbstractGObj::find_child_impl (name);
     if (res)
@@ -374,7 +374,7 @@ PathPoint::find_child_impl (const string& name)
 }
 
 void
-PathPoint::impl_activate ()
+SubPathWithSingleCoord::impl_activate ()
 {
     AbstractGObj::impl_activate ();
     auto* damaged = get_frame ()->damaged ();
@@ -383,7 +383,7 @@ PathPoint::impl_activate ()
 }
 
 void
-PathPoint::impl_deactivate ()
+SubPathWithSingleCoord::impl_deactivate ()
 {
     disable (_cx);
     disable (_cy);
@@ -427,7 +427,7 @@ PathMove::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const
 }
 
 PathClosure::PathClosure (CoreProcess* parent, const string& name)
-    : AbstractGObj (parent, name)
+    : SubPath (parent, name)
 {
     /* avoid dynamic_cast for cloning */
     if (parent == nullptr)
@@ -459,7 +459,7 @@ PathClosure::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, co
 }
 
 PathQuadratic::PathQuadratic (CoreProcess* parent, const string& name, double x1, double y1, double x, double y)
-    : AbstractGObj (parent, name),
+    : SubPath (parent, name),
       raw_props{.x1 = x1, .y1 = y1, .x = x, .y = y},
       _cx1 (nullptr), _cy1 (nullptr), _cx (nullptr), _cy (nullptr)
 {
@@ -584,7 +584,7 @@ PathQuadratic::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, 
 }
 
 PathCubic::PathCubic (CoreProcess* parent, const string& name, double x1, double y1, double x2, double y2, double x, double y)
-    : AbstractGObj (parent, name),
+    : SubPath (parent, name),
       raw_props{.x1 = x1, .y1 = y1, .x2 = x2, .y2 = y2, .x = x, .y = y},
       _cx1 (nullptr), _cy1 (nullptr), _cx2 (nullptr), _cy2 (nullptr), _cx (nullptr), _cy (nullptr)
 {
@@ -731,7 +731,7 @@ PathCubic::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, cons
 
 PathArc::PathArc (CoreProcess* parent, const string& name, double rx, double ry, double rotx, double fl, double swfl, double x,
                   double y)
-    : AbstractGObj (parent, name),
+    : SubPath (parent, name),
       raw_props{.rx = rx, .ry = ry, .rotx = rotx, .fl = fl, .swfl = swfl, .x = x, .y = y},
       _crx (nullptr), _cry (nullptr), _crotx (nullptr), _cfl (nullptr), _cswfl (nullptr), _cx (nullptr), _cy (nullptr)
 {
@@ -904,7 +904,7 @@ Path::Path (CoreProcess* parent, const string& name)
       _c_update (&_spec, ACTIVATION, &_updateaction, ACTIVATION, true)
 {
     _items        = new List (this, "items");
-    _bounding_box = new Blank (this, "bounding_box");
+    _bounding_box = new Component (this, "bounding_box");
     _bbx          = new DoubleProperty (nullptr, "bbx", 0);
     _bby          = new DoubleProperty (nullptr, "bby", 0);
     _bbw          = new DoubleProperty (nullptr, "bbw", 0);
@@ -1016,6 +1016,45 @@ PathClip::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const
     return clone;
 }
 
+
+
+
+
+void
+PathQuadratic::get_bounding_box (double& x, double& y, double& w, double& h) const
+{
+    x=0; y=0;
+    w=raw_props.x1<raw_props.x?raw_props.x1:raw_props.x;
+    h=raw_props.y1<raw_props.y?raw_props.y1:raw_props.y;
+}
+
+void
+PathCubic::get_bounding_box (double& x, double& y, double& w, double& h) const
+{
+    x=0; y=0;
+    w=raw_props.x1<raw_props.x?raw_props.x1:raw_props.x;
+    w=raw_props.x2<w?raw_props.x2:w;
+    h=raw_props.y1<raw_props.y?raw_props.y1:raw_props.y;
+    h=raw_props.y2<h?raw_props.y2:h;
+}
+
+void
+PathArc::get_bounding_box (double& x_, double& y_, double& w_, double& h_) const
+{
+    double rx=raw_props.rx,ry=raw_props.ry,rotx=raw_props.rotx,x=raw_props.x,y=raw_props.y;
+    double c = std::cos(rotx);
+    double s = std::sin(rotx);
+
+    double w = std::sqrt(rx*rx*c*c + ry*ry*s*s);
+    double h = std::sqrt(rx*rx*s*s + ry*ry*c*c);
+
+    x_ = std::min(0., x) - w;
+    w_ = (std::max(0., x) + w) - x;
+
+    y_ = std::min(0., y) - h;
+    h_ = std::max(0., y) + h;
+}
+
 void
 Path::get_bounding_box (double& x, double& y, double& w, double& h) const
 {
@@ -1026,18 +1065,72 @@ Path::get_bounding_box (double& x, double& y, double& w, double& h) const
         y = _bby->get_value ();
         w = _bbw->get_value ();
         h = _bbh->get_value ();
-    } else {
-        UNIMPL;
+    } else
+    {
+        //UNIMPL;
+        //std::cerr << __FUNCTION__ << __FL__;
         // should be computed for picking...
-        // for (auto p: _items->children ()) {
+        x=y=w=h=-1;
+        for (auto p: _items->children ()) {
+                double xc,yc,wc,hc;
+                auto *subpath = dynamic_cast<SubPath*>(p);
+                //assert(gshape);
+                if (subpath) {
+                    subpath->get_bounding_box(xc,yc,wc,hc);
+                    if (xc<x) x=xc;
+                    if (yc<y) y=yc;
+                    if (wc>w) w=wc;
+                    if (hc>h) h=hc;
+                } else {
+                    error(this, "bbox: Path child is not a SubPath");
+                }
+        }
     }
 }
 
 double
+PathLine::sdf (double px, double py) const
+{
+    vec2   p = vec2 (px, py);
+    double d;
+    d = SDF_plane (p, vec2 (0,0), vec2 (raw_props.x, raw_props.y));
+    return d;
+}
+
+double
+PathQuadratic::sdf (double px, double py) const
+{
+    return SDF_quadratic_bezier(vec2(px,py), vec2(0,0), vec2(raw_props.x1, raw_props.y1), vec2(raw_props.x, raw_props.y) );
+}
+
+double
+PathCubic::sdf (double px, double py) const
+{
+    return INFINITY;
+}
+
+double
+PathArc::sdf (double px, double py) const
+{
+    return SDF_arc(vec2(px,py), vec2(sin(raw_props.rotx), cos(raw_props.rotx)), raw_props.rx, raw_props.ry);
+}
+
+
+double
 Path::sdf (double x, double y) const
 {
-    UNIMPL;
-    return 0;
+    double d = INFINITY;
+    for (auto p: _items->children ()) {
+        auto *subpath = dynamic_cast<SubPath*>(p);
+        //assert(subpath);
+        if (subpath) {
+            auto sd = subpath->sdf(x,y);
+            if (abs(sd)<abs(d)) d=sd;
+        } else {
+            error(this, "sdf: Path child is not a SubPath");
+        }
+    }
+    return d;
 }
 
 void
