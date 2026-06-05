@@ -75,11 +75,11 @@ class Evdev {
   public:
     Evdev (const char* node);
     ~Evdev ();
-    FatProcess* action () { return _action; }
+    auto* action () { return _action; }
     void        handle_evdev_msg ();
 
   private:
-    FatProcess*      _action;
+    EvdevAction*     _action;
     IOFD*            _iofd;
     LinuxDevice*     _djn_dev;
     Coupling*        _readable_cpl;
