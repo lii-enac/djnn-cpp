@@ -305,6 +305,13 @@ error:
     return 0;
 }
 
+
+double
+SubPath::sdf (double px, double py) const
+{
+    return INFINITY;
+}
+
 SubPathWithSingleCoord::SubPathWithSingleCoord (CoreProcess* parent, const string& name, double x, double y)
     : SubPath (parent, name),
       raw_props{.x = x, .y = y},

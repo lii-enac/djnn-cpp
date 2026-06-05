@@ -13,7 +13,7 @@ class SubPath : public AbstractGObj {
     SubPath (CoreProcess* parent, const string& name) : AbstractGObj(parent, name) {}
     virtual void            get_bounding_box (double& x, double& y, double& w, double& h) const { x=-1; y=-1; w=-1; h=-1; }
     void                    draw () override = 0;
-    double                  sdf (double px, double py) const { return INFINITY; }
+    virtual double          sdf (double px, double py) const; //{ return INFINITY; }
     //virtual void get_xy(double & x, double & y) const = 0;
 };
 
@@ -58,7 +58,7 @@ class PathLine : public SubPathWithSingleCoord {
         : SubPathWithSingleCoord (parent, name, x, y) {}
     void      draw () override;
     void      get_bounding_box (double& x, double& y, double& w, double& h) const override { x=0; y=0; w=raw_props.x; h=raw_props.y; }
-    double    sdf (double px, double py) const;
+    double    sdf (double px, double py) const override;
     PathLine* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 
@@ -73,7 +73,7 @@ class PathQuadratic : public SubPath {
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override;
     void                    get_bounding_box (double& x, double& y, double& w, double& h) const override;
-    double                  sdf (double px, double py) const;
+    double                  sdf (double px, double py) const override;
     //void get_xy(double & x, double & y) const override { x=raw_props.x; y = raw_props.y; }
     PathQuadratic*          impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
@@ -100,7 +100,7 @@ class PathCubic : public SubPath {
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override;
     void                    get_bounding_box (double& x, double& y, double& w, double& h) const override;
-    double                  sdf (double px, double py) const;
+    double                  sdf (double px, double py) const override;
     //void get_xy(double & x, double & y) const override { x=raw_props.x; y = raw_props.y; }
     PathCubic*              impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
@@ -129,7 +129,7 @@ class PathArc : public SubPath {
     AbstractDoubleProperty* y () { return (AbstractDoubleProperty*)find_child_impl ("y"); }
     void                    draw () override;
     void                    get_bounding_box (double& x_, double& y_, double& w_, double& h_) const override;
-    double                  sdf (double px, double py) const;
+    double                  sdf (double px, double py) const override;
     //void get_xy(double & x, double & y) const override { x=raw_props.x; y = raw_props.y; }
     PathArc*                impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 
