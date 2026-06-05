@@ -116,6 +116,20 @@ QtWindow::impl_activate ()
         djnn_error (nullptr, "QtWindow::impl_activate () - Unable to create QtWindow");
 }
 
+uint32_t
+QtWindow::get_pixel_color(int x, int y)
+{
+    if (_qwidget) {
+        djnn::release_exclusive_access (DBG_GET);
+        QPixmap pixmap = _qwidget->grab(QRect(x, y, 1, 1));
+        djnn::get_exclusive_access (DBG_GET);
+        QImage image = pixmap.toImage();
+        QColor color = image.pixelColor(0, 0); 
+        return color.rgba();   
+    }
+    return 0;
+}
+
 void
 QtWindow::impl_deactivate ()
 {

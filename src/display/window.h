@@ -73,6 +73,7 @@ class WinImpl {
     virtual void set_cursor (int cursor_shape)                                = 0;
     Picking*     picking_view () { return _picking_view; };
     void         set_picking_view (Picking* p) { _picking_view = p; };
+    virtual uint32_t get_pixel_color(int x, int y) { return 0; }
     virtual void perform_screenshot (const djnnstl::string& path) {}
     virtual void set_opacity (double opacity) {}
     virtual void set_background_transparency_and_color (bool isTransparent, int r, int g, int b, bool isFrameless = false) {}
@@ -148,6 +149,7 @@ class Window : public FatProcess, public PickUI {
     void     set_picking_view (Picking* p) { _win_impl->set_picking_view (p); }
     //CoreProcess* find_child_impl (const string& name) override;
     void         set_mouse_local_coords (double x, double y, bool is_move) override {};
+    uint32_t get_pixel_color (int x, int y) { return _win_impl->get_pixel_color (x, y); }
 
     DoubleProperty* pos_x () { return _pos_x; }
     DoubleProperty* pos_y () { return _pos_y; }

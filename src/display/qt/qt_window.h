@@ -42,6 +42,8 @@ class QtWindow : public WinImpl {
     virtual void update_geometry () override;
     virtual void update_geometry_for_good ();
 
+    virtual uint32_t get_pixel_color(int x, int y) override;
+
   protected:
     /* FatProcess */
     void impl_activate () override;
