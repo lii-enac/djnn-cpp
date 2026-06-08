@@ -50,7 +50,7 @@ std::string to_string_with_precision(const T a_value, const int n = 6)
 string
 to_string (double v)
 {
-    return to_string_with_precision (v, 6);
+    return to_string_with_precision (v, 2);  // 2 Digit only !
 }
 
 }
