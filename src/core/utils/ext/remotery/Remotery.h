@@ -262,7 +262,7 @@ typedef const char* rmtPStr;
 typedef struct Msg_SampleTree rmtSampleTree;
 
 // Opaque pointer to a node in the sample graph tree
-typedef struct Sample rmtSample;
+typedef struct _Sample rmtSample;
 
 // Handle to the main remotery instance
 typedef struct Remotery Remotery;

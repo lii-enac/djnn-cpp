@@ -4691,6 +4691,8 @@ static void Server_Update(Server* server)
 
 #define SAMPLE_NAME_LEN 128
 
+#define Sample _Sample
+
 typedef struct Sample
 {
     // Inherit so that samples can be quickly allocated
