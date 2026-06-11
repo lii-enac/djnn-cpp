@@ -163,7 +163,32 @@ get_touch_points(const QTouchEvent* event)
 }
 #endif
 
+inline
+bool
+is_move_event(QEvent* event)
+{
+    switch (event->type ()) {
+        case QEvent::MouseMove:
+        case QEvent::TabletMove:
+        case QEvent::NonClientAreaMouseMove:
+            return true;
+        case QEvent::TouchUpdate: {
+            const auto& touchPoints = get_touch_points(static_cast<QTouchEvent*> (event));
 
+            for (const auto& touchPoint : touchPoints) {
+                switch (touchPoint.state ()) {
+                    case Qt::TouchPointMoved:
+                        return true;
+                    default:
+                        break;
+                }
+            }
+            return false;
+        }
+        default:
+            return false;
+    }
+}
 
 bool
 MyQQWidget::event (QEvent* event)
@@ -180,6 +205,14 @@ MyQQWidget::event (QEvent* event)
 
     if (!_qwidget_event_call_level) {
         rmt_BeginCPUSample(external_source_gui, 0);
+        #ifndef DJNN_NO_DEBUG
+        if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+            if ( !is_move_event(event) || _DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE)
+                std::cerr << ">> " << "external_source_gui " << event->type () << std::endl;
+        }
+        extern bool _OUTSIDE_GRAPH_EXE;
+        _OUTSIDE_GRAPH_EXE = true;
+        #endif
     }
     ++_qwidget_event_call_level;
 
@@ -300,6 +333,16 @@ MyQQWidget::event (QEvent* event)
     --_qwidget_event_call_level;
     if (!_qwidget_event_call_level) {
         rmt_EndCPUSample();
+        #ifndef DJNN_NO_DEBUG
+        if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+            if ( !is_move_event(event))// || _DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE)
+                std::cerr << "<< " << "external_source_gui" << std::endl;
+        }
+        if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+            extern bool _OUTSIDE_GRAPH_EXE;
+            _OUTSIDE_GRAPH_EXE = false;
+        }
+        #endif
     }
     
     return exec_;
@@ -342,7 +385,10 @@ MyQQWidget::mouseMoveEvent (QMouseEvent* event)
 
     bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y);
     if (exec_) {
+        auto dbg = _DEBUG_SEE_ACTIVATION_SEQUENCE_2;
+        if (!_DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE) _DEBUG_SEE_ACTIVATION_SEQUENCE_2 = 0;
         GRAPH_EXEC;
+        if (dbg) _DEBUG_SEE_ACTIVATION_SEQUENCE_2 = 1;
     }
 }
 

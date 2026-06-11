@@ -25,6 +25,7 @@ int
     _DEBUG_SEE_ACTIVATION_SEQUENCE_TARGET_TIME_US = 1000,
     _DEBUG_SEE_ACTIVATION_SEQUENCE_ONLY_TARGETED  = 0,
     _DEBUG_SEE_ACTIVATION_SEQUENCE_2              = 0,
+    _DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE         = 0,
     _DEBUG_SEE_PROP_SET_VALUE                     = 0,
     _AUTHORIZE_CYCLE                              = 0,
     _DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT    = 0,
@@ -140,7 +141,9 @@ debug_activation_sequence_2 (CoreProcess *p)
 }
 
 void
-debug_prop_set_value (CoreProcess *p)
+
+bool _OUTSIDE_GRAPH_EXE;
+
 {
     bool do_debug_log = _DEBUG_SEE_PROP_SET_VALUE;// && debug_info ().lineno != 0;
     extern int debug_index, debug_index_post;

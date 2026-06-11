@@ -478,8 +478,6 @@ Graph::exec ()
     if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
         cerr << endl << ">> graph exec" << endl;
     }
-    debug_index = 0;
-    debug_index_post = -1;
 
     if (_display_info_once == false) {
         if (_DEBUG_ENABLE_STRESS_TEST == 1) {
@@ -489,6 +487,7 @@ Graph::exec ()
         }
         _display_info_once = true;
     }
+
 #endif
 
     // remotery start

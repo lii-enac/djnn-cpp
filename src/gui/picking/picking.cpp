@@ -17,6 +17,9 @@
 
 #include <assert.h>
 
+#include "core/utils/iostream.h"
+
+
 #include "color_picking.h"
 #include "core/tree/list.h"
 #include "core/utils/error.h"
@@ -461,7 +464,7 @@ bool
 Picking::genericMouseMove (double x, double y)
 {
     #ifndef DJNN_NO_DEBUG
-    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2 && _DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE) {
         std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
     }
     #endif
@@ -592,7 +595,7 @@ Picking::genericMouseMove (double x, double y)
     rmt_EndCPUSample ();
 
     #ifndef DJNN_NO_DEBUG
-    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2 && _DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE) {
         std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
     }
     #endif
@@ -604,7 +607,7 @@ bool
 Picking::genericTouchMove (double x, double y, int id, float pressure)
 {
     #ifndef DJNN_NO_DEBUG
-    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2 && _DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE) {
         std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
     }
     #endif
@@ -668,7 +671,7 @@ Picking::genericTouchMove (double x, double y, int id, float pressure)
     }
 
     #ifndef DJNN_NO_DEBUG
-    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2 && _DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE) {
         std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
     }
     #endif
