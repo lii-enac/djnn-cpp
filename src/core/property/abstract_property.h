@@ -23,7 +23,7 @@ namespace djnn {
 class SuperAbstractProperty : public FatProcess {
   public:
     SuperAbstractProperty (CoreProcess* parent, const string& name, unsigned int notify_mask = notify_none)
-        : FatProcess (name),
+        : FatProcess (name), // FIXME shouldn't model be true, like Spike?
           _notify_mask (notify_mask) {}
     // virtual ~SuperAbstractProperty () override {}
     virtual process_type_e  get_process_type () const override { return PROPERTY_T; }
