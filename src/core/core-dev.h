@@ -70,7 +70,7 @@ djnnstl::string
 print_process_debug_info (const CoreProcess* p);
 
 void
-debug_prop_set_value (CoreProcess *p);
+debug_prop_set_value (CoreProcess *p, bool incr=true);
 
 #endif
 

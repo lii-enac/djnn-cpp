@@ -140,10 +140,11 @@ debug_activation_sequence_2 (CoreProcess *p)
     }
 }
 
-void
+
 
 bool _OUTSIDE_GRAPH_EXE;
 
+void debug_prop_set_value(CoreProcess *p, bool incr)
 {
     bool do_debug_log = _DEBUG_SEE_PROP_SET_VALUE;// && debug_info ().lineno != 0;
     extern int debug_index, debug_index_post;
