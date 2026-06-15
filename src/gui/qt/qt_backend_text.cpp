@@ -160,7 +160,8 @@ QtBackend::draw_text_field (TextField* tf)
     QFontMetrics* last_fm = (QFontMetrics*)tf->get_font_metrics ();
     delete last_fm; // FIXME costly!
     tf->set_font_metrics ((FontMetricsImpl*)(new QFontMetrics (fm)));
-    double text_height = fm.ascent () + fm.descent ();
+    int text_height = fm.ascent () + fm.descent ();
+    int text_y      = tf->text_y_offset (text_height);
 
     // compute position
     int width = tf->width ();
@@ -168,7 +169,7 @@ QtBackend::draw_text_field (TextField* tf)
     int y     = tf->y ();
 
     QMatrix4x4& matrix (_context->matrix);
-    matrix.translate (x, y + fm.ascent ());
+    matrix.translate (x, y + text_y + fm.ascent ());
 
     SimpleText* line = tf->content ();
 
@@ -178,7 +179,7 @@ QtBackend::draw_text_field (TextField* tf)
     QPointF p (posX, posY);
     p.setX (posX - tf->offset ());
 
-    _painter->setClipRect (0, 0, width, text_height, Qt::IntersectClip); // clip text
+    _painter->setClipRect (0, text_y, width, text_height, Qt::IntersectClip); // clip text
     _painter->setTransform (matrix.toTransform ());
 
     // draw
@@ -200,21 +201,20 @@ QtBackend::draw_text_field (TextField* tf)
         _painter->setBrush (brush);
         _painter->setPen (pen);
 
-        matrix.translate (-x, -y - fm.ascent ());
+        matrix.translate (-x, -y - text_y - fm.ascent ());
         _painter->setTransform (matrix.toTransform ());
 
         // draw selection rectangle
-        _painter->drawRect (start_x, 0, end_x - start_x,
-                            fm.ascent () + fm.descent ());
+        _painter->drawRect (start_x, text_y, end_x - start_x, text_height);
 
         // setup text, with clip
         pen.setStyle (Qt::SolidLine);
         pen.setColor (QColor (tf->selected_text_color ()));
         _painter->setPen (pen);
 
-        _painter->setClipRect (start_x, 0, end_x - start_x,
+        _painter->setClipRect (start_x, text_y, end_x - start_x,
                                text_height, Qt::IntersectClip);
-        matrix.translate (x, y + fm.ascent ());
+        matrix.translate (x, y + text_y + fm.ascent ());
         _painter->setTransform (matrix.toTransform ());
 
         // draw text
@@ -225,7 +225,7 @@ QtBackend::draw_text_field (TextField* tf)
 
     // draw picking view
     load_pick_context (tf, _context);
-    QRect rect (0, -fm.ascent (), tf->width (), tf->height ());
+    QRect rect (0, -text_y - fm.ascent (), tf->width (), tf->height ());
     _picking_view->painter ()->drawRect (rect);
 #if _DEBUG_SEE_GUI_INFO_PREF
     __nb_Drawing_object_picking++;
@@ -235,7 +235,7 @@ QtBackend::draw_text_field (TextField* tf)
     tf->set_ascent (fm.ascent ());
     tf->set_descent (fm.descent ());
     tf->set_leading (fm.leading ());
-    _context->matrix.translate (-tf->x (), -tf->y () - fm.ascent ());
+    _context->matrix.translate (-tf->x (), -tf->y () - text_y - fm.ascent ());
 
     rmt_EndCPUSample ();
 }

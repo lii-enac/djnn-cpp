@@ -596,9 +596,12 @@ TextField::draw ()
         AbstractGShape::pre_draw ();
         Backend::instance ()->draw_text_field (this);
         _first_draw = false;
-        _cursor_height.set_value (static_cast<int> (_ascent + _descent), true);
-        _line_height.set_value (static_cast<int> (_ascent + _descent + _leading),
-                                true);
+        int cursor_height  = static_cast<int> (_ascent + _descent);
+        int cursor_start_y = text_y_offset (cursor_height);
+        _cursor_height.set_value (cursor_height, true);
+        _cursor_start_y.set_value (cursor_start_y, true);
+        _cursor_end_y.set_value (cursor_start_y + cursor_height, true);
+        _line_height.set_value (static_cast<int> (_ascent + _descent + _leading), true);
         AbstractGShape::post_draw ();
     }
 }

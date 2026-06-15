@@ -184,6 +184,12 @@ class TextField : public AbstractGShape
         return _height.get_value ();
     }
     int
+    text_y_offset (int text_height)
+    {
+        int h = _height.get_value ();
+        return h > text_height ? (h - text_height) / 2 : 0;
+    }
+    int
     offset ()
     {
         return _offset;
