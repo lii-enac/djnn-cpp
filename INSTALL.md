@@ -85,7 +85,7 @@ pacman -U libivy-x.xx.x-1.pkg.tar.zst
 or using the sources:
 
 ```
-git clone --depth 1 http://github.com:lii-enac/libivy.git  
+git clone --depth 1 http://github.com/lii-enac/libivy.git  
 cd libivy/src
 make -j4 -f Makefile.mingw upgrade-pkgdeps
 make -j4 -f Makefile.mingw 
