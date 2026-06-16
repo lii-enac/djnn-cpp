@@ -683,7 +683,7 @@ bool
 Picking::genericTabletMove (double x, double y, stylus_type stylus_type, double pressure)
 {
     #ifndef DJNN_NO_DEBUG
-    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2 && _DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE) {
         std::cerr << ">> " << __DJNN_FUNCTION__ << std::endl;
     }
     #endif
@@ -811,7 +811,7 @@ Picking::genericTabletMove (double x, double y, stylus_type stylus_type, double 
     rmt_EndCPUSample ();
 
     #ifndef DJNN_NO_DEBUG
-    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2) {
+    if (_DEBUG_SEE_ACTIVATION_SEQUENCE_2 && _DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE) {
         std::cerr << "<< " << __DJNN_FUNCTION__ << std::endl;
     }
     #endif

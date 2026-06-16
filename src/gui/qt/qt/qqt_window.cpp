@@ -385,14 +385,7 @@ MyQQWidget::mouseMoveEvent (QMouseEvent* event)
 
     bool exec_ = _picking_view->genericMouseMove (mouse_pos_x, mouse_pos_y);
     if (exec_) {
-#ifndef DJNN_NO_DEBUG
-        auto dbg = _DEBUG_SEE_ACTIVATION_SEQUENCE_2;
-        if (!_DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE) _DEBUG_SEE_ACTIVATION_SEQUENCE_2 = 0;
-#endif
         GRAPH_EXEC;
-#ifndef DJNN_NO_DEBUG
-        if (dbg) _DEBUG_SEE_ACTIVATION_SEQUENCE_2 = 1;
-#endif
     }
 }
 
