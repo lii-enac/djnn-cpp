@@ -4,3 +4,5 @@ It is the result of the work from the Interactive Informatics team at ENAC <http
 Please follow the instructions in <a href="https://github.com/lii-enac/djnn-cpp/blob/master/INSTALL.md">INSTALL.md</a> to compile it.
 
 This library can be used through a dedicated language named Smala: <http://smala.io>
+
+You can find further documentation [here](doc/readme.md) including tutorials, how-to guides and explanations...
