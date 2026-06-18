@@ -168,11 +168,12 @@ QtBackend::load_drawing_context (AbstractGShape* s, QtContext* cur_context, doub
         tmpPen.setDashOffset (cur_context->pen.dashOffset () / w);
     }
     if (z_processing_step == 2) {
+        // Z-order replay draws items out of their tree order; always start from
+        // the clip stored in the captured context, not from the previous item.
+        _painter->setClipping (false);
         if (!cur_context->clip.isEmpty ()) {
             _painter->setTransform (cur_context->clipTransform);
-            _painter->setClipPath (cur_context->clip);
-        } else {
-            _painter->setClipping (false);
+            _painter->setClipPath (cur_context->clip, Qt::ReplaceClip);
         }
     }
 

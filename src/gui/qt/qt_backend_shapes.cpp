@@ -96,26 +96,39 @@ void
 QtBackend::draw_z_ordered_group (ZOrderedGroup* g)
 {
     rmt_BeginCPUSample (draw_z_ordered_group, RMTSF_Aggregate);
-    if (_painter == nullptr)
+    if (_painter == nullptr) {
+        rmt_EndCPUSample ();
         return;
-    cur_context           = nullptr;
-    z_processing_step     = 1;
+    }
+
+    cur_context = nullptr;
+    shapes_vectors.clear ();
+    z_processing_step = 1;
+
     GUIStructureHolder* h = gui_structure_observer->find_holder (g);
-    if (h == nullptr) {
-        return;
-    }
-    for (auto& c : h->children ()) {
-        c.first->draw ();
-    }
-    djnnstl::sort (shapes_vectors.begin (), shapes_vectors.end (), compare_z_order);
-    z_processing_step = 2;
-    for (auto v : shapes_vectors) {
-        for (auto& item : v->shapes ()) {
-            cur_context = &item.second;
-            item.first->draw ();
+    if (h != nullptr) {
+        for (auto& c : h->children ()) {
+            c.first->draw ();
         }
-        delete v;
+        djnnstl::sort (shapes_vectors.begin (), shapes_vectors.end (), compare_z_order);
+        z_processing_step = 2;
+        for (auto v : shapes_vectors) {
+            for (auto& item : v->shapes ()) {
+                cur_context = &item.second;
+                const bool has_context_clip = !cur_context->clip.isEmpty ();
+                // Qt may keep platform-specific clip state after the clipped draw.
+                // Isolate only clipped z-order items so that following items replay
+                // from their own context without paying save/restore for every item.
+                if (has_context_clip)
+                    _painter->save ();
+                item.first->draw ();
+                if (has_context_clip)
+                    _painter->restore ();
+            }
+            delete v;
+        }
     }
+
     shapes_vectors.clear ();
     z_processing_step = 0;
     cur_context       = nullptr;
