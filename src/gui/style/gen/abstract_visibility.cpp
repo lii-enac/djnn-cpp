@@ -31,33 +31,33 @@
 
 #include "gui/style/abstract_style.h"
 
-#include "abstract_display_style.h"
+#include "abstract_visibility.h"
 
 namespace djnn {
-AbstractDisplayStyle::AbstractDisplayStyle (CoreProcess* parent, const string& name, int d)
+AbstractVisibility::AbstractVisibility (CoreProcess* parent, const string& name, int v)
     : AbstractStyle (parent, name),
-      raw_props{.d = d},
-      _cd (nullptr)
+      raw_props{.v = v},
+      _cv (nullptr)
 {
 }
 
-AbstractDisplayStyle::~AbstractDisplayStyle ()
+AbstractVisibility::~AbstractVisibility ()
 {
-    remove_edge (_cd);
-    delete _cd;
+    remove_edge (_cv);
+    delete _cv;
 
     /* origin_x and origin_y are always in _symtable for AbstractGShape */
     if (children_size () > 0) {
         symtable_t::iterator it;
 
-        it = find_child_iterator ("d");
+        it = find_child_iterator ("v");
         if (it != children_end ())
             delete it->second;
     }
 }
 
 CoreProcess*
-AbstractDisplayStyle::find_child_impl (const string& name)
+AbstractVisibility::find_child_impl (const string& name)
 {
     auto* res = AbstractStyle::find_child_impl (name);
     if (res)
@@ -73,9 +73,9 @@ AbstractDisplayStyle::find_child_impl (const string& name)
     textp*          rawp_Textp  = nullptr;
     int             notify_mask = notify_none;
 
-    if (name == "d") {
-        coupling    = &_cd;
-        rawp_Int    = &raw_props.d;
+    if (name == "v") {
+        coupling    = &_cv;
+        rawp_Int    = &raw_props.v;
         notify_mask = notify_damaged_style;
         prop_Int    = true;
     } else
@@ -99,35 +99,35 @@ AbstractDisplayStyle::find_child_impl (const string& name)
 }
 
 const vector<string>&
-AbstractDisplayStyle::get_properties_name () const
+AbstractVisibility::get_properties_name () const
 {
     static const vector<string> res = {
-        "d",
+        "v",
     };
     return res;
 }
 
 void
-AbstractDisplayStyle::get_properties_values (int& d)
+AbstractVisibility::get_properties_values (int& v)
 {
-    d = raw_props.d;
+    v = raw_props.v;
 }
 
 void
-AbstractDisplayStyle::impl_activate ()
+AbstractVisibility::impl_activate ()
 {
     AbstractStyle::impl_activate ();
     auto _frame = get_frame ();
     if (_frame) {
-        enable (_cd, _frame->damaged ());
+        enable (_cv, _frame->damaged ());
     } else
-        djnn_warning (nullptr, "AbstractDisplayStyle::impl_activate () - Unable to find frame\n\n");
+        djnn_warning (nullptr, "AbstractVisibility::impl_activate () - Unable to find frame\n\n");
 }
 
 void
-AbstractDisplayStyle::impl_deactivate ()
+AbstractVisibility::impl_deactivate ()
 {
-    disable (_cd);
+    disable (_cv);
     AbstractStyle::impl_deactivate ();
 }
 

@@ -40,7 +40,7 @@ static string djn_ParseURL (const char*);
 static int Ignore (FatProcess**, const char*);
 static int ParseId (FatProcess**, const char*);
 static int ParseClass (FatProcess**, const char*);
-static int ParseDisplay (FatProcess**, const char*);
+static int ParseVisibility (FatProcess**, const char*);
 static int ParseStroke (FatProcess**, const char*);
 static int ParseFill (FatProcess**, const char*);
 static int ParseFillRule (FatProcess**, const char*);
@@ -77,7 +77,7 @@ static map<string, djn_XMLAttrHandler> handlers = {
     {"stroke-dashoffset", {&ParseStrokeDashOffset}},
     {"mask", {&Ignore}},
     {"requiredFeatures", {&Ignore}},
-    {"display", {&ParseDisplay}},
+    {"visibility", {&ParseVisibility}},
     {"requiredExtensions", {&Ignore}},
     {"stroke-linecap", {&ParseLineCap}},
     {"stroke-linejoin", {&ParseLineJoin}},
@@ -147,16 +147,18 @@ ParseId (FatProcess** e, const char* v)
 }
 
 static int
-ParseDisplay (FatProcess** e, const char* v)
+ParseVisibility (FatProcess** e, const char* v)
 {
     if (!*e)
         *e = new SVGHolder (nullptr, "SVGHolder");
 
     bool none = false;
-    if (strncmp (v, "none", 4) == 0) {
+    if (strncmp (v, "hidden", 6) == 0) {
+        none = true;
+    } else if (strncmp (v, "collapse", 8) == 0) {
         none = true;
     }
-    new Display (*e, "display", !none);
+    new Visibility (*e, "visibility", !none);
     return 1;
 }
 

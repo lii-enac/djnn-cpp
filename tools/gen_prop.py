@@ -624,8 +624,8 @@ dc.props.append(Prop('a', 'double', None, "style"))
 dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 
-dc = DjnnClass("AbstractDisplayStyle", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
-dc.props.append(Prop('d', 'int', None, "style"))
+dc = DjnnClass("AbstractVisibility", "AbstractStyle", "../src/gui/style", origin=None, finalize_construction=False)
+dc.props.append(Prop('v', 'int', None, "style"))
 dc.includes += '#include "gui/style/abstract_style.h"\n'
 dcs.append(dc)
 

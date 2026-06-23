@@ -38,27 +38,27 @@ AbstractStyle::~AbstractStyle ()
 }
 
 
-Display::Display (CoreProcess* parent, const string& name, int d)
-: AbstractDisplayStyle(parent, name, d)
+Visibility::Visibility (CoreProcess* parent, const string& name, int d)
+: AbstractVisibility(parent, name, d)
 {
     finalize_construction (parent, name); 
 }
 
 void
-Display::draw ()
+Visibility::draw ()
 {
     auto _frame = get_frame ();
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
         //Backend::instance ()->load_fill_color (this);
-        if (d()->get_value ()==0)
+        if (v()->get_value ()==0)
             throw 122;
     }
 }
 
-Display*
-Display::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
+Visibility*
+Visibility::impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const
 {
-    auto res           = new Display (nullptr, name, raw_props.d);
+    auto res           = new Visibility (nullptr, name, raw_props.v);
     origs_clones[this] = res;
     impl_clone_properties (res, origs_clones);
     return res;

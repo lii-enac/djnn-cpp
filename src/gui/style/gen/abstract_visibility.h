@@ -27,22 +27,22 @@ using djnnstl::vector;
 #include "gui/style/abstract_style.h"
 
 namespace djnn {
-class AbstractDisplayStyle : public AbstractStyle {
+class AbstractVisibility : public AbstractStyle {
   public:
-    AbstractDisplayStyle (CoreProcess* parent, const string& name, int d);
-    virtual ~AbstractDisplayStyle ();
+    AbstractVisibility (CoreProcess* parent, const string& name, int v);
+    virtual ~AbstractVisibility ();
 
-    void                  get_properties_values (int& d);
+    void                  get_properties_values (int& v);
     const vector<string>& get_properties_name () const override;
     virtual CoreProcess*  find_child_impl (const string&) override;
-    AbstractIntProperty*  d () { return (AbstractIntProperty*)find_child_impl ("d"); }
+    AbstractIntProperty*  v () { return (AbstractIntProperty*)find_child_impl ("v"); }
 
   protected:
     struct raw_props_t {
-        int d;
+        int v;
     };
     raw_props_t raw_props;
-    Coupling*   _cd;
+    Coupling*   _cv;
     void        impl_activate () override;
     void        impl_deactivate () override;
 };

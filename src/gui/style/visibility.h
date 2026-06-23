@@ -24,13 +24,13 @@
 #include "core/utils/containers/vector.h"
 using djnnstl::vector;
 
-#include "gui/style/gen/abstract_display_style.h"
+#include "gui/style/gen/abstract_visibility.h"
 
 namespace djnn {
-class Display : public AbstractDisplayStyle {
+class Visibility : public AbstractVisibility {
   public:
-    Display (CoreProcess* parent, const string& name, int d);
+    Visibility (CoreProcess* parent, const string& name, int d);
     void     draw () override;
-    Display* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
+    Visibility* impl_clone (map<const CoreProcess*, CoreProcess*>& origs_clones, const string& name) const override;
 };
 } // namespace djnn
