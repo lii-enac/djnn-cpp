@@ -39,6 +39,8 @@ ifeq ($(os),Darwin)
 	endif
 
 	lib_srcs += $(local_dir)/serial.cpp
+
+	lib_pkg += libpcre
 endif
 
 ifeq ($(os),Linux)
