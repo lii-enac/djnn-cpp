@@ -24,21 +24,21 @@ namespace djnn {
 LinuxMouse::LinuxMouse (CoreProcess* parent, const string& name, const struct libevdev* dev)
     : LinuxDevice (parent, name, MOUSE)
 {
-    _move    = new Spike (this, "move");
+    _move    = new FatSpike (this, "move");
     _move_dx = new IntProperty (nullptr, "dx", 0);
     _move_dy = new IntProperty (nullptr, "dy", 0);
     _move->add_symbol ("dx", _move_dx);
     _move->add_symbol ("dy", _move_dy);
-    _btn      = new Spike (this, "button");
-    _press    = new Spike (_btn, "press");
-    _release  = new Spike (_btn, "release");
+    _btn      = new FatSpike (this, "button");
+    _press    = new FatSpike (_btn, "press");
+    _release  = new FatSpike (_btn, "release");
     _btn_name = new TextProperty (nullptr, "name", "");
     _btn->add_symbol ("name", _btn_name);
     int w, hw;
     w  = libevdev_has_event_code (dev, EV_REL, REL_WHEEL);
     hw = libevdev_has_event_code (dev, EV_REL, REL_HWHEEL);
     if (w || hw) {
-        _wheel = new Spike (this, "wheel");
+        _wheel = new FatSpike (this, "wheel");
         if (w) {
             _wheel_dy = new IntProperty (nullptr, "dy", 0);
             _wheel->add_symbol ("dy", _wheel_dy);

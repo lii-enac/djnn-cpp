@@ -19,7 +19,7 @@
 #include <linux/input.h>
 
 #include "core/control/action.h"
-#include "core/control/spike.h"
+#include "base/fat_spike.h"
 #include "core/ontology/coupling.h"
 #include "core/property/bool_property.h"
 #include "core/property/int_property.h"
@@ -129,7 +129,7 @@ class LinuxMouse : public LinuxDevice {
     void handle_event (struct input_event* ev) override;
 
   private:
-    Spike *       _move, *_btn, *_press, *_release, *_wheel;
+    FatSpike    * _move, *_btn, *_press, *_release, *_wheel;
     IntProperty * _move_dx, *_move_dy, *_wheel_dx, *_wheel_dy;
     TextProperty* _btn_name;
 };
@@ -199,7 +199,7 @@ class GPIOLine : public FatProcess {
     };
 
   public:
-    GPIOLine (CoreProcess* parent, const string& name, int pin, direction_e dir);
+    GPIOLine (CoreProcess* parent, const string& name, int chip_number, int line_offset, direction_e dir);
     virtual ~GPIOLine ();
     direction_e get_direction () { return _dir; }
     int         get_pin () { return _pin; }
@@ -213,6 +213,10 @@ class GPIOLine : public FatProcess {
   private:
     int           _pin;
     direction_e   _dir;
+    struct gpiod_chip * _chip;
+    struct gpiod_line_request * _request;
+    struct gpiod_edge_event_buffer * _event_buf;
+    int  _line_offset;
     int           _fd;
     IOFD*         _iofd;
     BoolProperty* _value;
