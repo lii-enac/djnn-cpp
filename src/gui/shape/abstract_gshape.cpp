@@ -224,7 +224,7 @@ AbstractGShape::find_child_impl (const string& path)
         //         break;
         //     }
         // }
-        if (const auto& event = __ui_interface.find(key) != __ui_interface.end()) {
+        if (/*const auto& event =*/ __ui_interface.find(key) != __ui_interface.end()) {
             init_ui ();
         //     break;
         }

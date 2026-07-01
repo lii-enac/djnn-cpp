@@ -313,7 +313,7 @@ class ChildProcess : public CouplingProcess {
     const string& get_name () const;
     public:
     virtual CoreProcess* find_child_impl (const string&) override;
-    // virtual CoreProcess* find_child (int /*index*/) override { return nullptr; }
+    virtual CoreProcess* find_child_impl (int index) override { return CoreProcess::find_child(index); }
     static CoreProcess* find_child_impl (CoreProcess* p, const string& path);
 
     void add_child (CoreProcess* child, const string& name) override; // useless message

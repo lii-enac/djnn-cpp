@@ -216,7 +216,7 @@ class GPIOLine : public FatProcess {
     struct gpiod_chip * _chip;
     struct gpiod_line_request * _request;
     struct gpiod_edge_event_buffer * _event_buf;
-    int  _line_offset;
+    unsigned int  _line_offset;
     int           _fd;
     IOFD*         _iofd;
     BoolProperty* _value;

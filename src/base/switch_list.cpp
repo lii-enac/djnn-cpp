@@ -81,13 +81,16 @@ SwitchList::ChangeIndex::impl_activate ()
      * the action on changed index cause the branches switch ONLY if the
      * index is different from the current one.
      */
-    unsigned int i = _sw->index ()->get_value ();
-    if ((i - 1) < _sw->children ().size () && (i - 1) >= 0) {
-        auto* next = _sw->children ()[i - 1];
-        if (_sw->item () && _sw->item () != next) {
-            _sw->item ()->deactivate ();
-            _sw->set_item (next);
-            next->activate ();
+    unsigned int index = _sw->index ()->get_value ();
+    if (index > 1) {
+        unsigned int i = index - 1; // transform into c-like index
+        if (i < _sw->children ().size ()) {
+            auto* next = _sw->children ()[i];
+            if (_sw->item () && _sw->item () != next) {
+                _sw->item ()->deactivate ();
+                _sw->set_item (next);
+                next->activate ();
+            }
         }
     }
 }

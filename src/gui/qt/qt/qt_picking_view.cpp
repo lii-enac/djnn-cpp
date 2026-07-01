@@ -77,7 +77,7 @@ QtPickingView::~QtPickingView ()
 int
 QtPickingView::get_pixel (unsigned int x, unsigned int y)
 {
-    if (!_image || x < 0 || x >= (unsigned int)_image->width () || y < 0 || y >= (unsigned int)_image->height ())
+    if (!_image || /*x < 0 ||*/ x >= (unsigned int)_image->width () || /*y < 0 ||*/ y >= (unsigned int)_image->height ())
         return -1;
     return _image->pixel (x, y);
 }

@@ -50,7 +50,7 @@ BackgroundRect::find_child_impl (const string& path)
         key = path.substr (0, found);
     }
     /*  "press", "release", "move", "enter", "leave", "touches" */
-    if (const auto& event = __ui_interface.find(key) != __ui_interface.end()) {
+    if (/*const auto& event =*/ __ui_interface.find(key) != __ui_interface.end()) {
         assert(!_ui);
         _ui = new UI (this, get_frame ());
     }

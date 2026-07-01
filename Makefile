@@ -205,7 +205,9 @@ CFLAGS += -fPIC
 #DJNN_CXXFLAGS += -Wno-psabi #https://stackoverflow.com/a/48149400
 lib_suffix =.so
 DYNLIB ?= -shared
-YACC ?= bison -d -Wno-conflicts-sr -Wno-conflicts-rr
+ifeq ($(origin YACC), default)
+YACC := bison -d -Wno-conflicts-sr -Wno-conflicts-rr -Wno-yacc
+endif
 thread = STD
 #moc := moc
 compiler ?= gnu
