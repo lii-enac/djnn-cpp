@@ -1159,7 +1159,7 @@ toto:
 ifeq ($(pkgcmdtype),apk)
 pkgdeps += pkgconfig
 pkgdeps += g++
-pkglibdeps += eudev rtmidi
+pkglibdeps += eudev rtmidi libgpiod-dev
 pkglibdeps += curl libevdev expat openal-soft flex
 
 # ifeq ($(display),QT)
