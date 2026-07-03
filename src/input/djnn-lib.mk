@@ -12,6 +12,7 @@ ifeq ($(os),Linux)
 
 ifneq ($(use_gpio),no)
 	lib_pkg += libgpiod
+	lib_cflags += -DDJNN_USE_GPIO
 else
 	lib_srcs := $(filter-out src/input/linux/linux_gpio.cpp, $(lib_srcs))
 endif

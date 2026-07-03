@@ -41,9 +41,13 @@ init_input ()
         Mice->set_activation_state (ACTIVATED);
         TouchPanels = new Set (InputDevices, "TouchPanels");
         TouchPanels->set_activation_state (ACTIVATED);
+#ifdef DJNN_USE_GPIO
         GPIOs = new GPIOProxy (nullptr, "GPIO");
+#endif
         URI::add_uri ("input", InputDevices);
+#ifdef DJNN_USE_GPIO
         URI::add_uri ("gpio", GPIOs);
+#endif
         p_init_input ();
     }
 }
@@ -64,14 +68,20 @@ GPIOProxy::find_child_impl (const string& path)
     } else {
         return nullptr;
     }
+
+    CoreProcess* c    = nullptr;
+    
+#ifdef DJNN_USE_GPIO
     // string::size_type sz;
     const string buff = path.substr (pos);
-    CoreProcess* c    = nullptr;
     if (pos == 3) {
         c = p_find_gpio (buff, IN);
     } else {
         c = p_find_gpio (buff, OUT);
     }
+#endif
+
     return c;
+
 }
 } // namespace djnn

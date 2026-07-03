@@ -21,6 +21,8 @@ void
 p_init_input ()
 {
     udev = new Udev ();
+#ifdef DJNN_USE_GPIO
     p_init_gpios ();
+#endif
 }
 } // namespace djnn
