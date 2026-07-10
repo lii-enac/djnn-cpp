@@ -93,6 +93,10 @@ class QtBackend : public AbstractBackend {
     compute_x (FontMetricsImpl fm, SimpleText* t, size_t index) override;
     int
     compute_text_width (FontMetricsImpl fm, SimpleText* t) override;
+    void
+    set_clipboard_text (const string& text) override;
+    string
+    get_clipboard_text () override;
     double
     get_cursor_from_index (Text*, int) override;
     pair<double, int>

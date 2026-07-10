@@ -16,9 +16,11 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QtMath>
 #include <QtGui/QFontMetrics>
+#include <QtGui/QClipboard>
 #include <QtGui/QPicture>
 #include <QtGui/QTextCursor>
 #include <QtGui/QTextDocument>
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 #include <cmath>
 
@@ -238,6 +240,26 @@ QtBackend::draw_text_field (TextField* tf)
     _context->matrix.translate (-tf->x (), -tf->y () - text_y - fm.ascent ());
 
     rmt_EndCPUSample ();
+}
+
+void
+QtBackend::set_clipboard_text (const string& text)
+{
+    auto* clipboard = QApplication::clipboard ();
+    if (clipboard) {
+        clipboard->setText (QString::fromStdString (text));
+        return;
+    }
+    AbstractBackend::set_clipboard_text (text);
+}
+
+string
+QtBackend::get_clipboard_text ()
+{
+    auto* clipboard = QApplication::clipboard ();
+    if (clipboard)
+        return clipboard->text ().toStdString ();
+    return AbstractBackend::get_clipboard_text ();
 }
 
 void

@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018-2024)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2026)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -133,6 +133,14 @@ class AbstractBackend {
     virtual int
     get_average_char_width (FontMetricsImpl fm) {
         return 0;
+    }
+    virtual void
+    set_clipboard_text (const string& text) {
+        _clipboard_text = text;
+    }
+    virtual string
+    get_clipboard_text () {
+        return _clipboard_text;
     }
     virtual double
     get_cursor_from_index (Text*, int) {
@@ -297,5 +305,8 @@ class AbstractBackend {
     virtual void
     deactivate_gobj (AbstractGObj*) {
     }
+
+  private:
+    string _clipboard_text;
 };
 } // namespace djnn
