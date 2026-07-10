@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2018-2024)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2026)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -51,7 +51,6 @@ MultilineEditor::MultilineEditor (CoreProcess* parent, const string& name,
       _key_code_pressed (this, "key_pressed", 0),
       _key_code_released (this, "key_released", 0),
       _str_input (this, "string_input", ""),
-      _copy_buffer (this, "copy_buffer", ""),
       _toggle_edit (this, "toggle_edit"),
       _content_changed (this, "content_changed"),
       _clear (this, "clear"),
@@ -928,13 +927,13 @@ MultilineEditor::copy ()
         str.append (
             (get_line (_end_sel_y))->get_content ().substr (0, _end_sel_x));
     }
-    _copy_buffer.set_value (str, true);
+    Backend::instance ()->set_clipboard_text (str);
 }
 
 void
 MultilineEditor::paste ()
 {
-    string str = _copy_buffer.get_value ();
+    string str = Backend::instance ()->get_clipboard_text ();
     add_str (str);
 }
 

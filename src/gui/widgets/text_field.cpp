@@ -9,9 +9,7 @@
  *
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
- *      Stephane Conversy <stephane.conversy@enac.fr>
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
- *
  */
 #include "gui/widgets/text_field.h"
 
@@ -41,8 +39,7 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
       _text_color (this, "text_color", 0xffffff),
       _selected_text_color (this, "text_selected_color", 0xffffff),
       _selection_color (this, "selection_color", 0x429fe0), _str_input (this, "string_input", ""),
-      _copy_buffer (this, "copy_buffer", ""), _enable_edit (this, "enable_edit"),
-      _disable_edit (this, "disable_edit"), _content_changed (this, "content_changed"),
+      _enable_edit (this, "enable_edit"), _disable_edit (this, "disable_edit"), _content_changed (this, "content_changed"),
       _clear (this, "clear"), _validate (this, "validate"),
       _on_enable_edit (this, "on_enable_edit"), _on_disable_edit (this, "on_disable_edit"),
       _on_press (this, "on_press_action"), _on_release (this, "on_release_action"),
@@ -575,18 +572,18 @@ void
 TextField::copy ()
 {
     if (_start_sel_x == _end_sel_x)
-        return;
+        return; 
     sort_selection ();
     string content         = _line.get_content ();
     int    length_init_sel = _end_sel_x - _start_sel_x;
     string str             = content.substr (_start_sel_x, length_init_sel);
-    _copy_buffer.set_value (str, true);
+    Backend::instance ()->set_clipboard_text (str);
 }
 
 void
 TextField::paste ()
 {
-    string& str = _copy_buffer.get_value ();
+    string str = Backend::instance ()->get_clipboard_text ();
     add_str (str);
 }
 

@@ -2,7 +2,7 @@
  *  djnn v2
  *
  *  The copyright holders for the contents of this file are:
- *      Ecole Nationale de l'Aviation Civile, France (2020-2024)
+ *      Ecole Nationale de l'Aviation Civile, France (2018-2026)
  *  See file "license.terms" for the rights and conditions
  *  defined by copyright holders.
  *
@@ -10,8 +10,10 @@
  *  Contributors:
  *      Mathieu Magnaudet <mathieu.magnaudet@enac.fr>
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
+ *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
+
 #pragma once
 
 #include "core/control/action.h"
@@ -136,7 +138,7 @@ class MultilineEditor : public AbstractGShape {
     IntProperty                   _cursor_start_x, _cursor_start_y, _cursor_end_x, _cursor_end_y, _cursor_height;
     IntProperty                   _x, _y, _width, _height, _line_height, _spaces_for_tab;
     IntProperty                   _key_code_pressed, _key_code_released;
-    TextProperty                  _str_input, _copy_buffer;
+    TextProperty                  _str_input;
     Spike                         _toggle_edit, _content_changed, _clear;
     SimpleText*                   _line;
     ToggleEditAction              _toggle_action;

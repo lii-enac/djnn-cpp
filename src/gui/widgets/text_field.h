@@ -295,7 +295,7 @@ class TextField : public AbstractGShape
     IntProperty  _x, _y, _width, _height, _line_height;
     IntProperty  _key_code_pressed, _key_code_released;
     IntProperty  _text_color, _selected_text_color, _selection_color;
-    TextProperty _str_input, _copy_buffer;
+    TextProperty _str_input;
 
     Spike _enable_edit, _disable_edit, _content_changed, _clear;
     Blank _validate;
