@@ -13,7 +13,6 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
-
 #include <cmath>
 
 #include "interaction.h"

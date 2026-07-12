@@ -12,7 +12,6 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
-
 #include "utils.h"
 
 #include "core/serializer/serializer.h"
