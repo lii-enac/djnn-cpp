@@ -39,6 +39,8 @@ IGNORED_COMMITS = {
     # Header-only update commit. It should not make every touched file look like
     # it was substantively modified in that year/by that author.
     "6d459cb9c4c860466fdbf861c0409bf8ef05e7e9",
+    "9dde5b6bc5f1eaf81e64ec2f0ca963b549f7e556",
+    "356ec2f786f44bb16e7bc2ef4ad3881527bb96f8",
 }
 
 
