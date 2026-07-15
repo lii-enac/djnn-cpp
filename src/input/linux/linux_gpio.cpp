@@ -15,8 +15,7 @@
  *      Mathieu Poirier <mathieu.poirier@enac.fr>
  *
  */
-  
- /*  ---------------------------------------------------------------------
+/*  ---------------------------------------------------------------------
  *  PORTAGE libgpiod v2 (character device API) pour Alpine Linux 3.24+.
  *
  *  Remplace l'ancienne couche sysfs (/sys/class/gpio/...), incompatible

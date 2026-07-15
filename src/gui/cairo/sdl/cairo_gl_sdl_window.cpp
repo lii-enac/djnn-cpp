@@ -12,7 +12,6 @@
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
-
 #include "cairo_gl_sdl_window.h"
 
 #include "display/sdl/sdl_mainloop.h"
