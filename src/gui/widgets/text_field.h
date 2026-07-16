@@ -152,6 +152,18 @@ class TextField : public AbstractGShape
             ((TextField*)get_parent ())->clear ();
         }
     };
+    class SelectableChangedAction : public Action
+    {
+      public:
+        SelectableChangedAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
+        virtual ~SelectableChangedAction () {}
+        void
+        impl_activate () override
+        {
+            ((TextField*)get_parent ())->selectable_changed ();
+        }
+    };
 
   public:
     TextField (CoreProcess* parent, const string& name, int x, int y, int width, int height, const string& text = string (), bool enable_edit_on_activation = true);
@@ -286,6 +298,7 @@ class TextField : public AbstractGShape
     coord_t                       get_index_from_x (coord_t x);
     void                          add_string_input ();
     void                          add_str (const string& str);
+    void                          selectable_changed ();
     void                          draw () override;
     djnnstl::pair<double, double> get_local_coords (double x, double y);
 
@@ -310,8 +323,9 @@ class TextField : public AbstractGShape
     KeyReleasedAction      _key_released;
     StrInputAction         _on_str_input;
     ClearAction            _on_clear;
+    SelectableChangedAction _on_selectable_changed;
 
-    Coupling _c_key_press, _c_key_release, _c_str_input, _c_press, _c_release, _c_move, _c_double_click, _c_x, _c_y, _c_enable_edit, _c_disable_edit, _c_clear;
+    Coupling _c_key_press, _c_key_release, _c_str_input, _c_press, _c_release, _c_move, _c_double_click, _c_x, _c_y, _c_enable_edit, _c_disable_edit, _c_clear, _c_selectable;
 
     FontMetricsImpl _font_metrics;
     VoidProcess     _ordering_node;
@@ -320,7 +334,7 @@ class TextField : public AbstractGShape
     coord_t         _start_sel_x, _end_sel_x;
     const coord_t   _start_sel_y, _end_sel_y;
     bool            _shift_on, _ctrl_on, _alt_on, _press_on, _enable_edit_on_activation, _first_draw;
-    BoolProperty    _edit_enabled;
+    BoolProperty    _edit_enabled, _read_only, _selectable;
     int             _offset;
 };
 } // namespace djnn

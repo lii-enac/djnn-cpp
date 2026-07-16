@@ -45,7 +45,7 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
       _on_press (this, "on_press_action"), _on_release (this, "on_release_action"),
       _on_move (this, "on_move_action"), _on_double_click (this, "on_double_click_action"), _key_pressed (this, "key_pressed_action"),
       _key_released (this, "key_released_action"), _on_str_input (this, "on_str_input_action"),
-      _on_clear (this, "on_clear"),
+      _on_clear (this, "on_clear"), _on_selectable_changed (this, "on_selectable_changed"),
       _c_key_press (&_key_code_pressed, ACTIVATION, &_key_pressed, ACTIVATION),
       _c_key_release (&_key_code_released, ACTIVATION, &_key_released, ACTIVATION),
       _c_str_input (&_str_input, ACTIVATION, &_on_str_input, ACTIVATION),
@@ -55,11 +55,13 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
       _c_enable_edit (&_enable_edit, ACTIVATION, &_on_enable_edit, ACTIVATION),
       _c_disable_edit (&_disable_edit, ACTIVATION, &_on_disable_edit, ACTIVATION),
       _c_clear (&_clear, ACTIVATION, &_on_clear, ACTIVATION),
+      _c_selectable (),
       _font_metrics (nullptr), _ordering_node (), _index_x (0), _ascent (0), _descent (0),
       _leading (0), _index_y (0), _start_sel_x (0), _end_sel_x (0), _start_sel_y (0),
       _end_sel_y (0), _shift_on (false), _ctrl_on (false), _alt_on (false), _press_on (false),
       _enable_edit_on_activation (enable_edit_on_activation), _first_draw (true),
-      _edit_enabled (this, "edit_enabled", enable_edit_on_activation), _offset (0)
+      _edit_enabled (this, "edit_enabled", enable_edit_on_activation),
+      _read_only (this, "read_only", false), _selectable (this, "selectable", true), _offset (0)
 {
     init_ui ();
 
@@ -123,6 +125,8 @@ TextField::impl_activate ()
     _c_enable_edit.enable ();
     _c_disable_edit.enable ();
     _c_clear.enable ();
+    _c_selectable.init (&_selectable, ACTIVATION, &_on_selectable_changed, ACTIVATION);
+    _c_selectable.enable ();
 
     if (!_enable_edit_on_activation) {
         _c_str_input.disable ();
@@ -157,6 +161,7 @@ TextField::impl_deactivate ()
     _c_enable_edit.disable ();
     _c_disable_edit.disable ();
     _c_clear.disable ();
+    _c_selectable.disable ();
     _line.deactivate ();
 }
 
@@ -217,6 +222,7 @@ TextField::update_cursor ()
     }
     _cursor_start_x.set_value (start_x, true);
     _cursor_end_x.set_value (end_x, true);
+    update_drawing ();
 }
 
 coord_t
@@ -250,6 +256,8 @@ TextField::get_local_coords (double x, double y)
 void
 TextField::mouse_press ()
 {
+    if (!_selectable.get_value ())
+        return;
     if (!_edit_enabled.get_value ()) {
         set_editable (true);
         _edit_enabled.set_value (true, true);
@@ -281,6 +289,8 @@ TextField::mouse_release ()
 void
 TextField::mouse_move ()
 {
+    if (!_selectable.get_value ())
+        return;
     if (!_press_on)
         return;
     auto* move_x =
@@ -299,6 +309,8 @@ TextField::mouse_move ()
 void
 TextField::mouse_double_click ()
 {
+    if (!_selectable.get_value ())
+        return;
     _start_sel_x = 0;
     _end_sel_x = _index_x = _line.get_content ().length ();
     update_cursor ();
@@ -325,6 +337,8 @@ TextField::key_released ()
 void
 TextField::key_pressed ()
 {
+    if (!_selectable.get_value ())
+        return;
     int key = _key_code_pressed.get_value ();
     if (key == DJN_Key_Shift) {
         _shift_on = true;
@@ -343,6 +357,8 @@ TextField::key_pressed ()
         return;
     }
     if (key == DJN_Key_Return) {
+        if (_read_only.get_value ())
+            return;
         _validate.notify_activation ();
         set_editable (false);
         return;
@@ -448,6 +464,8 @@ TextField::key_pressed ()
         return;
     }
     if (key == DJN_Key_Backspace) {
+        if (_read_only.get_value ())
+            return;
         if (has_selection ()) {
             del_selection ();
         } else {
@@ -467,6 +485,8 @@ TextField::key_pressed ()
         return;
     }
     if (key == DJN_Key_Delete) {
+        if (_read_only.get_value ())
+            return;
         if (has_selection ()) {
             del_selection ();
         } else {
@@ -489,10 +509,14 @@ TextField::key_pressed ()
         return;
     }
     if (key == DJN_Key_V && _ctrl_on) {
+        if (_read_only.get_value ())
+            return;
         paste ();
         return;
     }
     if (key == DJN_Key_X && _ctrl_on) {
+        if (_read_only.get_value ())
+            return;
         copy ();
         del_selection ();
         return;
@@ -517,6 +541,8 @@ TextField::sort_selection ()
 void
 TextField::clear ()
 {
+    if (_read_only.get_value ())
+        return;
     _start_sel_x = 0;
     _end_sel_x   = _line.get_content ().length ();
     del_selection ();
@@ -525,6 +551,8 @@ TextField::clear ()
 void
 TextField::del_selection ()
 {
+    if (_read_only.get_value ())
+        return;
     sort_selection ();
     string cur_text = _line.get_content ();
     cur_text.erase (_start_sel_x, _end_sel_x - _start_sel_x);
@@ -537,6 +565,8 @@ TextField::del_selection ()
 void
 TextField::add_string_input ()
 {
+    if (_read_only.get_value ())
+        return;
     string& str = _str_input.get_value ();
     if (str.empty ())
         return;
@@ -546,6 +576,8 @@ TextField::add_string_input ()
 void
 TextField::add_str (const string& str)
 {
+    if (_read_only.get_value ())
+        return;
     if (str.empty ())
         return;
     string        cur_text = _line.get_content ();
@@ -585,6 +617,15 @@ TextField::paste ()
 {
     string str = Backend::instance ()->get_clipboard_text ();
     add_str (str);
+}
+
+void
+TextField::selectable_changed ()
+{
+    if (!_selectable.get_value () && has_selection ()) {
+        _start_sel_x = _end_sel_x = _index_x;
+        update_cursor ();
+    }
 }
 
 void
