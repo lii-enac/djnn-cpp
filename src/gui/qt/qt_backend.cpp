@@ -27,6 +27,7 @@
 #include "gui/backend.h"
 #include "gui/shape/image.h"
 #include "gui/shape/text.h"
+#include "gui/widgets/text_field.h"
 #include "gui/transformation/homography.h"
 #include "qt_context.h"
 
@@ -260,6 +261,29 @@ QtBackend::is_in_picking_view (AbstractGShape* s)
 
 static QFont::Style fontStyleArray[3] =
     {QFont::StyleNormal, QFont::StyleItalic, QFont::StyleOblique};
+
+void
+QtBackend::update_text_field_geometry (TextField* tf)
+{
+    rmt_BeginCPUSample (update_text_field_geometry, RMTSF_Aggregate);
+
+    QFontMetrics* current_fm = (QFontMetrics*)tf->get_font_metrics ();
+    QFontMetrics  fallback_fm { QFont () };
+    QFontMetrics& fm = current_fm ? *current_fm : fallback_fm;
+    SimpleText*   line = tf->content ();
+    QString       s = QObject::tr (line->get_content ().c_str ());
+#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
+    int width = fm.width (s);
+#else
+    int width = fm.horizontalAdvance (s);
+#endif
+    tf->set_content_width (width);
+    tf->set_content_height (fm.ascent () + fm.descent ());
+    tf->set_content_ascent (fm.ascent ());
+    tf->set_content_descent (fm.descent ());
+
+    rmt_EndCPUSample ();
+}
 
 void
 QtBackend::update_text_geometry (Text* text, FontFamily* ff, FontSize* fsz, FontStyle* fs, FontWeight* fw)

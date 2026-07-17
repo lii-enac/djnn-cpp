@@ -25,6 +25,14 @@
 #include "gui/transformation/homography.h"
 
 namespace djnn {
+
+void 
+TextField::ContentGeometryChangedAction::impl_activate() {
+    TextField* tf = (TextField*)get_parent();
+    Backend::instance()->update_text_field_geometry(tf);
+}
+
+
 TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
                       int width, int height, const string& text,
                       bool enable_edit_on_activation)
@@ -34,7 +42,10 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
       _cursor_end_x (this, "cursor_end_x", 0), _cursor_end_y (this, "cursor_end_y", 0),
       _cursor_height (this, "cursor_height", 16), _x (this, "x", x), _y (this, "y", y),
       _width (this, "width", width), _height (this, "height", height),
-      _line_height (this, "line_height", 16), _key_code_pressed (this, "key_pressed", 0),
+      _line_height (this, "line_height", 16),
+      _content_width (this, "content_width", 0), _content_height (this, "content_height", 0),
+      _content_ascent (this, "content_ascent", 0), _content_descent (this, "content_descent", 0),
+      _key_code_pressed (this, "key_pressed", 0),
       _key_code_released (this, "key_released", 0),
       _text_color (this, "text_color", 0xffffff),
       _selected_text_color (this, "text_selected_color", 0xffffff),
@@ -46,6 +57,7 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
       _on_move (this, "on_move_action"), _on_double_click (this, "on_double_click_action"), _key_pressed (this, "key_pressed_action"),
       _key_released (this, "key_released_action"), _on_str_input (this, "on_str_input_action"),
       _on_clear (this, "on_clear"), _on_selectable_changed (this, "on_selectable_changed"),
+      _on_content_geometry_changed (this, "on_content_geometry_changed"),
       _c_key_press (&_key_code_pressed, ACTIVATION, &_key_pressed, ACTIVATION),
       _c_key_release (&_key_code_released, ACTIVATION, &_key_released, ACTIVATION),
       _c_str_input (&_str_input, ACTIVATION, &_on_str_input, ACTIVATION),
@@ -55,7 +67,7 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
       _c_enable_edit (&_enable_edit, ACTIVATION, &_on_enable_edit, ACTIVATION),
       _c_disable_edit (&_disable_edit, ACTIVATION, &_on_disable_edit, ACTIVATION),
       _c_clear (&_clear, ACTIVATION, &_on_clear, ACTIVATION),
-      _c_selectable (),
+      _c_selectable (), _c_content_geometry (),
       _font_metrics (nullptr), _ordering_node (), _index_x (0), _ascent (0), _descent (0),
       _leading (0), _index_y (0), _start_sel_x (0), _end_sel_x (0), _start_sel_y (0),
       _end_sel_y (0), _shift_on (false), _ctrl_on (false), _alt_on (false), _press_on (false),
@@ -64,7 +76,7 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
       _read_only (this, "read_only", false), _selectable (this, "selectable", true), _offset (0)
 {
     init_ui ();
-
+    
     graph_add_edge (&_on_str_input, &_ordering_node);
     graph_add_edge (&_on_press, &_ordering_node);
     graph_add_edge (&_on_release, &_ordering_node);
@@ -80,6 +92,7 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
     graph_add_edge (&_ordering_node, &_content_changed);
     graph_add_edge (&_ordering_node, &_validate);
 
+    Backend::instance ()->update_text_field_geometry (this);
     finalize_construction (parent, name);
 }
 
@@ -126,7 +139,9 @@ TextField::impl_activate ()
     _c_disable_edit.enable ();
     _c_clear.enable ();
     _c_selectable.init (&_selectable, ACTIVATION, &_on_selectable_changed, ACTIVATION);
+    _c_content_geometry.init (_line.find_child ("text"), ACTIVATION, &_on_content_geometry_changed, ACTIVATION);
     _c_selectable.enable ();
+    _c_content_geometry.enable ();
 
     if (!_enable_edit_on_activation) {
         _c_str_input.disable ();
@@ -143,6 +158,7 @@ TextField::impl_activate ()
     }
 
     _line.activate ();
+    Backend::instance ()->update_text_field_geometry (this);
     _shift_on = _ctrl_on = _press_on = false;
 }
 
@@ -162,6 +178,7 @@ TextField::impl_deactivate ()
     _c_disable_edit.disable ();
     _c_clear.disable ();
     _c_selectable.disable ();
+    _c_content_geometry.disable ();
     _line.deactivate ();
 }
 

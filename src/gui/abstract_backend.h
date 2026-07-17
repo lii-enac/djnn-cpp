@@ -118,6 +118,9 @@ class AbstractBackend {
     virtual void
     draw_text_field (TextField*) {
     }
+    virtual void
+    update_text_field_geometry (TextField*) {
+    }
     virtual size_t
     compute_index (FontMetricsImpl fm, SimpleText* t, int x) {
         return 0;

@@ -174,6 +174,8 @@ QtBackend::draw_text_field (TextField* tf)
     matrix.translate (x, y + text_y + fm.ascent ());
 
     SimpleText* line = tf->content ();
+    // update content geometry
+    update_text_field_geometry (tf);
 
     double posX = line->get_x ();
     double posY = line->get_y ();

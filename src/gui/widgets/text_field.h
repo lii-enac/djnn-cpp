@@ -164,7 +164,14 @@ class TextField : public AbstractGShape
             ((TextField*)get_parent ())->selectable_changed ();
         }
     };
-
+    class ContentGeometryChangedAction : public Action
+    {
+      public:
+        ContentGeometryChangedAction (CoreProcess* parent, const string& name)
+            : Action (parent, name) {}
+        virtual ~ContentGeometryChangedAction () {}
+        void impl_activate () override;
+    };
   public:
     TextField (CoreProcess* parent, const string& name, int x, int y, int width, int height, const string& text = string (), bool enable_edit_on_activation = true);
     virtual ~TextField ();
@@ -195,6 +202,26 @@ class TextField : public AbstractGShape
     height ()
     {
         return _height.get_value ();
+    }
+    int
+    content_width ()
+    {
+        return _content_width.get_value ();
+    }
+    int
+    content_height ()
+    {
+        return _content_height.get_value ();
+    }
+    int
+    content_ascent ()
+    {
+        return _content_ascent.get_value ();
+    }
+    int
+    content_descent ()
+    {
+        return _content_descent.get_value ();
     }
     int
     text_y_offset (int text_height)
@@ -241,6 +268,26 @@ class TextField : public AbstractGShape
     set_height (int h)
     {
         _height.set_value (h, true);
+    }
+    void
+    set_content_width (int v)
+    {
+        _content_width.set_value (v, true);
+    }
+    void
+    set_content_height (int v)
+    {
+        _content_height.set_value (v, true);
+    }
+    void
+    set_content_ascent (int v)
+    {
+        _content_ascent.set_value (v, true);
+    }
+    void
+    set_content_descent (int v)
+    {
+        _content_descent.set_value (v, true);
     }
     bool
     has_selection ()
@@ -306,6 +353,7 @@ class TextField : public AbstractGShape
 
     IntProperty  _cursor_start_x, _cursor_start_y, _cursor_end_x, _cursor_end_y, _cursor_height;
     IntProperty  _x, _y, _width, _height, _line_height;
+    IntProperty  _content_width, _content_height, _content_ascent, _content_descent;
     IntProperty  _key_code_pressed, _key_code_released;
     IntProperty  _text_color, _selected_text_color, _selection_color;
     TextProperty _str_input;
@@ -324,8 +372,9 @@ class TextField : public AbstractGShape
     StrInputAction         _on_str_input;
     ClearAction            _on_clear;
     SelectableChangedAction _on_selectable_changed;
+    ContentGeometryChangedAction _on_content_geometry_changed;
 
-    Coupling _c_key_press, _c_key_release, _c_str_input, _c_press, _c_release, _c_move, _c_double_click, _c_x, _c_y, _c_enable_edit, _c_disable_edit, _c_clear, _c_selectable;
+    Coupling _c_key_press, _c_key_release, _c_str_input, _c_press, _c_release, _c_move, _c_double_click, _c_x, _c_y, _c_enable_edit, _c_disable_edit, _c_clear, _c_selectable, _c_content_geometry;
 
     FontMetricsImpl _font_metrics;
     VoidProcess     _ordering_node;

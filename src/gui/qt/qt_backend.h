@@ -79,6 +79,8 @@ class QtBackend : public AbstractBackend {
     draw_simple_text (SimpleText* t, QFontMetrics* fm, int x, int y);
     void
     draw_text_field (TextField*) override;
+    void
+    update_text_field_geometry (TextField*) override;
     int
     get_average_char_width (FontMetricsImpl fm) override;
     void
