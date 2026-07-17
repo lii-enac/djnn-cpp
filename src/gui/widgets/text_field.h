@@ -319,11 +319,6 @@ class TextField : public AbstractGShape
     {
         _font_metrics = fm;
     }
-    bool
-    first_draw ()
-    {
-        return _first_draw;
-    }
 
   private:
     void                          sort_selection ();
@@ -382,7 +377,7 @@ class TextField : public AbstractGShape
     const coord_t   _index_y;
     coord_t         _start_sel_x, _end_sel_x;
     const coord_t   _start_sel_y, _end_sel_y;
-    bool            _shift_on, _ctrl_on, _alt_on, _press_on, _enable_edit_on_activation, _first_draw;
+    bool            _shift_on, _ctrl_on, _alt_on, _press_on, _enable_edit_on_activation;
     BoolProperty    _edit_enabled, _read_only, _selectable;
     int             _offset;
 };

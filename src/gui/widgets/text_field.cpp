@@ -71,7 +71,7 @@ TextField::TextField (CoreProcess* parent, const string& name, int x, int y,
       _font_metrics (nullptr), _ordering_node (), _index_x (0), _ascent (0), _descent (0),
       _leading (0), _index_y (0), _start_sel_x (0), _end_sel_x (0), _start_sel_y (0),
       _end_sel_y (0), _shift_on (false), _ctrl_on (false), _alt_on (false), _press_on (false),
-      _enable_edit_on_activation (enable_edit_on_activation), _first_draw (true),
+      _enable_edit_on_activation (enable_edit_on_activation),
       _edit_enabled (this, "edit_enabled", enable_edit_on_activation),
       _read_only (this, "read_only", false), _selectable (this, "selectable", true), _offset (0)
 {
@@ -652,7 +652,6 @@ TextField::draw ()
     if (somehow_activating () && DisplayBackend::instance ()->window () == _frame) {
         AbstractGShape::pre_draw ();
         Backend::instance ()->draw_text_field (this);
-        _first_draw = false;
         int cursor_height  = static_cast<int> (_ascent + _descent);
         int cursor_start_y = text_y_offset (cursor_height);
         _cursor_height.set_value (cursor_height, true);
