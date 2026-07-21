@@ -64,6 +64,10 @@ ifeq ($(graphics),GL)
 include src/gui/gl/djnn-lib.mk
 endif
 
+ifeq ($(graphics),SDLGPU)
+include src/gui/sdl-gpu/djnn-lib.mk
+endif
+
 ifeq ($(graphics),EGL)
 include src/gui/egl/djnn-lib.mk
 endif

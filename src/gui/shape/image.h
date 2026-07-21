@@ -52,6 +52,12 @@ class Image : public AbstractPathImage {
 class DataImageWatcher;
 class DataImage : public AbstractDataImage {
   public:
+    enum pixel_format {
+        RGB,
+        RGBA,
+        BGR,
+        BGRA
+    };
     DataImage (CoreProcess* parent, const string& name, string* data, int format, double x, double y, double w, double h);
     DataImage (CoreProcess* parent, const string& name, string* data, double x, double y, double w, double h);
     DataImage (CoreProcess* parent, const string& name, double x, double y, double w, double h);
