@@ -10,6 +10,91 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
     - Update the Docs !
 
+## [1.23.0] - 2026-08-26
+
+### NEW
+
+    - NEW Qt OpenGL widget renderer support
+    - NEW Tracy profiling support
+    - NEW backend clipboard access with fallback support
+    - NEW TextField `read_only` and `selectable` properties
+    - NEW `Window::get_pixel_color` API for GUI testing
+
+### Added
+
+    - Added Remotery instrumentation and logs in graph execution, external sources, and GUI drawing updates
+    - Added `_DEBUG_SEE_ACTIVATION_SEQUENCE_2`, `_DEBUG_SEE_ACTIVATION_SEQUENCE_2_MOVE`, and `_DEBUG_SEE_PROP_SET_VALUE` debug helpers
+    - Added `cxx_version` in Makefile, defaulting to C++20
+    - Added Qt6 preparation options, including `qt_version` and `use_qopengl_widget`
+    - Added Jenkins CI configuration with separated Windows MSYS and WSL pipelines
+    - Added documentation overview and howtos for development, debugging, and performance
+    - Added `ActionParentMethod`, `FuncWrapper`, and `Previous::diff_only`
+    - Added `TextProperty::is_empty` and a specific C API `getString`
+    - Added simplified constructors for `Window` and `Coupling`
+    - Added Linux GPIO support for newer `gpiod` APIs
+    - Added `libgpiod-dev` package dependency for Alpine Linux
+    - Added platform folders external source
+    - Added tooling to update copyright headers
+
+### Changed
+
+    - Improved Makefile organization, package dependencies, build directory handling, rpath handling, and module cleanup targets
+    - Moved Qt package configuration from the main Makefile to Qt-specific build files
+    - Improved Windows, Darwin, Linux, Qt6, SDL, and `DJNN_NO_DEBUG` compilation support
+    - Made GPIO support optional when `gpiod` v2 is not available
+    - Refactored display and GUI event handling with macro-based event definitions
+    - Improved pen, pressure, eraser, and mouse button event handling
+    - Improved Qt text rendering with cached static text and font metrics
+    - Improved TextField editing behavior, selection handling, content geometry, dark mode color, and double-click support
+    - Improved GUI drawing invalidation and `update_drawing` to redraw only affected objects
+    - Optimized Qt HiDPI layer recomputation and stabilized Qt window geometry synchronization
+    - Improved color picking image format handling in the Qt backend
+    - Reworked `Display` style into `visibility`, with `none` becoming `hidden`
+    - Refactored path and polygon damage handling and started bbox/SDF path hierarchy work
+    - Improved core process hierarchy, return types, parent activation checks, and inline support
+    - Improved graph debugging, activation deque handling, and cycle/debug output
+    - Improved `find_child` XPath support, including `..`
+    - Improved XML verbosity and warnings for ignored XML attributes
+    - Improved `display_create_stats` memory handling and output
+    - Updated Remotery and cleaned profiling sample naming
+    - Updated editor configurations and formatting conventions
+
+### Fixed
+
+    - Fixed Windows GCC 15.2 compilation issues
+    - Fixed SDL mainloop compilation with SDL threads
+    - Fixed Qt6 build with OpenGL
+    - Fixed macOS compilation issues
+    - Fixed Linux compilation issues in core debug support
+    - Fixed `DJNN_NO_DEBUG` compilation and debug flag initialization issues
+    - Fixed `exec_env` Qt mainloop exit behavior
+    - Fixed deprecated Qt lambda capture warning
+    - Fixed directory observer compilation issue
+    - Fixed duplicate symbol in `TPrevious<double>::PreviousAction::impl_activate`
+    - Fixed `TextProperty` and `TemplateProperty` build issues
+    - Fixed `NativeAsyncAction` behavior with `FatAction`
+    - Fixed `BoolProperty` parent notification on value changes
+    - Fixed connector lookup to use `find_child` and report lookup errors
+    - Fixed ambiguous C API `find` function
+    - Fixed `Path` compilation by including the proper infinity definition
+    - Fixed accidental null entries in GUI structure maps
+    - Fixed unsafe null delegate calls in GUI drawing updates
+    - Fixed stylus mouse emulation initialization
+    - Fixed TextField deletion selection behavior
+    - Fixed very thin Qt outline rendering by avoiding cosmetic zero-width pens
+    - Fixed clipped z-order replay handling in the Qt backend
+    - Fixed interactive frame background updates that could deadlock
+    - Fixed explicit Darwin dependency on `libpcre`
+    - Fixed warning messages to include property names
+
+### Removed
+
+    - Removed `FatChildProcess` and `ParentProcess` from the public API
+    - Removed redundant state dependency parent checks
+    - Removed default optimization and debug flags from project config files
+    - Removed unused code in GUI and TextField internals
+    - Removed unnecessary trailing semicolons and unused-variable warnings
+
 ## [1.22.0] - 2025-07-29
 
 ### NEW

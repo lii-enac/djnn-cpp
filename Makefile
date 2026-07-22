@@ -46,7 +46,7 @@ config_%:
 	cp project/config/$@.mk config.mk
 
 MAJOR = 1
-MINOR = 22
+MINOR = 23
 MINOR2 = 0
 
 -include config.mk
