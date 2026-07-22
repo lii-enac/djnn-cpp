@@ -65,6 +65,8 @@ class Text : public AbstractGShape {
     AbstractIntProperty*       encoding () { return (AbstractIntProperty*)find_child_impl ("encoding"); }
     IntProperty*               width () { return &_width; }
     IntProperty*               height () { return &_height; }
+    IntProperty*               ascent () { return &_ascent; }
+    IntProperty*               descent () { return &_descent; }
     AbstractTextProperty*      text () { return &_text; }
     void                       set_width (double width) { _width.set_value (width, true); }
     void                       set_height (double height) { _height.set_value (height, true); }

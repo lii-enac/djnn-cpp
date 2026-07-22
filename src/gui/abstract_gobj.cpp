@@ -16,16 +16,29 @@
  */
 #include "abstract_gobj.h"
 
-#include "core/utils/remotery.h"
 #include "abstract_backend.h"
 #include "backend.h"
-#include "core/utils/error.h"
-#include "core/utils/iostream.h"
 #include "display/update_drawing.h"
 #include "display/window.h"
 #include "layer.h"
 
+#include "core/utils/remotery.h"
+
+#ifndef DJNN_NO_DEBUG
+#include "core/utils/error.h"
+#include "core/utils/iostream.h"
+#endif
+
 namespace djnn {
+
+AbstractGObj::AbstractGObj (CoreProcess* parent, const string& name)
+    : FatProcess (name), _frame (nullptr), _layer (nullptr), _damaged (notify_none), _impl (nullptr)
+{
+}
+
+AbstractGObj::~AbstractGObj ()
+{
+}
 
 void
 AbstractGObj::create_Gobj_update_coupling (CoreProcess** prop, CouplingWithData** cprop)

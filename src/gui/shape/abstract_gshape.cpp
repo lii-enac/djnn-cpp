@@ -335,9 +335,9 @@ AbstractGShape::pre_draw ()
     if (_classes.empty ())
         return;
     ComponentObserver::instance ().start_draw ();
-
     StyleSheet::draw_style (_classes);
 }
+
 void
 AbstractGShape::post_draw ()
 {

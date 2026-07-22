@@ -60,7 +60,6 @@ Text::Text (CoreProcess* parent, const string& name, double x, double y, double 
       _descent (this, "descent", 0),
       _text (this, "text", raw_props.text, notify_damaged_geometry),
       _cupdate_size (&_text, ACTIVATION, &_update_size, ACTIVATION, true),
-      //_ctext (&_text, ACTIVATION, UpdateDrawing::instance ()->get_damaged (), ACTIVATION )
       _ctext (&_text, ACTIVATION, nullptr, ACTIVATION)
 {
     set_origin (x, y);

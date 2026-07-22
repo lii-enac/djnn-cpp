@@ -13,6 +13,8 @@
  */
 #include <SDL3/SDL_timer.h>  // SDL_Delay
 
+#include <SDL3/SDL_timer.h>  // SDL_Delay
+
 #include "sdl_mainloop.h"
 
 #include "exec_env/global_mutex.h"

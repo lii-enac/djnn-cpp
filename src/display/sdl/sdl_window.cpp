@@ -16,6 +16,10 @@
 
 #include <SDL3/SDL_video.h>
 
+#include <assert.h>
+
+#include <SDL3/SDL_video.h>
+
 // #include "sdl_mainloop.h"
 #include "sdl_window.h"
 
@@ -145,7 +149,7 @@ SDLWindow::redraw ()
 bool
 SDLWindow::handle_event (SDL_Event& e)
 {
-    rmt_BeginCPUSample (sdlwin_handle_event, RMTSF_Root);
+    rmt_BeginCPUSample (sdlwin_handle_event, RMTSF_Aggregate);
     // std::cerr << e.type << __FL__;
     bool exec = false;
     switch (e.type) {
