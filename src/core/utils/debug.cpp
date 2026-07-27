@@ -179,8 +179,14 @@ void debug_prop_set_value(CoreProcess *p, bool incr)
         std::cerr 
             << std::left
             << std::setw(60) << src_code.substr(0,60)
-            << std::setw(15) << " (" + std::to_string(debug_index) + "," + std::to_string(debug_index_post) + ")" " sv "
-            << std::setw(w) << hn.substr(0, w-3) + (hn.size()>(w-3)?"...":" ")
+            << std::setw(15) << " (" + std::to_string(debug_index) + "," + std::to_string(debug_index_post) + ")" " sv ";
+        size_t len = hn.size();
+        size_t start =0;
+        if (len>(w)) {
+            start = len-(w+2);
+        }
+        std::cerr
+            << std::setw(w) << hn.substr(start, w) //+ (hn.size()>(w-3)?"...":" ")
             //<< std::setw(w) << tn.substr(0, w-3) + (tn.size()>(w-3)?"...":"")
             //<< __FL__;
             //<< std::endl
