@@ -34,7 +34,7 @@ class QtPickingView : public ColorPickingView {
     // Picking
     virtual void init () override;
     // ColorPickingView
-    virtual int get_pixel (unsigned int x, unsigned int y) override;
+    virtual uint get_pixel (unsigned int x, unsigned int y) override;
 
     // QtPickingView
     QPainter* painter () { return _painter; }

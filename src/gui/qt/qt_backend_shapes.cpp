@@ -1072,6 +1072,10 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
 
     rmt_BeginCPUSample (draw_layer_pixmap, RMTSF_Aggregate);
     _painter->drawPixmap (0, 0, *(ls->pm));
+    // // > SCO bug yellow edge
+    // _painter->setOpacity (0.4);
+    // _painter->drawImage (QPoint (0, 0), *pick_pm->pm);
+    // // > SCO bug yellow edge
     rmt_EndCPUSample ();
     _painter->setRenderHints (rh);
 

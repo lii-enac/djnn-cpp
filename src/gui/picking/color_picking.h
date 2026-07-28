@@ -32,19 +32,20 @@ class ColorPickingView : public Picking {
     PickUI*      pick (double x, double y);
     void         add_pick_shape (PickUI* gobj, bool cache = false);
     void         remove_pick_shape (PickUI* gobj);
-    virtual int  get_pixel (unsigned int x, unsigned int y) = 0;
+    virtual uint  get_pixel (unsigned int x, unsigned int y) = 0;
     virtual void object_deactivated (PickUI* gobj);
 
     // ColorPicking
-    unsigned int pick_color () { return _pick_color; }
+    using pick_color_t = unsigned int; 
+    pick_color_t pick_color () { return _pick_color; }
 
   protected:
-    unsigned int                        _pick_color;
-    djnnstl::map<unsigned int, PickUI*> _color_map;
+    pick_color_t                        _pick_color;
+    djnnstl::map<pick_color_t, PickUI*> _color_map;
 
     int             seed;
     double          myrandom ();
     void            next_color ();
-    virtual PickUI* pick_impl (unsigned int color); // default implementation uses _color_map
+    virtual PickUI* pick_impl (pick_color_t color); // default implementation uses _color_map
 };
 } // namespace djnn

@@ -73,7 +73,7 @@ QtPickingView::~QtPickingView ()
         delete _pick_debug_win;
 }
 
-int
+uint
 QtPickingView::get_pixel (unsigned int x, unsigned int y)
 {
     if (!_image || /*x < 0 ||*/ x >= (unsigned int)_image->width () || /*y < 0 ||*/ y >= (unsigned int)_image->height ())

@@ -14,6 +14,9 @@
  *      Stephane Conversy <stephane.conversy@enac.fr>
  *
  */
+
+#include <assert.h>
+
 #include "color_picking.h"
 
 #include "core/utils/iostream.h"
@@ -86,6 +89,8 @@ ColorPickingView::next_color ()
 // 11.2021 MP : bug when on picking with myrandom color
 #if 1
     // if ( _DEBUG_SEE_COLOR_PICKING_VIEW == 0 )
+    if (_pick_color == ((pick_color_t)-1))
+        std::cerr << "warning next_color is wrapping up" << std::endl;
     ++_pick_color;
     //_pick_color+=100;
 #else
@@ -115,9 +120,13 @@ ColorPickingView::add_pick_shape (PickUI* pshape, bool cache)
 
     // reset cache if it changed
     pshape->cache (cache);
-    _color_map.insert (djnnstl::pair<unsigned int, PickUI*> (_pick_color, pshape));
+    //_color_map.insert (djnnstl::pair<pick_color_t, PickUI*> (_pick_color, pshape)); // won't work if key already exists
+    _color_map[_pick_color] = pshape;
     // save pick_color in PickUI interface
     pshape->color (_pick_color);
+    // // > SCO bug yellow edge
+    // std::cout << "add    color: " << std::hex << pshape->color () << " obj: " << pshape<< " has_ui:" << pshape->has_ui () << std::endl;
+    // // < SCO bug yellow edge
     next_color ();
 }
 
@@ -126,29 +135,47 @@ ColorPickingView::remove_pick_shape (PickUI* pshape)
 {
     // use the saved color in pickUI interface to accelerate find in _color_map
     auto it = _color_map.find (pshape->color ());
-    if (it != _color_map.end ())
+    if (it != _color_map.end ()) {
+        // // > SCO bug yellow edge
+        // std::cout << "remove color: " << std::hex << pshape->color () << " obj: " << it->second << " has_ui:" << it->second->has_ui () << std::endl;
+        // // < SCO bug yellow edge
         _color_map.erase (it);
+        pshape->color (0);
+    }
 }
 
 PickUI*
-ColorPickingView::pick_impl (unsigned int color) // default implementation, using _color_map
+ColorPickingView::pick_impl (pick_color_t color) // default implementation, using _color_map
 {
+    PickUI* res = nullptr;
     auto it = _color_map.find (color);
 
-    // debug
-    // std::cout << "pick color: " << std::hex << color << " obj: " << it->second << std::endl <<std::endl;
+    //std::cout << "pick color: " << std::hex << color;
 
-    // We added guard on has_ui because background_windows doesn't have ui all the time even if it is always in the _color_map
-    if (it != _color_map.end () && it->second->has_ui ()) {
-        return it->second;
+    // // > SCO bug yellow edge
+    // if (it == _color_map.end ()) {
+    //     std::cerr << "strange color " << std::hex << color << " **************************** in picking pixmap, but not in _color_map" << std::endl;
+    // }
+    // // < SCO bug yellow edge
+    //assert (it != _color_map.end ());
+
+    if (it != _color_map.end ()) {
+        // debug
+        //std::cout << std::hex << " obj: " << it->second << " has_ui:" << it->second->has_ui ();
+        // We added guard on has_ui because background_windows doesn't have ui all the time even if it is always in the _color_map
+        if (it->second->has_ui ()) {
+            res = it->second;
+        }
     }
-    return nullptr;
+    //std::cout << std::endl;
+    return res;
 }
 
 PickUI*
 ColorPickingView::pick (double x, double y)
 {
     int color = get_pixel (x, y);
+    if (!color) return nullptr;
     return pick_impl (color);
 }
 
