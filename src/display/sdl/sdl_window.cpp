@@ -117,6 +117,9 @@ SDLWindow::handle_resized (int w, int h)
 void
 SDLWindow::update_hidpi ()
 {
+    auto s = SDL_GetWindowDisplayScale (_sdl_window);
+    if (s == 0) error(nullptr, "SDL_GetDisplayContentScale return 0");
+    _window->hidpi_scale ()->set_value (s, true);
 }
 
 void
