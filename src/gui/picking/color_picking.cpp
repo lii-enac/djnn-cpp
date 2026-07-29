@@ -165,6 +165,7 @@ ColorPickingView::pick_impl (pick_color_t color) // default implementation, usin
     // if (it == _color_map.end ()) {
     //     std::cerr << "strange color " << std::hex << color << " **************************** in picking pixmap, but not in _color_map" << std::endl;
     // }
+    // assert (it != _color_map.end ());
     // // < SCO bug yellow edge
     
     if (it != _color_map.end ()) {

@@ -38,6 +38,7 @@ class ColorPickingView : public Picking {
     // ColorPicking
     using pick_color_t = unsigned int; 
     pick_color_t pick_color () { return _pick_color; }
+    void set_pick_color (pick_color_t c) { _pick_color = c; }
 
   protected:
     pick_color_t                        _pick_color;

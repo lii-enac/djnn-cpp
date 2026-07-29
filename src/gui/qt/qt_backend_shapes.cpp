@@ -970,6 +970,8 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
         // Set _cur_origin to newm for low DPI pixmap painting
         _cur_origin = newm;
 
+        auto sav_pick_color = _picking_view->pick_color ();
+
         // Draw offscreen low DPI pixmap (use current _painter)
         for (auto& p : _children) {
             p.first->draw ();
@@ -988,6 +990,8 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
 
             // Reset _cur_origin to newm for high DPI pixmap painting
             _cur_origin = newm;
+
+            _picking_view->set_pick_color (sav_pick_color);
 
             // Draw offscreen high DPI pixmap (use current _painter)
             for (auto& p : _children) {
