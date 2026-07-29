@@ -551,7 +551,7 @@ Graph::exec ()
         }
 #endif
     }
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // pre_execution
 
 #ifdef DJNN_NO_DEBUG
     graph_counter_act++;
@@ -715,7 +715,7 @@ Graph::exec ()
             is_end = false;
         }
     }
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // execution
 
 // execute scheduled deletion of processes
 #ifndef DJNN_NO_DEBUG
@@ -726,7 +726,7 @@ Graph::exec ()
     for (auto p : _scheduled_deletions)
         delete p;
     _scheduled_deletions.clear ();
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // deletion
 
 #ifndef DJNN_NO_DEBUG
     end_delete = std::chrono::steady_clock::now ();
@@ -745,7 +745,7 @@ Graph::exec ()
         p->trigger_activation_flag ();
         p->set_activation_flag (NONE_ACTIVATION);
     }
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // output
 
 #ifndef DJNN_NO_DEBUG
     end_output = std::chrono::steady_clock::now ();
@@ -824,7 +824,7 @@ Graph::exec ()
         cerr << "<< graph exec" << endl << endl;
     }
 
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // Graph_exec
 }
 
 // -----------------------------------------------------------------------
@@ -855,13 +855,13 @@ Graph::sort (Vertex* v_root)
         }
     } else
         traverse_depth_first (v_root);
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // traverse_depth_first
     
     //std::cerr << "__i:" << __i << " avoided over " << _ordered_vertices.size() << __FL__;
     rmt_BeginCPUSample (actual_sort, RMTSF_Aggregate);
     std::sort (_ordered_vertices.begin (), _ordered_vertices.end (),
                [] (const Vertex* v1, const Vertex* v2) { return v1->get_order_stamp () > v2->get_order_stamp (); });
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // actual_sort
 
 #if !_EXEC_FULL_ORDERED_VERTICES
     rmt_BeginCPUSample (actual_sort_full, RMTSF_Aggregate);
@@ -872,7 +872,7 @@ Graph::sort (Vertex* v_root)
     
     std::sort (_activation_deque.begin (), _activation_deque.end (),
                [] (const Vertex* v1, const Vertex* v2) { return v1->get_sorted_index () < v2->get_sorted_index (); });
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // actual_sort_full
 #endif
 
     _sorted = true;
@@ -901,7 +901,7 @@ Graph::sort (Vertex* v_root)
     sorted_average = sorted_total / sorted_counter;
     cerr << "\033[0m" << endl;
 #endif
-    rmt_EndCPUSample (); // end  of sort
+    rmt_EndCPUSample (); // sort
 }
 
 // -----------------------------------------------------------------------

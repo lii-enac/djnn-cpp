@@ -58,7 +58,7 @@ ComponentObserver::start_draw ()
     for (auto m : _draw_manager_list) {
         m->push ();
     }
-    // rmt_EndCPUSample();
+    // rmt_EndCPUSample(); // start_draw
 }
 
 void
@@ -68,7 +68,7 @@ ComponentObserver::end_draw ()
     for (auto m : _draw_manager_list) {
         m->pop ();
     }
-    // rmt_EndCPUSample();
+    // rmt_EndCPUSample(); // stop_draw
 }
 
 void

@@ -187,7 +187,7 @@ SDLWindow::handle_event (SDL_Event& e)
             }
             else assert(0);
             trigger_redraw ();
-            rmt_EndCPUSample ();
+            rmt_EndCPUSample (); // update or timer or please_stop
             exec = true;
             break;
         }
@@ -205,7 +205,7 @@ SDLWindow::handle_event (SDL_Event& e)
     case SDL_EVENT_WINDOW_EXPOSED: {
         rmt_BeginCPUSample (window_exposed, RMTSF_None);
         trigger_redraw ();
-        rmt_EndCPUSample ();
+        rmt_EndCPUSample (); // window_exposed
         exec = true;
         break;
     }
@@ -254,7 +254,7 @@ SDLWindow::handle_event (SDL_Event& e)
     }
     //}
     //}
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // sdlwin_handle_event
     return exec;
 }
 
@@ -274,7 +274,7 @@ SDLWindow::trigger_redraw ()
         _window->refreshed ()->notify_activation ();
     }
 #endif
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // trigger_redraw
 }
 
 void

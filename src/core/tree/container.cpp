@@ -313,7 +313,7 @@ Container::update_drawing ()
     for (auto c : _children) {
         c->update_drawing ();
     }
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // Container_update_drawing
 }
 
 void
@@ -332,7 +332,7 @@ Container::draw ()
     //   c->draw ();
     // }
     // ComponentObserver::instance ().end_draw ();
-    // //rmt_EndCPUSample();
+    // //rmt_EndCPUSample(); // container_draw
 }
 
 void
@@ -348,7 +348,7 @@ Container::pick ()
         c->pick ();
     }
     // ComponentObserver::instance ().end_pick ();
-    // rmt_EndCPUSample();
+    // rmt_EndCPUSample(); // container_pick
 }
 
 AbstractGShape*

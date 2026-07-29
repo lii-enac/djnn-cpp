@@ -151,7 +151,7 @@ IOFD::run ()
             //     _except.activate (); // propagating
             // }
             GRAPH_EXEC;            // executing
-            rmt_EndCPUSample();
+            rmt_EndCPUSample(); // external_source_iofd
         }
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     }

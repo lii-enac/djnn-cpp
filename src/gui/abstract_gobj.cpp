@@ -245,7 +245,7 @@ AbstractGObj::update_drawing ()
         _layer->damaged ()->activate ();
     } else if (_frame)
         _frame->damaged ()->activate ();
-    rmt_EndCPUSample ();
+    rmt_EndCPUSample (); // abstractGobj_update_drawing
 }
 
 void

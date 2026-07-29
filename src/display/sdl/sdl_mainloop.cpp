@@ -160,7 +160,7 @@ SDLMainloop::sdl_run ()
         djnn::get_exclusive_access (DBG_GET); // no break after this call without release !!
         rmt_BeginCPUSample(external_source_gui, 0);
         handle_events (e);
-        rmt_EndCPUSample();
+        rmt_EndCPUSample(); // external_source_gui
         djnn::release_exclusive_access (DBG_REL); // no break before this call without release !!
     }
 
