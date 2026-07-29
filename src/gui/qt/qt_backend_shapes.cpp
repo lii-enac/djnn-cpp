@@ -997,6 +997,7 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
             // Reset _cur_origin to newm for high DPI pixmap painting
             _cur_origin = newm;
 
+            // Produce the same colors in both pixmaps, so that when they are swapped, all ids are the same
             _picking_view->set_pick_color (sav_pick_color);
 
             // Draw offscreen high DPI pixmap (use current _painter)
