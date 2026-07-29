@@ -1,4 +1,4 @@
-lib_cppflags += -DDJNN_SDL
+lib_cppflags += -DDJNN_SDL -DDJNN_USE_SDL_THREAD=1
 
 ifneq ($(os),em)
 lib_pkg += sdl3
