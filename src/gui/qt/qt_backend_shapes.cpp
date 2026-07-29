@@ -782,6 +782,7 @@ struct PickLayerStuff : LayerCache
             delete lpm;
         if (hpm)
             delete hpm;
+        // lpm = hpm = nullptr; // useless, but crashes if accessed-after-free
     }
 };
 
@@ -857,12 +858,15 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
     // Check if the layer is in motion (panning, zooming, rotating) in hdpi mode
     // If yes: draw low DPI pixmap
     // If no: draw high DPI pixmap
-    bool is_in_interaction = is_hdpi && (!areAlmostEqual (tx, 0.0) ||
-                                         !areAlmostEqual (ty, 0.0) ||
-                                         !areAlmostEqual (a, 1.0) ||
-                                         !areAlmostEqual (b, 0.0) ||
-                                         !areAlmostEqual (c, 0.0) ||
-                                         !areAlmostEqual (d, 1.0));
+    bool is_in_interaction
+        //= true;
+        = is_hdpi &&
+    (   !areAlmostEqual (tx, 0.0) ||
+        !areAlmostEqual (ty, 0.0) ||
+        !areAlmostEqual (a, 1.0) ||
+        !areAlmostEqual (b, 0.0) ||
+        !areAlmostEqual (c, 0.0) ||
+        !areAlmostEqual (d, 1.0));
 
     // Obtain current layer caches
     auto* ls      = dynamic_cast<LayerStuff*> (l->cache ());
@@ -883,6 +887,9 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
     bool recompute_pixmap = l->invalid_cache (); // Simplified to check cache invalidation. beaware than is depending of hdpi
 
     if (recompute_pixmap) {
+        // // > SCO bug yellow edge
+        // std::cerr << "rec lodpi" << std::endl;
+        // // < SCO bug yellow edge
 #ifndef DJNN_NO_DEBUG
         if (ls && (_DEBUG_SEE_RECOMPUTE_PIXMAP_AND_PAINTEVENT || _DEBUG_SEE_RECOMPUTE_PIXMAP_ONLY))
             cerr << "\n---  RECOMPUTE PIXMAP " << l->get_debug_name () << endl;
@@ -901,6 +908,9 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
         ls->lpm->fill (Qt::transparent);
         // ls->lpm->fill (Qt::darkYellow); // debug version
         if (is_hdpi) {
+            // // > SCO bug yellow edge
+            // std::cerr << "rec hidpi" << std::endl;
+            // // < SCO bug yellow edge
             ls->hpm = new QPixmap (w * dpi_scale, h * dpi_scale);
             ls->hpm->setDevicePixelRatio (dpi_scale);
             ls->hpm->fill (Qt::transparent);
@@ -965,6 +975,8 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
             p.first->draw ();
         }
 
+        //_in_cache   = false;
+
         if (is_hdpi) {
             // Delete low DPI pixmap painter to create high DPI painter
             delete _painter;
@@ -1003,10 +1015,16 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
 
     // Select the appropriate pixmap based on resolution and interaction state
     if (is_hdpi && !is_in_interaction) {
+        // // > SCO bug yellow edge
+        // std::cerr << "set hidpi" << std::endl;
+        // // < SCO bug yellow edge
         // High DPI but not in interaction: use high DPI pixmap
         ls->pm      = ls->hpm;
         pick_pm->pm = pick_pm->hpm;
     } else {
+        // // > SCO bug yellow edge
+        // std::cerr << "set lodpi" << std::endl;
+        // // < SCO bug yellow edge
         // Low DPI or high DPI in interaction: use low DPI pixmap
         ls->pm      = ls->lpm;
         pick_pm->pm = pick_pm->lpm;
@@ -1075,11 +1093,14 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
     // // > SCO bug yellow edge
     // _painter->setOpacity (0.4);
     // _painter->drawImage (QPoint (0, 0), *pick_pm->pm);
-    // // > SCO bug yellow edge
+    // // < SCO bug yellow edge
     rmt_EndCPUSample ();
     _painter->setRenderHints (rh);
 
     _picking_view->painter ()->setCompositionMode (QPainter::CompositionMode_SourceOver);
+    // // > SCO bug yellow edge
+    // std::cerr << "draw picking pixmap" << std::endl;
+    // // < SCO bug yellow edge
     rmt_BeginCPUSample (draw_layer_pixmap_pick, RMTSF_Aggregate);
     _picking_view->painter ()->drawImage (QPoint (0, 0), *pick_pm->pm);
     rmt_EndCPUSample ();

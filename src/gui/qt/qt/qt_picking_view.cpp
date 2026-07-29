@@ -100,6 +100,9 @@ QtPickingView::init ()
     rmt_EndCPUSample ();
 
     rmt_BeginCPUSample (ColorPickingView_new, RMTSF_None);
+    // // > SCO bug yellow edge
+    // std::cerr << "new picking image" << std::endl;
+    // // < SCO bug yellow edge
     if (_image == nullptr)
         _image = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
     _painter = new QPainter (_image);

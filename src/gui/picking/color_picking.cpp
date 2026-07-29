@@ -60,6 +60,10 @@ ColorPickingView::init ()
     // -----------------
 
     // ---- code after 07/2021
+    // intention IIUC (SCO): init while keeping 'cached' (i.e. in layer) shapes with the same color id so that we are not required to regenerate the maps.
+    // To do so, we need to ensure that the next color does not collide with already assigned color ids.
+    // A solution consists in finding the minimum color id that can be incremented from with no possible collision
+    // So the algorithm below finds the highest assigned color id and make it the next color to pick
     for (auto it = _color_map.cbegin (); it != _color_map.cend ();) {
         if (it->second->cache ()) {
             if (_pick_color < it->first) {
@@ -67,12 +71,17 @@ ColorPickingView::init ()
             }
             ++it;
         } else {
+            // // > SCO bug yellow edge
+            // std::cerr << "remove color: " << std::hex << it->first << std::endl;
+            // // < SCO bug yellow edge
+            // << " obj: " << it->second << " has_ui:" << it->second->has_ui () << std::endl;
             it = _color_map.erase (it); // or "it = m.erase(it)" since C++11
         }
     }
 
     seed = 0; // not correct anymore since Layers
 
+    // we have the max, now advance by one
     next_color ();
 }
 
@@ -120,12 +129,12 @@ ColorPickingView::add_pick_shape (PickUI* pshape, bool cache)
 
     // reset cache if it changed
     pshape->cache (cache);
-    //_color_map.insert (djnnstl::pair<pick_color_t, PickUI*> (_pick_color, pshape)); // won't work if key already exists
-    _color_map[_pick_color] = pshape;
+    _color_map.insert (djnnstl::pair<pick_color_t, PickUI*> (_pick_color, pshape)); // won't work if key already exists
+    //_color_map[_pick_color] = pshape;
     // save pick_color in PickUI interface
     pshape->color (_pick_color);
     // // > SCO bug yellow edge
-    // std::cout << "add    color: " << std::hex << pshape->color () << " obj: " << pshape<< " has_ui:" << pshape->has_ui () << std::endl;
+    // std::cerr << "add    color: " << std::hex << pshape->color () << " obj: " << pshape<< " has_ui:" << pshape->has_ui () << std::endl;
     // // < SCO bug yellow edge
     next_color ();
 }
@@ -137,7 +146,7 @@ ColorPickingView::remove_pick_shape (PickUI* pshape)
     auto it = _color_map.find (pshape->color ());
     if (it != _color_map.end ()) {
         // // > SCO bug yellow edge
-        // std::cout << "remove color: " << std::hex << pshape->color () << " obj: " << it->second << " has_ui:" << it->second->has_ui () << std::endl;
+        // std::cerr << "remove color: " << std::hex << pshape->color () << " obj: " << it->second << " has_ui:" << it->second->has_ui () << std::endl;
         // // < SCO bug yellow edge
         _color_map.erase (it);
         pshape->color (0);
@@ -157,8 +166,7 @@ ColorPickingView::pick_impl (pick_color_t color) // default implementation, usin
     //     std::cerr << "strange color " << std::hex << color << " **************************** in picking pixmap, but not in _color_map" << std::endl;
     // }
     // // < SCO bug yellow edge
-    //assert (it != _color_map.end ());
-
+    
     if (it != _color_map.end ()) {
         // debug
         //std::cout << std::hex << " obj: " << it->second << " has_ui:" << it->second->has_ui ();
@@ -187,8 +195,12 @@ ColorPickingView::object_deactivated (PickUI* gobj)
 
     // FIXME : should we delete object from picking_view when deactivated
     auto it = _color_map.find (gobj->color ());
-    if (it != _color_map.end ())
+    if (it != _color_map.end ()) {
+        // // > SCO bug yellow edge
+        // std::cerr << "remove color: " << std::hex << gobj->color () << " obj: " << it->second << " has_ui:" << it->second->has_ui () << " (deactivated)" << std::endl;
+        // // < SCO bug yellow edge
         _color_map.erase (it);
+    }
 }
 
 } /* namespace djnn */
