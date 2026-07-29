@@ -858,15 +858,21 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
     // Check if the layer is in motion (panning, zooming, rotating) in hdpi mode
     // If yes: draw low DPI pixmap
     // If no: draw high DPI pixmap
-    bool is_in_interaction
-        //= true;
-        = is_hdpi &&
-    (   !areAlmostEqual (tx, 0.0) ||
-        !areAlmostEqual (ty, 0.0) ||
+    bool is_identity =
+    ! ( 
+        !areAlmostEqual (tx, 0.0, 1e-2) ||
+        !areAlmostEqual (ty, 0.0, 1e-2) ||
         !areAlmostEqual (a, 1.0) ||
         !areAlmostEqual (b, 0.0) ||
         !areAlmostEqual (c, 0.0) ||
-        !areAlmostEqual (d, 1.0));
+        !areAlmostEqual (d, 1.0))
+    ;
+    bool is_in_interaction
+        = is_hdpi && !is_identity;
+        //= true;
+   ;
+//    std::cerr << is_identity << " " << is_in_interaction << std::endl;
+//    if (!is_identity) std::cerr << a << " " << b << " " << c << " " << d << " tx:" << tx << " ty:" << ty << std::endl;
 
     // Obtain current layer caches
     auto* ls      = dynamic_cast<LayerStuff*> (l->cache ());
@@ -907,7 +913,7 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
         ls->lpm->setDevicePixelRatio (1);
         ls->lpm->fill (Qt::transparent);
         // ls->lpm->fill (Qt::darkYellow); // debug version
-        if (is_hdpi) {
+        if (is_hdpi && !is_in_interaction) {
             // // > SCO bug yellow edge
             // std::cerr << "rec hidpi" << std::endl;
             // // < SCO bug yellow edge
@@ -921,7 +927,7 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
         pick_pm->lpm = new QImage (w, h, QImage::Format_ARGB32_Premultiplied);
         pick_pm->lpm->setDevicePixelRatio (1);
         pick_pm->lpm->fill (Qt::transparent);
-        if (is_hdpi) {
+        if (is_hdpi && !is_in_interaction) {
             pick_pm->hpm = new QImage (w * dpi_scale, h * dpi_scale, QImage::Format_ARGB32_Premultiplied);
             pick_pm->hpm->setDevicePixelRatio (dpi_scale);
             pick_pm->hpm->fill (Qt::transparent);
@@ -979,7 +985,7 @@ QtBackend::draw_layer (Layer* l, const children_t& _children)
 
         //_in_cache   = false;
 
-        if (is_hdpi) {
+        if (is_hdpi && !is_in_interaction) {
             // Delete low DPI pixmap painter to create high DPI painter
             delete _painter;
             delete _picking_view->painter ();
