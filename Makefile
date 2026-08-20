@@ -1070,23 +1070,23 @@ ifneq ($(pkgcmd),)
 pkgcmdtype := $(notdir $(pkgcmd))
 
 ifeq ($(pkgcmdtype),apt)
-	pkginst := apt install -y
-	pkgupg := apt upgrade -y
+pkginst := apt install -y
+pkgupg := apt upgrade -y
 endif
 
 ifeq ($(pkgcmdtype),apk)
-	pkginst := apk add
-	pkgupg := apk upgrade
+pkginst := apk add
+pkgupg := apk upgrade
 endif
 
 ifeq ($(pkgcmdtype),brew)
-	pkginst := brew install
-	pkgupg := brew upgrade
+pkginst := brew install
+pkgupg := brew upgrade
 endif
 
 ifeq ($(pkgcmdtype),pacman)
-	pkginst := pacman -S --needed
-	pkgupg := pacman -Syu --needed
+pkginst := pacman -S --needed
+pkgupg := pacman -Syu --needed
 endif
 
 #untested - source only :-/
@@ -1129,24 +1129,24 @@ pkglibdeps += expat1 curl4 evdev2 openal1
 # 	#pkgdeps += qt5-default #for ubuntu < 22.04
 # endif
 ifeq ($(display),SDL)
-	ifeq ($(specialtarget),raspberry-ua-netinst)
-		# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
-		#pkgdeps += raspberrypi
-	else
-		pkglibdeps += sdl2-dev sdl2-image # gbm
-	endif
+ifeq ($(specialtarget),raspberry-ua-netinst)
+# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
+#pkgdeps += raspberrypi
+else
+pkglibdeps += sdl2-dev sdl2-image # gbm
+endif
 endif
 ifeq ($(display),DRM)
-	pkglibdeps += drm
+pkglibdeps += drm
 endif
 ifeq ($(graphics),CAIRO)
-	pkglibdeps += cairo pango1.0 #libpangocairo-1.0-0 
+pkglibdeps += cairo pango1.0 #libpangocairo-1.0-0 
 endif
 ifeq ($(graphics),GL)
-	pkglibdeps += freetype6 fontconfig1 glm
+pkglibdeps += freetype6 fontconfig1 glm
 endif
 ifeq ($(graphics),SDLGPU)
-	pkglibdeps += freetype6 fontconfig1 glm
+pkglibdeps += freetype6 fontconfig1 glm
 endif
 pkglibdeps_full := $(addprefix lib,$(pkglibdeps))
 #pkglibdeps_full := $(addsuffix -dev,$(pkglibdeps_full))
@@ -1166,24 +1166,24 @@ pkglibdeps += curl libevdev expat openal-soft flex
 # 	pkglibdeps += qt5opengl5
 # endif
 ifeq ($(display),SDL)
-	ifeq ($(specialtarget),raspberry-ua-netinst)
-		# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
-		#pkgdeps += raspberrypi
-	else
-		pkglibdeps += sdl2 sdl2_image # gbm-
-	endif
+ifeq ($(specialtarget),raspberry-ua-netinst)
+# on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
+#pkgdeps += raspberrypi
+else
+pkglibdeps += sdl2 sdl2_image # gbm-
+endif
 endif
 ifeq ($(display),DRM)
-	pkglibdeps += drm
+pkglibdeps += drm
 endif
 ifeq ($(graphics),CAIRO)
-	pkglibdeps += cairo pango1.0 #libpangocairo-1.0-0 
+pkglibdeps += cairo pango1.0 #libpangocairo-1.0-0 
 endif
 ifeq ($(graphics),GL)
-	pkglibdeps += freetype fontconfig glm 
+pkglibdeps += freetype fontconfig glm 
 endif
 ifeq ($(graphics),SDLGPU)
-	pkglibdeps += freetype fontconfig glm
+pkglibdeps += freetype fontconfig glm
 endif
 #pkglibdeps_full := $(addsuffix -dev,$(pkglibdeps))
 pkglibdeps_full := $(pkglibdeps)
@@ -1199,62 +1199,61 @@ pkgdeps += rtmidi
 # 	pkgdeps += qt5
 # endif
 ifeq ($(display),SDL)
-	#pkgdeps += sdl2 sdl2_image
-	pkgdeps += sdl3
-	#sdl3_image
+#pkgdeps += sdl2 sdl2_image
+pkgdeps += sdl3
+#sdl3_image
 endif
 ifeq ($(graphics),CAIRO)
-	pkgdeps += cairo pango
+pkgdeps += cairo pango
 endif
 ifeq ($(graphics),GL)
-	pkgdeps += glm fontconfig freetype2
+pkgdeps += glm fontconfig freetype2
 endif
 ifeq ($(graphics),SDLGPU)
-	pkgdeps += glm fontconfig freetype2
+pkgdeps += glm fontconfig freetype2
 endif
 ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
-	pkgdeps += openal-soft
+pkgdeps += openal-soft
 endif
 endif
 
 ifeq ($(pkgcmdtype),pacman)
-	#https://www.msys2.org/
+#https://www.msys2.org/
+pkgdeps := git make pkg-config
 
-	#pkgdeps := git make pkg-config
+#pkginst := pacboy -S --needed
+#pkgupg := pacboy -Syu --needed
 
-	#pkginst := pacboy -S --needed
-	#pkgupg := pacboy -Syu --needed
+#boost
+mgwpkgdeps += gcc expat curl
+#pkgdeps += libusb #crazyflie
+mgwpkgdeps += rtmidi
+ifeq ($(graphics),QT)
+mgwpkgdeps += qt5-3d
+endif
+ifeq ($(display),SDL)
+mgwpkgdeps += SDL2 SDL2_image
+endif
+ifeq ($(graphics),CAIRO)
+mgwpkgdeps += cairo pango
+endif
+ifeq ($(graphics),GL)
+mgwpkgdeps += glm fontconfig freetype
+endif
+ifeq ($(graphics),SDLGPU)
+mgwpkgdeps += glm fontconfig freetype
+endif
+ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
+mgwpkgdeps += openal
+endif
 
-	#boost
-	mgwpkgdeps += gcc expat curl
-	#pkgdeps += libusb #crazyflie
-	mgwpkgdeps += rtmidi
-	ifeq ($(graphics),QT)
-		mgwpkgdeps += qt5-3d
-	endif
-	ifeq ($(display),SDL)
-		mgwpkgdeps += SDL2 SDL2_image
-	endif
-	ifeq ($(graphics),CAIRO)
-		mgwpkgdeps += cairo pango
-	endif
-	ifeq ($(graphics),GL)
-		mgwpkgdeps += glm fontconfig freetype
-	endif
-	ifeq ($(graphics),SDLGPU)
-		mgwpkgdeps += glm fontconfig freetype
-	endif
-	ifeq ($(audio),$(filter $(audio),AL AL_SOFT))
-		mgwpkgdeps += openal
-	endif
-
-	# mgwpkgdeps += gcc boost expat curl qt5
-	# mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
-	# ifeq ($(graphics),GL)
-	# 	mgwpkgdeps += glm
-	# endif
-	mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
-	pkgdeps += $(mgwpkgdeps)
+#mgwpkgdeps += gcc boost expat curl qt5
+# mgwpkgdeps += freetype SDL2 SDL2_image cairo pango fontconfig libusb
+# ifeq ($(graphics),GL)
+# 	mgwpkgdeps += glm
+# endif
+mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
+pkgdeps += $(mgwpkgdeps)
 endif
 
 #endif
@@ -1291,6 +1290,17 @@ endif
 # 	#mgwpkgdeps := $(addprefix mingw-w64-x86_64-, $(mgwpkgdeps))
 # 	pkgdeps += $(mgwpkgdeps)
 # endif
+
+$(info ===============================)
+$(info os=$(os))
+$(info pkgcmd=$(pkgcmd))
+$(info pkgcmdtype=$(pkgcmdtype))
+$(info graphics=$(graphics))
+$(info display=$(display))
+$(info mgwpkgdeps=$(mgwpkgdeps))
+$(info pkgdeps=$(pkgdeps))
+$(info pkginst=$(pkginst))
+$(info ===============================)
 
 install-pkgdeps:
 	$(pkginst) $(pkgdeps)
