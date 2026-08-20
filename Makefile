@@ -1219,13 +1219,13 @@ endif
 
 ifeq ($(pkgcmdtype),pacman)
 #https://www.msys2.org/
-pkgdeps := git make pkg-config
+pkgdeps := git make 
 
 #pkginst := pacboy -S --needed
 #pkgupg := pacboy -Syu --needed
 
 #boost
-mgwpkgdeps += gcc expat curl
+mgwpkgdeps += gcc expat curl pkg-config
 #pkgdeps += libusb #crazyflie
 mgwpkgdeps += rtmidi
 ifeq ($(graphics),QT)
@@ -1291,19 +1291,20 @@ endif
 # 	pkgdeps += $(mgwpkgdeps)
 # endif
 
-$(info ===============================)
-$(info os=$(os))
-$(info pkgcmd=$(pkgcmd))
-$(info pkgcmdtype=$(pkgcmdtype))
-$(info graphics=$(graphics))
-$(info display=$(display))
-$(info mgwpkgdeps=$(mgwpkgdeps))
-$(info pkgdeps=$(pkgdeps))
-$(info pkginst=$(pkginst))
-$(info ===============================)
+
 
 install-pkgdeps:
 	$(pkginst) $(pkgdeps)
+	$(info ===============================)
+	$(info os=$(os))
+	$(info pkgcmd=$(pkgcmd))
+	$(info pkgcmdtype=$(pkgcmdtype))
+	$(info graphics=$(graphics))
+	$(info display=$(display))
+	$(info mgwpkgdeps=$(mgwpkgdeps))
+	$(info pkgdeps=$(pkgdeps))
+	$(info pkginst=$(pkginst))
+	$(info ===============================)
 
 upgrade-pkgdeps:
 	$(pkgupg) $(pkgdeps)
