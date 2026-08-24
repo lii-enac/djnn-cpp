@@ -1225,7 +1225,7 @@ pkgdeps := git make
 #pkgupg := pacboy -Syu --needed
 
 #boost
-mgwpkgdeps += gcc expat curl pkg-config
+mgwpkgdeps += gcc expat curl pkgconf
 #pkgdeps += libusb #crazyflie
 mgwpkgdeps += rtmidi
 ifeq ($(graphics),QT)
