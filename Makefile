@@ -1120,14 +1120,14 @@ pkgdeps += bison flex
 ifeq ($(pkgcmdtype),apt)
 pkgdeps += pkg-config
 pkgdeps += g++
-pkglibdeps += udev1 rtmidi6
-pkglibdeps += expat1 curl4 evdev2 openal1
+pkglibdeps += udev-dev rtmidi-dev
+pkglibdeps += expat1-dev curl4-gnutls-dev evdev-dev openal-dev
 #libboost-thread-dev 
 #libboost-fiber-dev
-# ifeq ($(display),QT)
-# 	pkglibdeps += qt5opengl5
+ifeq ($(display),QT)
+pkglibdeps += qt5opengl5-dev
 # 	#pkgdeps += qt5-default #for ubuntu < 22.04
-# endif
+endif
 ifeq ($(display),SDL)
 ifeq ($(specialtarget),raspberry-ua-netinst)
 # on rpi, compile and install sdl2 with KMSDRM support, raspbian's sdl2 does not provide it by default
